@@ -23,6 +23,12 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="1000" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
 
 
+### 天候の変更
+「Snow」「Rain」「Cloud」バーを動かすことで天候を変更することが可能です。
+
+※イメージ貼り付け予定
+
+
 ## 自動テクスチャの生成
 「自動テクスチャの生成」では対象となる3D都市モデルの建物に対して、自動的にテクスチャを貼り付けることができ、見た目を綺麗にすることができます。
 
@@ -45,6 +51,10 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 
 
+## シーンの保存
+テクスチャ生成などを行ったら右下にあるSceneビューの右下にある「シーンの保存」ボタンを押下し、保存してください。また、やり直したい場合は最後に保存した時点に戻ることも可能です。
+
+<img width="196" alt="スクリーンショット 2023-06-27 18 03 40" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/81bf706e-7902-41b9-afac-33cdbb301faf">
 
 
 
