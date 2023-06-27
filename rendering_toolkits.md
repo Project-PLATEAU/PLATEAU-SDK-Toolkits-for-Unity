@@ -25,5 +25,18 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 
 
+## 自動テクスチャの生成
+「自動テクスチャの生成」では対象となる3D都市モデルの建物に対して、自動的にテクスチャを貼り付けることができ、見た目を綺麗にすることができます。
+
+1.Unityの「Hierarchy」ビューより対象となる建物のGameObjectを選択してください。
+
+<img width="958" alt="スクリーンショット 2023-06-27 18 20 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/2c7221aa-0756-488e-b485-d79b1ad7eb89">
+
+2.「自動テクスチャの生成」メニューの中の「テクスチャ生成」ボタンを押下してください。
+
+<img width="1728" alt="スクリーンショット 2023-06-27 18 01 41" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/6f51eb00-7690-4e04-abd5-7e8e0d5cec88">
+
+
+
 
 
