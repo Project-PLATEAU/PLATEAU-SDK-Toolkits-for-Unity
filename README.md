@@ -25,7 +25,7 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 - LOD機能
 - シミュレーション
 
-使い方は「[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/rendering_toolkits.md)」
+使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/rendering_toolkit.md)
 
 ## Sandbox Toolkit
 
@@ -47,6 +47,9 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 - Windows（x86_64）
 - MacOS（ARM）
 - Android、iOS
+
+使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/sandbox_toolkit.md)
+
 
 # 利用手順
 - 最新版はReleaseページからダウンロードしてください。 [ダウンロードリンクはこちら](https://project-plateau.github.io/PLATEAU-SDK-for-Unity/)
