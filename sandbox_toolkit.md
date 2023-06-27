@@ -33,4 +33,21 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="500" alt="スクリーンショット 2023-06-27 19 56 04" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/036036ca-02de-4b0b-adfe-b325e0f66986">
 
 
+## Humanの作成
+専用のメニューから人型のアバターモデルを選択し、3D都市モデルの中に配置できます。
+
+1. 「アセット」メニューの中で対象となるモデルをクリックし選択します。
+
+<img width="500" alt="スクリーンショット 2023-06-27 21 21 07" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/9142b44d-1783-4c32-acc3-d56e0e582ebb">
+
+2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
+
+<img width="1111" alt="スクリーンショット 2023-06-27 21 54 41" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/79fb89da-05f2-4da4-8ff5-1d3f82e1a262">
+
+## Vehicleの作成
+
+
+
+## Propsの作成
+
 
