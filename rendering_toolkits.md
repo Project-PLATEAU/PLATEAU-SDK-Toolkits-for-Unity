@@ -23,8 +23,6 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="1000" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
 
 
-
-
 ## 自動テクスチャの生成
 「自動テクスチャの生成」では対象となる3D都市モデルの建物に対して、自動的にテクスチャを貼り付けることができ、見た目を綺麗にすることができます。
 
@@ -41,6 +39,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 4. テクスチャが自動的に生成され、モデルの見た目が変更されます。
 <img width="500" alt="スクリーンショット 2023-06-27 18 24 18" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/4f906794-cb24-4959-9639-ab908e0538e1">
 
+この状態で「環境システムの設定」メニューから「「Time of Day」を夜にすると、窓のライトが表示されます。
 
 
 
