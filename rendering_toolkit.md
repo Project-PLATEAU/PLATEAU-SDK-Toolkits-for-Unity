@@ -20,13 +20,19 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 ### 時間の変更
 「Time of Day」欄のスライダーを動かすと、表示時間帯を変更することができます。
-<img width="1000" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
+<img width="500" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
 
 
 ### 天候の変更
-「Snow」「Rain」「Cloud」バーを動かすことで天候を変更することが可能です。
+「Snow」「Rain」「Cloud」バーを動かすことで天候を変更することが可能です。変更後にGameビューを表示することで確認することができます。
 
-※イメージ貼り付け予定
+<img width="500" alt="スクリーンショット 2023-06-27 18 48 34" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/47700266-6162-403b-bf58-db5eb6025990">
+
+### 太陽光・月光の色変更
+「Sun Color」を押すことで太陽の色、「Moon Color」を押すことで月の色をそれぞれ設定することができます。
+
+<img width="500" alt="スクリーンショット 2023-06-27 18 49 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/91bfa98b-95f0-4da9-86b3-8fffdd23c60e">
+
 
 
 ## 自動テクスチャの生成
