@@ -20,7 +20,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 ### 時間の変更
 「Time of Day」欄のスライダーを動かすと、表示時間帯を変更することができます。
-<img width="1253" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
+<img width="1000" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
 
 
 
@@ -28,13 +28,22 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 ## 自動テクスチャの生成
 「自動テクスチャの生成」では対象となる3D都市モデルの建物に対して、自動的にテクスチャを貼り付けることができ、見た目を綺麗にすることができます。
 
-1.Unityの「Hierarchy」ビューより対象となる建物のGameObjectを選択してください。
+1. Unityの「Hierarchy」ビューより対象となる建物のGameObjectを選択してください。
 
-<img width="958" alt="スクリーンショット 2023-06-27 18 20 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/2c7221aa-0756-488e-b485-d79b1ad7eb89">
+<img width="500" alt="スクリーンショット 2023-06-27 18 20 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/2c7221aa-0756-488e-b485-d79b1ad7eb89">
 
-2.「自動テクスチャの生成」メニューの中の「テクスチャ生成」ボタンを押下してください。
+2. 「自動テクスチャの生成」メニューの中の「テクスチャ生成」ボタンを押下してください。
 
-<img width="1728" alt="スクリーンショット 2023-06-27 18 01 41" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/6f51eb00-7690-4e04-abd5-7e8e0d5cec88">
+3. テクスチャ作成の確認画面が表示されます。問題なければ「はい」ボタンを押下してください。
+
+<img width="500" alt="スクリーンショット 2023-06-27 18 21 43" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/f6adc2ee-28ee-4ab8-a011-04fca260cc5f">
+
+4. テクスチャが自動的に生成され、モデルの見た目が変更されます。
+<img width="500" alt="スクリーンショット 2023-06-27 18 24 18" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/4f906794-cb24-4959-9639-ab908e0538e1">
+
+
+
+
 
 
 
