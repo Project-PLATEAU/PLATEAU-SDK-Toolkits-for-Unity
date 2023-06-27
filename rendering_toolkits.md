@@ -41,6 +41,10 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 この状態で「環境システムの設定」メニューから「「Time of Day」を夜にすると、窓のライトが表示されます。
 
+<img width="500" alt="スクリーンショット 2023-06-27 18 32 13" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/6dbaa67e-0ca4-4eac-82a6-3a81412bfcda">
+
+
+
 
 
 
