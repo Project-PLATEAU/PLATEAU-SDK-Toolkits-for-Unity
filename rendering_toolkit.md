@@ -9,7 +9,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 <img width="371" alt="スクリーンショット 2023-06-27 17 45 56" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/03b129e4-eed2-4096-8cf7-9679ae7652e0">
 
-するとPLATEAU Toolkitのメインメニューが表示されます。
+するとPLATEAU Rendering Toolkitのメインメニューが表示されます。
 
 <img width="324" alt="スクリーンショット 2023-06-27 17 46 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/1bf3da51-c1ef-4056-9639-b7b8c6bd5002">
 
