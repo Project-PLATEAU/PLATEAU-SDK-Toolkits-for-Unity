@@ -41,14 +41,13 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 - 乗り物エージェントの配置機能
 - Props(施設器具等)の配置機能
   
+使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/sandbox_toolkit.md)
 
 
 # 動作環境
 - Windows（x86_64）
 - MacOS（ARM）
 - Android、iOS
-
-使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/sandbox_toolkit.md)
 
 
 # 利用手順
