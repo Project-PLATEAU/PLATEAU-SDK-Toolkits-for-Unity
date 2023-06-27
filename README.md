@@ -25,6 +25,8 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 - LOD機能
 - シミュレーション
 
+使い方は「[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/rendering_toolkits.md)」
+
 ## Sandbox Toolkit
 
 3D都市モデルを用いてゲームや映像などを直感的に開発できるように、カメラや乗り物、人などの導線の設計、インタラクションのためのコライダー設定などを簡易的に行えるような環境を実現します。
