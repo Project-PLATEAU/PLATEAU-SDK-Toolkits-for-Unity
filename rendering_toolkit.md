@@ -51,9 +51,9 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 4. テクスチャが自動的に生成され、モデルの見た目が変更されます。
 <img width="500" alt="スクリーンショット 2023-06-27 18 24 18" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/4f906794-cb24-4959-9639-ab908e0538e1">
 
-この状態で「環境システムの設定」メニューから「「Time of Day」を夜にすると、窓のライトが表示されます。
+この状態で「環境システムの設定」メニューから「「Time of Day」を夜にすると、窓のライトが表示されます。（なお、現在は主に高さのある建物に対してのみライトの表示が適用されます。)
 
-<img width="500" alt="スクリーンショット 2023-06-27 18 32 13" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/6dbaa67e-0ca4-4eac-82a6-3a81412bfcda">
+<img width="500" alt="スクリーンショット 2023-06-27 18 54 17" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/2135325b-f68a-48d2-8e37-3f7785c319cd">
 
 
 
