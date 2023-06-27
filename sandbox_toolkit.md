@@ -42,7 +42,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
 
-<img width="1111" alt="スクリーンショット 2023-06-27 21 54 41" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/79fb89da-05f2-4da4-8ff5-1d3f82e1a262">
+<img width="800" alt="スクリーンショット 2023-06-27 21 54 41" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/79fb89da-05f2-4da4-8ff5-1d3f82e1a262">
 
 ## Vehicleの作成
 
