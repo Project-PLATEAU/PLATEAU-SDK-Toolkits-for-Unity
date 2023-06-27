@@ -32,9 +32,12 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 <img width="500" alt="スクリーンショット 2023-06-27 19 56 04" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/036036ca-02de-4b0b-adfe-b325e0f66986">
 
+各モデル配置における「配置ツールを起動ボタン」を押下し、配置位置を「トラックに沿って配置」を選択しすると、作成したトラックに沿ってモデルを配置することができます。
+<img width="598" alt="スクリーンショット 2023-06-27 22 11 06" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/040788ff-00a4-4330-91ac-6307f97dbddd">
+
 
 ## Humanの作成
-専用のメニューから人型のアバターモデルを選択し、3D都市モデルの中に配置できます。
+専用のメニューから人型のモデルを選択し、3D都市モデルの中に配置できます。
 
 1. 「アセット」メニューの中で対象となるモデルをクリックし選択します。
 
@@ -46,8 +49,26 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 ## Vehicleの作成
 
+専用のメニューから乗り物型のモデルを選択し、3D都市モデルの中に配置できます。
+
+1. 「アセット」メニューの中で対象となるモデルをクリックし選択します。
+
+<img width="500" alt="スクリーンショット 2023-06-27 22 07 50" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/ae02e0c1-23c4-48c4-9a0c-16a78ad1ec34">
+
+2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
+
+<img width="800" alt="スクリーンショット 2023-06-27 22 12 27" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/77335e58-a83f-46fa-8d5e-aad760a1eeab">
 
 
 ## Propsの作成
 
+専用のメニューから乗り物型のモデルを選択し、3D都市モデルの中に配置できます。
 
+1. 「アセット」メニューの中で対象となるモデルをクリックし選択します。
+
+<img width="680" alt="スクリーンショット 2023-06-27 22 16 05" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/f5f0f467-e5e8-4d06-8469-cc241665b3db">
+
+
+2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
+
+<img width="800" alt="スクリーンショット 2023-06-27 22 17 26" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/bb9b09a4-a5f1-4046-a9ea-9fdf458a8783">
