@@ -44,24 +44,26 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/sandbox_toolkit.md)
 
 
-# 動作環境
+# 検証済環境
+## OS環境
 - Windows（x86_64）
 - MacOS（ARM）
-- Android、iOS
 
+## Unity Version
+- 2022.3.3f1(LTS)
 
 # 利用手順
-- 最新版はReleaseページからダウンロードしてください。 [ダウンロードリンクはこちら](https://project-plateau.github.io/PLATEAU-SDK-for-Unity/)
-- 詳しい利用方法については、こちらのマニュアル をご覧ください。
 
 ### PLATEAU SDK for Unity
+
+PLATEAU SDK-Toolkits for Unityを利用するにあたり、事前にPLATEAU SDKのインストールと対象となる地域の3D都市モデルのダウンロードが必要となります。
 
 TarballかGithub URL からのインストールのみなので手動でインストールする必要があります。詳細はPlateau SDKのドキュメンテーションをご参照ください。
 [PLATEAU SDK for Unity](https://project-plateau.github.io/PLATEAU-SDK-for-Unity/)
 
 PLATEAU SDKを利用し、対象となる地域の3D都市モデルのダウンロードとUnityへの展開を行なってください。
 
-## Unity PLATEAU Toolkit のインストール
+## PLATEAU SDK-Toolkits for Unity のインストール
 
 1. Unityエディタを開き、「Window」メニューから「Package Manager」を選択します。
 2. 「Package Manager」ウィンドウが開いたら、右上にある「＋」ボタンをクリックします。
