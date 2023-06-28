@@ -24,7 +24,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 
 ### 天候の変更
-「Snow」「Rain」「Cloud」バーを動かすことで天候を変更することが可能です。変更後にGameビューを表示することで確認することができます。
+「Snow」「Rain」「Cloud」バーを動かすことで天候を変更することが可能です。変更後にGameビューを表示することで確認することができます。Sceneビューでも表示可能ですが、対象となるカメラの前方のみの表示になりますので、確認の際はご注意ください。
 
 <img width="500" alt="スクリーンショット 2023-06-27 18 48 34" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/47700266-6162-403b-bf58-db5eb6025990">
 
