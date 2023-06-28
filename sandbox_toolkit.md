@@ -33,6 +33,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="500" alt="スクリーンショット 2023-06-27 19 56 04" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/036036ca-02de-4b0b-adfe-b325e0f66986">
 
 各モデル配置における「配置ツールを起動ボタン」を押下し、配置位置を「トラックに沿って配置」を選択しすると、作成したトラックに沿ってモデルを配置することができます。
+
 <img width="598" alt="スクリーンショット 2023-06-27 22 11 06" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/040788ff-00a4-4330-91ac-6307f97dbddd">
 
 
