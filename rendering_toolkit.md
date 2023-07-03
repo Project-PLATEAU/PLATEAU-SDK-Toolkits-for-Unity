@@ -56,6 +56,21 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="500" alt="スクリーンショット 2023-06-27 18 54 17" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/2135325b-f68a-48d2-8e37-3f7785c319cd">
 
 
+※なおテクスチャの自動生成後は3D都市モデルに関しての、テクスチャ自動生成の処理パフォーマンスの都合上Hierarchyビューの構成が変わります。あらかじめご注意ください。
+
+
+### 変更前
+PLATEAU SDKでダウンロードした直後は専用親GameObject（下記の場合は13100_tokyo23-ku_2022_citygml_1_2_op）に3D都市オブジェクトが格納されている。
+
+
+<img width="500" alt="スクリーンショット 2023-06-30 8 11 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/58426be6-8b1d-46d7-b5b7-c4abad877b88">
+
+
+### 変更後
+「ParentForGroupedObjects」と呼ばれるGameObjectに全てのモデルデータが移動する。
+
+<img width="500" alt="スクリーンショット 2023-07-03 15 12 23" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/6b5981a9-1b1a-405b-b8de-689b4d4edea5">
+
 
 ## シーンの保存
 テクスチャ生成などを行ったら右下にあるSceneビューの右下にある「シーンの保存」ボタンを押下し、保存してください。また、やり直したい場合は最後に保存した時点に戻ることも可能です。
