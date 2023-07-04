@@ -45,12 +45,18 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 
 
 # 検証済環境
-## OS環境
+## 推奨OS環境
 - Windows（x86_64）
 - MacOS（ARM）
 
 ## Unity Version
 - 2022.3.3f1(LTS)
+
+## Rendering Pipeline
+
+
+## PLATEAU SDKバージョン
+- version 1.1.5
 
 # 利用手順
 
