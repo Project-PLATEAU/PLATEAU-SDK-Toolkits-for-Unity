@@ -46,8 +46,8 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 
 # 検証済環境
 ## 推奨OS環境
-- Windows（x86_64）
-- MacOS（ARM）
+- Windows
+- MacOS
 
 ## Unity Version
 - 2021.3.27f1(LTS)
