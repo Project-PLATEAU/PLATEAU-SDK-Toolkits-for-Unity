@@ -50,7 +50,7 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 - MacOS（ARM）
 
 ## Unity Version
-- 2021.3.22f1(LTS)
+- 2021.3.27f1(LTS)
 
 ## Rendering Pipeline
 
