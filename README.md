@@ -57,7 +57,7 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 - HDRP
 
 ## PLATEAU SDKバージョン
-- version 1.1.5
+- [version 1.1.5](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity/releases)
 
 # 利用手順
 
