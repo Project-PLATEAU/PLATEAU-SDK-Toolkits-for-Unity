@@ -53,7 +53,8 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 - 2021.3.27f1(LTS)
 
 ## Rendering Pipeline
-
+- URP
+- HDRP
 
 ## PLATEAU SDKバージョン
 - version 1.1.5
