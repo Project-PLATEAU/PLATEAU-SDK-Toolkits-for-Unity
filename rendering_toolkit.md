@@ -1,3 +1,9 @@
+//Time Smoothingのパラメータについても解説する
+//fog distancdeについても解説する
+//Weather Material Fadeについても解説する
+//Check particle in scene viewについても解説する
+//hide child objectsについても解説する
+
 # PLATEAU SDK-Rendering Toolkit for Unity
 
 PLATEAUの都市モデル・LODに適したグラフィックス向上処理を実現。テクスチャの自動作成・高解像度化や、時候に合わせた環境光などの調節機能を実現することで開発者がより手軽にシミュレーションを行えるような環境を提供します。
@@ -21,6 +27,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 ### 時間の変更
 「Time of Day」欄のスライダーを動かすと、表示時間帯を変更することができます。
 <img width="500" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
+
 
 
 ### 天候の変更
