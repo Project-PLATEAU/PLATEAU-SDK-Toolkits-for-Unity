@@ -4,7 +4,7 @@
 <img width="250" alt="スクリーンショット 2023-06-26 8 00 40" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/efd49976-5506-422f-b9a8-fe7132ef2377">
 </p>
 
-PLATEAU toolkit for Unityは、PLATEAUの3D都市モデルデータをUnityで扱うためのツールキットであり、主に以下の機能を提供しています。
+PLATEAU SDK-Toolkits for Unityは、PLATEAUの3D都市モデルデータをUnityで扱うためのツールキットであり、主に以下の機能を提供しています。
 このPLATEAU toolkit for Unityは[PLATEAU SDK for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity)と併用して利用することで、
 目的に応じたPLATREAUの3D都市モデルデータを利用したシステム開発を進めることができます。
 
