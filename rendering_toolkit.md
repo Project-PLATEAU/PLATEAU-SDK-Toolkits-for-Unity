@@ -1,9 +1,3 @@
-//Time Smoothingのパラメータについても解説する
-//fog distancdeについても解説する
-//Weather Material Fadeについても解説する
-//Check particle in scene viewについても解説する
-//hide child objectsについても解説する
-
 # PLATEAU SDK-Rendering Toolkit for Unity
 
 PLATEAUの都市モデル・LODに適したグラフィックス向上処理を実現。テクスチャの自動作成・高解像度化や、時候に合わせた環境光などの調節機能を実現することで開発者がより手軽にシミュレーションを行えるような環境を提供します。
@@ -19,16 +13,14 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 <img width="324" alt="スクリーンショット 2023-06-27 17 46 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/1bf3da51-c1ef-4056-9639-b7b8c6bd5002">
 
+
+
 ## 環境システムの設定
 「環境システムの設定」では、シーンの時間帯や天候などを変更し、3D都市モデルを使った表示シミュレーションを行うことができます。
 
 ### 時間の変更
 「Time of Day」欄のスライダーを動かすと、表示時間帯を変更することができます。
 <img width="500" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
-
-
-「Time Smoothing」欄のスライダーを動かすと、時間が変化した時の環境の変化の滑らかさを設定することができます。
-
 
 
 ### 天候の変更
@@ -40,6 +32,18 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 「Sun Color」を押すことで太陽の色、「Moon Color」を押すことで月の色をそれぞれ設定することができます。
 
 <img width="500" alt="スクリーンショット 2023-06-27 18 49 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/91bfa98b-95f0-4da9-86b3-8fffdd23c60e">
+
+
+
+### fog distanceの設定
+
+
+
+### Weather Material Fadeの設定
+
+
+
+hide child objectsを変更すること
 
 
 
