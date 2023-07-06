@@ -19,14 +19,15 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 <img width="324" alt="スクリーンショット 2023-06-27 17 46 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/1bf3da51-c1ef-4056-9639-b7b8c6bd5002">
 
-
-
 ## 環境システムの設定
 「環境システムの設定」では、シーンの時間帯や天候などを変更し、3D都市モデルを使った表示シミュレーションを行うことができます。
 
 ### 時間の変更
 「Time of Day」欄のスライダーを動かすと、表示時間帯を変更することができます。
 <img width="500" alt="スクリーンショット 2023-06-27 17 56 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/c6bc6a65-9397-49f0-a195-2b7db44e003a">
+
+
+「Time Smoothing」欄のスライダーを動かすと、時間が変化した時の環境の変化の滑らかさを設定することができます。
 
 
 
