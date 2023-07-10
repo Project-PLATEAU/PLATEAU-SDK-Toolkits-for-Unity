@@ -35,9 +35,9 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 
 
-### fog distanceの設定
-
-
+### Fog Distanceの設定
+「Fog Distance」のスライダーを調整することで、霧の濃さを調整することができます。
+<img width="1119" alt="スクリーンショット 2023-07-11 6 37 32" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/43137921-88b2-4784-ae48-df6659d137ae">
 
 ### Weather Material Fadeの設定
 
