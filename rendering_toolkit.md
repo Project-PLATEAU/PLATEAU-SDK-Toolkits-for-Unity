@@ -40,7 +40,11 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="500" alt="スクリーンショット 2023-07-11 6 37 32" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/43137921-88b2-4784-ae48-df6659d137ae">
 
 ### Weather Material Fadeの設定
+「Weather material fade」スライダーを調整すると、天候に合わせたマテリアル表示の濃度を設定することができます。
 
+<img width="400" alt="スクリーンショット 2023-07-11 13 16 11" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/68e57f2a-3e35-4b81-b74b-b4194497ea46">
+
+<img width="400" alt="スクリーンショット 2023-07-11 13 16 24" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/24ee2ef6-ab5b-417b-a26a-8e71c59c0c91">
 
 
 ### Hide child objectsの設定
