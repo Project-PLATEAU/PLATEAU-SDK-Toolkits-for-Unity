@@ -21,9 +21,9 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 </p>
 
 ＜リリース済の機能＞
+- 環境システムの設定
 - テクスチャ自動生成
 - LOD機能
-- シミュレーション
 
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/rendering_toolkit.md)
 
