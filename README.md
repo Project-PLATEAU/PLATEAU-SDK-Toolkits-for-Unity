@@ -63,7 +63,16 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 
 # 利用手順
 
-### PLATEAU SDK for Unity
+## Unityでのプロジェクト作成
+
+対象となるUnity Versionで新たにUnityプロジェクトを作成してください。その際のテンプレートとして「3D(URP)」もしくは「3D(HDRP)」を選択してください。
+
+<p align="center">
+<img width="500" alt="スクリーンショット 2023-07-11 13 24 11" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/135de29f-623a-46dd-a895-f335b5eff08b">
+</p>
+
+
+## PLATEAU SDK for Unityのインストール
 
 PLATEAU SDK-Toolkits for Unityを利用するにあたり、事前にPLATEAU SDKのインストールと対象となる地域の3D都市モデルのダウンロードが必要となります。
 
