@@ -91,3 +91,13 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
 
 <img width="800" alt="スクリーンショット 2023-06-27 22 17 26" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/bb9b09a4-a5f1-4046-a9ea-9fdf458a8783">
+
+## 関連API
+SandboxToolkitの開発において、Unity の以下のAPI を使用しています。
+1. [Splines](https://docs.unity3d.com/Packages/com.unity.splines@2.1/manual/index.html)
+2. [PackageManager](https://docs.unity3d.com/ja/2021.3/Manual/class-PackageManager.html)
+3. [Preferences](https://docs.unity3d.com/2021.3/Documentation/Manual/Preferences.html)
+4. [UI Toolkit](https://docs.unity3d.com/2021.3/Documentation/Manual/UIElements.html)
+5. [Raycasters](https://docs.unity3d.com/2021.3/Documentation/Manual/Raycasters.html)
+6. [Collision](https://docs.unity3d.com/2021.3/Documentation/Manual/collision-section.html)
+7. [Scenes](https://docs.unity3d.com/2021.3/Documentation/Manual/CreatingScenes.html)
