@@ -74,9 +74,7 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 
 ## PLATEAU SDK for Unityのインストール
 
-PLATEAU SDK-Toolkits for Unityを利用するにあたり、事前にPLATEAU SDKのインストールと対象となる地域の3D都市モデルのダウンロードが必要となります。
-
-TarballかGithub URL からのインストールのみなので手動でインストールする必要があります。詳細はPlateau SDKのドキュメンテーションをご参照ください。
+PLATEAU SDK-Toolkits for Unityを利用するにあたり、事前にPLATEAU SDKのインストールと対象となる地域の3D都市モデルのダウンロードが必要となります。TarballかGithub URLからインストールをする必要があります。詳細はPlateau SDKのドキュメンテーションをご参照ください。
 [PLATEAU SDK for Unity](https://project-plateau.github.io/PLATEAU-SDK-for-Unity/)
 
 PLATEAU SDKを利用し、対象となる地域の3D都市モデルのダウンロードとUnityへの展開を行なってください。
