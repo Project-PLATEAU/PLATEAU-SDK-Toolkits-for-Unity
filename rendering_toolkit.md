@@ -102,15 +102,18 @@ PLATEAU SDKでダウンロードした直後は専用親GameObject（下記の�
 「LODグループ生成」ボタンを押すと、すべての3D都市モデルに対してLOD機能が設定されます。
 LODグループが生成されると、建物オブジェクトに対してのカメラの距離で表示されるグラフィクスが異なります。
 
+<img width="500" alt="スクリーンショット 2023-07-11 21 18 01" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/26e1c951-e359-49af-9e9e-a62816dd8ddc">
+
+
 ※PLATEAUで定義されているLODとUnityのLODは対応関係が異なるのでご注意ください。
 PLATEAU LOD・・・LOD0が最下位であり、上位になればよりリッチなグラフィクスを持ったモデルになります。
 UnityのLOD・・・最も建物とカメラが近いハイグラフィックになり、カメラが遠ざかると簡素な表現なります。
 
-<img width="500" alt="スクリーンショット 2023-07-11 21 18 01" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/26e1c951-e359-49af-9e9e-a62816dd8ddc">
-<img width="300" alt="スクリーンショット 2023-07-11 21 14 52" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/40ab798a-f8af-4247-aaae-ac0dd7fe5da1">
+<img width="250" alt="スクリーンショット 2023-07-11 21 14 52" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/40ab798a-f8af-4247-aaae-ac0dd7fe5da1">
 
+<img width="250" alt="スクリーンショット 2023-07-11 21 14 58" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/a9ba5333-af24-48fc-8a16-db090da19e8a">
 
-<img width="300" alt="スクリーンショット 2023-07-11 21 15 06" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/0b5aac90-d002-41f3-8692-a0f816b46319">
+<img width="250" alt="スクリーンショット 2023-07-11 21 15 06" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/0b5aac90-d002-41f3-8692-a0f816b46319">
 
 
 
@@ -118,7 +121,6 @@ UnityのLOD・・・最も建物とカメラが近いハイグラフィックに
 
 <img width="1435" alt="スクリーンショット 2023-07-11 21 25 12" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/8f32fbb2-14f0-4d47-b8a4-7e614dbd89a3">
 
-![Uploading スクリーンショット 2023-07-11 21.14.58.png…]()
 
 ## シーンの保存
 テクスチャ生成などを行ったら右下にあるSceneビューの右下にある「シーンの保存」ボタンを押下し、保存してください。また、やり直したい場合は最後に保存した時点に戻ることも可能です。
