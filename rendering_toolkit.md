@@ -127,9 +127,13 @@ UnityのLOD・・・最も建物とカメラが近いハイグラフィックに
 
 <img width="196" alt="スクリーンショット 2023-06-27 18 03 40" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/81bf706e-7902-41b9-afac-33cdbb301faf">
 
-
-
-
-
-
+## 関連API
+Rendering Toolkit の開発において、Unity の以下のAPI を使用しています。
+1. [MeshRenderer](https://docs.unity3d.com/2021.3/Documentation/ScriptReference/MeshRenderer.html)
+2. [MeshFilter](https://docs.unity3d.com/2021.3/Documentation/ScriptReference/MeshFilter.html)
+3. [LOD](https://docs.unity3d.com/2021.3/Documentation/ScriptReference/LOD.html)
+4. [Skybox](https://docs.unity3d.com/2021.3/Documentation/ScriptReference/Skybox.html)
+5. [HideFlags](https://docs.unity3d.com/2021.3/Documentation/ScriptReference/HideFlags.html)
+6. [Shaders](https://docs.unity3d.com/2021.3/Documentation/ScriptReference/Shader.html)
+7. [VFX](https://docs.unity3d.com/Packages/com.unity.visualeffectgraph@7.0/api/UnityEngine.VFX.Utility.html)
 
