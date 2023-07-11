@@ -43,7 +43,11 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 
 
-hide child objectsを変更すること
+### Hide child objectsの設定
+
+「Hide child objects」のチェックボックスを入れるとHierarchy viewの中におけるParentForGroupObjectsの子オブジェクトの表示・非表示を切り替えることができます。
+<img width="249" alt="スクリーンショット 2023-07-11 11 52 26" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/010bd0f0-abb1-474b-988c-dd1142f535b3">
+
 
 
 
