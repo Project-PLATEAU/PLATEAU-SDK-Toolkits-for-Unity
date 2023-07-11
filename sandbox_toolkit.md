@@ -36,6 +36,22 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 <img width="598" alt="スクリーンショット 2023-06-27 22 11 06" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/040788ff-00a4-4330-91ac-6307f97dbddd">
 
+### トラックの速度制限
+トラックには速度制限を設定することができ、速度制限が設定されているトラックを移動オブジェクトが移動する際はこの速度制限以上の速度が出ないように制御されます。
+速度制限は `PlateauSandboxTrack` のインスペクターから設定するか、速度制限設定ツールからシーン上で一括設定することができます。
+
+- インスペクターから設定する場合は `Has Speed Limit` にチェックボックスをいれて、制限速度（m/s）を `Speed Limit` に設定してください。
+  
+![image](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/122778529/3189450e-b09e-458a-87b5-c449d21c8ac6)
+
+- 速度制限設定ツールはPLATEAU Sandbox Toolkitのトラックタブから起動できます。
+ 
+![image](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/122778529/b7793cdb-f883-4245-9b46-bd2b206a75ae)
+
+- 制限速度ツールでは、シーンの各トラック上に設定ウィンドウが表示され、このウィンドウから制限速度を設定することができます。
+
+![speed_limit_tool](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/122778529/48567486-cde5-4a6a-9158-6785a1525dce)
+
 
 ## Humanの作成
 専用のメニューから人型のモデルを選択し、3D都市モデルの中に配置できます。
