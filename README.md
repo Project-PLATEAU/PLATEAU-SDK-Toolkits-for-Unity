@@ -46,8 +46,8 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 
 # 検証済環境
 ## 推奨OS環境
-- Windows
-- MacOS
+- Windows11
+- macOS Ventura 13.2
 
 ## Unity Version
 - 2021.3.27f1(LTS)
@@ -55,6 +55,8 @@ PLATEAUの都市モデル・LODに適したグラフィックス向上処理を�
 ## Rendering Pipeline
 - URP
 - HDRP
+
+なお, Built-in Rendering Pipelineでは動作しないため、下記の作成方法に従ってプロジェクトを作成してください。
 
 ## PLATEAU SDKバージョン
 - [version 1.1.5](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity/releases)
