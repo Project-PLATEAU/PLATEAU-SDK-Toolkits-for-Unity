@@ -7,11 +7,12 @@ PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミ�
 
 PLATEAU-SDK-Toolkits-for-Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
 
-<img width="371" alt="スクリーンショット 2023-06-27 17 45 56" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/03b129e4-eed2-4096-8cf7-9679ae7652e0">
+<img width="372" alt="スクリーンショット 2023-07-12 19 20 22" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/58356a9f-7b52-49ce-9d5a-bbe55b56be87">
 
 Sandbox Toolkitのメインメニューが表示されます。
 
-<img width="500" alt="スクリーンショット 2023-06-27 19 36 19" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/503a029e-02ab-428c-bdc7-cb4c6e9b2416">
+<img width="497" alt="スクリーンショット 2023-07-12 19 39 14" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/89ed4c23-ebe9-4dec-b6c8-8bd2b78d39f9">
+
 
 ## 全般
 Sandbox Toolkitの各機能を利用するためには、**シーンに配置された3D都市モデルのオブジェクトにCollider (コライダー) コンポーネントを設定する必要があります。**
@@ -20,26 +21,32 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 トラックの作成を行うことで、直感的に3D都市モデルの中にオブジェクト移動用の経路を作成することができます。
 
 1. 「ツール」メニューの中で「新しいトラックを作成」ボタンを押下します。
+2. 
+<img width="670" alt="スクリーンショット 2023-07-12 19 39 21" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/54d30e78-bbf1-497b-8d29-8f59656cfbd5">
 
-<img width="674" alt="スクリーンショット 2023-06-27 19 48 03" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/8015dac6-e258-4616-a06c-a8e7c1f0c562">
 
-2. 編集モードに入り、Sceneビューで専用の配置アイコンがマウスカーソルの位置に表示されます。
-<img width="800" alt="スクリーンショット 2023-06-27 19 51 24" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/baf6e7a2-6abe-47b9-b482-806619bf1d2a">
+3. 編集モードに入り、Sceneビューで専用の配置アイコンがマウスカーソルの位置に表示されます。
 
-3. その状態でSceneビュー内において、対象となる地表上でクリックをすると、トラック生成のポイントが作成されます。
-4. そのまま続けて地表上をクリックしていくと、ポイントが生成され、ポイントに合わせてトラックが生成されます。
+<img width="796" alt="スクリーンショット 2023-07-12 19 39 27" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/49029b7d-f4dc-49dc-a1e4-1a24cff34563">
 
-<img width="500" alt="スクリーンショット 2023-06-27 19 50 16" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/30425292-f11d-4311-990c-ee1c2249cb49">
+
+4. その状態でSceneビュー内において、対象となる地表上でクリックをすると、トラック生成のポイントが作成されます。
+5. そのまま続けて地表上をクリックしていくと、ポイントが生成され、ポイントに合わせてトラックが生成されます。
+
+<img width="498" alt="スクリーンショット 2023-07-12 19 39 34" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/3f483c28-1573-4d89-8b67-571b2262568f">
+
 
 5. 最後に視点と同じポイントをクリックすると、ループ可能なトラックが作成できます。
 
-<img width="500" alt="スクリーンショット 2023-06-27 19 56 04" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/036036ca-02de-4b0b-adfe-b325e0f66986">
+<img width="498" alt="スクリーンショット 2023-07-12 19 39 40" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b66cdcb3-0317-4acc-9951-ccb04652a0dd">
+
 
 各モデル配置における「配置ツールを起動ボタン」を押下し、配置位置を「トラックに沿って配置」を選択しすると、作成したトラックに沿ってモデルを配置することができます。　
 
 ※配置したHumanとVehicleを動作させるためにはPlayModeを実行する必要があります。
 
-<img width="598" alt="スクリーンショット 2023-06-27 22 11 06" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/040788ff-00a4-4330-91ac-6307f97dbddd">
+<img width="594" alt="スクリーンショット 2023-07-12 19 39 47" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/d4d27a36-8b65-42bd-85a7-14440c0c25cd">
+
 
 ### トラックの速度制限
 トラックには速度制限を設定することができます。
@@ -47,15 +54,16 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 - インスペクターから設定する場合は `Has Speed Limit` にチェックボックスをいれて、制限速度（m/s）を `Speed Limit` に設定してください。
   
-![image](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/122778529/3189450e-b09e-458a-87b5-c449d21c8ac6)
+<img width="482" alt="スクリーンショット 2023-07-12 19 39 54" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/f4c13c46-dce7-46d3-b52d-1e54cb36c407">
+
 
 - 速度制限設定ツールはPLATEAU Sandbox Toolkitのトラックタブから起動できます。
  
-![image](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/122778529/b7793cdb-f883-4245-9b46-bd2b206a75ae)
+<img width="407" alt="スクリーンショット 2023-07-12 19 39 59" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/bdc7a5a0-c714-4917-8544-5f6f8253a4e1">
 
 - 制限速度ツールでは、シーンの各トラック上に設定ウィンドウが表示され、このウィンドウから制限速度を設定することができます。
 
-![speed_limit_tool](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/122778529/48567486-cde5-4a6a-9158-6785a1525dce)
+<img width="1006" alt="スクリーンショット 2023-07-12 19 40 14" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/6f17b30f-1fdb-43a5-8d14-3ad136773be0">
 
 
 ## Humanの作成
@@ -63,11 +71,13 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 1. 「アセット」メニューの中で対象となるモデルをクリックし選択します。
 
-<img width="500" alt="スクリーンショット 2023-06-27 21 21 07" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/9142b44d-1783-4c32-acc3-d56e0e582ebb">
+<img width="497" alt="スクリーンショット 2023-07-12 19 40 26" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/d68047f8-de01-4061-b961-f757b3ca6db0">
+
 
 2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
 
-<img width="800" alt="スクリーンショット 2023-06-27 21 54 41" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/79fb89da-05f2-4da4-8ff5-1d3f82e1a262">
+<img width="797" alt="スクリーンショット 2023-07-12 19 40 34" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/043449a7-334f-4b3a-90cc-35f41a437913">
+
 
 ## Vehicleの作成
 
@@ -75,11 +85,12 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 1. 「アセット」メニューの中で対象となるモデルをクリックし選択します。
 
-<img width="500" alt="スクリーンショット 2023-06-27 22 07 50" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/ae02e0c1-23c4-48c4-9a0c-16a78ad1ec34">
+<img width="498" alt="スクリーンショット 2023-07-12 19 40 39" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/09360166-5822-4fab-9a19-7e0fe4f8c771">
+
 
 2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
 
-<img width="800" alt="スクリーンショット 2023-06-27 22 12 27" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/77335e58-a83f-46fa-8d5e-aad760a1eeab">
+<img width="796" alt="スクリーンショット 2023-07-12 19 40 45" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/1def056b-84a4-4a9b-824b-2d3951c4027d">
 
 
 ## Propsの作成
@@ -88,12 +99,13 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 1. 「アセット」メニューの中で対象となるモデルをクリックし選択します。
 
-<img width="680" alt="スクリーンショット 2023-06-27 22 16 05" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/f5f0f467-e5e8-4d06-8469-cc241665b3db">
+<img width="677" alt="スクリーンショット 2023-07-12 19 40 52" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/fac5e124-6d66-4f43-95f6-4ce8fd73a7c2">
 
 
 2. 配置ツールを起動ボタンを押下し、メニューからSceneビューへ対象モデルをドラッグ&ドロップします。
 
-<img width="800" alt="スクリーンショット 2023-06-27 22 17 26" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/bb9b09a4-a5f1-4046-a9ea-9fdf458a8783">
+<img width="798" alt="スクリーンショット 2023-07-12 19 41 00" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/a01a4ecc-8b85-486a-9159-126c584ee758">
+
 
 ## 関連API
 SandboxToolkitの開発において、Unity の以下のAPI を使用しています。
