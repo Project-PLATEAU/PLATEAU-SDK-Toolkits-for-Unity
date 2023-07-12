@@ -1,22 +1,23 @@
-# PLATEAU SDK-Rendering Toolkit for Unity
+### PLATEAU-SDK-Toolkits-for-Unity
+# Rendering Toolkit 利用マニュアル
 
-PLATEAUの都市モデル・LODに適したグラフィックス向上処理を実現。テクスチャの自動作成・高解像度化や、時候に合わせた環境光などの調節機能を実現することで開発者がより手軽にシミュレーションを行えるような環境を提供します。
-
+PLATEAUの3D都市モデルのグラフィックスを向上させる処理を行います。  
+環境設定、テクスチャの自動作成、LOD設定等の機能をGUI上で提供します。  
 
 # 利用手順
 
-PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
+PLATEAU-SDK-Toolkits-for-Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
 
 <img width="371" alt="スクリーンショット 2023-06-27 17 45 56" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/03b129e4-eed2-4096-8cf7-9679ae7652e0">
 
-するとPLATEAU Rendering Toolkitのメインメニューが表示されます。
+Rendering Toolkitのメインメニューが表示されます。
 
 <img width="324" alt="スクリーンショット 2023-06-27 17 46 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/1bf3da51-c1ef-4056-9639-b7b8c6bd5002">
 
 
 
-## 環境システムの設定
-「環境システムの設定」では、シーンの時間帯や天候などを変更し、3D都市モデルを使った表示シミュレーションを行うことができます。
+## 1. 環境システムの設定
+「環境システムの設定」では、シーンの時間帯や天候などを変更し、3D都市モデルを使った環境シミュレーションを行うことができます。
 
 ### 時間の変更
 「Time of Day」欄のスライダーを動かすと、表示時間帯を変更することができます。
@@ -24,12 +25,14 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 
 ### 天候の変更
-「Snow」「Rain」「Cloud」バーを動かすことで天候を変更することが可能です。変更後にGameビューを表示することで確認することができます。Sceneビューでも表示可能ですが、対象となるカメラの前方のみの表示になりますので、確認の際はご注意ください。
+「Snow」「Rain」「Cloud」バーを動かすことで天候を変更することが可能です。  
+変更後にGameビューで表示を確認することができます。  
+Sceneビューでも表示可能ですが、対象となるカメラの前方のみの表示になりますので、確認の際はご注意ください。
 
 <img width="500" alt="スクリーンショット 2023-06-27 18 48 34" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/47700266-6162-403b-bf58-db5eb6025990">
 
 ### 太陽光・月光の色変更
-「Sun Color」を押すことで太陽の色、「Moon Color」を押すことで月の色をそれぞれ設定することができます。
+「Sun Color」を押すことで太陽の色を、「Moon Color」を押すことで月の色をそれぞれ設定することができます。
 
 <img width="500" alt="スクリーンショット 2023-06-27 18 49 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/91bfa98b-95f0-4da9-86b3-8fffdd23c60e">
 
@@ -57,8 +60,9 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="400" alt="スクリーンショット 2023-07-11 11 52 38" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/d9df0edc-d57b-4b1d-b79e-19e3277aef37">
 
 
-## 自動テクスチャの生成
-「自動テクスチャの生成」では対象となる3D都市モデルの建物に対して、自動的にテクスチャを貼り付けることができ、見た目を綺麗にすることができます。
+## 2. 自動テクスチャの生成
+「自動テクスチャの生成」では、3D都市モデルの建築物モデルに対してランダムにテクスチャを貼り付けることができます。  
+既にテクスチャを持つLOD2建築物モデルに対しては、窓のライトのみ付与します。
 
 1. Unityの「Hierarchy」ビューより対象となる建物のGameObjectを選択してください。
 
@@ -78,36 +82,37 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 <img width="500" alt="スクリーンショット 2023-06-27 18 54 17" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/2135325b-f68a-48d2-8e37-3f7785c319cd">
 
 
-※なおテクスチャの自動生成後は3D都市モデルに関しての、テクスチャ自動生成の処理パフォーマンスの都合上Hierarchyビューの構成が変わります。あらかじめご注意ください。
+### 注意点
+テクスチャの自動生成後は3D都市モデルのHierarchyビューの構成が変わります。あらかじめご注意ください。
 
-
-### 変更前
+#### 変更前
 PLATEAU SDKでダウンロードした直後は専用親GameObject（下記の場合は13100_tokyo23-ku_2022_citygml_1_2_op）に3D都市オブジェクトが格納されている。
 
 
 <img width="500" alt="スクリーンショット 2023-06-30 8 11 09" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/58426be6-8b1d-46d7-b5b7-c4abad877b88">
 
 
-### 変更後
+#### 変更後
 「ParentForGroupedObjects」と呼ばれるGameObjectに全てのモデルデータが移動する。
 
 <img width="500" alt="スクリーンショット 2023-07-03 15 12 23" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/6b5981a9-1b1a-405b-b8de-689b4d4edea5">
 
 ### 窓の表示
 
-「窓の表示切り替え」ボタンを押下すると、テクスチャに合わせた窓の表示もしくは非表示を切り替えることが可能です。なお現状ではLOD2のみが対象となっております。
+「窓の表示切り替え」ボタンを押下すると、テクスチャに合わせた窓の表示もしくは非表示を切り替えることが可能です。  
+この機能は、現時点ではLOD2建築物モデルのみが対象となります。
 
 
-## LODグループ
-「LODグループ生成」ボタンを押すと、すべての3D都市モデルに対してLOD機能が設定されます。
-LODグループが生成されると、建物オブジェクトに対してのカメラの距離で表示されるグラフィクスが異なります。
+## 3. LODグループ生成
+「LODグループ生成」ボタンを押すと、すべての3D都市モデルに対してUnityのLOD機能が設定されます。  
+LODグループが生成されると、建物オブジェクトに対してのカメラの距離で表示されるグラフィクスが変化します。
 
 <img width="500" alt="スクリーンショット 2023-07-11 21 18 01" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/26e1c951-e359-49af-9e9e-a62816dd8ddc">
 
-
-※PLATEAUで定義されているLODとUnityのLODは対応関係が異なるのでご注意ください。
-PLATEAU LOD・・・LOD0が最下位であり、上位になればよりリッチなグラフィクスを持ったモデルになります。
-UnityのLOD・・・最も建物とカメラが近いハイグラフィックになり、カメラが遠ざかると簡素な表現なります。
+### 注意点
+PLATEAUで定義されている3D都市モデルのLOD概念とUnity上でのLOD概念が異なることにご注意ください。
+- PLATEAU LOD・・・LOD0が最下位であり、上位になればよりリッチな詳細度を持ったモデルになります。
+- UnityのLOD・・・最も建物とカメラが近いLOD0がハイグラフィックになり、カメラが遠ざかるとLODが上がり、簡素な表現なります。
 
 <img width="250" alt="スクリーンショット 2023-07-11 21 14 52" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/40ab798a-f8af-4247-aaae-ac0dd7fe5da1">
 
