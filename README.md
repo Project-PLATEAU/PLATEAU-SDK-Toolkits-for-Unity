@@ -86,8 +86,7 @@ PLATEAU SDKを利用し、対象となる地域の3D都市モデルのダウン�
 3. ドロップダウンメニューから「Add package from tarball...」を選択します。
 4. ファイル選択ダイアログが開いたら、インストールしたいパッケージの.tar.gzファイルを探し、選択します。
 
-[ダウンロードリンクはこちら]([https://project-plateau.github.io/PLATEAU-SDK-for-Unity/](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/release))
-
+[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/release)
 <p align="center">
 <img width="500" alt="スクリーンショット 2023-06-26 12 31 50" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/f40cd78c-2f9c-4302-a70f-f2f4329d09b6">
 </p>
