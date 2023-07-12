@@ -1,5 +1,6 @@
-# PLATEA-S![Toolkits_MainVisual_v2](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/79615787/8d5cc8a7-6125-480a-8649-e0fef44d4be4)
-DK-Toolkits-for-Unity
+# PLATEA-SDK-Toolkits-for-Unity
+![Toolkits_MainVisual_v2](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/79615787/8d5cc8a7-6125-480a-8649-e0fef44d4be4)
+
 
 PLATEAU-SDK-Toolkits-for-Unityは、PLATEAUの提供する「3D都市モデル」のデータを利用したUnity上でのアプリケーション開発を支援するツールキット群です。  
 **PLATEAU-SDK-Toolkits-for-Unityは[PLATEAU SDK for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity)を前提とするアドオンです。**
