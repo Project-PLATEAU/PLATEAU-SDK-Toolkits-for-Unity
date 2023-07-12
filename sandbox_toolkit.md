@@ -108,7 +108,7 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 
 ## 関連API
-SandboxToolkitの開発において、Unity の以下のAPI を使用しています。
+Sandbox Toolkitの開発において、Unity の以下のAPIを使用しています。本ツールをカスタマイズしながら作りたい場合にはこちらを参考にしてください。
 1. [Splines](https://docs.unity3d.com/Packages/com.unity.splines@2.1/manual/index.html)
 2. [PackageManager](https://docs.unity3d.com/ja/2021.3/Manual/class-PackageManager.html)
 3. [Preferences](https://docs.unity3d.com/2021.3/Documentation/Manual/Preferences.html)
