@@ -1,20 +1,23 @@
-# PLATEAU SDK-Sandbox Toolkit for Unity
-
-3D都市モデルを用いてゲームや映像などを直感的に開発できるように、カメラや乗り物、人などの導線の設計、インタラクションのためのコライダー設定などを簡易的に行えるような環境を実現します。
+### PLATEAU-SDK-Toolkits-for-Unity
+# Sandbox Toolkit 利用マニュアル
+PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミュレーション実行などを支援します。  
+乗り物、人、プロップなどの配置及び操作、トラックの設定機能などをGUI上で提供します。  
 
 # 利用手順
 
-PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
+PLATEAU-SDK-Toolkits-for-Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
 
 <img width="371" alt="スクリーンショット 2023-06-27 17 45 56" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/03b129e4-eed2-4096-8cf7-9679ae7652e0">
 
-するとPLATEAU Sandbox Toolkitのメインメニューが表示されます。
+Sandbox Toolkitのメインメニューが表示されます。
 
 <img width="500" alt="スクリーンショット 2023-06-27 19 36 19" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/503a029e-02ab-428c-bdc7-cb4c6e9b2416">
 
+## 全般
+Sandbox Toolkitの各機能を利用するためには、**シーンに配置された3D都市モデルのオブジェクトにCollider (コライダー) コンポーネントを設定する必要があります。**
 
-## トラックの作成
-トラックの作成を行うことで、直感的に3D都市モデルの中に道路を作成することができます。
+## 1. トラックの作成
+トラックの作成を行うことで、直感的に3D都市モデルの中にオブジェクト移動用の経路を作成することができます。
 
 1. 「ツール」メニューの中で「新しいトラックを作成」ボタンを押下します。
 
@@ -34,12 +37,12 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 各モデル配置における「配置ツールを起動ボタン」を押下し、配置位置を「トラックに沿って配置」を選択しすると、作成したトラックに沿ってモデルを配置することができます。　
 
-※配置したHumanとVehicleを動かしにはPlayModeに入る必要があります。
+※配置したHumanとVehicleを動作させるためにはPlayModeを実行する必要があります。
 
 <img width="598" alt="スクリーンショット 2023-06-27 22 11 06" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/040788ff-00a4-4330-91ac-6307f97dbddd">
 
 ### トラックの速度制限
-トラックには速度制限を設定することができ、速度制限が設定されているトラックを移動オブジェクトが移動する際はこの速度制限以上の速度が出ないように制御されます。
+トラックには速度制限を設定することができます。
 速度制限は `PlateauSandboxTrack` のインスペクターから設定するか、速度制限設定ツールからシーン上で一括設定することができます。
 
 - インスペクターから設定する場合は `Has Speed Limit` にチェックボックスをいれて、制限速度（m/s）を `Speed Limit` に設定してください。
