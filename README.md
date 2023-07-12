@@ -1,4 +1,4 @@
-# PLATEA-SDK-Toolkits-for-Unity
+# PLATEAU-SDK-Toolkits-for-Unity
 ![Toolkits_MainVisual_v2](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/79615787/8d5cc8a7-6125-480a-8649-e0fef44d4be4)
 
 
