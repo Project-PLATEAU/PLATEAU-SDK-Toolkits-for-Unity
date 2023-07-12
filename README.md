@@ -40,8 +40,8 @@ PLATEAUの3D都市モデルのグラフィックスを向上させる処理を�
 
 ## SandboxToolkit
 
-PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミュレーション実行などを支援します。
-乗り物、人、プロップなどの配置及び操作、トラックの設定機能などをGUI上で提供します。
+PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミュレーション実行などを支援します。  
+乗り物、人、プロップなどの配置及び操作、トラックの設定機能などをGUI上で提供します。  
 
 <p align="center">
 <img width="500" alt="スクリーンショット 2023-06-26 12 22 46" src="https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/assets/137732437/a33dad18-02e3-4baa-a1d4-918ceefb83eb">
