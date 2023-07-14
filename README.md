@@ -1,5 +1,5 @@
 # PLATEAU-SDK-Toolkits-for-Unity
-![Toolkits_MainVisual_v2](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/79615787/8d5cc8a7-6125-480a-8649-e0fef44d4be4)
+![PLATEAU-Tool-Kit_Banner (3)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/02750b20-c0c2-4e89-a4f8-9f60867a7602)
 
 
 PLATEAU-SDK-Toolkits-for-Unityは、PLATEAUの提供する「3D都市モデル」のデータを利用したUnity上でのアプリケーション開発を支援するツールキット群です。  
