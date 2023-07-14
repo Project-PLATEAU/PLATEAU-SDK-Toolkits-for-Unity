@@ -45,7 +45,7 @@ Sceneビューでも表示可能ですが、対象となるカメラの前方の
 
 ### Weather Material Fadeの設定
 「Weather material fade」スライダーを調整すると、自動生成されたテクスチャのmaterialを単色化することができます。
-<img width="500" alt="WeatherMaterialFade" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/36ffdf5c-4073-4204-8f12-f6d946dc8d94">
+![PLATEAU-Rrendering-WeatherMaterialFade](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b12e3580-b67c-4c37-a398-876f3b0a823b)
 
 
 
