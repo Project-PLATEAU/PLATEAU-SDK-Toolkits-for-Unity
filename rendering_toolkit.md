@@ -4,6 +4,8 @@
 PLATEAUの3D都市モデルのグラフィックスを向上させる処理を行います。  
 環境設定、テクスチャの自動作成、LOD設定等の機能をGUI上で提供します。  
 
+なお、URP環境においては下記のFog, Cloudといった天候に関する設定機能がありますがHDRP環境にはありませんのでご注意ください。
+
 # 利用手順
 
 PLATEAU-SDK-Toolkits-for-Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
