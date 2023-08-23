@@ -11,8 +11,8 @@ PLATEAU-SDK-Toolkits-for-Unityは以下の4つのToolkitから構成されます
 **年度内に3回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
-- [Rendering Toolkit](#RenderingToolkit)
-- [Sandbox Toolkit](#SandboxToolkit)
+- [Rendering Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
+- [Sandbox Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/sandbox_toolkit.md)
 - Map Toolkit
 - AR Toolkit
 
