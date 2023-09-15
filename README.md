@@ -1,9 +1,11 @@
 # PLATEAU-SDK-Toolkits-for-Unity
 ![PLATEAU-Tool-Kit_Banner (3)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/02750b20-c0c2-4e89-a4f8-9f60867a7602)
 
-
 PLATEAU-SDK-Toolkits-for-Unityは、PLATEAUの提供する「3D都市モデル」のデータを利用したUnity上でのアプリケーション開発を支援するツールキット群です。  
 **PLATEAU-SDK-Toolkits-for-Unityは[PLATEAU SDK for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity)を前提とするアドオンです。**
+
+[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/v0.1.1)
+
 
 ## 4つのToolkit
 PLATEAU-SDK-Toolkits-for-Unityは以下の4つのToolkitから構成されます。  
@@ -113,7 +115,7 @@ Unityエディタが再起動します。
 <img width="500" alt="InputDialog" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/120234a9-1457-46f5-9a71-0c43febd44a2">
 </p>
 
-[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/release)
+[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/v0.1.1)
 
 ## ライセンス
 - 本リポジトリはMITライセンスで提供されています。
