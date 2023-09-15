@@ -19,8 +19,10 @@ PLATEAU-SDK-Toolkits-for-Unityは以下の4つのToolkitから構成されます
 
 ### 更新履歴
 
-|  2023/07/23  |  1st Release  |  Rendering Toolkit v0.1.0（ベータ版） <br> Sandbox Toolkit v0.1.0（ベータ版）  |
+|  2023/09/15  |  Windows Buildに関する不具合の修正  |  Rendering Toolkit v0.1.1 <br> Sandbox Toolkit v0.1.1  |
 | :--- | :--- | :--- |
+|  2023/07/23  |  1st Release  |  Rendering Toolkit v0.1.0（ベータ版） <br> Sandbox Toolkit v0.1.0（ベータ版）  |
+
 
 
 ## RenderingToolkit
