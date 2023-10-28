@@ -163,7 +163,7 @@ Unityエディタが再起動します。
 <img width="500" alt="InputDialog" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/120234a9-1457-46f5-9a71-0c43febd44a2">
 </p>
 
-[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/v0.1.1)
+[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/v0.2.1)
 
 ## ライセンス
 - 本リポジトリはMITライセンスで提供されています。
