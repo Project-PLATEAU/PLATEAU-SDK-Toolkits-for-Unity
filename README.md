@@ -68,7 +68,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/sandbox_toolkit.md)
 
 
-## [Maps Toolkit](/doc/release2/maps_toolkit.md)
+## [Maps Toolkit](/maps_toolkit.md)
 
 Maps ToolkitはPLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。
 
@@ -80,7 +80,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - BIMモデル（IFCファイル）の配置機能
 - シェープファイル・GeoJesonの配置機能
 
-使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/maps_toolkit.md)
+使い方は[こちら](/maps_toolkit.md)
 
 ## [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
