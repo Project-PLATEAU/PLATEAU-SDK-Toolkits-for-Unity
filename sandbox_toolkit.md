@@ -1,11 +1,11 @@
-### PLATEAU-SDK-Toolkits-for-Unity
+### PLATEAU SDK-Toolkits for Unity
 # Sandbox Toolkit 利用マニュアル
 PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミュレーション実行などを支援します。  
 乗り物、人、プロップなどの配置及び操作、トラックの設定機能などをGUI上で提供します。  
 
 # 利用手順
 
-PLATEAU-SDK-Toolkits-for-Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
+PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Rendering Toolkit」を選択します。
 
 <img width="372" alt="スクリーンショット 2023-07-12 19 20 22" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/58356a9f-7b52-49ce-9d5a-bbe55b56be87">
 
