@@ -80,7 +80,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - BIMモデル（IFCファイル）の配置機能
 - シェープファイル・GeoJesonの配置機能
 
-使い方は[こちら](！ダミーダミーダミー！)
+使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/maps_toolkit.md)
 
 ## [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
