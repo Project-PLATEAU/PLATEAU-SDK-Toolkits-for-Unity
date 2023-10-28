@@ -22,7 +22,7 @@ PLATEAU-SDK-Toolkits-for-Unityは以下の4つのコンポーネントから構�
 
 ### 更新履歴
 
-|  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  MapsToolkit v0.2.1（ベータ版）  <br> Rendering Toolkit v0.2.1（ベータ版）   |
+|  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps　Toolkit v0.2.1（ベータ版）  <br> Rendering Toolkit v0.2.1（ベータ版）   |
 | :--- | :--- | :--- |
 |  2023/09/15  |  Windows Buildに関する不具合の修正  |  Rendering Toolkit v0.1.1（ベータ版） <br> Sandbox Toolkit v0.1.1（ベータ版）  |
 |  2023/07/23  |  1st Release  |  Rendering Toolkit v0.1.0（ベータ版） <br> Sandbox Toolkit v0.1.0（ベータ版）  |
@@ -134,7 +134,7 @@ PLATEAU SDKを利用し、3D都市モデルをUnityシーン上へ配置して�
 
 ### 3. Cesium for Unity のインストール
 
-PLATEAU SDK-ToolkitではCesium for Unity が必要となるため、事前にインストールしていただく必要があります。下記のページでよりダウンロードしてください。Maps Toolkitではバージョンv1.6.3をサポートしています。
+PLATEAU SDK-ToolkitsではCesium for Unity が必要となるため、事前にインストールしていただく必要があります。下記のページでよりダウンロードしてください。Maps Toolkitではバージョンv1.6.3をサポートしています。
 
 - [Cesium for Unity v1.6.3](https://github.com/CesiumGS/cesium-unity/releases/tag/v1.6.3)
 
