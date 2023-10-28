@@ -1,15 +1,15 @@
-# PLATEAU-SDK-Toolkits-for-Unity
+# PLATEAU SDK-Toolkits for Unity
 
 ![mainvisual](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/84f49b01-1554-44cf-8192-8eeaf2c57ac9)
 
-PLATEAU-SDK-Toolkits-for-Unityは、PLATEAUの提供する「3D都市モデル」のデータを利用したUnity上でのアプリケーション開発を支援するツールキット群です。  
-**PLATEAU-SDK-Toolkits-for-Unityは[PLATEAU SDK for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity)を前提とするアドオンです。**
+PLATEAU SDK-Toolkits for Unityは、PLATEAUの提供する「3D都市モデル」のデータを利用したUnity上でのアプリケーション開発を支援するツールキット群です。  
+**PLATEAU SDK-Toolkits for Unityは[PLATEAU SDK for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity)を前提とするアドオンです。**
 
 [ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/v0.2.1)
 
 
 ## Toolkitの構成要素
-PLATEAU-SDK-Toolkits-for-Unityは以下の4つのコンポーネントから構成されます。  
+PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構成されます。  
 2023年度の開発はアジャイル方式で行われます。  
 **年度内に3回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
@@ -146,7 +146,7 @@ Windows > PackageManagerの「Add package from tarball…」を選択し、ダ�
 <img width="400" alt="top_manual_1_packagemanager" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/bf577dca-0d2f-4959-948a-0e8d8dfa899d">
 </p>
 
-### 4. PLATEAU-SDK-Toolkits-for-Unity のインストール
+### 4. PLATEAU SDK-Toolkits for Unity のインストール
 
 1. Unityエディタを開き、「Window」メニューから「Package Manager」を選択します。
 2. 「Package Manager」ウィンドウが開いたら、右上にある「＋」ボタンをクリックします。
@@ -156,7 +156,7 @@ Windows > PackageManagerの「Add package from tarball…」を選択し、ダ�
 <img width="493" alt="スクリーンショット 2023-07-12 19 18 42" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b9076829-b7cb-45db-a5a1-5ce6dbc435b1">
 </p>
 
-新しいプロジェクトでPLATEAU-SDK-Toolkits-for-Unityをインストールする際は、入力システムについての確認ダイアログが表示されます場合があります。その場合は「Yes」を選択してください。
+新しいプロジェクトでPLATEAU SDK-Toolkits for Unityをインストールする際は、入力システムについての確認ダイアログが表示されます場合があります。その場合は「Yes」を選択してください。
 Unityエディタが再起動します。
 
 <p align="center">
