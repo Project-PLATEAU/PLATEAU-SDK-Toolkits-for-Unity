@@ -188,21 +188,20 @@ PLATEAU SDKを用いて配置された3D都市モデルにCesium for Unity上で
 
 Maps Toolkit ウィンドウの `PLATEAUモデル` フィールドにシーン上の3D都市モデルオブジェクトを設定します（ヒエラルキーからドラッグアンドドロップして設定できます）。
 
-<img width="1000" alt="map_manual_22_setplateaumodel" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/d7ce5c48-9f07-4e43-95cc-592cbc28d4aa">
+<img width="1000" alt="map_manual_22_setplateaumodel" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/0dc9fc2d-77f9-4250-a9f5-b6a9657c0629">
 
 
 「PLATEAUモデルの位置を合わせる」を押すと選択した3D都市モデルオブジェクトがCesiumの地形モデル上で正しい位置に配置されます。
 
 (例) 上記の設定で東京タワー周辺のPLATEAU建築物モデルの位置合わせの実行結果
-<img width="1000" alt="map_manual_23_modelfitting" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/5f6ecda3-2454-430f-bf90-df356c5d16d8">
-
+<img width="1000" alt="map_manual_23_modelfitting" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/15b2a0b0-89b6-4449-9596-5a84a6ded6ea">
 
 > **Note**
 **位置合わせ**を実行すると`PLATEAU Instanced City Model`オブジェクトの緯度経度高さが`Cesium Georeference` ゲームオブジェクトのコンポーネントの `Origin (Longitude Latitude Height)`の値へ自動的に入力されます。
 
-<img width="400" alt="map_manual_24_citymodel_lonlat" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/14c602f4-95e0-477b-9b26-a6fbaa4daaa1">
+<img width="400" alt="map_manual_24_citymodel_lonlat" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/c8224783-3da1-4c7a-99fb-a758879b4b48">
 
-<img width="400" alt="map_manual_25_cesiumgeo_lonlat" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/1b0c1836-9e8f-416d-b171-1123f4230464">
+<img width="400" alt="map_manual_25_cesiumgeo_lonlat" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/50b856a6-5d19-47e1-a6a2-cdd9e3442d89">
 
 
 > **Warning**
@@ -216,7 +215,7 @@ PLATEAU SDK によって特定の範囲の3D都市モデルをインポートす
 
 Cesium ウィンドウから再度「Blank 3D Tiles Tileset」を押下し、新しい `Cesium 3D Tileset` オブジェクトを作成します。このとき、既にシーン内に `Cesium Georeference` オブジェクトが存在する場合はそのオブジェクトの子オブジェクトとして作成されます。
 
-<img width="400" alt="map_manual_26_blank3dtileasset" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/458a978b-2d61-4919-a698-5e580c00e4df">
+<img width="400" alt="map_manual_26_blank3dtileasset" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/5bd144aa-290f-487e-a8ef-9986184c6d06">
 
 
 #### ストリーミングURLを設定
@@ -230,22 +229,21 @@ plateau-3D Tiles-streaming
 
 - https://github.com/Project-PLATEAU/plateau-streaming-tutorial/blob/main/3d-tiles/plateau-3dtiles-streaming.md
 
-<img width="400" alt="map_manual_27_plateau-3D Tiles-streaming" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/d652fbde-dda7-44f5-b641-5cc1f0b2267a">
+<img width="400" alt="map_manual_27_plateau-3D Tiles-streaming" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/9d12418f-a1a6-4e73-80f4-0092d56ea3e3">
 
 
 なお、複数の地域をまたがる場所の開発を行う場合は、これまでの手順を参考に `Cesium 3D Tileset` オブジェクトを作成し、それぞれURLを設定してください。
 
 ストリーミング3D都市モデルを追加することで、下図のように青いアウトラインのあるインポートされた3D都市モデルの周囲の建物を表示することができます。
 
-<img width="600" alt="map_manual_28_blueoutline" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/7f0af433-6b98-4ca1-b13d-7b960be73b0f">
+<img width="600" alt="map_manual_28_blueoutline" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/6d57edf4-8e7f-43fc-8b8a-01c0183ba038">
 
 
 **ストリーミングされる3D都市モデルの範囲設定**
 
 ここまでの手順で周囲の3D都市モデルを表示することができますが、インポートした部分の3D都市モデルも重複して表示されています。
 
-<img width="600" alt="[map_manual_29_imported" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/50410dba-2e61-483a-ad32-386e170598ec">
-
+<img width="600" alt="[map_manual_29_imported" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/05475ce7-066e-4f5c-a9d6-ba8b40d0af42">
 
 Cesium では特定の領域の建物の表示を制限する仕組みが用意されているため、ここではその仕組を用いてインポートされた3D都市モデルがストリーミングされる3D都市モデルと重複しないような設定を行います。
 
@@ -304,14 +302,14 @@ public class CesiumBoxExcluder : CesiumTileExcluder
 
  `CesiumBoxExcluder` の `Invert` をオンにすると `Box Collider` の外側の3D Tilesのみが表示され、オフにすると内側のみが表示されます。
 
-<img width="600" alt="map_manual_30_box" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/2b9ac7ba-2ff2-4b08-9e60-9f55832e0acf">
+<img width="600" alt="map_manual_30_box" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b378183c-d973-44fe-8a18-5bfb0f926938">
 
 
 ## 2. IFCモデルの読み込み
 
 IFC読み込みツールでは読み込んだIFCモデルを選択し、以下のような操作を行うことが可能です。
 
-<img width="600" alt="map_manual_31_ifctop" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/f8872871-cf14-4a08-9eb5-26ec6104bf68">
+<img width="600" alt="map_manual_31_ifctop" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/3192600d-09d5-4a30-b9d2-32003b67990d">
 
 
 | 項目 | 説明 |
@@ -339,22 +337,22 @@ IFC読み込みツールでは読み込んだIFCモデルを選択し、以下�
 
  PLATEAU都市モデルとBIMモデル（ここではIFCファイル）を活用するにあたって詳細は「[3D都市モデル整備のためのBIM活用マニュアル](https://www.mlit.go.jp/plateau/file/libraries/doc/plateau_doc_0003_ver03.pdf)」をご参照ください。
  
- <img width="600" alt="map_manual_32_ifcload" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/efbb5a84-49f4-485b-a362-a6290de4d369">
+<img width="600" alt="map_manual_32_ifcload" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/e83c1758-533a-4f8f-ad82-9dbd5c41b8f2">
 
 コンソール画面が開き、読み込みと変換処理が開始されます。（時間がかかる場合があります。）
 
-<img width="400" alt="map_manual_33_terminal" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/3fe217f9-6fd7-4ef1-81e2-11857ab17bd3">
-
+<img width="400" alt="map_manual_33_terminal" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/644738b1-960e-4e11-9ea8-5b5ac0294616">
 
 
 完了するとプロジェクト内のAssets/MeshesフォルダにGLBファイルとXMLファイルが保存されます。
 
-<img width="400" alt="map_manual_34_asettsmeshes" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/0037adf1-0a07-44da-b033-b3e64e5bca8b">
+<img width="400" alt="map_manual_34_asettsmeshes" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/44e58269-2a0d-4379-851b-aa50f37b892c">
 
 
 インポートしたGLBファイルは、シーンにドラッグドロップして配置することができます。
 
-<img width="400" alt="map_manual_35_dragdrop" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/37e1c4ed-b534-49db-942c-465540c55c9f">
+<img width="400" alt="map_manual_35_dragdrop" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/4e41cf85-710a-4beb-86a1-c29e47d2f185">
+
 
 
 ### 2-2. 属性情報を付与
@@ -362,14 +360,19 @@ IFC読み込みツールでは読み込んだIFCモデルを選択し、以下�
 「ローカルディスクからIFCファイルを読み込み」によってIFCを読み込んだ結果、Assets/MeshesフォルダにGLBファイル（3Dモデル）とXMLファイル（属性情報）が作成されます。
 
 「属性情報を付与」機能ではUnityエディタ内でGLBファイル（3Dモデル）とXMLファイル（属性情報）の関連付けを行いいます。
-<img width="600" alt="map_manual_36_attribution" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/0f8939d7-8a54-4b2f-85fc-9cdd6958b8ed">
+
+<img width="600" alt="map_manual_36_attribution" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/c27951db-d7a2-4612-a30b-11e9358070ab">
 
 
 IFCモデルの項目には、ヒエラルキーからGLBのゲームオブジェクトをドラック＆ドロップして設定します。
-<img width="600" alt="map_manual_37_drop" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/e783fa51-fdc0-4c20-9bc7-983fa4d568d9">
+
+<img width="600" alt="map_manual_37_drop" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/d5c014a5-446a-49b8-9d09-b7e86f383d7f">
+
 
 IFC属性情報の項目には、Assets/MeshesフォルダからXMLファイルをドラック＆ドロップして設定します。
-<img width="400" alt="map_manual_38_" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/d61c8f2d-02d2-46b4-951b-a264cebe60f2">
+
+<img width="400" alt="map_manual_38_" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/4bbdd87e-651e-40a3-8ed0-c25d1ebee7cd">
+
 
 最後に「属性情報を付与」ボタンをクリックするとIFCファイルの属性情報をUnity上のIFCモデルに関連付けされ、位置情報などの属性情報をUnity上で利用することができます。
 
@@ -377,7 +380,7 @@ IFC属性情報の項目には、Assets/MeshesフォルダからXMLファイル�
 
 ヒエラルキーにて、GLBオブジェクト（IFCを読み込んだ結果）を`Cesium Georeference`の子オブジェクトに設定します。
 
-<img width="600" alt="map_manual_39_glbundergeo" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/fd69770a-e137-4813-9c6b-2c9c5e37c049">
+<img width="600" alt="map_manual_39_glbundergeo" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/08b46041-c04e-4a7b-bd8d-7d55c25f1c41">
 
 さらにGLBオブジェクトのインスペクタ上で「Add Component」を押下し、 `Cesium Globe Anchor` を選択してアタッチします。これで自動配置するための準備は完了です。
 
@@ -385,7 +388,8 @@ IFC属性情報の項目には、Assets/MeshesフォルダからXMLファイル�
 
 
 読み込んだIFCモデルを指定された緯度、経度、標高に配置します。また回転角度、縮尺を設定することができます。
-<img width="600" alt="map_manual_40_ifc_posture" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/f774b285-699e-4fd6-bd4e-1be0f7153940">
+
+<img width="600" alt="map_manual_40_ifc_posture" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/97fac068-7f74-4047-866a-3ded6c248e66">
 
 
 ### 2-4. IFC属性情報から自動配置
@@ -396,14 +400,16 @@ IFC属性情報に位置情報が保存されている場合、その情報を�
 
 ヒエラルキーにて、GLBオブジェクト（IFCを読み込んだ結果）を`Cesium Georeference`の子オブジェクトに設定します。
 
-<img width="600" alt="map_manual_39_glbundergeo" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/fd69770a-e137-4813-9c6b-2c9c5e37c049">
+<img width="600" alt="map_manual_39_glbundergeo" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/08b46041-c04e-4a7b-bd8d-7d55c25f1c41">
 
 さらにGLBオブジェクトのインスペクタ上で「Add Component」を押下し、 `Cesium Globe Anchor` を選択してアタッチします。これで自動配置するための準備は完了です。
 
-![Untitled 16](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/113009946/d9c9b561-35a1-4a44-9c33-c7dca5afa961)
+<img width="400" alt="mapsnew" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/52cd0f6f-eb88-44aa-be51-3e554133de5f">
+
 
 「IFC属性情報から自動配置」ボタンを押すとモデルが配置されます。
-<img width="600" alt="map_manual_41_ifcautoplace" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/7476fbab-b41e-42eb-9900-48c5c072c5d6">
+
+<img width="600" alt="map_manual_41_ifcautoplace" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/76566af7-b88e-4739-8d78-896f5931c6a8">
 
 
 ### 2-5. IFC読み込みの環境設定
@@ -412,7 +418,7 @@ IFC属性情報に位置情報が保存されている場合、その情報を�
 | IFC ローダーパス | IFCローダー (IfcConvert) はWindowsでは基本的に変更する必要はないですが、 macOS では選択する必要があります（後述）。 |
 | IFC アウトプットパス | 生成されるファイルの出力先フォルダは、デフォルトではUnityプロジェクト内の Assets/Meshes に設定されていますが、 IFC アウトプットパス を設定することで別のフォルダを指定することができます。 |
 
-<img width="600" alt="map_manual_42_ifcloaderpath" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/9b0ffc95-279d-454e-874c-74427442a190">
+<img width="600" alt="map_manual_42_ifcloaderpath" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/01f8a681-afa4-445a-8077-a6df8db5d54a">
 
 
 #### macOSについて
@@ -429,7 +435,7 @@ PLATEAU SDK Toolkits for Unity をインストールしたあとmacOSでは以�
 
 `{インストールしたUnityプロジェクトのフォルダパス}/Library/PackageCache/com.unity.plateautoolkit@{ハッシュ}/PlateauToolkit.Maps/Editor/IfcConvert/`
 
-<img width="400" alt="map_manual_43_macexplorer" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/6ba64668-86b6-435d-afb5-f7fba686585d">
+<img width="400" alt="map_manual_43_macexplorer" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/42bdf792-afe1-4765-b226-b63e6eeca007">
 
 
 > **Warning**
@@ -450,7 +456,7 @@ exe形式の実行ファイルはWindows向けなので、以降の手順では(
 
 “Permission Denied” が表示されていれば環境設定のセキュリティ画面を開きます。
 
-<img width="600" alt="map_manual_44_macospermission" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/1b375fd7-0ac3-4eb9-af9f-9779113b2f5e">
+<img width="600" alt="map_manual_44_macospermission" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/37ec1f3d-0430-4a7b-80a4-f7519690e74b">
 
 
 上記の図のように、IfcConvert はブロックされましたというメッセージを見つけて「許可」を押下してください。その後、再度「ターミナルアプリ」から上記コマンドを実行してGLBファイルが生成されることを確認し、正しくIfcConvertの実行されることを確認してください。
@@ -459,7 +465,7 @@ exe形式の実行ファイルはWindows向けなので、以降の手順では(
 
 デフォルトでは Windows の実行ファイルのパスが設定されていますが、macOSでは Maps Toolkit ウィンドウから環境設定を開き、上記の実行ファイルのパスを `IFC ローダーパス` に設定してください。
 
-<img width="600" alt="map_manual_45_ifcloaderpath" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/6c6591b1-56f6-4e23-9954-a6908cdb63ff">
+<img width="600" alt="map_manual_45_ifcloaderpath" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/f652beb1-2b6e-474a-9a23-b9eb9863e45b">
 
 
 設定が完了したら Windowsと同様の手順でMaps ToolkitによるIFCの読み込みができます。
@@ -481,14 +487,14 @@ GISデータは緯度経度を用いるデータであり、GISデータの読�
 | SHPのレンダー方法 | GISデータはメッシュあるいは線として描画することができます。GeoJSONの場合は自動で決定されます（ファイル内のプロパティから自動判断されます）。 |
 | GISの線幅 | 描画する先の太さを指定します。SHPのレンダー方法がLineのときのみ表示されます。|
 
-<img width="600" alt="map_manual_46_shppng" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/5c7d7241-828c-4095-a4bc-64a53a566058">
+<img width="600" alt="map_manual_46_shppng" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/a3bb42e0-9586-46d3-8e1f-ddabe8638db9">
 
-<img width="600" alt="map_manual_47_shpmesh" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/a780cfce-dbd4-4126-9eee-f4705c7247b5">
+<img width="600" alt="map_manual_47_shpmesh" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/223001e4-43da-453e-806e-486aa607a03e">
 
 
 ファイルを指定した後に「GISデータの読み込み」を押すと、でGISオブジェクトが描画されます。
 
-<img width="600" alt="map_manual_48_shprever" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity-Release2Draft/assets/137732437/5c5abdbf-0990-4319-9118-36942fba0916">
+<img width="600" alt="map_manual_48_shprever" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/0f56d730-f980-4ae6-a230-9feacdd69f1f">
 
 
 > **Note**
