@@ -10,13 +10,13 @@ PLATEAU SDK-Toolkits for Unityは、PLATEAUの提供する「3D都市モデル�
 
 
 ## Toolkitsの構成要素
-PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構成されます。  
+PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構成されます。
 2023年度の開発はアジャイル方式で行われます。  
 **年度内に4回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
-- [Rendering Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
-- [Sandbox Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/sandbox_toolkit.md)
+- [Rendering Toolkit（本リポジトリ)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
+- [Sandbox Toolkit（本リポジトリ)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/sandbox_toolkit.md)
 - [Map Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
@@ -102,7 +102,7 @@ AR ExtensionsはToolkitsを前提としたエクステンションとして構�
 - macOS Ventura 13.2
 
 ### Unity Version
-- Unity 2021.3.30)
+- Unity 2021.3.30
     - Unity 2021.3系であれば問題なく動作する見込みです。
 
 ### Rendering Pipeline
