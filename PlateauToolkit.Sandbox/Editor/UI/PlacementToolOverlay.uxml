@@ -1,0 +1,27 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" xsi="http://www.w3.org/2001/XMLSchema-instance" engine="UnityEngine.UIElements" editor="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:DropdownField label="配置位置" index="0" choices="表面に配置,トラックに沿って配置" name="placement-mode" />
+    <ui:DropdownField label="配置方法" index="0" choices="クリック,ブラシ" name="placement-tool" />
+    <ui:DropdownField label="オブジェクトの向き" index="0" choices="配置面の法線,ワールド座標" name="placement-up-vector" />
+    <ui:GroupBox name="brush-placement-group" style="display: flex; margin-left: 0; margin-right: 0; padding-left: 0; flex-direction: column;">
+        <ui:Label text="ブラシ配置設定" display-tooltip-when-elided="true" style="background-color: rgba(0, 0, 0, 0.34); padding-bottom: 2px; padding-top: 2px; margin-bottom: 6px; padding-left: 4px; -unity-font-style: bold;" />
+        <ui:GroupBox tooltip="配置されるオブジェクトの回転を設定します" style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 4px; padding-top: 0; padding-bottom: 0; padding-right: 4px;">
+            <ui:Label text="オブジェクトの回転" display-tooltip-when-elided="true" style="justify-content: flex-start; align-items: auto; -unity-text-align: middle-left; margin-right: 8px; width: 100px;" />
+            <ui:Slider picking-mode="Ignore" value="0" high-value="360" show-input-field="true" low-value="0" name="brush-placement-rotation" style="flex-direction: row; flex-shrink: 0; flex-grow: 1;" />
+        </ui:GroupBox>
+        <ui:GroupBox tooltip="配置されるオブジェクトの数を設定します" style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 4px; padding-top: 0; padding-bottom: 0; padding-right: 4px;">
+            <ui:Label text="配置数" display-tooltip-when-elided="true" style="justify-content: flex-start; align-items: auto; -unity-text-align: middle-left; margin-right: 8px; width: 100px;" />
+            <ui:SliderInt picking-mode="Ignore" value="10" high-value="30" show-input-field="true" direction="Horizontal" name="brush-placement-count" style="flex-direction: row; flex-grow: 1;" />
+        </ui:GroupBox>
+        <ui:GroupBox tooltip="配置する範囲を設定します" style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 4px; padding-top: 0; padding-bottom: 0; padding-right: 4px;">
+            <ui:Label text="ブラシサイズ" display-tooltip-when-elided="true" style="justify-content: flex-start; align-items: auto; -unity-text-align: middle-left; margin-right: 8px; width: 100px;" />
+            <ui:Slider picking-mode="Ignore" value="5" high-value="100" low-value="0" show-input-field="true" name="brush-placement-radius" style="flex-direction: column; flex-grow: 1;" />
+        </ui:GroupBox>
+        <ui:GroupBox tooltip="ドラッグした際の配置間隔を設定します" style="flex-direction: row; margin-left: 0; margin-right: 0; margin-top: 0; margin-bottom: 0; padding-left: 4px; padding-top: 0; padding-bottom: 0; padding-right: 4px;">
+            <ui:Label text="配置間隔" display-tooltip-when-elided="true" style="justify-content: flex-start; align-items: auto; -unity-text-align: middle-left; margin-right: 8px; width: 100px;" />
+            <ui:Slider picking-mode="Ignore" value="5" high-value="10" show-input-field="true" low-value="0" name="brush-placement-spacing" style="flex-direction: column; flex-grow: 1;" />
+        </ui:GroupBox>
+        <ui:Toggle label="シード値固定" name="brush-placement-fixed-seed" tooltip="シード値を固定するとブラシの形状が一定になります" />
+        <ui:TextField picking-mode="Ignore" label="ブラシ乱数シード値" value="0" text="0" name="brush-placement-seed" tooltip="ブラシの形状を決定する値です" />
+        <ui:Button text="ランダムにシード値を振り直す" display-tooltip-when-elided="true" name="brush-placement-randomize-seed" style="margin-top: 8px;" />
+    </ui:GroupBox>
+</ui:UXML>

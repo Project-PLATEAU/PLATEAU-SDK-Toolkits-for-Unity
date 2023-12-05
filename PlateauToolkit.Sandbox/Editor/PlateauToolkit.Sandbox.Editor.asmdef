@@ -1,0 +1,35 @@
+{
+    "name": "PlateauToolkit.Sandbox.Editor",
+    "rootNamespace": "PlateauToolkit.Sandbox.Editor",
+    "references": [
+        "GUID:d8b63aba1907145bea998dd612889d6b",
+        "GUID:75469ad4d38634e559750d17036d5f7c",
+        "GUID:21d1eb854b91ade49bc69a263d12bee2",
+        "GUID:e43142fc3fec6554980dde6126631f1d",
+        "GUID:5583122765da9804d8b3e6f2dccd809b",
+        "GUID:f31ea2bc62aff8541a07efe6906b6778",
+        "GUID:341d5aae340da8942a2252a8266d48e5"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "",
+            "define": "UNITY_URP"
+        },
+        {
+            "name": "com.unity.render-pipelines.high-definition",
+            "expression": "",
+            "define": "UNITY_HDRP"
+        }
+    ],
+    "noEngineReferences": false
+}

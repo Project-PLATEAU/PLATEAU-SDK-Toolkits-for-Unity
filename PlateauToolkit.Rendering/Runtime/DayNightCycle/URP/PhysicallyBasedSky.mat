@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6862962507120231884
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 6
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PhysicallyBasedSky
+  m_Shader: {fileID: 4800000, guid: 87fd4644e8d2f444584d25123cb7bc8f, type: 3}
+  m_ValidKeywords: []
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _CloudLightmapA:
+        m_Texture: {fileID: 2800000, guid: db6368e46f0aed644a8f75da959623fb, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0.09}
+    - _CloudLightmapB:
+        m_Texture: {fileID: 2800000, guid: d878ccec086ef364e939e31ee34e028a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _MoonTexture:
+        m_Texture: {fileID: 2800000, guid: 6ae8888febd6b6540bc2486b9be64053, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _PanoramaTex:
+        m_Texture: {fileID: 2800000, guid: 776fc1aff2eac4c43be1106426bbcf9c, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_9731af74d0c14a9e80b5b2ca08b21596_Texture_1:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Ints: []
+    m_Floats:
+    - _Brightness: 18
+    - _CloudCylinderBottom: -60
+    - _CloudCylinderTop: 50
+    - _CloudScrollSpeed: 0.003
+    - _GloundHeight: 100
+    - _HightFogEnd: 100000
+    - _HightFogStart: 0
+    - _MoonPhase: 0.403
+    - _MoonSize: 0.08
+    - _QueueControl: 0
+    - _QueueOffset: -9
+    - _Rotation: -2
+    - _Samples: 40
+    - _SpaceFadeDistance: 30000
+    m_Colors:
+    - _CloudCylinderCenter: {r: 0, g: 0, b: 0, a: 1}
+    - _MainLightRight: {r: 0.57, g: 2.3, b: 0.91, a: 0}
+    - _MainLightUp: {r: -2.94, g: 4, b: 0.28, a: 0}
+    - _MoonColor: {r: 4.237095, g: 4.237095, b: 4.237095, a: 1}
+    - _MoonEmissionColor: {r: 5.656854, g: 5.433856, b: 4.838567, a: 0.78431374}
+    - _MoonLightDirection: {r: 0.89756244, g: -0.40475762, b: 0.17479399, a: 0}
+    - _MoonLightRight: {r: 0.191152, g: 0.000000014901161, b: -0.9815604, a: 0}
+    - _MoonLightUp: {r: 0.3972941, g: 0.914424, b: 0.07737024, a: 0}
+  m_BuildTextureStacks: []

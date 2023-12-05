@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 636a53165821c004caaa22bc0bbe40e3, type: 3}
+  m_Name: Building Plateau Material Assignment Table HDRP
+  m_EditorClassIdentifier: 
+  m_Max10mMaterials:
+  - {fileID: 2100000, guid: 7b10a250638ee1f46989b0844e77d40b, type: 2}
+  - {fileID: 2100000, guid: 85f9a91b3348f064f8d08de5d54668a4, type: 2}
+  - {fileID: 2100000, guid: 1001dfe5942345b41b23eb6a8132803d, type: 2}
+  - {fileID: 2100000, guid: 5adcf5ca39a089a42a8f3bea13498c6e, type: 2}
+  - {fileID: 2100000, guid: 07060d485e9d95249a8a0813f55a25bb, type: 2}
+  - {fileID: 2100000, guid: 6f46b867d5e0dc44a9b8d17350827207, type: 2}
+  - {fileID: 2100000, guid: 788781efae08bd34d85b62d6a5be4393, type: 2}
+  - {fileID: 2100000, guid: 8b241cf3f0844bf4d9063e2bc2e6b5b0, type: 2}
+  - {fileID: 2100000, guid: 1e2326b69ed48c14aba18060f261cf3f, type: 2}
+  - {fileID: 2100000, guid: 9fa01c4e29f7bcd439ecd523beb052b4, type: 2}
+  m_Max40mMaterials:
+  - {fileID: 2100000, guid: 7b10a250638ee1f46989b0844e77d40b, type: 2}
+  - {fileID: 2100000, guid: 85f9a91b3348f064f8d08de5d54668a4, type: 2}
+  - {fileID: 2100000, guid: 1001dfe5942345b41b23eb6a8132803d, type: 2}
+  - {fileID: 2100000, guid: 5adcf5ca39a089a42a8f3bea13498c6e, type: 2}
+  - {fileID: 2100000, guid: 07060d485e9d95249a8a0813f55a25bb, type: 2}
+  - {fileID: 2100000, guid: 6f46b867d5e0dc44a9b8d17350827207, type: 2}
+  - {fileID: 2100000, guid: 788781efae08bd34d85b62d6a5be4393, type: 2}
+  - {fileID: 2100000, guid: 8b241cf3f0844bf4d9063e2bc2e6b5b0, type: 2}
+  - {fileID: 2100000, guid: 1e2326b69ed48c14aba18060f261cf3f, type: 2}
+  - {fileID: 2100000, guid: 5926b36e8b6bbb44ba9d79330f22a42e, type: 2}
+  m_Max80mMaterials:
+  - {fileID: 2100000, guid: 7b10a250638ee1f46989b0844e77d40b, type: 2}
+  - {fileID: 2100000, guid: 85f9a91b3348f064f8d08de5d54668a4, type: 2}
+  - {fileID: 2100000, guid: 1001dfe5942345b41b23eb6a8132803d, type: 2}
+  - {fileID: 2100000, guid: 5adcf5ca39a089a42a8f3bea13498c6e, type: 2}
+  - {fileID: 2100000, guid: 07060d485e9d95249a8a0813f55a25bb, type: 2}
+  - {fileID: 2100000, guid: 6f46b867d5e0dc44a9b8d17350827207, type: 2}
+  - {fileID: 2100000, guid: 788781efae08bd34d85b62d6a5be4393, type: 2}
+  - {fileID: 2100000, guid: 8b241cf3f0844bf4d9063e2bc2e6b5b0, type: 2}
+  - {fileID: 2100000, guid: 1e2326b69ed48c14aba18060f261cf3f, type: 2}
+  - {fileID: 2100000, guid: 2a0ce87427ae62f4ba73189966a31f30, type: 2}
+  m_Max150mMaterials:
+  - {fileID: 2100000, guid: 7b10a250638ee1f46989b0844e77d40b, type: 2}
+  - {fileID: 2100000, guid: 85f9a91b3348f064f8d08de5d54668a4, type: 2}
+  - {fileID: 2100000, guid: 1001dfe5942345b41b23eb6a8132803d, type: 2}
+  - {fileID: 2100000, guid: 5adcf5ca39a089a42a8f3bea13498c6e, type: 2}
+  - {fileID: 2100000, guid: 07060d485e9d95249a8a0813f55a25bb, type: 2}
+  - {fileID: 2100000, guid: 6f46b867d5e0dc44a9b8d17350827207, type: 2}
+  - {fileID: 2100000, guid: 788781efae08bd34d85b62d6a5be4393, type: 2}
+  - {fileID: 2100000, guid: 8b241cf3f0844bf4d9063e2bc2e6b5b0, type: 2}
+  - {fileID: 2100000, guid: 1e2326b69ed48c14aba18060f261cf3f, type: 2}
+  - {fileID: 2100000, guid: 2a0ce87427ae62f4ba73189966a31f30, type: 2}
+  m_MaxHeightMaterials:
+  - {fileID: 2100000, guid: 7b10a250638ee1f46989b0844e77d40b, type: 2}
+  - {fileID: 2100000, guid: 85f9a91b3348f064f8d08de5d54668a4, type: 2}
+  - {fileID: 2100000, guid: 1001dfe5942345b41b23eb6a8132803d, type: 2}
+  - {fileID: 2100000, guid: 5adcf5ca39a089a42a8f3bea13498c6e, type: 2}
+  - {fileID: 2100000, guid: 07060d485e9d95249a8a0813f55a25bb, type: 2}
+  - {fileID: 2100000, guid: 6f46b867d5e0dc44a9b8d17350827207, type: 2}
+  - {fileID: 2100000, guid: 788781efae08bd34d85b62d6a5be4393, type: 2}
+  - {fileID: 2100000, guid: 8b241cf3f0844bf4d9063e2bc2e6b5b0, type: 2}
+  - {fileID: 2100000, guid: 1e2326b69ed48c14aba18060f261cf3f, type: 2}
+  - {fileID: 2100000, guid: 5926b36e8b6bbb44ba9d79330f22a42e, type: 2}

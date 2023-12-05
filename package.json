@@ -1,0 +1,34 @@
+{
+  "name": "com.unity.plateautoolkit",
+  "displayName": "PLATEAU SDK Toolkits for Unity",
+  "version": "0.2.3-alpha1",
+  "unity": "2021.3",
+  "description": "Toolkit utilities for PLATEAU",
+  "keywords": [
+    "Toolbox",
+    "Plateau"
+  ],
+  "category": "utility",
+  "samples": [
+    {
+      "displayName": "HDRP Sample Assets",
+      "description": "HDRP sample assets for PLATEAU Toolkit",
+      "path": "Samples~/HDRP",
+      "interactiveImport": true
+    },
+    {
+      "displayName": "URP Sample Assets",
+      "description": "URP sample assets for PLATEAU Toolkit",
+      "path": "Samples~/URP",
+      "interactiveImport": true
+    }
+  ],
+  "dependencies": {
+    "com.synesthesias.plateau-unity-sdk": "1.0.0",
+    "com.unity.splines":"2.2.0",
+    "com.unity.inputsystem":"1.5.1",
+    "com.unity.cloud.gltfast":"5.0.4",
+    "com.unity.visualeffectgraph":"12.1.10",
+    "com.unity.nuget.newtonsoft-json": "3.2.1"
+  }
+}
