@@ -6,7 +6,7 @@
 PLATEAU SDK-Toolkits for Unityは、PLATEAUの提供する「3D都市モデル」のデータを利用したUnity上でのアプリケーション開発を支援するツールキット群です。  
 **PLATEAU SDK-Toolkits for Unityは[PLATEAU SDK for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity)を前提とするアドオンです。**
 
-[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/v0.2.1)
+[ダウンロードリンクはこちら](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/releases/)
 
 
 ## Toolkitsの構成要素
@@ -134,21 +134,7 @@ TarballかGithub URLからインストールをする必要があります。詳
 
 PLATEAU SDKを利用し、3D都市モデルをUnityシーン上へ配置してください。
 
-### 3. Cesium for Unity のインストール
-
-PLATEAU SDK-ToolkitsではCesium for Unity が必要となるため、事前にインストールしていただく必要があります。下記のページでよりダウンロードしてください。Maps Toolkitではバージョンv1.6.3をサポートしています。
-
-- [Cesium for Unity v1.6.3](https://github.com/CesiumGS/cesium-unity/releases/tag/v1.6.3)
-
-ダウンロードした tgz ファイルは Maps Toolkit を使用する Unity プロジェクトのフォルダ内に配置することを推奨します。Unity プロジェクトのフォルダに配置することで、相対パスでパッケージを参照することができ、フォルダを移動したり別の環境での同じプロジェクトの利用が容易になります。Unityプロジェクト外を参照すると、絶対パスがmanifest.jsonに書き込まれることになり、少し不便になり、依存解決のエラーなどが将来的に発生してしまう可能性があります。
-
-Windows > PackageManagerの「Add package from tarball…」を選択し、ダウンロードした Cesium for Unity の tgz ファイルを選択します。
-
-<p align="center">
-<img width="400" alt="top_manual_1_packagemanager" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/bf577dca-0d2f-4959-948a-0e8d8dfa899d">
-</p>
-
-### 4. PLATEAU SDK-Toolkits for Unity のインストール
+### 3. PLATEAU SDK-Toolkits for Unity のインストール
 
 1. Unityエディタを開き、「Window」メニューから「Package Manager」を選択します。
 2. 「Package Manager」ウィンドウが開いたら、右上にある「＋」ボタンをクリックします。
@@ -165,7 +151,7 @@ Unityエディタが再起動します。
 <img width="500" alt="InputDialog" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/120234a9-1457-46f5-9a71-0c43febd44a2">
 </p>
 
-[ダウンロードリンクはこちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/tag/v0.2.1)
+[ダウンロードリンクはこちら](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/releases/)
 
 ## ライセンス
 - 本リポジトリはMITライセンスで提供されています。
