@@ -12,19 +12,28 @@ PLATEAU SDK-Toolkits for Unityは、PLATEAUの提供する「3D都市モデル�
 ## Toolkitsの構成要素
 PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構成されます。  
 2023年度の開発はアジャイル方式で行われます。  
-**年度内に3回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
+**年度内に4回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
 - [Rendering Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
 - [Sandbox Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/sandbox_toolkit.md)
-- [Map Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/maps_toolkit.md)
+- [Map Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
+
+また、Release3に伴い、Toolkitを活用した下記の４種類のサンプルアプリプロジェクトを提供しています。<br>
+下記リポジトリよりご利用ください。
+
+- [AR City Miniature](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-ARCityMiniature)
+- [Urban Scape](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-UrbanScape)
+- [City Rescue Multi Play](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
+- [AR Treasure Map](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-ARTreasureMap)
 
 
 ### 更新履歴
 
-|  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps　Toolkit v0.2.1（ベータ版）  <br> Rendering Toolkit v0.2.1（ベータ版）   |
+|  2023/12/13  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化  |    |
 | :--- | :--- | :--- |
+|  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps　Toolkit v0.2.1（ベータ版）  <br> Rendering Toolkit v0.2.1（ベータ版）   |
 |  2023/09/15  |  Windows Buildに関する不具合の修正  |  Rendering Toolkit v0.1.1（ベータ版） <br> Sandbox Toolkit v0.1.1（ベータ版）  |
 |  2023/07/23  |  1st Release  |  Rendering Toolkit v0.1.0（ベータ版） <br> Sandbox Toolkit v0.1.0（ベータ版）  |
 
@@ -69,24 +78,16 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/sandbox_toolkit.md)
 
 
-## [Maps Toolkit](/maps_toolkit.md)
+## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 
-Maps ToolkitはPLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。
+PLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。<br>
+[こちらのリポジトリ](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)からご利用ください。
 
-https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/42bcee43-436a-45f4-9cd2-a306ed36b905
 
-
-＜リリース済機能＞
-- Cesium for Unityと連携したグローバル地形への3D都市モデルの配置機能
-- BIMモデル（IFCファイル）の配置機能
-- シェープファイル・GeoJesonの配置機能
-
-使い方は[こちら](/maps_toolkit.md)
-
-## [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
+## [PLATEAU SDK-AR-Extensions for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
 PLATEAUの3D都市モデルを活用したARアプリ開発ツールです。AR空間に3Dモデルを配置し、位置のずれや地面の高さを調整できます。さらに、3Dオブジェクトを遮蔽するオクルージョン機能も備えています。Streamingにより配置された3D都市モデルを用いたARアプリ開発も可能です。
-AR ExtensionsはToolkitsを前提としたエクステンションとして構築されています。
+AR ExtensionsはToolkitsを前提としたエクステンションとして構築されています。<br>
 [こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)からご利用ください。
 
 
@@ -101,7 +102,7 @@ AR ExtensionsはToolkitsを前提としたエクステンションとして構�
 - macOS Ventura 13.2
 
 ### Unity Version
-- Unity 2021.3.31f1 (2023/10/10現在 2021 LTSバージョン)
+- Unity 2021.3.30)
     - Unity 2021.3系であれば問題なく動作する見込みです。
 
 ### Rendering Pipeline
@@ -111,7 +112,7 @@ AR ExtensionsはToolkitsを前提としたエクステンションとして構�
 **Built-in Rendering Pipelineでは動作しません。**
 
 ## PLATEAU SDKバージョン
-- [version 2.0.3-alpha](https://github.com/Synesthesias/PLATEAU-SDK-for-Unity/releases/tag/v2.0.3-alpha)
+- [PLATEAU SDK for Unity v2.2.1-alpha](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity/releases)
 
 ## 導入手順
 
