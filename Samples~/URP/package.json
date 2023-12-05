@@ -1,0 +1,7 @@
+{
+  "name": "com.unity.plateautoolkit.samples.universal",
+  "displayName": "PLATEAU Toolkit Samples URP",
+  "version": "1.0.0",
+  "unity": "2021.3",
+  "description": "Samples for PLATEAU Toolkit for Universal Render Pipeline"
+}
