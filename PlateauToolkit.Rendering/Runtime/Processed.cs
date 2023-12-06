@@ -1,5 +1,4 @@
-﻿#if UNITY_EDITOR
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace PlateauToolkit.Rendering
 {
@@ -8,4 +7,3 @@ namespace PlateauToolkit.Rendering
         // This class exists only to indicate that the mesh has been processed
     }
 }
-#endif
