@@ -38,8 +38,6 @@ namespace PlateauToolkit.Rendering.Editor
         EnvironmentControllerEditor m_EnvEditor;
         HideInHierarchyController m_HideInHierarchyEditor;
 
-        float m_TargetScale;
-
         int m_MaskPercentage = 20;
         int m_RandomAlphaSeed;
 
@@ -51,7 +49,6 @@ namespace PlateauToolkit.Rendering.Editor
             LODGrouping,
             Shader,
             Environment,
-            Scaler
         }
 
         Tab m_CurrentTab;
@@ -60,7 +57,6 @@ namespace PlateauToolkit.Rendering.Editor
         {
             InitializePaths();
             m_CurrentTab = Tab.Environment;
-            m_TargetScale = 1.0f;
 
             SceneView scene = SceneView.lastActiveSceneView;
             if (scene != null)
@@ -181,13 +177,6 @@ namespace PlateauToolkit.Rendering.Editor
                     () =>
                     {
                          if (TabButton(PlateauToolkitRenderingPaths.k_LodIcon, Tab.LODGrouping))
-                        {
-
-                        }
-                    },
-                    () =>
-                    {
-                         if (TabButton(PlateauToolkitRenderingPaths.k_ScalerIcon, Tab.Scaler))
                         {
 
                         }
@@ -431,34 +420,6 @@ namespace PlateauToolkit.Rendering.Editor
                     }
                     break;
                 #endregion
-                #region texture scaler
-                case Tab.Scaler:
-                    PlateauToolkitRenderingGUILayout.Header("テクスチャの解像度調整");
-                    EditorGUILayout.Space();
-                    EditorGUILayout.HelpBox("オブジェクトに付与されているテクスチャの解像度変更", MessageType.Info);
-                    EditorGUILayout.Space();
-
-                    EditorGUILayout.BeginHorizontal();
-                    m_TargetScale = EditorGUILayout.FloatField("スケール", m_TargetScale);
-
-                    if (GUILayout.Button("解像度変更"))
-                    {
-                        if (!SelectedObjectsExist())
-                        {
-                            EditorUtility.DisplayDialog(
-                               "オブジェクト選択の確認",
-                               "少なくとも有効なオブジェクトを一つ選択してください。",
-                               "OK"
-                               );
-                        }
-                        else
-                        {
-                            TextureScaler.ResizeTextures(m_SelectedObjects.ToArray(), m_TargetScale);
-                        }
-                    }
-                    EditorGUILayout.EndHorizontal();
-                    break;
-#endregion
 
             }
             #endregion
