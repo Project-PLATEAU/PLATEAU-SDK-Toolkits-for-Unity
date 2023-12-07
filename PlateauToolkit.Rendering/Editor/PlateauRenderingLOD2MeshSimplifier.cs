@@ -130,14 +130,14 @@ namespace PlateauToolkit.Rendering.Editor
 
             GameObject lod1 = null;
             GameObject lod2 = null;
-            if (building.name.Contains("Lod1"))
+            if (building.name.Contains("LOD1"))
             {
                 lod1 = building;
-                lod2 = PlateauRenderingBuildingUtilities.FindSiblingLodObject(building, "Lod2");
+                lod2 = PlateauRenderingBuildingUtilities.FindSiblingLodObject(building, "LOD2");
             }
-            else if (building.name.Contains("Lod2"))
+            else if (building.name.Contains("LOD2"))
             {
-                lod1 = PlateauRenderingBuildingUtilities.FindSiblingLodObject(building, "Lod1");
+                lod1 = PlateauRenderingBuildingUtilities.FindSiblingLodObject(building, "LOD1");
                 lod2 = building;
             }
             else
@@ -147,12 +147,12 @@ namespace PlateauToolkit.Rendering.Editor
 
             if (lod1 == null)
             {
-                throw new Exception("Lod1 object not found.");
+                throw new Exception("LOD1 object not found.");
             }
 
             if (lod2 == null)
             {
-                throw new Exception("Lod2 object not found.");
+                throw new Exception("LOD2 object not found.");
             }
 
             return (lod1, lod2);
