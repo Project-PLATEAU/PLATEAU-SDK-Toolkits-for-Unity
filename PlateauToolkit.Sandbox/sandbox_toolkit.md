@@ -201,25 +201,25 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 カメラマネージャーを作成することで、PLATEAU Sandbox Toolkit によって配置されたオブジェクトの視点に切り替えることができるようになります。
 
 カメラマネージャーはPLATEAU Sandbox Toolkit ウィンドウから「カメラマネージャーを作成」ボタンを押下して作成することができます。<br>
-<img width="400" alt="スクリーンショット 2023-11-28 11 15 55" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/6609e084-32b0-4c6a-bfec-2cf6c01a5a50">
+<img width="400" alt="Camera Manager Creation" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2027.png">
 
 ヒエラルキービュー内に "PlateauSandboxCameraManager" が作成されます。<br>
-<img width="400" alt="スクリーンショット 2023-11-28 11 16 02" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/b156b900-08d0-4319-a38e-ac39045ad9e4">
+<img width="400" alt="Camera Manager Creation Result" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2028.png">
 
 
 プレイモードにおいて配置したアバターや乗り物をクリックすると、デフォルトではそのオブジェクトの一人称視点に遷移します。
 マウス操作によって、さまざまな方向を見回すことが可能です。<br>
 
-<img width="300" alt="left" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/6764ed29-3f39-4c48-8a22-55f798504b94">
-<img width="300" alt="front" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/2c7a46d4-8c68-473a-b97b-526dde084c1c">
-<img width="300" alt="right" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/27c846ba-2a2c-4bea-8f79-7ee8dd085439">
+<img width="300" alt="left" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2029.png">
+<img width="300" alt="front" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2030.png">
+<img width="300" alt="right" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2031.png">
 
 なお、特定のエージェントに対しカメラインタラクション機能を設定したくない場合は、 `PlateauSandboxAvatar` の `Is Camera View Available` のチェックボックスをオフにします。<br>
 
-<img width="400" alt="sandbox_camerainteracation_cameraviewenable" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/11931da9-fd7a-4855-be09-b114818a55e5">
+<img width="400" alt="sandbox_camerainteracation_cameraviewenable" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2032.png">
 
 尚、キーボード入力によるカメラ操作の有効/無効の設定は "PlateauSandboxCameraManager" の `Enable Keywboard Camera Switch` のチェックボックスによって切り替えることが可能です。<br>
-<img width="475" alt="sandbox_cameramanager_enablekeyboard" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/bd9321ba-9520-4e75-9eaa-22dc923f6733">
+<img width="475" alt="sandbox_cameramanager_enablekeyboard" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2033.png">
 
 ## 2-1. 操作方法
 
@@ -236,7 +236,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 ### 一人称視点モード
 
 オブジェクトの視点の位置からカメラ表示するモードです。<br>
-<img width="600" alt="sandbox_camerainteraction_fps" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/9e35cace-9f82-4a54-9c6a-d70c249a1fcb">
+<img width="600" alt="sandbox_camerainteraction_fps" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2034.png">
 
 | 操作    | 内容       | 備考  |
 |:----- |:-------- |:--- |
@@ -246,7 +246,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 オブジェクトの後方からオブジェクトの視点の先に向けたカメラを表示するモードです。<br>
 
-<img width="600" alt="sandbox_camerainteraction_tps" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/d62398d6-ad82-4d15-8d26-fa59d1e8d786">
+<img width="600" alt="sandbox_camerainteraction_tps" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2035.png">
 
 | 操作              | 内容           | 備考  |
 |:--------------- |:------------ |:--- |
@@ -258,7 +258,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 対象のオブジェクトを注視点として、見回すことのできるモードです。<br>
 
-<img width="600" alt="sandbox_camerainteraction_around" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/17ffd4ba-ef8c-4c6b-a4ec-894adff984fa">
+<img width="600" alt="sandbox_camerainteraction_around" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2036.png">
 
 | 操作       | 内容                   | 備考  |
 |:-------- |:-------------------- |:--- |
@@ -270,7 +270,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 アバターや乗り物のコンポーネント ( `PlateauSandboxAvatar` 、 `PlateauSandboxVehicle` ) の `CameraTargetSettings` を調整することでカメラのデフォルトの位置などカメラに関する設定を変更することができます。
 位置は対象のオブジェクトの原点からの相対座標で表現され、Xは横方向, Yは高さ, Zで前後方向の設定をすることができます。<br>
 
-<img width="684" alt="sandbox_camerainteraction_offset" src="https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/137732437/25fe3605-6861-446e-82dc-6f51605867ec">
+<img width="684" alt="sandbox_camerainteraction_offset" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2037.png">
 
 | 設定項目                                 | 内容                      |
 |:------------------------------------ |:----------------------- |
