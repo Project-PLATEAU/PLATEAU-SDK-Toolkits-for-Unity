@@ -17,7 +17,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 
 - [Rendering Toolkit（本リポジトリ)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
 - [Sandbox Toolkit（本リポジトリ)](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
-- [Map Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
+- [Maps Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
 また、Release3に伴い、Toolkitを活用した下記の４種類のサンプルアプリプロジェクトを提供しています。<br>
