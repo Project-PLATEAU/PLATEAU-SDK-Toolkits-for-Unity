@@ -1,5 +1,5 @@
 # PLATEAU SDK Toolkits for Unity
-![mainvisual](https://github.com/SeiTakeuchi/SeiTakeuchi-PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/5d1f4c70-1178-4330-90f7-65169b965669)
+![mainvisual](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/cc118e82-b9b9-45a1-83cf-7300c2338ebe)
 
 
 
