@@ -16,7 +16,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
 - [Rendering Toolkit（本リポジトリ)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
-- [Sandbox Toolkit（本リポジトリ)](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
+- [Sandbox Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 - [Maps Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
@@ -59,7 +59,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/rendering_toolkit.md)
 
 
-## [Sandbox Toolkit]([https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity#renderingtoolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/sandbox_toolkit.md))
+## [Sandbox Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 
 PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミュレーション実行などを支援します。  
 乗り物、人、プロップなどの配置及び操作、トラックの設定機能などをGUI上で提供します。  
