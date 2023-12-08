@@ -29,7 +29,7 @@ PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニュー�
 
 Sandbox Toolkitのメインメニューが表示されます。
 
-<img width="497" alt="スクリーンショット 2023-07-12 19 39 14" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/89ed4c23-ebe9-4dec-b6c8-8bd2b78d39f9">
+<img width="497" alt="Sandbox Toolkit Menu" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%202.png">
 
 ## 全般
 
@@ -47,7 +47,7 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 1. 「ツール」メニューの中で「新しいトラックを作成」ボタンを押下します。
    
-   <img width="670" alt="スクリーンショット 2023-07-12 19 39 21" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/54d30e78-bbf1-497b-8d29-8f59656cfbd5">
+   <img width="670" alt="Track Creation" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/54d30e78-bbf1-497b-8d29-8f59656cfbd5">
 
 2. 「新しいトラックを作成」をクリックすることでトラック編集ツールを開始することができます。<br>
 トラック編集ツールを起動した状態でシーンビューにマウスカーソルを移動すると、マウスカーソル上にトラックを形成するためのポイントのプレビューが表示され、クリックすることでポイントを配置することができます。
@@ -65,7 +65,6 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 ※作成したトラックへのアバター、乗り物の配置方法は[1-5. 共通配置ツール](#1-5-共通配置ツール)で後述します。
 
-<img width="594" alt="スクリーンショット 2023-07-12 19 39 47" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/d4d27a36-8b65-42bd-85a7-14440c0c25cd">
 
 ### トラックの速度制限
 
@@ -125,17 +124,15 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 
 ### 1-5. 共通配置ツール
 アバター、乗り物、プロップの配置メニューから「配置ツール」を使用することで、複数のオブジェクトの同時配置、トラックに沿ったオブジェクトの配置などを行うことができます。
-
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/c7a6e25e-b89c-4aae-a8d6-41c1f6ec630e)
+<img width="400" alt="Placement Tool" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2016.png">
 
 起動するとこのようにボタンの表示が変わり、配置するオブジェクトをアセットリストからクリックして選択してシーン上に簡単にオブジェクトを配置できます。
 配置ツールを起動している状態でシーン上でマウスを操作すると、マウス上に次のようにカーソルと配置するオブジェクトのプレビューが表示され、クリックすることで選択したオブジェクトを配置することができます。<br>
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/c2a63cb4-34d8-4e12-b2dc-ce4be471f2f7)
-
+<img width="300" alt="Placement Example" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2017.png">
 
 【配置オプション / 配置方法】
 配置ツールを起動すると、シーンビューの右下に次のような配置ツール設定ウィンドウが表示されます。
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/5f798eed-1acd-47b9-9db4-159ef9b75d36)
+<img width="300" alt="Placement Tool Window" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2018.png">
 
 | メニュー    | 内容       |
 |:----- |:-------- |
@@ -146,17 +143,18 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 #### 配置位置
 **①表面に配置** <br>
 Unity のコライダーに沿ってオブジェクトを配置するモードです。「表面に配置」オプションを選択している場合は、PLATEAUモデルや配置したい3Dモデルにコライダーが設定されていない場合はオブジェクトを配置するための場所を決定することができないため、オブジェクトを配置できません。PLATEAUモデルのコライダー設定やその他のコライダー設定に関しては各種ドキュメントを参照して設定してください。
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/5bad9ab5-7b03-46fd-8806-6a37ee4331ab)
+<img width="450" alt="Surface Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2019.gif">
+
 
 **②トラックに沿って配置** <br>
 [1-1. トラックの作成](#1-1-トラックの作成)で設定したシーン上のトラックに沿ってオブジェクトを配置します。
 「トラックに沿って配置」と配置方法「クリック」を選択している状態で配置を行うと、自動的に配置されたオブジェクトにトラックに沿って移動するコンポーネントがアタッチされます。
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/de19f80d-b2f9-482a-afc0-1d1ef58b4a86)
+<img width="450" alt="Track Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2020.gif">
 
 
 #### 配置方法
 **①クリック** <br>
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/37e45cd9-de86-4046-9629-cf9868b2170c)
+<img width="450" alt="Click Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2021.gif">
 
 クリックすることで一つのオブジェクトを配置できます。ドラッグすることで、配置する際の向きを設定できます。
 他のオブジェクトとの衝突を判定し、オブジェクトが重なっている場合はカーソルが赤色になりオブジェクトが配置できません。配置する際のオブジェクトのデフォルトの向きは「配置位置」の設定により異なります。<br>
@@ -166,7 +164,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | トラックに沿って配置 | 常にトラックの進行方向に設定されます。 |
 
 **②ブラシ** <br>
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/79d38b6f-c788-44d4-99fd-a68e0f6bdc68)
+<img width="450" alt="Brush Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2022.gif">
 
 |設定項目| 概要      |
 |:----- |:-------- |
@@ -189,13 +187,13 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 |:----- |:-------- |
 | 表面に配置 | コライダーの法線方向に配置されます。 |
 | トラックに沿って配置 | トラックの法線方向に配置され、トラックが配置されている面の法線は使用されません。 |
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/f0e53138-28cb-42c6-b65f-91150e0b184d)
-
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/85cca2cc-d603-4e4d-bb1b-39be9e00356e)
+<img width="200" alt="Normal Orientation - Surface Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2023.png">
+<img width="400" alt="Normal Orientation - Track Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2024.gif">
 
 **ワールド座標** <br>
 配置オブジェクトは、常にワールド座標の上方向が法線ベクトルの正になる向きで配置されます。
-![image](https://github.com/unity-takeuchi/PLATEAU-SDK-Toolkits-for-Unity-drafts/assets/127069970/9fe55afd-0f1d-4334-af6c-85d87b3d69fc)
+<img width="200" alt="Normal Orientation - Surface Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2025.png">
+<img width="400" alt="Normal Orientation - Track Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2026.gif">
 
 
 # 2. カメラインタラクション機能
