@@ -16,7 +16,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
 - [Rendering Toolkit（本リポジトリ)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
-- [Sandbox Toolkit（本リポジトリ)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/sandbox_toolkit.md)
+- [Sandbox Toolkit（本リポジトリ)](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/sandbox_toolkit.md)
 - [Map Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
@@ -75,7 +75,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - 乗り物エージェントの配置機能
 - Props(施設器具等)の配置機能
   
-使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/sandbox_toolkit.md)
+使い方は[こちら](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/sandbox_toolkit.md)
 
 
 ## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
