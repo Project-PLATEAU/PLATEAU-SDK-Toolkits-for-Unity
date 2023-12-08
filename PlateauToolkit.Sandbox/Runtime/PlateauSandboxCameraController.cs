@@ -49,29 +49,42 @@ namespace PlateauToolkit.Sandbox
         public PlateauSandboxCameraMode CameraMode => m_Mode;
         public IPlateauSandboxCameraTarget Target => m_Target;
 
+        bool m_IsDragStartedFromUI;
+
         public void HandleInput()
         {
-            Vector2 delta;
-            Vector2 scroll;
-            bool isMiddleButtonPressed;
-            bool isLeftButtonPressed;
+            Vector2 delta = Vector2.zero;
+            Vector2 scroll = Vector2.zero;
+            bool isMiddleButtonPressed = false;
+            bool isLeftButtonPressed = false;
 
+            if (Mouse.current != null)
             {
-                Mouse mouse = Mouse.current;
-                if (mouse != null && (EventSystem.current == null || !EventSystem.current.IsPointerOverGameObject()))
+                do
                 {
-                    delta = mouse.delta.ReadValue();
-                    scroll = mouse.scroll.ReadValue();
-                    isMiddleButtonPressed = mouse.middleButton.isPressed;
-                    isLeftButtonPressed = mouse.leftButton.isPressed;
-                }
-                else
-                {
-                    delta = Vector2.zero;
-                    scroll= Vector2.zero;
-                    isMiddleButtonPressed = false;
-                    isLeftButtonPressed = false;
-                }
+                    if (Mouse.current.leftButton.wasPressedThisFrame &&
+                        EventSystem.current != null &&
+                        EventSystem.current.IsPointerOverGameObject())
+                    {
+                        m_IsDragStartedFromUI = true;
+                        break;
+                    }
+
+                    if (m_IsDragStartedFromUI)
+                    {
+                        if (Mouse.current.leftButton.isPressed)
+                        {
+                            break;
+                        }
+
+                        m_IsDragStartedFromUI = false;
+                    }
+
+                    delta = Mouse.current.delta.ReadValue();
+                    scroll = Mouse.current.scroll.ReadValue();
+                    isMiddleButtonPressed = Mouse.current.middleButton.isPressed;
+                    isLeftButtonPressed = Mouse.current.leftButton.isPressed;
+                } while (false);
             }
 
             switch (m_Mode)
