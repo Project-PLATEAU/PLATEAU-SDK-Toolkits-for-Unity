@@ -126,7 +126,7 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 アバター、乗り物、プロップの配置メニューから「配置ツール」を使用することで、複数のオブジェクトの同時配置、トラックに沿ったオブジェクトの配置などを行うことができます。<br>
 <img width="500" alt="Placement Tool" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2016.png">
 
-起動するとこのようにボタンの表示が変わり、配置するオブジェクトをアセットリストからクリックして選択してシーン上に簡単にオブジェクトを配置できます。
+共通配置ツールを起動するとこのようにボタンの表示が変わり、配置するオブジェクトをアセットリストからクリックして選択してシーン上に簡単にオブジェクトを配置できます。
 配置ツールを起動している状態でシーン上でマウスを操作すると、マウス上に次のようにカーソルと配置するオブジェクトのプレビューが表示され、クリックすることで選択したオブジェクトを配置することができます。<br>
 <img width="300" alt="Placement Example" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2017.png">
 
