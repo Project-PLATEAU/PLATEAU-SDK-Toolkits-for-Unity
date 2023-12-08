@@ -136,7 +136,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 <img width="498" alt="スクリーンショット 2023-07-12 19 39 40" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b66cdcb3-0317-4acc-9951-ccb04652a0dd">
 
-※作成したトラックへのアバター、乗り物の配置方法は[1-5. 共通配置ツール](#1-5-共通配置ツール)で後述します。
+作成したトラックへのアバター、乗り物の配置方法は[1-5. 共通配置ツール](#1-5-共通配置ツール)で後述します。
 
 #### トラックの速度制限
 
@@ -211,22 +211,22 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 ## 3. カメラインタラクション機能
 
-カメラマネージャーを作成することで、PLATEAU Sandbox Toolkit によって配置されたオブジェクトの視点に切り替えることができるようになります。
+カメラマネージャー ( `PlateauSandboxCameraManager` ) を作成することで、PLATEAU Sandbox Toolkit によって配置されたオブジェクトの視点に切り替えることができるようになります。
 
-カメラマネージャーはPLATEAU Sandbox Toolkit ウィンドウから「カメラマネージャーを作成」ボタンを押下して作成することができます。<br>
+カメラマネージャーは Sandbox Toolkit ウィンドウから「カメラマネージャーを作成」ボタンを押下して作成することができます。<br>
 <img width="400" alt="Camera Manager Creation" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2027.png">
 
 ヒエラルキービュー内に "PlateauSandboxCameraManager" が作成されます。<br>
 <img width="400" alt="Camera Manager Creation Result" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2028.png">
 
-プレイモードにおいて配置したアバターや乗り物をクリックすると、そのオブジェクトの一人称視点に遷移します。<br>
-カメラインタラクション機能には一人称視点、三人称視点、周囲を見回すモードが用意されており、マウス操作によって、さまざまな方向を見回すことが可能です。<br>
+プレイモードを実行し、配置したアバターや乗り物をクリックすると、デフォルトではそのオブジェクトの一人称視点に遷移します。<br>
+カメラインタラクション機能には一人称視点、三人称視点、三人称中心視点が用意されており、対象のオブジェクトを様々な視点から見ることができます。<br>
 
 <img width="300" alt="left" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2029.png">
 <img width="300" alt="front" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2030.png">
 <img width="300" alt="right" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2031.png">
 
-なお、特定のエージェントに対しカメラインタラクション機能を設定したくない場合は、 `PlateauSandboxAvatar` の `Is Camera View Available` のチェックボックスをオフにします。<br>
+なお、特定のエージェントに対しカメラインタラクション機能を設定したくない場合は、 `PlateauSandboxAvatar` の `Is Camera View Available` のチェックボックスを外します。<br>
 
 <img width="400" alt="sandbox_camerainteracation_cameraviewenable" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2032.png">
 
@@ -240,12 +240,12 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | 操作      | 内容                         | 備考        |
 |:------- |:-------------------------- |:--------- |
 | マウス移動   | カメラの向き変更                   |           |
-| 「1」キー押下 | 視点を一人称視点モードに変更する           | キー操作有効時のみ |
-| 「2」キー押下 | 視点を三人称視点モードに変更する           | キー操作有効時のみ |
-| 「3」キー押下 | 注視点をエージェント本体にした見回しモードに変更する | キー操作有効時のみ |
+| 「1」キー押下 | カメラを一人称視点に変更する           | キー操作有効時のみ |
+| 「2」キー押下 | カメラを三人称視点に変更する           | キー操作有効時のみ |
+| 「3」キー押下 | カメラを三人称中心視点に変更する | キー操作有効時のみ |
 | 「0」キー押下 | カメラインタラクションモードを終了する        | キー操作有効時のみ |
 
-#### 一人称視点モード
+#### 一人称視点
 
 オブジェクトの視点の位置からカメラ表示するモードです。<br>
 <img width="600" alt="sandbox_camerainteraction_fps" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2034.png">
@@ -254,7 +254,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 |:----- |:-------- |:--- |
 | マウス移動 | カメラの向き変更 |     |
 
-#### 三人称視点モード
+#### 三人称視点
 
 オブジェクトの後方からオブジェクトの視点の先に向けたカメラを表示するモードです。<br>
 
@@ -266,16 +266,16 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | マウススクロール        | カメラ視点の前後移動   |     |
 | マウス中央を押しながらドラッグ | カメラ視点の上下左右移動 |     |
 
-#### 見回しモード
+#### 三人称中心視点
 
-対象のオブジェクトを注視点として、見回すことのできるモードです。<br>
+対象のオブジェクトを中心に軌道上を移動することができるモードです。<br>
 
 <img width="600" alt="sandbox_camerainteraction_around" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2036.png">
 
 | 操作       | 内容                   | 備考  |
 |:-------- |:-------------------- |:--- |
 | マウス移動    | エージェントを中心としたカメラの回転移動 |     |
-| マウススクロール | カメラ視点の前後移動           |     |
+| マウススクロール | 対象のオブジェクトとの距離の調整           |     |
 
 ### 3-2. カメラのデフォルト位置の変更
 
