@@ -470,7 +470,6 @@ GameObject:
   - component: {fileID: 67282327676643188}
   - component: {fileID: 5770921238078998328}
   - component: {fileID: 5378154792464423300}
-  - component: {fileID: 7596929163668683715}
   m_Layer: 0
   m_Name: Prop_StreetLight_05_col
   m_TagString: Untagged
@@ -557,15 +556,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5089251817129739031, guid: bda0911f4570ad84ea61ee9efb702afb, type: 3}
---- !u!114 &7596929163668683715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7761734146919000312}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

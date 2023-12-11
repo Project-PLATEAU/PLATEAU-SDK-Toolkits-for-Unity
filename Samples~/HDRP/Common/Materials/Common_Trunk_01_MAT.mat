@@ -197,7 +197,7 @@ Material:
     - _DetailScale: 1
     - _Detail_Albedo_Scale: 0
     - _Detail_Smoothness_Scale: 0
-    - _Diffusion_Profile: 2.6486764
+    - _Diffusion_Profile: 3.8956573
     - _DoubleSidedEnable: 0
     - _DoubleSidedGIMode: 0
     - _DoubleSidedNormalMode: 2
@@ -276,8 +276,8 @@ Material:
     - _BaseColor: {r: 0.24528301, g: 0.22599974, b: 0.22599974, a: 1}
     - _BendPivot: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.24528295, g: 0.22599971, b: 0.22599971, a: 1}
-    - _Diffusion_Profile_Asset: {r: -3.698545e+22, g: 20.616848, b: -5.291675e-28,
-        a: -1.3520143e+18}
+    - _Diffusion_Profile_Asset: {r: -8.695931e+30, g: -5.0949594e+31, b: -0.010710085,
+        a: -0.0000000055696536}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmmisiveColor: {r: 0, g: 0, b: 0, a: 0}

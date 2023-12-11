@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 using UnityEditor;
 using UnityEngine.Splines;
@@ -244,9 +244,17 @@ namespace PlateauToolkit.Sandbox.Editor
                         }
                         m_CurveList.Clear();
 
-                        m_PlacePoint = nearestPosition != null
-                            ? new PlacePoint(nearestPosition.Value, Vector3.up, null, false)
-                            : null;
+                        if (nearestPosition != null)
+                        {
+                            IsPlaceable = true;
+                            m_PlacePoint = new PlacePoint(nearestPosition.Value, Vector3.up, null, false);
+                        }
+                        else
+                        {
+                            IsPlaceable = false;
+                            m_PlacePoint = null;
+                        }
+
                         break;
                     }
                 }

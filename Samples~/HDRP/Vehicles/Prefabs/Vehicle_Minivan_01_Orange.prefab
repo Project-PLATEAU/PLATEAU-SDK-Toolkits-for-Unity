@@ -83,15 +83,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda077a72c546a7af70bc41307238b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Wheels:
-  - {fileID: 3657850205370577936}
-  - {fileID: 7639809662270174966}
+  m_BackWheels:
   - {fileID: 3121765263091240367}
   - {fileID: 8630139585985286688}
-  m_WheelRadius: 0.7
+  m_FrontWheels:
+  - {fileID: 3657850205370577936}
+  - {fileID: 7639809662270174966}
+  m_WheelRadius: 0.34
   m_BackWheelAxisTransform: {fileID: 7613527113375040904}
-  m_Wheelbase: 0
-  m_Collider: {fileID: 9031929933007798386}
+  m_Wheelbase: 2.6
+  m_IsCameraViewAvailable: 1
+  m_CameraTargetSettings:
+    m_FirstPersonViewPosition: {x: 0, y: 1, z: 1}
+    m_ThirdPersonViewDefaultCameraPosition: {x: 1.5, y: 1.5, z: -5}
+    m_ThirdPersonOrbitInitialRotation: {x: 0, y: 30}
+    m_ThirdPersonOrbitOffset: {x: 0, y: 0, z: 0}
+    m_ThirdPersonOrbitDefaultDistance: 8
 --- !u!1 &280710638488579927
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,7 +372,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 922622030382617773}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1.03}
+  m_LocalPosition: {x: 0, y: 0, z: -1.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -384,7 +391,6 @@ GameObject:
   - component: {fileID: 732793917865359086}
   - component: {fileID: 6187973234142078290}
   - component: {fileID: 9031929933007798386}
-  - component: {fileID: 4878668516783285211}
   m_Layer: 0
   m_Name: Vehicle_MiniVan_01_Mesh_col
   m_TagString: Untagged
@@ -471,18 +477,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1141789667409558822, guid: 7177a91da1de9064295c972c18fef31f, type: 3}
---- !u!114 &4878668516783285211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2871155333556663491}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &3837475463542766306
 GameObject:
   m_ObjectHideFlags: 0

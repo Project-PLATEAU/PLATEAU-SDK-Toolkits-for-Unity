@@ -341,7 +341,6 @@ GameObject:
   - component: {fileID: 1864182530065794339}
   - component: {fileID: 1529647219825366263}
   - component: {fileID: 6088764083686547544}
-  - component: {fileID: 1196899982029125421}
   m_Layer: 0
   m_Name: Prop_TreeSmall_01_Mesh_col
   m_TagString: Untagged
@@ -428,15 +427,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 5336354492750775768, guid: 6f64cdecc7453dd4b8c85d3093701e88, type: 3}
---- !u!114 &1196899982029125421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6934331458232505787}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

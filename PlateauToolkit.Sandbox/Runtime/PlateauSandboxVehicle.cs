@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace PlateauToolkit.Sandbox
@@ -111,16 +111,14 @@ namespace PlateauToolkit.Sandbox
 
         void OnDrawGizmos()
         {
-            if (m_BackWheelAxisTransform == null)
+            if (m_BackWheelAxisTransform != null)
             {
-                return;
+                Vector3 frontWheelAxis = m_BackWheelAxisTransform.position + transform.forward * m_Wheelbase;
+
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawSphere(m_BackWheelAxisTransform.position, k_GizmoSize);
+                Gizmos.DrawSphere(frontWheelAxis, k_GizmoSize);
             }
-
-            Vector3 frontWheelAxis = m_BackWheelAxisTransform.position + transform.forward * m_Wheelbase;
-
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawSphere(m_BackWheelAxisTransform.position, k_GizmoSize);
-            Gizmos.DrawSphere(frontWheelAxis, k_GizmoSize);
 
             if (m_BackWheels != null)
             {
@@ -130,6 +128,16 @@ namespace PlateauToolkit.Sandbox
                     Gizmos.DrawLine(wheelTransform.position,
                         wheelTransform.position + wheelTransform.up * m_WheelRadius);
                 }
+            }
+
+            if (m_CameraTargetSettings != null)
+            {
+                m_CameraTargetSettings.Transform = transform;
+
+                Gizmos.color = Color.blue;
+                Gizmos.DrawSphere(m_CameraTargetSettings.FirstPersonViewPosition, k_GizmoSize);
+                Gizmos.DrawSphere(m_CameraTargetSettings.ThirdPersonViewDefaultCameraPosition, k_GizmoSize);
+                Gizmos.DrawSphere(m_CameraTargetSettings.ThirdPersonOrbitCenter, k_GizmoSize);
             }
         }
     }

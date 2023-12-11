@@ -1,4 +1,4 @@
-﻿Shader "Skybox/URPPhysicallyBasedSky"
+Shader "Skybox/URPPhysicallyBasedSky"
 {
     Properties
     {

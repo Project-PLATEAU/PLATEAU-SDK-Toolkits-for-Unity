@@ -255,7 +255,6 @@ GameObject:
   - component: {fileID: 3546124951678112650}
   - component: {fileID: 2514859917437314714}
   - component: {fileID: 8289311719629704673}
-  - component: {fileID: 6236210111995477584}
   m_Layer: 0
   m_Name: Prop_Bench_05_Mesh_col
   m_TagString: Untagged
@@ -342,18 +341,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -5993979134436497430, guid: 96c92bcb8790f3f44b61f9418c00d650, type: 3}
---- !u!114 &6236210111995477584
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2669456365058074233}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2820777018859592263
 GameObject:
   m_ObjectHideFlags: 0

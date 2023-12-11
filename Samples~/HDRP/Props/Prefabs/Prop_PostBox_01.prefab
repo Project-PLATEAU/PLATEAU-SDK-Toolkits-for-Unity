@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 5123997903185874441}
   - component: {fileID: 650208946743990013}
   - component: {fileID: 3520355738143706854}
-  - component: {fileID: 2093300823889776652}
   m_Layer: 0
   m_Name: Prop_PostBox_01_Mesh_col
   m_TagString: Untagged
@@ -182,18 +181,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1638172069184022532, guid: 2edf7f09b2e4a89448c1e59b748ce6a7, type: 3}
---- !u!114 &2093300823889776652
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4638109223356441177}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6028185124134468848
 GameObject:
   m_ObjectHideFlags: 0
