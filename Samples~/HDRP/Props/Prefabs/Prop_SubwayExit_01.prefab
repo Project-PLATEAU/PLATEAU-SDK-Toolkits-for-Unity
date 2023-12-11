@@ -250,7 +250,6 @@ GameObject:
   - component: {fileID: 5703340369045017850}
   - component: {fileID: 3250986747182437488}
   - component: {fileID: 2508552197875997217}
-  - component: {fileID: 98660197977538501}
   m_Layer: 0
   m_Name: Prop_SubwayExit_01_Mesh_col
   m_TagString: Untagged
@@ -337,15 +336,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -4305473001156961451, guid: 8fe2a8593328dee419e2732ed73c3849, type: 3}
---- !u!114 &98660197977538501
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9206589531047611518}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

@@ -1,4 +1,4 @@
-﻿using PlateauToolkit.Editor;
+using PlateauToolkit.Editor;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;

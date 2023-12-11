@@ -759,7 +759,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 7191051701246078021}
-  m_Collider: {fileID: 1083161871379289551}
+  m_IsCameraViewAvailable: 0
+  m_CameraTargetSettings:
+    m_FirstPersonViewPosition: {x: 0, y: 1.6, z: 0.2}
+    m_ThirdPersonViewDefaultCameraPosition: {x: 1, y: 1.5, z: -2}
+    m_ThirdPersonOrbitInitialRotation: {x: 0, y: 20}
+    m_ThirdPersonOrbitOffset: {x: 0, y: 1, z: 0}
+    m_ThirdPersonOrbitDefaultDistance: 3
 --- !u!1 &4626576675147247858
 GameObject:
   m_ObjectHideFlags: 0
@@ -941,7 +947,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3842540344216924470}
   - component: {fileID: 1083161871379289551}
-  - component: {fileID: 7496028738101046840}
   m_Layer: 0
   m_Name: Hips
   m_TagString: Untagged
@@ -981,18 +986,6 @@ CapsuleCollider:
   m_Height: 1.55
   m_Direction: 1
   m_Center: {x: 0, y: 0.02, z: -0.00604105}
---- !u!114 &7496028738101046840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5229329531504457989}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5776406667940377220
 GameObject:
   m_ObjectHideFlags: 0

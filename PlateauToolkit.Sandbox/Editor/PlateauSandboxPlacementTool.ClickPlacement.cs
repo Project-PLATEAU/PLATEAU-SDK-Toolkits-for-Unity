@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System;
 using UnityEditor;
 using UnityEngine.Splines;
@@ -296,10 +296,12 @@ namespace PlateauToolkit.Sandbox.Editor
 
                         if (nearestPosition == null)
                         {
+                            IsPlaceable = false;
                             m_PlacePoint = null;
                         }
                         else
                         {
+                            IsPlaceable = true;
                             (Vector3 position, Vector3 forward, PlateauSandboxTrack track) = nearestPosition.Value;
 
                             Vector3 up;

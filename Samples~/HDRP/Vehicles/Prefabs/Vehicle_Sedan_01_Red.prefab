@@ -113,15 +113,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebda077a72c546a7af70bc41307238b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Wheels:
-  - {fileID: 5082529227871032602}
-  - {fileID: 6877857037067750474}
+  m_BackWheels:
   - {fileID: 4628656734813948368}
   - {fileID: 399454874200937368}
-  m_WheelRadius: 0.6
+  m_FrontWheels:
+  - {fileID: 5082529227871032602}
+  - {fileID: 6877857037067750474}
+  m_WheelRadius: 0.35
   m_BackWheelAxisTransform: {fileID: 5058269564009895288}
-  m_Wheelbase: 0
-  m_Collider: {fileID: 1962377116244362741}
+  m_Wheelbase: 2.7
+  m_IsCameraViewAvailable: 1
+  m_CameraTargetSettings:
+    m_FirstPersonViewPosition: {x: 0, y: 1, z: 1}
+    m_ThirdPersonViewDefaultCameraPosition: {x: 1.5, y: 1.5, z: -5}
+    m_ThirdPersonOrbitInitialRotation: {x: 0, y: 30}
+    m_ThirdPersonOrbitOffset: {x: 0, y: 0, z: 0}
+    m_ThirdPersonOrbitDefaultDistance: 8
 --- !u!1 &2053762036831798967
 GameObject:
   m_ObjectHideFlags: 0
@@ -217,7 +224,6 @@ GameObject:
   - component: {fileID: 8596320353428694151}
   - component: {fileID: 5249322060423837339}
   - component: {fileID: 1962377116244362741}
-  - component: {fileID: 6346040241677101576}
   m_Layer: 0
   m_Name: Vehicle_Sedan_01_Mesh_col
   m_TagString: Untagged
@@ -304,18 +310,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 2817670784949471042, guid: eb80680071d337c4ca1eae806d780d54, type: 3}
---- !u!114 &6346040241677101576
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3721810797119131359}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5283592380809554017
 GameObject:
   m_ObjectHideFlags: 0

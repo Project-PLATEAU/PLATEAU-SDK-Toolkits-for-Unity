@@ -206,7 +206,7 @@ Material:
     - _HEIGHTMAP: 0
     - _LinkDetailsWithBase: 0
     - _MASKMAP: 0
-    - _Metallic: 0.8
+    - _Metallic: 0
     - _MetallicRemapMax: 1
     - _MetallicRemapMin: 0
     - _Mode: 0
@@ -223,7 +223,7 @@ Material:
     - _RefractionModel: 0
     - _RenderQueueType: 1
     - _RequireSplitLighting: 0
-    - _Smoothness: 0.8
+    - _Smoothness: 0
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0
@@ -262,8 +262,8 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - _BaseColor: {r: 0, g: 0.5849056, b: 0, a: 1}
-    - _Color: {r: 0, g: 0.5849056, b: 0, a: 1}
+    - _BaseColor: {r: 0.40346503, g: 0.4716981, b: 0.422338, a: 1}
+    - _Color: {r: 0.403465, g: 0.4716981, b: 0.42233798, a: 1}
     - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
     - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmmisiveColor: {r: 0, g: 0, b: 0, a: 0}

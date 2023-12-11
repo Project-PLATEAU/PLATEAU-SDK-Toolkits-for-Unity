@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -130,7 +130,24 @@ namespace PlateauToolkit.Sandbox.Editor
 
             if (!m_Placement.IsPlaceable)
             {
-                EditorWindow.GetWindow<SceneView>().ShowNotification(new("オブジェクトを配置できるコライダーが見つかりません。"));
+                string notPlaceableMessage;
+                switch (m_Context.PlacementSettings.Location)
+                {
+                    case PlacementLocation.PlaceOnSurface:
+                        notPlaceableMessage = "オブジェクトを配置できるコライダーが見つかりません。";
+                        break;
+                    case PlacementLocation.PlaceAlongTrack:
+                        notPlaceableMessage = "オブジェクトを配置できるトラックが見つかりません。";
+                        break;
+                    default:
+                        notPlaceableMessage = null;
+                        break;
+                }
+
+                if (notPlaceableMessage != null)
+                {
+                    EditorWindow.GetWindow<SceneView>().ShowNotification(new(notPlaceableMessage));
+                }
             }
             else
             {
