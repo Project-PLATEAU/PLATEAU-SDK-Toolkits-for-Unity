@@ -420,9 +420,9 @@ namespace PlateauToolkit.Rendering.Editor
 
         public static void ChangeLOD2BuildingShader(GameObject obj)
         {
-            string buildingShaderPath = "Shader Graphs/URP Building Shader";
+            string buildingShaderPath = "Weather/URP Building Shader";
 #if UNITY_HDRP
-            buildingShaderPath = "Shader Graphs/HDRP Building Shader";
+            buildingShaderPath = "Weather/HDRP Building Shader";
 #endif
 
             var newShader = Shader.Find(buildingShaderPath);

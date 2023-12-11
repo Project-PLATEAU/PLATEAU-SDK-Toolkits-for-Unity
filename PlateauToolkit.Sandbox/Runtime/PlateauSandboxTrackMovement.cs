@@ -50,7 +50,7 @@ namespace PlateauToolkit.Sandbox
     }
 
     [ExecuteAlways]
-    class PlateauSandboxTrackMovement : MonoBehaviour
+    public class PlateauSandboxTrackMovement : MonoBehaviour
     {
         [SerializeField] PlateauSandboxTrack m_Track;
 

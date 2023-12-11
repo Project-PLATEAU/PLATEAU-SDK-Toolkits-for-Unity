@@ -89,7 +89,15 @@ namespace PlateauToolkit.Rendering.Editor
                             Texture2D resizedTexture;
                             if (resizedTextures.TryGetValue(originalTexture, out resizedTexture))
                             {
-                                material.mainTexture = resizedTexture;
+
+                                if (selectedGameObject.name.Contains("auto_textured"))
+                                {
+                                    material.SetTexture("_BaseColorMap", resizedTexture);
+                                }
+                                else
+                                {
+                                    material.mainTexture = resizedTexture;
+                                }
                             }
                         }
                     }
