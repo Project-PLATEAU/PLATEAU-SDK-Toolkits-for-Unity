@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -360,7 +360,7 @@ namespace PlateauToolkit.Rendering.Editor
                 Vector3 bottomEdge = k_HullEdgeDirections[bottomIndex];
 
                 // find the angles between our caliper lines and the polygon edges, by doing
-                // ` arccosine(caliperEdge 揃 hullEdge) ` for each pair of caliper edge & polygon edge
+                // ` arccosine(caliperEdge · hullEdge) ` for each pair of caliper edge & polygon edge
                 double leftAngle = Math.Acos(caliperLeft.x * leftEdge.x + caliperLeft.z * leftEdge.z);
                 double rightAngle = Math.Acos(caliperRight.x * rightEdge.x + caliperRight.z * rightEdge.z);
                 double topAngle = Math.Acos(caliperTop.x * topEdge.x + caliperTop.z * topEdge.z);

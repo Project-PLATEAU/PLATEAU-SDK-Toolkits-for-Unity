@@ -86,6 +86,11 @@ namespace PlateauToolkit.Rendering
         const double k_Deg2Rad = Math.PI / 180;
         const double k_Rad2Deg = 180 / Math.PI;
 
+        public float IsNight
+        {
+            get { return m_IsNight; }
+        }
+
         public void Awake()
         {
             if (s_Instance != null)

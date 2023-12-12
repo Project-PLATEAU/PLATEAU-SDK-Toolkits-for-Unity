@@ -1,4 +1,4 @@
-namespace PlateauToolkit.Rendering
+﻿namespace PlateauToolkit.Rendering
 {
 
     public class PlateauToolkitRenderingPaths

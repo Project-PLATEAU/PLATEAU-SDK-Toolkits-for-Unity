@@ -26,12 +26,12 @@ Material:
   m_Name: FloorEmission
   m_Shader: {fileID: -6465566751694194690, guid: 1fb48b4f92f62a8489f24218b7788408,
     type: 3}
-  m_ValidKeywords:
-  - _ENABLE_FOG_ON_TRANSPARENT
-  - _SURFACE_TYPE_TRANSPARENT
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
+  - _ENABLE_FOG_ON_TRANSPARENT
   - _NORMALMAP_TANGENT_SPACE
+  - _SURFACE_TYPE_TRANSPARENT
   m_LightmapFlags: 0
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
@@ -265,6 +265,7 @@ Material:
     - _NormalScale: 1
     - _OcclusionStrength: 1
     - _Opacity: 0.5
+    - _OpacityFadeDistance: 50
     - _OpaqueCullMode: 2
     - _PPDLodThreshold: 5
     - _PPDMaxSamples: 15
