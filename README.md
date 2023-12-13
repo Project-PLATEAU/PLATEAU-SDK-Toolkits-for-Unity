@@ -15,7 +15,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 **年度内に4回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
-- [Rendering Toolkit（本リポジトリ)](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
+- [Rendering Toolkit](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Rendering/README.md)
 - [Sandbox Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 - [Maps Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
@@ -39,7 +39,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 
 
 
-## [Rendering Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/blob/main/rendering_toolkit.md)
+## [Rendering Toolkit](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Rendering/README.md)
 
 PLATEAUの3D都市モデルのグラフィックスを向上させる処理を行います。
 
@@ -56,7 +56,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - 雲の量を調整する機能
 - ポストエフェクトを追加する機能
 
-使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-Unity-Toolkit/blob/main/rendering_toolkit.md)
+使い方は[こちら](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Rendering/README.md)
 
 
 ## [Sandbox Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
