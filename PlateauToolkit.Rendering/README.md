@@ -21,7 +21,7 @@ PLATEAUの3D都市モデルのグラフィックスを向上させる処理を�
   * [5. ポストエフェクト](#5-ポストエフェクト)
     + [5-1. 事前準備](#5-1-事前準備)
     + [5-2. 追加されるポストエフェクト](#5-2-追加されるポストエフェクト)
-
+  * [6. 頂点カラーの設定](#6-頂点カラーの設定)
 
 - [関連API](#関連api)
 
@@ -275,6 +275,20 @@ Rendering Toolkitのポストエフェクト機能では下記の3種類のエ�
 「Settings」の中のメニューによってパラメータを変更することが可能です。
 
 <img width="404" alt="rendering_manual_17_nightvisionparam" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/2a3b8089-400e-4c7f-9fe2-d03808082ed6">
+
+## 6. 頂点カラーの設定
+頂点カラーの設定メニューから、マスク範囲と頂点アルファのランダムシード値を設定できます。
+![image](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/91682674-ea09-4257-9046-884cde40ffe8)
+
+頂点カラーマスク機能を使用することで、自動生成する窓のテクスチャをマスクする(隠す)範囲を設定できます。
+地物の上端からの割合(%)で指定し、指定した範囲は窓が表示されなくなります。
+![image](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/074c61d7-0104-4236-aeb0-84eafdfada34)
+
+頂点アルファのランダムシード値設定を活用することで、地物ごとのアルファチャンネルをランダムに割り当てることができます。
+![image](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/4028d71c-7581-4d80-9eef-e9ec8b46f512)
+
+AR City Miniatureサンプルで[建物ごとに色味を変えて3D都市モデルの審美性を高める例](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-Toolkits-Sample-ARCityMiniature?tab=readme-ov-file#4-2-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB%E7%AB%AF%E6%9C%AB%E3%82%92%E5%AF%BE%E8%B1%A1%E3%81%AB%E3%81%97%E3%81%9F3d%E9%83%BD%E5%B8%82%E3%83%A2%E3%83%87%E3%83%AB%E3%81%AE%E4%BD%9C%E6%88%90)を解説しておりますので、ご参照ください。
+
 
 
 ## 関連API
