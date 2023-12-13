@@ -287,7 +287,7 @@ Rendering Toolkitのポストエフェクト機能では下記の3種類のエ�
 頂点アルファのランダムシード値設定を活用することで、地物ごとのアルファチャンネルをランダムに割り当てることができます。
 ![image](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/4028d71c-7581-4d80-9eef-e9ec8b46f512)
 
-AR City Miniatureサンプルで[建物ごとに色味を変えて3D都市モデルの審美性を高める例](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-Toolkits-Sample-ARCityMiniature?tab=readme-ov-file#4-2-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB%E7%AB%AF%E6%9C%AB%E3%82%92%E5%AF%BE%E8%B1%A1%E3%81%AB%E3%81%97%E3%81%9F3d%E9%83%BD%E5%B8%82%E3%83%A2%E3%83%87%E3%83%AB%E3%81%AE%E4%BD%9C%E6%88%90)を解説しておりますので、ご参照ください。
+AR City Miniatureサンプルで[活用例](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-Toolkits-Sample-ARCityMiniature?tab=readme-ov-file#4-2-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB%E7%AB%AF%E6%9C%AB%E3%82%92%E5%AF%BE%E8%B1%A1%E3%81%AB%E3%81%97%E3%81%9F3d%E9%83%BD%E5%B8%82%E3%83%A2%E3%83%87%E3%83%AB%E3%81%AE%E4%BD%9C%E6%88%90)を解説しておりますので、ご参照ください。
 
 
 
