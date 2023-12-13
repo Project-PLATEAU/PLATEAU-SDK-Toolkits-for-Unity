@@ -20,7 +20,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 - [Maps Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
-また、Release3に伴い、Toolkitを活用した下記の４種類のサンプルアプリプロジェクトを提供しています。<br>
+Toolkitを活用した下記の４種類のサンプルアプリプロジェクトを提供しています。<br>
 下記リポジトリよりご利用ください。
 
 - [AR City Miniature](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-ARCityMiniature)
@@ -31,7 +31,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 
 ### 更新履歴
 
-|  2023/12/13  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化  |    |
+|  2023/12/14  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化  |  ［FBコメント］バージョン書いてください  |
 | :--- | :--- | :--- |
 |  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps　Toolkit v0.2.1（ベータ版）  <br> Rendering Toolkit v0.2.1（ベータ版）   |
 |  2023/09/15  |  Windows Buildに関する不具合の修正  |  Rendering Toolkit v0.1.1（ベータ版） <br> Sandbox Toolkit v0.1.1（ベータ版）  |
@@ -55,6 +55,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - LOD機能
 - 雲の量を調整する機能
 - ポストエフェクトを追加する機能
+- ［FBコメント］Release3について説明を追加してください
 
 使い方は[こちら](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Rendering/README.md)
 
@@ -74,18 +75,21 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - 人物エージェントの配置機能
 - 乗り物エージェントの配置機能
 - Props(施設器具等)の配置機能
+- ［FBコメント］Release3について説明を追加してください
   
 使い方は[こちら](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 
 
 ## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 
+［FBコメント］ビジュアルをなんかいれてください  
 PLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。<br>
 [こちらのリポジトリ](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)からご利用ください。
 
 
 ## [PLATEAU SDK-AR-Extensions for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 
+［FBコメント］ビジュアルをなんか入れてください  
 PLATEAUの3D都市モデルを活用したARアプリ開発ツールです。AR空間に3Dモデルを配置し、位置のずれや地面の高さを調整できます。さらに、3Dオブジェクトを遮蔽するオクルージョン機能も備えています。Streamingにより配置された3D都市モデルを用いたARアプリ開発も可能です。
 AR ExtensionsはToolkitsを前提としたエクステンションとして構築されています。<br>
 [こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)からご利用ください。
