@@ -18,13 +18,19 @@ Material:
   m_DoubleSidedGI: 1
   m_CustomRenderQueue: -1
   stringTagMap:
+    MotionVector: User
     RenderType: TransparentCutout
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - TransparentDepthPrepass
+  - TransparentDepthPostpass
+  - TransparentBackface
+  - RayTracingPrepass
+  - MOTIONVECTORS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: 15645b61cf2794240bfdb2bece1f129c, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
@@ -60,7 +66,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 6d44bcd043a54b447b1823dbb650531d, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -112,7 +118,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SmoothnessMap:
-        m_Texture: {fileID: 2800000, guid: 19fabf6370255433fa736008910e1bf2, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
@@ -146,11 +152,18 @@ Material:
     - Vector1_C739FCF4: 0.5
     - _AORemapMax: 1
     - _AORemapMin: 0
+    - _AddPrecomputedVelocity: 0
     - _AlphaClip: 1
     - _AlphaClipping: 0.5
     - _AlphaClipping_1: 0.5
+    - _AlphaCutoffEnable: 1
+    - _AlphaDstBlend: 0
+    - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
+    - _AlphaToMaskInspectorValue: 0
     - _BendYEnd: 10
     - _Blend: 0
+    - _BlendMode: 0
     - _BlendOp: 0
     - _BumpScale: 2
     - _CameraFadingEnabled: 0
@@ -160,9 +173,14 @@ Material:
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMode: 0
+    - _ConservativeDepthOffsetEnable: 0
     - _Cull: 0
+    - _CullMode: 0
+    - _CullModeForward: 0
     - _Cutoff: 0.5
+    - _DETAILMAP: 0
     - _DETAIL_UV_SET: 0
+    - _DepthOffsetEnable: 0
     - _DetailAlbedoMapScale: 1
     - _DetailColor: 0
     - _DetailNormalMapScale: 1
@@ -170,31 +188,47 @@ Material:
     - _DetailScale: 1
     - _Detail_Albedo_Scale: 0
     - _Detail_Smoothness_Scale: 0
+    - _Diffusion_Profile: 2.6486764
     - _DistortionBlend: 0.5
     - _DistortionEnabled: 0
     - _DistortionStrength: 1
     - _DistortionStrengthScaled: 0.1
+    - _DoubleSidedEnable: 1
+    - _DoubleSidedGIMode: 0
+    - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
     - _EmissiveEV100: 10
     - _EmissiveExposureWeight: 0
+    - _EnableBlendModePreserveSpecularLighting: 1
+    - _EnableFogOnTransparent: 1
     - _EnvironmentReflections: 1
     - _FlipbookBlending: 0
     - _FlipbookMode: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.6480049
     - _GlossyReflections: 1
+    - _HEIGHTMAP: 0
     - _LeafAnimStrength: 1
     - _LinkDetailsWithBase: 0
+    - _MASKMAP: 0
     - _Metallic: 0
     - _MetallicRemapMax: 1
     - _MetallicRemapMin: 0
     - _Mode: 3
     - _NormalScale: 1
     - _OcclusionStrength: 1
+    - _Opacity: 1
+    - _OpaqueCullMode: 2
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RayTracing: 0
     - _ReceiveShadows: 1
+    - _ReceivesSSR: 1
+    - _ReceivesSSRTransparent: 0
+    - _RefractionModel: 0
+    - _RenderQueueType: 1
+    - _RequireSplitLighting: 0
     - _Smoothness: 0
     - _SmoothnessRemapMax: 0
     - _SmoothnessRemapMin: 0
@@ -205,16 +239,39 @@ Material:
     - _SoftParticlesNearFadeDistance: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _StencilRef: 0
+    - _StencilRefDepth: 8
+    - _StencilRefDistortionVec: 4
+    - _StencilRefGBuffer: 10
+    - _StencilRefMV: 40
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDistortionVec: 4
+    - _StencilWriteMaskGBuffer: 14
+    - _StencilWriteMaskMV: 40
+    - _SupportDecals: 1
     - _Surface: 0
+    - _SurfaceType: 0
     - _Thickness: 0
+    - _TransparentBackfaceEnable: 0
+    - _TransparentCullMode: 2
+    - _TransparentDepthPostpassEnable: 0
+    - _TransparentDepthPrepassEnable: 0
+    - _TransparentSortPriority: 0
+    - _TransparentWritingMotionVec: 0
+    - _TransparentZWrite: 0
     - _TreeBendFreq: 1
     - _TreeBendScale: 0.2
     - _USE_MASKMAP: 0
     - _UVSec: 0
     - _UV_SET: 0
+    - _UseShadowThreshold: 1
     - _WindTurbulence: 1
     - _WorkflowMode: 1
     - _ZTest: 4
+    - _ZTestDepthEqualForOpaque: 3
+    - _ZTestGBuffer: 3
+    - _ZTestTransparent: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
@@ -223,12 +280,31 @@ Material:
     - _BendPivot: {r: 0, g: 0, b: 0, a: 0}
     - _CameraFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _Diffusion_Profile_Asset: {r: -3.698545e+22, g: 20.616848, b: -5.291675e-28,
+        a: -1.3520143e+18}
+    - _DoubleSidedConstants: {r: 1, g: 1, b: 1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmmisiveColor: {r: 0, g: 0, b: 0, a: 0}
     - _SoftParticleFadeParams: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _WindDirection: {r: 0.1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+--- !u!114 &1204962834883245692
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 12
+  hdPluginSubTargetMaterialVersions:
+    m_Keys: []
+    m_Values: 
 --- !u!114 &9061191899348802005
 MonoBehaviour:
   m_ObjectHideFlags: 11

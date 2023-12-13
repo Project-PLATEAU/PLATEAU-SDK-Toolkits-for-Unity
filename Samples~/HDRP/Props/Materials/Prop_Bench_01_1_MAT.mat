@@ -22,12 +22,14 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: 2450
   stringTagMap:
+    MotionVector: User
     RenderType: TransparentCutout
   disabledShaderPasses:
   - TransparentDepthPrepass
   - TransparentDepthPostpass
   - TransparentBackface
   - RayTracingPrepass
+  - MOTIONVECTORS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -194,6 +196,7 @@ Material:
     - _Mode: 0
     - _NormalScale: 1
     - _OcclusionStrength: 1
+    - _Opacity: 1
     - _OpaqueCullMode: 2
     - _Parallax: 0.02
     - _QueueControl: 0

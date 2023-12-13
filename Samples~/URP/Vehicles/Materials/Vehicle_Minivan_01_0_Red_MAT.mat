@@ -1,5 +1,21 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8646555516967974933
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da692e001514ec24dbc4cca1949ff7e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 12
+  hdPluginSubTargetMaterialVersions:
+    m_Keys: []
+    m_Values: 
 --- !u!114 &-3503748599270683973
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -24,15 +40,22 @@ Material:
   m_Shader: {fileID: -6465566751694194690, guid: 56a1fbf7b674d7849b84e6a129487e6d,
     type: 3}
   m_ValidKeywords:
+  - _ALPHATEST_ON
   - _USE_MASKMAP
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2000
+  m_CustomRenderQueue: 2450
   stringTagMap:
-    RenderType: Opaque
-  disabledShaderPasses: []
+    MotionVector: User
+    RenderType: TransparentCutout
+  disabledShaderPasses:
+  - TransparentDepthPrepass
+  - TransparentDepthPostpass
+  - TransparentBackface
+  - RayTracingPrepass
+  - MOTIONVECTORS
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -77,7 +100,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: fbece23a91a99cc4a99b631124368c3d, type: 3}
+        m_Texture: {fileID: 2800000, guid: d6ce1097559dbfd4b9720b1184e07ba8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
@@ -154,16 +177,28 @@ Material:
     - Vector1_C739FCF4: 0.5
     - _AORemapMax: 1
     - _AORemapMin: 0
-    - _AlphaClip: 0
+    - _AddPrecomputedVelocity: 0
+    - _AlphaClip: 1
+    - _AlphaCutoffEnable: 1
+    - _AlphaDstBlend: 0
+    - _AlphaSrcBlend: 1
+    - _AlphaToMask: 0
+    - _AlphaToMaskInspectorValue: 0
     - _Blend: 0
+    - _BlendMode: 0
     - _BumpScale: 1
     - _CastShadows: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
     - _ColorMaskEdgeThreshold: 0.1
+    - _ConservativeDepthOffsetEnable: 0
     - _Cull: 2
+    - _CullMode: 2
+    - _CullModeForward: 2
     - _Cutoff: 0.5
+    - _DETAILMAP: 0
     - _DETAIL_UV_SET: 0
+    - _DepthOffsetEnable: 0
     - _DetailAlbedoMapScale: 1
     - _DetailColor: 0
     - _DetailNormalMapScale: 1
@@ -171,24 +206,39 @@ Material:
     - _DetailScale: 1
     - _Detail_Albedo_Scale: 0
     - _Detail_Smoothness_Scale: 0
+    - _DoubleSidedEnable: 0
+    - _DoubleSidedGIMode: 0
+    - _DoubleSidedNormalMode: 2
     - _DstBlend: 0
     - _EmissiveEV100: 6
-    - _EmissiveExposureWeight: 1
+    - _EmissiveExposureWeight: 0
+    - _EnableBlendModePreserveSpecularLighting: 1
+    - _EnableFogOnTransparent: 1
     - _EnvironmentReflections: 1
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
+    - _HEIGHTMAP: 0
     - _LinkDetailsWithBase: 0
+    - _MASKMAP: 1
     - _Metallic: 0
     - _MetallicRemapMax: 1
     - _MetallicRemapMin: 0
     - _Mode: 0
     - _NormalScale: 1
     - _OcclusionStrength: 1
+    - _Opacity: 1
+    - _OpaqueCullMode: 2
     - _Parallax: 0.02
     - _QueueControl: 0
     - _QueueOffset: 0
+    - _RayTracing: 0
     - _ReceiveShadows: 1
+    - _ReceivesSSR: 1
+    - _ReceivesSSRTransparent: 0
+    - _RefractionModel: 0
+    - _RenderQueueType: 1
+    - _RequireSplitLighting: 0
     - _Smoothness: 1
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0.4
@@ -196,18 +246,42 @@ Material:
     - _Smoothness_1: 1
     - _SpecularHighlights: 1
     - _SrcBlend: 1
+    - _StencilRef: 0
+    - _StencilRefDepth: 8
+    - _StencilRefDistortionVec: 4
+    - _StencilRefGBuffer: 10
+    - _StencilRefMV: 40
+    - _StencilWriteMask: 6
+    - _StencilWriteMaskDepth: 8
+    - _StencilWriteMaskDistortionVec: 4
+    - _StencilWriteMaskGBuffer: 14
+    - _StencilWriteMaskMV: 40
+    - _SupportDecals: 0
     - _Surface: 0
+    - _SurfaceType: 0
+    - _TransparentBackfaceEnable: 0
+    - _TransparentCullMode: 2
+    - _TransparentDepthPostpassEnable: 0
+    - _TransparentDepthPrepassEnable: 0
+    - _TransparentSortPriority: 0
+    - _TransparentWritingMotionVec: 0
+    - _TransparentZWrite: 0
     - _USE_MASKMAP: 1
     - _UVSec: 0
     - _UV_SET: 0
+    - _UseShadowThreshold: 1
     - _WorkflowMode: 1
     - _ZTest: 4
+    - _ZTestDepthEqualForOpaque: 3
+    - _ZTestGBuffer: 3
+    - _ZTestTransparent: 4
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _DoubleSidedConstants: {r: 1, g: 1, b: -1, a: 0}
+    - _EmissionColor: {r: 1, g: 1, b: 1, a: 1}
     - _EmmisiveColor: {r: 1, g: 1, b: 1, a: 1}
     - _PrimaryColor: {r: 0.7735849, g: 0.31673193, b: 0.31673193, a: 1}
     - _SecondaryColor: {r: 1, g: 1, b: 1, a: 1}

@@ -89,13 +89,13 @@ MonoBehaviour:
   m_FrontWheels:
   - {fileID: 3657850205370577936}
   - {fileID: 7639809662270174966}
-  m_WheelRadius: 0.7
+  m_WheelRadius: 0.34
   m_BackWheelAxisTransform: {fileID: 7613527113375040904}
-  m_Wheelbase: 2.5
+  m_Wheelbase: 2.6
   m_IsCameraViewAvailable: 1
   m_CameraTargetSettings:
-    m_FirstPersonViewPosition: {x: 0, y: 1, z: 1}
-    m_ThirdPersonViewDefaultCameraPosition: {x: 1.5, y: 1.5, z: -5}
+    m_FirstPersonViewPosition: {x: 0, y: 1, z: 3}
+    m_ThirdPersonViewDefaultCameraPosition: {x: 1.5, y: 2, z: -3}
     m_ThirdPersonOrbitInitialRotation: {x: 0, y: 30}
     m_ThirdPersonOrbitOffset: {x: 0, y: 0, z: 0}
     m_ThirdPersonOrbitDefaultDistance: 8
@@ -936,6 +936,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 841738320275021520}
     m_Modifications:
+    - target: {fileID: 3104744102695110745, guid: 38390a714096026488958847a7e5c42f,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 1.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104744102695110745, guid: 38390a714096026488958847a7e5c42f,
+        type: 3}
+      propertyPath: m_Offset.z
+      value: 0.7955596
+      objectReference: {fileID: 0}
     - target: {fileID: 4018253880872633429, guid: 38390a714096026488958847a7e5c42f,
         type: 3}
       propertyPath: m_RootOrder

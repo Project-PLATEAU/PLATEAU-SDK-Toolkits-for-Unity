@@ -63,13 +63,13 @@ MonoBehaviour:
   m_Rain: 0
   m_Snow: 0
   m_FogDistance: 200000
-  m_FogColor: {r: 0.7254902, g: 0.7607843, b: 0.75686276, a: 0.13725491}
+  m_FogColor: {r: 0.9, g: 1, b: 0.9894737, a: 0.13725491}
   m_MaterialFade: 0
   m_BuildingColor: {r: 1, g: 1, b: 1, a: 1}
-  m_TransparencyDistMin: 0
-  m_TransparencyDistMax: 0
+  m_OpacityDistMin: 0
+  m_OpacityDistMax: 0
   m_GlobalOpacity: 1
-  m_MoonScale: 0.08
+  m_MoonScale: 0.03
   m_MoonPhase: 0
   m_CloudySaturationGradient:
     serializedVersion: 2

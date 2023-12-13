@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3779187907989809331
 Transform:
   m_ObjectHideFlags: 0
@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3779187907989809324}
-  m_LocalRotation: {x: 0.07823394, y: 0.9039368, z: 0.3760485, w: -0.18805666}
+  m_LocalRotation: {x: 0.07823392, y: 0.90393674, z: 0.37604862, w: -0.18805672}
   m_LocalPosition: {x: 1.3438945, y: -0.6683121, z: 2.7419953}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -45,7 +45,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.044227947, g: 0.22265933, b: 0.33246323, a: 0.925}
-  m_Intensity: 0.0010530418
+  m_Intensity: 0
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -178,13 +178,13 @@ MonoBehaviour:
   m_Rain: 0
   m_Snow: 0
   m_FogDistance: 200000
-  m_FogColor: {r: 0.7254902, g: 0.7607843, b: 0.75686276, a: 0.13725491}
+  m_FogColor: {r: 0.9, g: 1, b: 0.9894737, a: 0.13725491}
   m_MaterialFade: 0
   m_BuildingColor: {r: 1, g: 1, b: 1, a: 1}
-  m_TransparencyDistMin: 0
-  m_TransparencyDistMax: 0
+  m_OpacityDistMin: 0
+  m_OpacityDistMax: 0
   m_GlobalOpacity: 1
-  m_MoonScale: 0.08
+  m_MoonScale: 0.03
   m_MoonPhase: 0
   m_CloudySaturationGradient:
     serializedVersion: 2
@@ -282,7 +282,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3779187909633393843}
-  m_LocalRotation: {x: -0.078382604, y: 0.7791247, z: -0.6139432, w: -0.0994716}
+  m_LocalRotation: {x: -0.07838264, y: 0.77912474, z: -0.6139432, w: -0.09947157}
   m_LocalPosition: {x: 1.3438945, y: -0.6683121, z: 2.7419953}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -302,7 +302,7 @@ Light:
   m_Type: 1
   m_Shape: 0
   m_Color: {r: 0.925, g: 0.9225571, b: 0.9113896, a: 0.925}
-  m_Intensity: 0.99894625
+  m_Intensity: 0.99997383
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

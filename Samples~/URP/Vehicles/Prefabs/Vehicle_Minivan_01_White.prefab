@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 898703216261747066}
   - component: {fileID: 5342054729323570699}
   - component: {fileID: 6028057257226828543}
+  - component: {fileID: 1430688014}
   m_Layer: 0
   m_Name: Vehicle_Minivan_01_White
   m_TagString: Untagged
@@ -255,16 +256,41 @@ MonoBehaviour:
   m_FrontWheels:
   - {fileID: 3825220998092307386}
   - {fileID: 7913017181572315484}
-  m_WheelRadius: 0.7
+  m_WheelRadius: 0.34
   m_BackWheelAxisTransform: {fileID: 7961818546774575650}
-  m_Wheelbase: 2.5
+  m_Wheelbase: 2.6
   m_IsCameraViewAvailable: 1
   m_CameraTargetSettings:
-    m_FirstPersonViewPosition: {x: 0, y: 1, z: 1}
-    m_ThirdPersonViewDefaultCameraPosition: {x: 1.5, y: 1.5, z: -5}
+    m_FirstPersonViewPosition: {x: 0, y: 1, z: 3}
+    m_ThirdPersonViewDefaultCameraPosition: {x: 1.5, y: 2, z: -3}
     m_ThirdPersonOrbitInitialRotation: {x: 0, y: 30}
     m_ThirdPersonOrbitOffset: {x: 0, y: 0, z: 0}
     m_ThirdPersonOrbitDefaultDistance: 8
+--- !u!114 &1430688014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 518764415726128064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2a246254748223418a45aba33dff93e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Track: {fileID: 0}
+  m_MaxVelocity: 20
+  m_TrackOffset: {x: 0, y: 0, z: 0}
+  m_CollisionDetectOriginOffset: {x: 0, y: 0, z: 3}
+  m_CollisionDetectRadius: 0.5
+  m_CollisionDetectHeight: 0.5
+  m_MinCollisionDetectDistance: 5
+  m_RunOnAwake: 1
+  m_IsPaused: 0
+  m_RandomStartPoint: 0
+  m_LoopOnOpenedTrack: 1
+  m_SplineContainerT: 0
+  m_SerializedMovingObject: {fileID: 6028057257226828543}
 --- !u!1 &800354869872171783
 GameObject:
   m_ObjectHideFlags: 0
@@ -936,6 +962,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 898703216261747066}
     m_Modifications:
+    - target: {fileID: 3104744102695110745, guid: 38390a714096026488958847a7e5c42f,
+        type: 3}
+      propertyPath: m_Size.z
+      value: 1.9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3104744102695110745, guid: 38390a714096026488958847a7e5c42f,
+        type: 3}
+      propertyPath: m_Offset.z
+      value: 0.7955596
+      objectReference: {fileID: 0}
     - target: {fileID: 4018253880872633429, guid: 38390a714096026488958847a7e5c42f,
         type: 3}
       propertyPath: m_RootOrder

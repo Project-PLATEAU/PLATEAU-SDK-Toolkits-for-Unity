@@ -99,7 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Animator: {fileID: 6767395232980399399}
-  m_IsCameraViewAvailable: 1
+  m_IsCameraViewAvailable: 0
   m_CameraTargetSettings:
     m_FirstPersonViewPosition: {x: 0, y: 1.6, z: 0.2}
     m_ThirdPersonViewDefaultCameraPosition: {x: 1, y: 1.5, z: -2}
