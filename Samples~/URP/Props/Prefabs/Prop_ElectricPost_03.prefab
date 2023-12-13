@@ -342,6 +342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5452370268576592839}
   - component: {fileID: 1004490141922100406}
+  - component: {fileID: 2257989813191630847}
   m_Layer: 0
   m_Name: Prop_ElectricPost_03
   m_TagString: Untagged
@@ -402,6 +403,18 @@ LODGroup:
     renderers:
     - renderer: {fileID: 6781717843986667741}
   m_Enabled: 1
+--- !u!114 &2257989813191630847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675129435078846845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7551373136407858758
 GameObject:
   m_ObjectHideFlags: 0

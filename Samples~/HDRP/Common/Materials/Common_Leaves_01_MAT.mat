@@ -219,6 +219,7 @@ Material:
     - _Mode: 3
     - _NormalScale: 1
     - _OcclusionStrength: 1
+    - _Opacity: 1
     - _OpaqueCullMode: 2
     - _Parallax: 0.02
     - _QueueControl: 0
