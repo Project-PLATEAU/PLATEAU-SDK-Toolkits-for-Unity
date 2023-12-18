@@ -22,11 +22,11 @@ PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミ�
 
 PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニューより「PLATEAU」>「PLATEAU Toolkit」>「Sandbox Toolkit」を選択します。
 
-<img width="372" alt= "PLATEAU Toolkit Menu" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/58356a9f-7b52-49ce-9d5a-bbe55b56be87">
+<img width="372" alt= "plateau_toolkit_menu" src="../Documentation~/Sandbox Images/plateau_toolkit_menu.png">
 
 Sandbox Toolkitのメインメニューが表示されます。
 
-<img width="497" alt="Sandbox Toolkit Menu" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%202.png">
+<img width="497" alt="sandbox_toolkit_menu" src="../Documentation~/Sandbox Images/sandbox_toolkit_menu.png">
 
 ## 全般
 
@@ -38,15 +38,15 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 ### 配置ツールの開始方法
 
 アバター、乗り物、プロップの配置メニューから「配置ツール」を使用することで、複数のオブジェクトの同時配置やトラックに沿ったオブジェクトの配置などを行うことができます。<br>
-<img width="500" alt="Placement Tool" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2016.png">
+<img width="500" alt="placement_tool" src="../Documentation~/Sandbox Images/placement_tool.png">
 
 配置ツールを起動すると以下の画像のようにボタンの表示が変わり、配置するオブジェクトを Sandbox Toolkit ウィンドウのアセットリストからクリックして選択することができます。
 配置するオブジェクトを選択してシーン上でマウスを操作すると、マウス上に画像のようにカーソルと配置するオブジェクトのプレビューが表示され、後述する配置オプションに応じた操作によって選択したオブジェクトを配置することができます。<br>
-<img width="300" alt="Placement Example" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2017.png">
+<img width="300" alt="placement_example" src="../Documentation~/Sandbox Images/placement_example.png">
 
 ### 配置オプション
 配置ツールを起動すると、シーンビューの右下に次のような配置ツール設定ウィンドウが表示されます。<br>
-<img width="300" alt="Placement Tool Window" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2018.png">
+<img width="300" alt="placement_tool_window" src="../Documentation~/Sandbox Images/placement_tool_window.png">
 
 | メニュー    | 内容       |
 |:----- |:-------- |
@@ -58,16 +58,16 @@ Sandbox Toolkitの各機能を利用するためには、**シーンに配置さ
 ##### 配置位置 - 表面に配置
 
 Unity のコライダーに沿ってオブジェクトを配置するモードです。「表面に配置」オプションを選択している場合は、PLATEAUモデルや配置したい3Dモデルにコライダーが設定されていない場合はオブジェクトを配置するための場所を決定することができないため、オブジェクトを配置できません。PLATEAUモデルのコライダー設定やその他のコライダー設定に関しては各種ドキュメントを参照して設定してください。<br>
-<img width="450" alt="Surface Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2019.gif">
+<img width="450" alt="surface_placement" src="../Documentation~/Sandbox Images/surface_placement.gif">
 
 ##### 配置位置 - トラックに沿って配置
 [2. トラック機能](#2-トラック機能)で設定したシーン上のトラックに沿ってオブジェクトを配置します。
 「トラックに沿って配置」と配置方法「クリック」を選択している状態で配置を行うと、自動的に配置されたオブジェクトにトラックに沿って移動するコンポーネント（ `PlateauSandboxTrackMovement` ）がアタッチされます。<br>
-<img width="450" alt="Track Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2020.gif">
+<img width="450" alt="track_placement" src="../Documentation~/Sandbox Images/track_placement.gif">
 
 #### 配置方法
 ##### 配置方法 - クリック
-<img width="450" alt="Click Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2021.gif">
+<img width="450" alt="click_placement" src="../Documentation~/Sandbox Images/click_placement.gif">
 
 クリックすることで一つのオブジェクトを配置できます。ドラッグすることで、配置する際の向きを設定できます。
 他のオブジェクトとの衝突を判定し、オブジェクトが重なっている場合はカーソルが赤色になりオブジェクトが配置できません。配置する際のオブジェクトのデフォルトの向きは「配置位置」の設定により異なります。<br>
@@ -77,7 +77,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | トラックに沿って配置 | 常にトラックの進行方向に設定されます。 |
 
 ##### 配置方法 - ブラシ
-<img width="450" alt="Brush Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2022.gif">
+<img width="450" alt="brush_placement" src="../Documentation~/Sandbox Images/brush_placement.gif">
 
 |設定項目| 概要      |
 |:----- |:-------- |
@@ -101,14 +101,14 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | 表面に配置 | コライダーの法線方向に配置されます。 |
 | トラックに沿って配置 | トラックの法線方向に配置され、トラックが配置されている面の法線は使用されません。 |
 
-<img width="200" alt="Normal Orientation - Surface Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2023.png">
-<img width="400" alt="Normal Orientation - Track Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2024.gif">
+<img width="200" alt="normal_orientation_surface_placement" src="../Documentation~/Sandbox Images/normal_orientation_surface_placement.png">
+<img width="400" alt="normal_orientation_track_placement" src="../Documentation~/Sandbox Images/normal_orientation_track_placement.gif">
 <br>
 
 ##### オブジェクトの向き - ワールド座標
 配置オブジェクトは、常にワールド座標の上方向が法線ベクトルの正になる向きで配置されます。<br>
-<img width="200" alt="Normal Orientation - Surface Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2025.png">
-<img width="400" alt="Normal Orientation - Track Placement" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2026.gif">
+<img width="200" alt="world_surface_placement" src="../Documentation~/Sandbox Images/world_surface_placement.png">
+<img width="400" alt="world_track_placement" src="../Documentation~/Sandbox Images/world_track_placement.gif">
 
 ## 2. トラック機能
 
@@ -120,21 +120,21 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 「ツール」メニューの中で「新しいトラックを作成」ボタンを押下します。<br>
    
-<img width="670" alt="Track Creation" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/54d30e78-bbf1-497b-8d29-8f59656cfbd5">
+<img width="670" alt="track_creation_ui" src="../Documentation~/Sandbox Images/track_creation_ui.png">
 
 「新しいトラックを作成」をクリックすることでトラック編集ツールを開始することができます。<br>
 トラック編集ツールを起動した状態でシーンビューにマウスカーソルを移動すると、マウスカーソル上にトラックを形成するためのポイントのプレビューが表示され、クリックすることでポイントを配置することができます。<br>
 
-<img width="796" alt="スクリーンショット 2023-07-12 19 39 27" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/49029b7d-f4dc-49dc-a1e4-1a24cff34563">
+<img width="796" alt="track_creation_start" src="../Documentation~/Sandbox Images/track_creation_start.png">
 
 シーンビュー内において、トラックを引きたい地表上でクリックをすると、トラック生成のポイントが作成されます。
 そのまま続けて地表上をクリックしていくと、ポイントが生成され、ポイントに合わせてトラックが生成されます。
 
-<img width="498" alt="スクリーンショット 2023-07-12 19 39 34" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/3f483c28-1573-4d89-8b67-571b2262568f">
+<img width="498" alt="track_creation_points" src="../Documentation~/Sandbox Images/track_creation_points.png">
 
 最後に始点と同じポイントをクリックすると、ループ可能なトラックが作成できます。Escキーを押すことでトラックの作成を終了します。
 
-<img width="498" alt="スクリーンショット 2023-07-12 19 39 40" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b66cdcb3-0317-4acc-9951-ccb04652a0dd">
+<img width="498" alt="track_creation_loop" src="../Documentation~/Sandbox Images/track_creation_loop.png">
 
 作成したトラックへのアバター、乗り物の配置方法は[1-5. 共通配置ツール](#1-5-共通配置ツール)で後述します。
 
@@ -148,15 +148,15 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 - インスペクターから設定する場合は `Has Speed Limit` にチェックボックスをいれて、制限速度（m/s）を `Speed Limit` に設定してください。
 
-<img width="482" alt="スクリーンショット 2023-07-12 19 39 54" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/f4c13c46-dce7-46d3-b52d-1e54cb36c407">
+<img width="482" alt="plateau_sandbox_track_speed_limit" src="../Documentation~/Sandbox Images/plateau_sandbox_track_speed_limit.png">
 
 - 速度制限設定ツールは PLATEAU Sandbox Toolkit ウィンドウのトラックタブから起動することができます。
 
-<img width="407" alt="スクリーンショット 2023-07-12 19 39 59" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/bdc7a5a0-c714-4917-8544-5f6f8253a4e1">
+<img width="407" alt="plateau_sandbox_track_speed_limit_tool" src="../Documentation~/Sandbox Images/plateau_sandbox_track_speed_limit_tool.png">
 
 - 制限速度ツールを使用するとシーンの各トラック上に設定ウィンドウが表示され、このウィンドウから制限速度を設定することができます。
 
-<img width="1006" alt="スクリーンショット 2023-07-12 19 40 14" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/6f17b30f-1fdb-43a5-8d14-3ad136773be0">
+<img width="1006" alt="plateau_sandbox_track_speed_limit_setting" src="../Documentation~/Sandbox Images/plateau_sandbox_track_speed_limit_setting.png">
 
 
 ### 2-2. トラック移動コンポーネント
@@ -214,24 +214,24 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 カメラマネージャー ( `PlateauSandboxCameraManager` ) を作成することで、PLATEAU Sandbox Toolkit によって配置されたオブジェクトの視点に切り替えることができるようになります。
 
 カメラマネージャーは Sandbox Toolkit ウィンドウから「カメラマネージャーを作成」ボタンを押下して作成することができます。<br>
-<img width="400" alt="Camera Manager Creation" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2027.png">
+<img width="400" alt="camera_manager_creation" src="../Documentation~/Sandbox Images/camera_manager_creation.png">
 
 ヒエラルキービュー内に "PlateauSandboxCameraManager" が作成されます。<br>
-<img width="400" alt="Camera Manager Creation Result" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2028.png">
+<img width="400" alt="camera_manager_creation_result" src="../Documentation~/Sandbox Images/camera_manager_creation_result.png">
 
 プレイモードを実行し、配置したアバターや乗り物をクリックすると、デフォルトではそのオブジェクトの一人称視点に遷移します。<br>
 カメラインタラクション機能には一人称視点、三人称視点、三人称中心視点が用意されており、対象のオブジェクトを様々な視点から見ることができます。<br>
 
-<img width="300" alt="left" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2029.png">
-<img width="300" alt="front" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2030.png">
-<img width="300" alt="right" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2031.png">
+<img width="300" alt="left" src="../Documentation~/Sandbox Images/left.png">
+<img width="300" alt="front" src="../Documentation~/Sandbox Images/front.png">
+<img width="300" alt="right" src="../Documentation~/Sandbox Images/right.png">
 
 なお、特定のエージェントに対しカメラインタラクション機能を設定したくない場合は、 `PlateauSandboxAvatar` の `Is Camera View Available` のチェックボックスを外します。<br>
 
-<img width="400" alt="sandbox_camerainteracation_cameraviewenable" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2032.png">
+<img width="400" alt="sandbox_camerainteracation_cameraviewenable" src="../Documentation~/Sandbox Images/sandbox_camerainteracation_cameraviewenable.png">
 
 尚、キーボード入力によるカメラ操作の有効/無効の設定は "PlateauSandboxCameraManager" の `Enable Keywboard Camera Switch` のチェックボックスによって切り替えることが可能です。<br>
-<img width="475" alt="sandbox_cameramanager_enablekeyboard" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2033.png">
+<img width="475" alt="sandbox_cameramanager_enablekeyboard" src="../Documentation~/Sandbox Images/sandbox_cameramanager_enablekeyboard.png">
 
 ### 3-1. 操作方法
 
@@ -248,7 +248,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 #### 一人称視点
 
 オブジェクトの視点の位置からカメラ表示するモードです。<br>
-<img width="600" alt="sandbox_camerainteraction_fps" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2034.png">
+<img width="600" alt="sandbox_camerainteraction_fps" src="../Documentation~/Sandbox Images/sandbox_camerainteraction_fps.png">
 
 | 操作    | 内容       | 備考  |
 |:----- |:-------- |:--- |
@@ -258,7 +258,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 オブジェクトの後方からオブジェクトの視点の先に向けたカメラを表示するモードです。<br>
 
-<img width="600" alt="sandbox_camerainteraction_tps" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2035.png">
+<img width="600" alt="sandbox_camerainteraction_tps" src="../Documentation~/Sandbox Images/sandbox_camerainteraction_tps.png">
 
 | 操作              | 内容           | 備考  |
 |:--------------- |:------------ |:--- |
@@ -270,7 +270,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 
 対象のオブジェクトを中心に軌道上を移動することができるモードです。<br>
 
-<img width="600" alt="sandbox_camerainteraction_around" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2036.png">
+<img width="600" alt="sandbox_camerainteraction_around" src="../Documentation~/Sandbox Images/sandbox_camerainteraction_around.png">
 
 | 操作       | 内容                   | 備考  |
 |:-------- |:-------------------- |:--- |
@@ -282,7 +282,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 アバターや乗り物のコンポーネント ( `PlateauSandboxAvatar` 、 `PlateauSandboxVehicle` ) の `CameraTargetSettings` を調整することでカメラのデフォルトの位置などカメラに関する設定を変更することができます。
 位置は対象のオブジェクトの原点からの相対座標で表現され、Xは横方向, Yは高さ, Zで前後方向の設定をすることができます。<br>
 
-<img width="684" alt="sandbox_camerainteraction_offset" src="https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Sandbox/SandboxReadmeImages/Sandbox%2037.png">
+<img width="684" alt="sandbox_camerainteraction_offset" src="../Documentation~/Sandbox Images/sandbox_camerainteraction_offset.png">
 
 | 設定項目                                 | 内容                      |
 |:------------------------------------ |:----------------------- |
