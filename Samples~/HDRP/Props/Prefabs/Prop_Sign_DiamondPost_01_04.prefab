@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 382878667639879723}
   - component: {fileID: 5648848679854779552}
   m_Layer: 0
-  m_Name: Prop_sign_DiamondPost_01_04
+  m_Name: Prop_Sign_DiamondPost_01_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
