@@ -95,6 +95,9 @@ GameObject:
   - component: {fileID: 2486841706491202444}
   - component: {fileID: 7266864704185072893}
   - component: {fileID: 2668857932769504353}
+  - component: {fileID: -1824381240331616185}
+  - component: {fileID: -3247175120916180943}
+  - component: {fileID: 6526641055349457981}
   m_Layer: 0
   m_Name: Prop_Sign_CircularPost_01_03
   m_TagString: Untagged
@@ -154,6 +157,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-1824381240331616185
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3010896008641548598}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.111996174, y: 0.63147116, z: 0.61669147}
+  m_Center: {x: 0.015776396, y: 2.1128075, z: -0.0013732314}
+--- !u!65 &-3247175120916180943
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3010896008641548598}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.116240315, y: 1.8267956, z: 0.11011496}
+  m_Center: {x: 0.011588354, y: 0.8994224, z: -0.007850185}
+--- !u!65 &6526641055349457981
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3010896008641548598}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3093673, y: 0.044173613, z: 0.2983016}
+  m_Center: {x: 0.0018933117, y: 0.004146442, z: -0.0022674352}
 --- !u!1 &6635569021454011395
 GameObject:
   m_ObjectHideFlags: 0

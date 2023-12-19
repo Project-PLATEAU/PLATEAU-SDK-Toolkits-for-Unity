@@ -275,6 +275,8 @@ GameObject:
   - component: {fileID: 7095104443504868497}
   - component: {fileID: 2606669729953844192}
   - component: {fileID: 192333194510237837}
+  - component: {fileID: 4245547883861474695}
+  - component: {fileID: -1925399400904296603}
   m_Layer: 0
   m_Name: Prop_Sign_06
   m_TagString: Untagged
@@ -335,3 +337,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &4245547883861474695
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7583234161383007787}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.0597374, y: 0.74435997, z: 0.7939102}
+  m_Center: {x: 0.057920896, y: 4.2804375, z: -0.46580145}
+--- !u!65 &-1925399400904296603
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7583234161383007787}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.034731075, y: 4.2959075, z: 0.038331352}
+  m_Center: {x: 0.04703603, y: 2.195689, z: -0.05173995}

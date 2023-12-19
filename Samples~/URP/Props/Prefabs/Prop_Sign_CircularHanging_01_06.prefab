@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4370874359275203641}
   - component: {fileID: 8859258570394868552}
   - component: {fileID: 4261195173998578640}
+  - component: {fileID: 5057105007015230815}
   m_Layer: 0
   m_Name: Prop_Sign_CircularHanging_01_06
   m_TagString: Untagged
@@ -75,6 +76,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &5057105007015230815
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4027246930525845123}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.46356887, y: 0.73472977, z: 0.6239351}
+  m_Center: {x: 0.36951306, y: 0.24990368, z: 0.0031624883}
 --- !u!1 &7209792267375991180
 GameObject:
   m_ObjectHideFlags: 0

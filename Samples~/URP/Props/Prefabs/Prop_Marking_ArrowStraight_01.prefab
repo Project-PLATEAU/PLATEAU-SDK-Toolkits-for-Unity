@@ -70,7 +70,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 3117334526546779427}
 --- !u!1 &3739646317098123604
 GameObject:
   m_ObjectHideFlags: 0
@@ -165,7 +164,6 @@ GameObject:
   - component: {fileID: 974831687167158916}
   - component: {fileID: 4339719768035546742}
   - component: {fileID: 7078333015541223537}
-  - component: {fileID: 3117334526546779427}
   m_Layer: 0
   m_Name: Prop_RoadMarkArrowStraight_01_Mesh_LOD0
   m_TagString: Untagged
@@ -238,17 +236,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3117334526546779427
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5089595637532120194}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 1620689780386061411, guid: b005257f0d1469c4287164cd0fa1cb72, type: 3}

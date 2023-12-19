@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1724664975459447497}
   - component: {fileID: 5887649475700180408}
   - component: {fileID: 1709019814715328812}
+  - component: {fileID: -8865363158924627038}
   m_Layer: 0
   m_Name: Prop_ElectricPole_01
   m_TagString: Untagged
@@ -71,7 +72,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 4726136454486770873}
+--- !u!65 &-8865363158924627038
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2064035134039992435}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.36489052, y: 14.171116, z: 0.3221483}
+  m_Center: {x: 0.000000029802322, y: 7.0900154, z: -0.00015185773}
 --- !u!1 &3593966365832148926
 GameObject:
   m_ObjectHideFlags: 0

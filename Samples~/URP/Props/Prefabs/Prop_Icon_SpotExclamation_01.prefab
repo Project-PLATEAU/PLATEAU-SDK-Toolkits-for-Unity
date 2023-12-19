@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4006324057718064296}
   - component: {fileID: 1188288158890192994}
   - component: {fileID: 1133133887442374492}
+  - component: {fileID: -431477524227650845}
   m_Layer: 0
   m_Name: Prop_Icon_SpotExclamation_01
   m_TagString: Untagged
@@ -97,3 +98,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-431477524227650845
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 827916556936434103}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 6.985255, z: 1.1633165}
+  m_Center: {x: -0.00000023841858, y: 3.4926274, z: -0.00000008940697}
