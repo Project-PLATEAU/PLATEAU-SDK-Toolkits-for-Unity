@@ -1,6 +1,6 @@
 # PLATEAU SDK Toolkits for Unity
-![mainvisual](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/cc118e82-b9b9-45a1-83cf-7300c2338ebe)
 
+<img width="1080" alt="toolkits_key_visual" src="/Documentation~/Images/toolkits_key_visual.png">
 
 
 PLATEAU SDK-Toolkits for Unityは、PLATEAUの提供する「3D都市モデル」のデータを利用したUnity上でのアプリケーション開発を支援するツールキット群です。  
@@ -15,10 +15,10 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 **年度内に4回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
 ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
-- [Rendering Toolkit](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Rendering/README.md)
-- [Sandbox Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
+- [Rendering Toolkit](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Rendering)
+- [Sandbox Toolkit](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 - [Maps Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
-- [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
+- [AR Extensions](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-AR-Extensions-for-Unity)
 
 Toolkitを活用した下記の４種類のサンプルアプリプロジェクトを提供しています。<br>
 下記リポジトリよりご利用ください。
@@ -55,9 +55,9 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - LOD機能
 - 雲の量を調整する機能
 - ポストエフェクトを追加する機能
-- ［FBコメント］Release3について説明を追加してください
+- 頂点カラーの設定機能
 
-使い方は[こちら](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/blob/main/PlateauToolkit.Rendering/README.md)
+使い方は[こちら](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Rendering)
 
 
 ## [Sandbox Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
@@ -75,24 +75,34 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - 人物エージェントの配置機能
 - 乗り物エージェントの配置機能
 - Props(施設器具等)の配置機能
-- ［FBコメント］Release3について説明を追加してください
+- カメラインタラクション機能
   
-使い方は[こちら](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
+使い方は[こちら](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 
 
 ## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
-
-［FBコメント］ビジュアルをなんかいれてください  
 PLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。<br>
-[こちらのリポジトリ](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)からご利用ください。
+https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/42bcee43-436a-45f4-9cd2-a306ed36b905
+
+### リリース済の機能
+- Cesium for Unityとの連携
+- BIMモデルとの連携（IFCファイルの読み込み）
+- GISデータとの連携
+
+[こちらのリポジトリ](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Maps-Toolkit-for-Unity)からご利用ください。
 
 
 ## [PLATEAU SDK-AR-Extensions for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
-
-［FBコメント］ビジュアルをなんか入れてください  
 PLATEAUの3D都市モデルを活用したARアプリ開発ツールです。AR空間に3Dモデルを配置し、位置のずれや地面の高さを調整できます。さらに、3Dオブジェクトを遮蔽するオクルージョン機能も備えています。Streamingにより配置された3D都市モデルを用いたARアプリ開発も可能です。
 AR ExtensionsはToolkitsを前提としたエクステンションとして構築されています。<br>
-[こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)からご利用ください。
+https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity/assets/127069970/1bb0cea8-c388-41fc-abcc-8462fa8473fd
+
+### リリース済の機能
+- Geospatial APIを用いた3D都市モデルの位置合わせ機能
+- ARマーカーを用いた3D都市モデルの位置合わせ機能
+- ARオクルージョン機能
+
+[こちらのリポジトリ](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-AR-Extensions-for-Unity)からご利用ください。
 
 
 # セットアップ環境
@@ -126,7 +136,7 @@ Unity Version 2021.3.27f1(LTS)により新たにUnityプロジェクトを作成
 その際のテンプレートとして「3D(URP)」もしくは「3D(HDRP)」を選択してください。
 
 <p align="center">
-<img width="493" alt="スクリーンショット 2023-07-12 19 18 33" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b45abddf-fe60-4dbd-9127-910fcb916ed4">
+<img width="493" alt="toolkits_setup_select_urp" src="/Documentation~/Images/toolkits_setup_select_urp.png">
 </p>
 
 
@@ -145,14 +155,14 @@ PLATEAU SDKを利用し、3D都市モデルをUnityシーン上へ配置して�
 3. ドロップダウンメニューから「Add package from tarball...」を選択します。
 4. ファイル選択ダイアログが開いたら、インストールしたいパッケージの.tar.gzファイルを探し、選択します。
 <p align="center">
-<img width="493" alt="スクリーンショット 2023-07-12 19 18 42" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/b9076829-b7cb-45db-a5a1-5ce6dbc435b1">
+<img width="493" alt="toolkits_setup_install_tarball" src="/Documentation~/Images/toolkits_setup_install_tarball.png">
 </p>
 
 新しいプロジェクトでPLATEAU SDK-Toolkits for Unityをインストールする際は、入力システムについての確認ダイアログが表示されます場合があります。その場合は「Yes」を選択してください。
 Unityエディタが再起動します。
 
 <p align="center">
-<img width="500" alt="InputDialog" src="https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/120234a9-1457-46f5-9a71-0c43febd44a2">
+<img width="500" alt="toolkits_setup_warning" src="/Documentation~/Images/toolkits_setup_warning.png">
 </p>
 
 [ダウンロードリンクはこちら](https://github.com/unity-shimizu/PLATEAU-SDK-Toolkits-for-Unity/releases/)
