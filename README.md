@@ -80,7 +80,10 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 
 ## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 PLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。<br>
-https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/42bcee43-436a-45f4-9cd2-a306ed36b905
+
+
+https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/f2dd1c1d-1190-4fb4-9db0-adefe20a9434
+
 
 ### リリース済の機能
 - Cesium for Unityとの連携
@@ -93,7 +96,12 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 ## [PLATEAU SDK-AR-Extensions for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 PLATEAUの3D都市モデルを活用したARアプリ開発ツールです。AR空間に3Dモデルを配置し、位置のずれや地面の高さを調整できます。さらに、3Dオブジェクトを遮蔽するオクルージョン機能も備えています。Streamingにより配置された3D都市モデルを用いたARアプリ開発も可能です。
 AR ExtensionsはToolkitsを前提としたエクステンションとして構築されています。<br>
-https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity/assets/127069970/1bb0cea8-c388-41fc-abcc-8462fa8473fd
+
+
+
+https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/813b6771-546c-4a96-a956-52449b9d3009
+
+
 
 ### リリース済の機能
 - Geospatial APIを用いた3D都市モデルの位置合わせ機能
