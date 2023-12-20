@@ -342,6 +342,9 @@ GameObject:
   m_Component:
   - component: {fileID: 5452370268576592839}
   - component: {fileID: 1004490141922100406}
+  - component: {fileID: 2257989813191630847}
+  - component: {fileID: 1371578171804302133}
+  - component: {fileID: 2208914770643872035}
   m_Layer: 0
   m_Name: Prop_ElectricPost_03
   m_TagString: Untagged
@@ -402,6 +405,44 @@ LODGroup:
     renderers:
     - renderer: {fileID: 6781717843986667741}
   m_Enabled: 1
+--- !u!114 &2257989813191630847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675129435078846845}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!65 &1371578171804302133
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675129435078846845}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.24993894, y: 5.515651, z: 0.2448843}
+  m_Center: {x: 0.0010995716, y: 2.7150009, z: -0.003095664}
+--- !u!65 &2208914770643872035
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675129435078846845}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.90698385, y: 2.2743492, z: 0.4179644}
+  m_Center: {x: -0.2365824, y: 6.609647, z: -0.000038176775}
 --- !u!1 &7551373136407858758
 GameObject:
   m_ObjectHideFlags: 0

@@ -70,7 +70,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 4488277262906032325}
 --- !u!1 &6823510071023148861
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,7 +81,6 @@ GameObject:
   - component: {fileID: 5852287314027100537}
   - component: {fileID: 8359798390565241541}
   - component: {fileID: 3774311333995684811}
-  - component: {fileID: 4488277262906032325}
   m_Layer: 0
   m_Name: Prop_RoadMarkStraightLine_01_Mesh_LOD0
   m_TagString: Untagged
@@ -155,20 +153,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &4488277262906032325
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6823510071023148861}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -3924820802605651594, guid: 9eaec61c09096a14db221e40bfaf931c, type: 3}
 --- !u!1 &6912218537749548399
 GameObject:
   m_ObjectHideFlags: 0
