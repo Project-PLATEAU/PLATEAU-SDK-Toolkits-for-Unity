@@ -279,17 +279,20 @@ Rendering Toolkitのポストエフェクト機能では下記の3種類のエ�
 地物の上端からの割合(%)で指定し、指定した範囲は窓が表示されなくなります。<br>
 <img width="600" alt="rendering_manual_19_vertexcolor_range" src="../Documentation~/Rendering Images/rendering_manual_19_vertexcolor_range.png">
 
-頂点アルファのランダムシード値設定を活用することで、地物ごとにランダムな値を割り振り、または調整を行うことができます。
+頂点アルファのランダムシード値設定を活用することで、地物ごとにランダムな値を割り振り、または調整を行うことができます。<br>
+頂点アルファをシェーダーのパラメータ化し、建物ごとに色味を変える設定を行うと、街の外観を立体的に表現できます。
 <br>
-<img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Rendering Images/rendering_manual_20_vertexcolor_randomseed.png">
+<img width="300" alt="Seed_0" src="../Documentation~/Rendering Images/Seed_0.png">
+<img width="300" alt="Seed_100" src="../Documentation~/Rendering Images/Seed_100.png"> <br>
+ランダムシード値設定の例）左画像:0 右画像:100に設定。
 
-例として、夜の街灯りの表現の一環で、各ビルには色温度の範囲内でランダムカラーグラデーションが割り当てられます。<br>
+例として、夜の街灯りの表現をご紹介します。各ビルには色温度の範囲内でランダムカラーグラデーションが割り当てられます。<br>
 地物ごとのランダムな値は、AutoTextruing実行時に各地物の頂点アルファにランダムな値が自動で付与されます。
 <br>
 <img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Rendering Images/render_vertexcolor1.png">
 
 頂点アルファのランダムシード値設定を活用することで、地物に割り当てられた頂点アルファ値及びカラーグラデーションの微調整を行うことが可能です。<br>
-例：黄味がかったグラデーションから青味がかったグラデーションに調整
+例：黄味がかったグラデーションから青味がかったグラデーションに調整する場合:
 <br>
 <img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Rendering Images/render_vertexcolor2.png">
 <br>
