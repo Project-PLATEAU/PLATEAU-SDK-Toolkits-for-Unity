@@ -20,20 +20,19 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 - [Maps Toolkit](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 - [AR Extensions](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-SDK-AR-Extensions-for-Unity)
 
-Toolkitを活用した下記の４種類のサンプルアプリプロジェクトを提供しています。<br>
+Toolkitを活用した下記の3種類のサンプルアプリプロジェクトを提供しています。<br>
 下記リポジトリよりご利用ください。
 
-- [AR City Miniature](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-ARCityMiniature)
 - [Urban Scape](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-UrbanScape)
-- [City Rescue Multi Play](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
+- [City Rescue Multiplay](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
 - [AR Treasure Map](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-ARTreasureMap)
 
 
 ### 更新履歴
 
-|  2023/12/14  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化  |  ［FBコメント］バージョン書いてください  |
+|  2023/12/22  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化 <br>Rendering Toolkitに頂点カラー機能を追加  <br>AR Extensionsにマーカー位置合わせ機能を追加 <br> サンプルシーンの追加|  Sandbox Toolkit v0.3.0（ベータ版） <br> Rendering Toolkit v0.3.0（ベータ版）<br> Maps Toolkit v0.3.0（ベータ版）<br> AR Extensions v0.3.0（ベータ版）<br> Urban Scape v1.0.0 <br> City Rescue Multiplay v1.0.0 <br> AR Treasure Map v1.0.0|
 | :--- | :--- | :--- |
-|  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps　Toolkit v0.2.1（ベータ版）  <br> Rendering Toolkit v0.2.1（ベータ版）   |
+|  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> AR Extensionsのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps Toolkit v0.2.1（ベータ版）<br>  AR Extensions v0.2.1（ベータ版） <br> Rendering Toolkit v0.2.1（ベータ版）   |
 |  2023/09/15  |  Windows Buildに関する不具合の修正  |  Rendering Toolkit v0.1.1（ベータ版） <br> Sandbox Toolkit v0.1.1（ベータ版）  |
 |  2023/07/23  |  1st Release  |  Rendering Toolkit v0.1.0（ベータ版） <br> Sandbox Toolkit v0.1.0（ベータ版）  |
 
@@ -48,7 +47,6 @@ PLATEAUの3D都市モデルのグラフィックスを向上させる処理を�
 https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/137732437/85cb8331-bb26-470c-ad69-33c56ffe9143
 
 
-＜リリース済機能＞
 ### リリース済の機能
 - 環境システムの設定
 - テクスチャ自動生成
