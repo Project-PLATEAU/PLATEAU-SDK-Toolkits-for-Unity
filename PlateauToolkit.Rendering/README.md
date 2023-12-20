@@ -272,14 +272,28 @@ Rendering Toolkitのポストエフェクト機能では下記の3種類のエ�
 
 ## 6. 頂点カラーの設定
 頂点カラーの設定メニューから、マスク範囲と頂点アルファのランダムシード値を設定できます。
+
 <img width="600" alt="rendering_manual_18_vertexcolor_ui" src="../Documentation~/Images/rendering_manual_18_vertexcolor_ui.png">
 
 頂点カラーマスク機能を使用することで、自動生成する窓のテクスチャをマスクする(隠す)範囲を設定できます。
 地物の上端からの割合(%)で指定し、指定した範囲は窓が表示されなくなります。<br>
 <img width="600" alt="rendering_manual_19_vertexcolor_range" src="../Documentation~/Images/rendering_manual_19_vertexcolor_range.png">
 
-頂点アルファのランダムシード値設定を活用することで、地物ごとのアルファチャンネルをランダムに割り当てることができます。
+頂点アルファのランダムシード値設定を活用することで、地物ごとにランダムな値を割り振り、または調整を行うことができます。
+<br>
 <img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Images/rendering_manual_20_vertexcolor_randomseed.png">
+
+例として、夜の街灯りの表現の一環で、各ビルには色温度の範囲内でランダムカラーグラデーションが割り当てられます。<br>
+地物ごとのランダムな値は、AutoTextruing実行時に各地物の頂点アルファにランダムな値が自動で付与されます。
+<br>
+<img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Images/render_vertexcolor1.png">
+
+頂点アルファのランダムシード値設定を活用することで、地物に割り当てられた頂点アルファ値及びカラーグラデーションの微調整を行うことが可能です。<br>
+例：黄味がかったグラデーションから青味がかったグラデーションに調整
+<br>
+<img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Images/render_vertexcolor2.png">
+<br>
+<img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Images/render_vertexcolor3.png">
 
 AR City Miniatureサンプルで[活用例](https://github.com/PLATEAU-Toolkits-Internal/PLATEAU-Toolkits-Sample-ARCityMiniature?tab=readme-ov-file#4-2-%E3%83%A2%E3%83%90%E3%82%A4%E3%83%AB%E7%AB%AF%E6%9C%AB%E3%82%92%E5%AF%BE%E8%B1%A1%E3%81%AB%E3%81%97%E3%81%9F3d%E9%83%BD%E5%B8%82%E3%83%A2%E3%83%87%E3%83%AB%E3%81%AE%E4%BD%9C%E6%88%90)を解説しておりますので、ご参照ください。
 
