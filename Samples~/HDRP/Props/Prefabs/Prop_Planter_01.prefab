@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1454601887191981700}
   - component: {fileID: 5941891802880436725}
   - component: {fileID: 9046530516258148156}
+  - component: {fileID: -6733666936277270276}
   m_Layer: 0
   m_Name: Prop_Planter_01
   m_TagString: Untagged
@@ -71,7 +72,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 7805725856217377940}
+--- !u!65 &-6733666936277270276
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2261959409523524670}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7474731, y: 0.60619926, z: 0.74570715}
+  m_Center: {x: -0.0008829236, y: 0.30285573, z: -0.0017659068}
 --- !u!1 &5841209737554566722
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +181,6 @@ GameObject:
   - component: {fileID: 2291866920752630000}
   - component: {fileID: 6427535462923844464}
   - component: {fileID: 7805725856217377940}
-  - component: {fileID: 5906752731864110565}
   m_Layer: 0
   m_Name: Prop_Planter_01_1_MAT_Mesh_col
   m_TagString: Untagged
@@ -255,18 +267,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8894367346483853945, guid: 160f45ff7ec3e854cbad76827beb3724, type: 3}
---- !u!114 &5906752731864110565
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7323634674170039203}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8588509926023205530
 GameObject:
   m_ObjectHideFlags: 0

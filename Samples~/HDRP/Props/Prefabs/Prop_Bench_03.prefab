@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 4876518004303119217}
   - component: {fileID: 429742886532576256}
   - component: {fileID: 3707168318343426300}
+  - component: {fileID: 1285065347003102224}
   m_Layer: 0
   m_Name: Prop_Bench_03
   m_TagString: Untagged
@@ -71,7 +72,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 9021429119589582565}
+--- !u!65 &1285065347003102224
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5253184967142840779}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.397154, y: 0.77623755, z: 4.4046364}
+  m_Center: {x: 0, y: 0.3989006, z: 0.0037412643}
 --- !u!1 &5457016654261424465
 GameObject:
   m_ObjectHideFlags: 0
@@ -168,7 +181,6 @@ GameObject:
   - component: {fileID: 8414421627864869910}
   - component: {fileID: 2467972573740738718}
   - component: {fileID: 9021429119589582565}
-  - component: {fileID: 9153082324775043183}
   m_Layer: 0
   m_Name: Prop_Bench_03_Mesh_col
   m_TagString: Untagged
@@ -255,18 +267,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6696181820505305968, guid: e8cae697788799f4fa27b4658a825b86, type: 3}
---- !u!114 &9153082324775043183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5922442452947480380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &9210575264726182083
 GameObject:
   m_ObjectHideFlags: 0

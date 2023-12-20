@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5570636153613994618}
   - component: {fileID: 7685981384527888048}
   - component: {fileID: 35579028381247990}
+  - component: {fileID: -948975303468630149}
   m_Layer: 0
   m_Name: Prop_Icon_GOAL_01
   m_TagString: Untagged
@@ -96,3 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-948975303468630149
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8190617433277669221}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 11.965537, y: 3.120139, z: 0.7999761}
+  m_Center: {x: 0.36310244, y: 1.5600692, z: -0.000000029802322}

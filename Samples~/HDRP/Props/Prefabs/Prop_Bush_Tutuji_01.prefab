@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3165182197400381622}
   - component: {fileID: 866955270517972092}
   - component: {fileID: 8039282021557999863}
+  - component: {fileID: 2956076981208522354}
   m_Layer: 0
   m_Name: Prop_Bush_Tutuji_01
   m_TagString: Untagged
@@ -96,3 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &2956076981208522354
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1659848358037028265}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 2.6351376, y: 1.4631984, z: 2.5244317}
+  m_Center: {x: -0.05814743, y: 0.7315992, z: 0.15390635}

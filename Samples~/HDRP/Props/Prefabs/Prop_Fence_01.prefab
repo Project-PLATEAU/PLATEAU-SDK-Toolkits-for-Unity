@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 4072162014325571975}
   - component: {fileID: 6792460473898341107}
   - component: {fileID: 4068349357326587103}
-  - component: {fileID: 3482297249309192144}
   m_Layer: 0
   m_Name: Prop_Fence_01_Mesh_col
   m_TagString: Untagged
@@ -99,18 +98,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -6936691429871697417, guid: 9588dd55514f9c8429b1fae406981672, type: 3}
---- !u!114 &3482297249309192144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1727683336932272418}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5003952075524290050
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +275,7 @@ GameObject:
   - component: {fileID: 7540206251772485504}
   - component: {fileID: 3386194597726824689}
   - component: {fileID: 3706418962999467794}
+  - component: {fileID: 8520092236836598745}
   m_Layer: 0
   m_Name: Prop_Fence_01
   m_TagString: Untagged
@@ -348,4 +336,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 4068349357326587103}
+--- !u!65 &8520092236836598745
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7201221781458535738}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.05777, y: 0.8923203, z: 0.05859056}
+  m_Center: {x: -0.0024496317, y: 0.41283, z: -0.014074251}

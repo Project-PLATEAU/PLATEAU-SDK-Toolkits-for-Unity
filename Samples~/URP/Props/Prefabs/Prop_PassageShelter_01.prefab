@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 5162046056527710792}
   - component: {fileID: 5628335906194071000}
   m_Layer: 0
-  m_Name: Prop_PassagerShelter_01
+  m_Name: Prop_PassageShelter_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

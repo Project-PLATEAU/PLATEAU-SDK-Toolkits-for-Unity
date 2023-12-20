@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 7008700635034373356}
   - component: {fileID: 2817555382879779741}
   - component: {fileID: 5805312769477013212}
+  - component: {fileID: -6657138965894318600}
   m_Layer: 0
   m_Name: Prop_TrafficCrossLight_01
   m_TagString: Untagged
@@ -154,7 +155,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 8621717721131773292}
+--- !u!65 &-6657138965894318600
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7640419116044981846}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.18901613, y: 3.510713, z: 0.22440936}
+  m_Center: {x: 0.006610859, y: 1.7311225, z: 0.0129773095}
 --- !u!1 &8080774714154351959
 GameObject:
   m_ObjectHideFlags: 0
@@ -167,7 +180,6 @@ GameObject:
   - component: {fileID: 5584514216381629567}
   - component: {fileID: 6112983664335130754}
   - component: {fileID: 8621717721131773292}
-  - component: {fileID: 4400760461156613282}
   m_Layer: 0
   m_Name: Prop_TrafficCrossLight_01_Mesh_col
   m_TagString: Untagged
@@ -254,18 +266,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -1813681264883915590, guid: d141358b91b2ed545aad5bf37c127c39, type: 3}
---- !u!114 &4400760461156613282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8080774714154351959}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8916162869740251528
 GameObject:
   m_ObjectHideFlags: 0

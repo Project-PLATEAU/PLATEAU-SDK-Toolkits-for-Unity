@@ -1,4 +1,4 @@
-namespace PlateauToolkit.Sandbox.Editor
+﻿namespace PlateauToolkit.Sandbox.Editor
 {
     static class PlateauSandboxPaths
     {

@@ -95,7 +95,6 @@ GameObject:
   - component: {fileID: 3182074418072705681}
   - component: {fileID: 2382135943186491034}
   - component: {fileID: 7814904400917674869}
-  - component: {fileID: 634680055230688324}
   m_Layer: 0
   m_Name: Prop_TrafficLight_02_col
   m_TagString: Untagged
@@ -182,18 +181,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8444557714518282012, guid: a092de41f1858054b8c0aa5caddde8cb, type: 3}
---- !u!114 &634680055230688324
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3880491784511343366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5495013525219543248
 GameObject:
   m_ObjectHideFlags: 0
@@ -288,6 +275,8 @@ GameObject:
   - component: {fileID: 6037268321832822838}
   - component: {fileID: 1554498490386538311}
   - component: {fileID: 7526734055961944031}
+  - component: {fileID: 9020397726854936164}
+  - component: {fileID: 4216160652863976672}
   m_Layer: 0
   m_Name: Prop_TrafficLight_02
   m_TagString: Untagged
@@ -348,4 +337,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 7814904400917674869}
+--- !u!65 &9020397726854936164
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6378081280522728076}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.18712366, y: 8.374837, z: 0.21826601}
+  m_Center: {x: 0.044462204, y: 4.179953, z: 0.08442727}
+--- !u!65 &4216160652863976672
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6378081280522728076}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.3050265, y: 0.65295315, z: 0.92582005}
+  m_Center: {x: -1.7081983, y: 5.976752, z: 0.037089854}

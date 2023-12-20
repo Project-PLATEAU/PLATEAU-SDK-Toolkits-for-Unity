@@ -275,6 +275,7 @@ GameObject:
   - component: {fileID: 8137697490243467581}
   - component: {fileID: 3942047607827861068}
   - component: {fileID: 3353346232922025849}
+  - component: {fileID: -3927493534318207508}
   m_Layer: 0
   m_Name: Prop_PostBox_01
   m_TagString: Untagged
@@ -335,4 +336,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 3520355738143706854}
+--- !u!65 &-3927493534318207508
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8909589474753438599}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.8092357, y: 1.2927129, z: 0.5772251}
+  m_Center: {x: -0.00085926056, y: 0.6413126, z: -0.0017185807}

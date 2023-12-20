@@ -260,6 +260,7 @@ GameObject:
   - component: {fileID: 6559569890600022200}
   - component: {fileID: 2112849748502333385}
   - component: {fileID: 8372696747302952821}
+  - component: {fileID: -5269756758057895226}
   m_Layer: 0
   m_Name: Prop_Cone_03
   m_TagString: Untagged
@@ -325,7 +326,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 2168325177875078243}
+--- !u!65 &-5269756758057895226
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5783631973872282114}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.39070454, y: 0.7007562, z: 0.3935125}
+  m_Center: {x: 0.0014039427, y: 0.34695286, z: 0}
 --- !u!1 &6228399727578910600
 GameObject:
   m_ObjectHideFlags: 0
@@ -338,7 +351,6 @@ GameObject:
   - component: {fileID: 8414126234966303225}
   - component: {fileID: 2066359948714196724}
   - component: {fileID: 2168325177875078243}
-  - component: {fileID: 3050773426841403468}
   m_Layer: 0
   m_Name: Prop_TrafficCone_01_Mesh_col
   m_TagString: Untagged
@@ -425,15 +437,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -9001457772613558528, guid: b69dc630ed7965244840c269d00dc9b6, type: 3}
---- !u!114 &3050773426841403468
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6228399727578910600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

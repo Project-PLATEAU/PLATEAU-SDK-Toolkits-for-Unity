@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2352709880519535756}
   - component: {fileID: 2590557331808063896}
+  - component: {fileID: -3327495672859719236}
   m_Layer: 0
   m_Name: Prop_Sign_DiamondHanging_01_08
   m_TagString: Untagged
@@ -129,3 +130,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-3327495672859719236
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3165275754805818934}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.46326935, y: 0.87718594, z: 0.8702949}
+  m_Center: {x: 0.34533042, y: 0.31150383, z: 0.0009653717}

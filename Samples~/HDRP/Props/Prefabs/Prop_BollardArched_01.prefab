@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1062108339896417539}
   - component: {fileID: 5253240338152147570}
   - component: {fileID: 8014083105107072835}
+  - component: {fileID: -6392790407310051651}
   m_Layer: 0
   m_Name: Prop_BollardArched_01
   m_TagString: Untagged
@@ -71,7 +72,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 1357234427505246192}
+--- !u!65 &-6392790407310051651
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429686141721061305}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.7328627, y: 0.6996342, z: 0.093408704}
+  m_Center: {x: 0.00598073, y: 0.3455519, z: -0.0007276237}
 --- !u!1 &1288148144915301754
 GameObject:
   m_ObjectHideFlags: 0
@@ -250,7 +263,6 @@ GameObject:
   - component: {fileID: 8608340162456675225}
   - component: {fileID: 4773387482702384933}
   - component: {fileID: 1357234427505246192}
-  - component: {fileID: 2962683989157999145}
   m_Layer: 0
   m_Name: Prop_Bollard_Arched_01_Mesh_col
   m_TagString: Untagged
@@ -337,15 +349,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3377821967996492217, guid: 52304170e29c3dc419ea7aa0f8ce5647, type: 3}
---- !u!114 &2962683989157999145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8364971276837894709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

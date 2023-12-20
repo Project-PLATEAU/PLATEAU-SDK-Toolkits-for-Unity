@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 7842600808609672868}
   - component: {fileID: 216075917974647362}
   - component: {fileID: 1018379481428705372}
+  - component: {fileID: -594624519200637405}
   m_Layer: 0
   m_Name: Prop_VendingMachine_01
   m_TagString: Untagged
@@ -149,7 +150,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 4053421522353527875}
+--- !u!65 &-594624519200637405
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7466215354590475294}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.0488666, y: 1.9002883, z: 0.4991232}
+  m_Center: {x: -0.00091677904, y: 0.9358915, z: -0.0005493909}
 --- !u!1 &8346998069348550329
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +175,6 @@ GameObject:
   - component: {fileID: 5665868104859179567}
   - component: {fileID: 5727793478942514936}
   - component: {fileID: 4053421522353527875}
-  - component: {fileID: 8548666980087342367}
   m_Layer: 0
   m_Name: Prop_VendingMachine_01_Mesh_col
   m_TagString: Untagged
@@ -249,15 +261,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -2085276285327849247, guid: 7774a4869c159794a9492346cf28a76f, type: 3}
---- !u!114 &8548666980087342367
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8346998069348550329}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

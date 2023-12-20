@@ -192,6 +192,7 @@ GameObject:
   - component: {fileID: 5314305133527666393}
   - component: {fileID: 5780325528330987782}
   - component: {fileID: 2981774622333880796}
+  - component: {fileID: -8363030884354049107}
   m_Layer: 0
   m_Name: Prop_Sign_07
   m_TagString: Untagged
@@ -247,3 +248,16 @@ LODGroup:
     renderers:
     - renderer: {fileID: 4348946442380009075}
   m_Enabled: 1
+--- !u!65 &-8363030884354049107
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4795177949139817571}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.1909307, y: 1.4722326, z: 1}
+  m_Center: {x: 0.035572574, y: 0.7367523, z: 0}
