@@ -1,4 +1,4 @@
-#region Code Inspection Surpression
+﻿#region Code Inspection Surpression
 // ReSharper disable ConvertToAutoProperty
 // ReSharper disable UnusedType.Global
 // ReSharper disable UnusedType.Local

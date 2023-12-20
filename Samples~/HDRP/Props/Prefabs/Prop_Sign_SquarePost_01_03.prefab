@@ -10,6 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6477460669346528257}
   - component: {fileID: 5407031679140169369}
+  - component: {fileID: -4717858927731469301}
+  - component: {fileID: -43000294317369636}
+  - component: {fileID: -2713310087888389681}
   m_Layer: 0
   m_Name: Prop_Sign_SquarePost_01_03
   m_TagString: Untagged
@@ -45,6 +48,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-4717858927731469301
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958051769732228795}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.28549665, y: 0.04445244, z: 0.28412157}
+  m_Center: {x: 0.0003810227, y: 0.005192371, z: -0.000018149614}
+--- !u!65 &-43000294317369636
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958051769732228795}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.06755373, y: 2.3248, z: 0.06643239}
+  m_Center: {x: -0.00070668757, y: 1.1896198, z: -0.000000074505806}
+--- !u!65 &-2713310087888389681
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5958051769732228795}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.022432327, y: 0.6157942, z: 0.6189785}
+  m_Center: {x: 0.049071312, y: 2.108862, z: -0.0009622574}
 --- !u!1 &7064911080857368761
 GameObject:
   m_ObjectHideFlags: 0

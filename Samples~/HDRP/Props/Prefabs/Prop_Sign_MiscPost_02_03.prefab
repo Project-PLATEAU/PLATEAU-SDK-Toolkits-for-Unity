@@ -209,6 +209,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9046656930836620655}
+  - component: {fileID: -2099968861082236539}
+  - component: {fileID: -2921348731101367274}
+  - component: {fileID: -2871173089513582996}
   m_Layer: 0
   m_Name: Prop_Sign_MiscPost_02_03
   m_TagString: Untagged
@@ -232,3 +235,42 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &-2099968861082236539
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559089032479899605}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.28549665, y: 0.04445244, z: 0.28412157}
+  m_Center: {x: 0.0003810227, y: 0.005192371, z: -0.000018149614}
+--- !u!65 &-2921348731101367274
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559089032479899605}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.06755373, y: 2.3248, z: 0.06643239}
+  m_Center: {x: -0.00070668757, y: 1.1896198, z: -0.000000074505806}
+--- !u!65 &-2871173089513582996
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8559089032479899605}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.02768302, y: 0.3651886, z: 0.6276765}
+  m_Center: {x: 0.04884839, y: 2.169619, z: 0.000038981438}

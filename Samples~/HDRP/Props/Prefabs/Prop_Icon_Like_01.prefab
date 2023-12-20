@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8930375698213936691}
   - component: {fileID: 6632647935853226745}
   - component: {fileID: 8798522604362504403}
+  - component: {fileID: -1392329907147753394}
   m_Layer: 0
   m_Name: Prop_Icon_Like_01
   m_TagString: Untagged
@@ -97,3 +98,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-1392329907147753394
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5119214367743527724}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 6.7461724, y: 6.055577, z: 1.0909064}
+  m_Center: {x: -0.65273976, y: 3.0277884, z: 0.002013743}

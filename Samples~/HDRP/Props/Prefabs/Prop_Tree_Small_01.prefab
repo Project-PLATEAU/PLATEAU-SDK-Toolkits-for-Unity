@@ -95,6 +95,8 @@ GameObject:
   - component: {fileID: 181603199991335945}
   - component: {fileID: 4962738695095483256}
   - component: {fileID: 703447360953483987}
+  - component: {fileID: 8062202656456337441}
+  - component: {fileID: -8224490723821068598}
   m_Layer: 0
   m_Name: Prop_Tree_Small_01
   m_TagString: Untagged
@@ -160,7 +162,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 6088764083686547544}
+--- !u!65 &8062202656456337441
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706783157218612915}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.12462306, y: 1.3975191, z: 0.14874834}
+  m_Center: {x: 0.09637183, y: 0.69067144, z: 0.09070715}
+--- !u!65 &-8224490723821068598
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 706783157218612915}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.5489341, y: 3.8725042, z: 1.5113357}
+  m_Center: {x: 0.14663309, y: 3.301124, z: 0.052637517}
 --- !u!1 &3700110372644973993
 GameObject:
   m_ObjectHideFlags: 0

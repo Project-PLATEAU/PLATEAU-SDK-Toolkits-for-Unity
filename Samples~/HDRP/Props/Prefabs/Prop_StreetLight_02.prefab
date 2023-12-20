@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1200046682767561006}
   - component: {fileID: 2494116750110834027}
   - component: {fileID: 4544297812510918106}
+  - component: {fileID: -11724438969815997}
+  - component: {fileID: -1645496414868371680}
   m_Layer: 0
   m_Name: Prop_StreetLight_02
   m_TagString: Untagged
@@ -66,7 +68,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 6997155155312104615}
+--- !u!65 &-11724438969815997
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012190619280034708}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.28930658, y: 11.960086, z: 0.34031713}
+  m_Center: {x: -0.0067901015, y: 5.9429784, z: 0.19964087}
+--- !u!65 &-1645496414868371680
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2012190619280034708}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.31238863, y: 0.09222031, z: 1.836905}
+  m_Center: {x: -0.05601944, y: 11.636967, z: 0.7833319}
 --- !u!1 &4981807806236333345
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +407,6 @@ GameObject:
   - component: {fileID: 915588168361368533}
   - component: {fileID: 7412298028225981960}
   - component: {fileID: 6997155155312104615}
-  - component: {fileID: 3834451610152621189}
   m_Layer: 0
   m_Name: Prop_StreetLight_02_col
   m_TagString: Untagged
@@ -467,15 +493,3 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -3355030345544638664, guid: 01b3aaef1c5635b43bf06b16204b4870, type: 3}
---- !u!114 &3834451610152621189
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8741707779888981880}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

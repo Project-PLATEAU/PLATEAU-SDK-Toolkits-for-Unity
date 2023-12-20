@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 1648180061173996294}
   - component: {fileID: 4249057176095239323}
   - component: {fileID: 4706446206010928047}
-  - component: {fileID: 763748288362037930}
   m_Layer: 0
   m_Name: Prop_StreetLight_04_col
   m_TagString: Untagged
@@ -99,18 +98,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 6822038348258354398, guid: 41ecf3841e0a5ba4abbd93dcc2070df9, type: 3}
---- !u!114 &763748288362037930
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4306017247765250008}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5504091768229461320
 GameObject:
   m_ObjectHideFlags: 0
@@ -122,6 +109,9 @@ GameObject:
   - component: {fileID: 5127813139169519602}
   - component: {fileID: 104630939023904899}
   - component: {fileID: 8323166918994094589}
+  - component: {fileID: -1424633015578004439}
+  - component: {fileID: 404860053155994678}
+  - component: {fileID: -2225399406602565661}
   m_Layer: 0
   m_Name: Prop_StreetLight_04
   m_TagString: Untagged
@@ -188,7 +178,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 4706446206010928047}
+--- !u!65 &-1424633015578004439
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5504091768229461320}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.17625731, y: 6.1169415, z: 0.11687088}
+  m_Center: {x: 0, y: 3.079546, z: -0.008146942}
+--- !u!65 &404860053155994678
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5504091768229461320}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.1427829, y: 1.0287113, z: 0.051695168}
+  m_Center: {x: 0, y: 4.274495, z: -0.014664501}
+--- !u!65 &-2225399406602565661
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5504091768229461320}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.56594, y: 0.7883129, z: 0.5608834}
+  m_Center: {x: 0, y: 6.5290985, z: -0.0039441586}
 --- !u!1 &7002294502693752995
 GameObject:
   m_ObjectHideFlags: 0

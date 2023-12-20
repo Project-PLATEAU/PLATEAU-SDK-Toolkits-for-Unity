@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 958243888189054485}
   - component: {fileID: 3662313691334437856}
+  - component: {fileID: 6737327479871212486}
   m_Layer: 0
   m_Name: Prop_Sign_MiscHanging_02_02
   m_TagString: Untagged
@@ -45,6 +46,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &6737327479871212486
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 434470996859339951}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.46326935, y: 0.7315185, z: 0.62739444}
+  m_Center: {x: 0.34533042, y: 0.24856031, z: -0.0010633469}
 --- !u!1 &751689034440385966
 GameObject:
   m_ObjectHideFlags: 0

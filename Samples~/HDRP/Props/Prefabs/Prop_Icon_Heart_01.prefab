@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5377148075448142569}
   - component: {fileID: 7889040899879206435}
   - component: {fileID: 5162113843937507056}
+  - component: {fileID: -8970009623401582608}
   m_Layer: 0
   m_Name: Prop_Icon_Heart_01
   m_TagString: Untagged
@@ -96,3 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-8970009623401582608
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8537554505275564022}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 4.4450216, y: 4.071683, z: 0.7620462}
+  m_Center: {x: -0.00000011920929, y: 2.0358415, z: -0.000002488494}

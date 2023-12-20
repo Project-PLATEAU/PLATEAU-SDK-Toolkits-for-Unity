@@ -248,7 +248,7 @@ namespace PlateauToolkit.Rendering
             Shader.SetGlobalFloat("_Snow", m_Snow);
             Shader.SetGlobalFloat("_GlobalOpacityDistMin", m_OpacityDistMin);
             Shader.SetGlobalFloat("_GlobalOpacityDistMax", m_OpacityDistMax);
-            Shader.SetGlobalFloat("_GlobalOpacity", m_GlobalOpacity);
+            Shader.SetGlobalFloat("_GlobalTransparency", 1.0f - m_GlobalOpacity);
 
             // check if m_RainVFX has particle rate
             if (m_RainVFX)

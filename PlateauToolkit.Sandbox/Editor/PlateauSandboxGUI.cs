@@ -1,4 +1,4 @@
-using PlateauToolkit.Editor;
+﻿using PlateauToolkit.Editor;
 using System;
 using UnityEditor;
 using UnityEditor.EditorTools;
@@ -92,12 +92,8 @@ namespace PlateauToolkit.Sandbox.Editor
                     buttonRect.y + k_AssetButtonSelectedBorderSize,
                     buttonRect.width - k_AssetButtonSelectedBorderSize * 2,
                     buttonRect.height - k_AssetButtonSelectedBorderSize * 2);
-                Texture2D previewTexture = AssetPreview.GetAssetPreview(asset);
-                if (previewTexture != null)
-                {
-                    GUI.DrawTexture(textureRect, previewTexture);
-                }
-                else
+
+                if (AssetPreview.IsLoadingAssetPreview(asset.GetInstanceID()))
                 {
                     // Show the loading label
                     s_LoadingLabelStyle ??= new GUIStyle(GUI.skin.label)
@@ -107,6 +103,18 @@ namespace PlateauToolkit.Sandbox.Editor
                     };
                     EditorGUI.DrawRect(textureRect, new Color(0.1f, 0.1f, 0.1f, 1f));
                     EditorGUI.LabelField(textureRect, "ロード中...", s_LoadingLabelStyle);
+                }
+                else
+                {
+                    Texture2D previewTexture = AssetPreview.GetAssetPreview(asset);
+                    if (previewTexture != null)
+                    {
+                        GUI.DrawTexture(textureRect, previewTexture);
+                    }
+                    else
+                    {
+                        GUI.DrawTexture(textureRect, AssetPreview.GetMiniThumbnail(asset));
+                    }
                 }
 
                 GUILayout.FlexibleSpace();

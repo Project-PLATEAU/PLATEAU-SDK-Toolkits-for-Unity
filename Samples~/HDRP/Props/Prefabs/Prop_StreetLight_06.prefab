@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 3552227621104003321}
   - component: {fileID: 6511740613375588541}
   - component: {fileID: 5890891784863187087}
-  - component: {fileID: 6521887606419005188}
   m_Layer: 0
   m_Name: Prop_StreetLight_06_Mesh_col
   m_TagString: Untagged
@@ -99,18 +98,6 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8454425332109517914, guid: 107d1327b384fdd43975c5ac0f7db315, type: 3}
---- !u!114 &6521887606419005188
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 271119353162954411}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c18fdb8d18c139844921c32d3af223d2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &2181403789381203942
 GameObject:
   m_ObjectHideFlags: 0
@@ -289,7 +276,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7986976686595957985}
   - component: {fileID: 3697091144466453071}
-  - component: {fileID: 409748473389683624}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -374,26 +360,6 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &409748473389683624
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4447565828778299167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Version: 1
-  m_UsePipelineSettings: 1
-  m_AdditionalLightsShadowResolutionTier: 2
-  m_LightLayerMask: 1
-  m_CustomShadowLayers: 0
-  m_ShadowLayerMask: 1
-  m_LightCookieSize: {x: 1, y: 1}
-  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &6137554451167007609
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,6 +371,9 @@ GameObject:
   - component: {fileID: 6802451863437117891}
   - component: {fileID: 1746611898626064050}
   - component: {fileID: 4148543725078538202}
+  - component: {fileID: 7228174392075001306}
+  - component: {fileID: 6156235274113238313}
+  - component: {fileID: 3648466447691101676}
   m_Layer: 0
   m_Name: Prop_StreetLight_06
   m_TagString: Untagged
@@ -466,4 +435,42 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 5890891784863187087}
+--- !u!65 &7228174392075001306
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6137554451167007609}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.27164245, y: 3.232127, z: 0.22974825}
+  m_Center: {x: -0.00805819, y: 1.6446906, z: -0.006534338}
+--- !u!65 &6156235274113238313
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6137554451167007609}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.2861946, y: 0.09858608, z: 0.07087374}
+  m_Center: {x: -0.014341235, y: 2.8424296, z: -0.034908056}
+--- !u!65 &3648466447691101676
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6137554451167007609}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.3707695, y: 0.7325511, z: 0.3200884}
+  m_Center: {x: 0.0025455952, y: 3.629532, z: -0.022057056}

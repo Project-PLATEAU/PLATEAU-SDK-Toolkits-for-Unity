@@ -95,6 +95,8 @@ GameObject:
   - component: {fileID: 5384489010513696118}
   - component: {fileID: 928748209002996231}
   - component: {fileID: 5263550217171290822}
+  - component: {fileID: -4663730295660190165}
+  - component: {fileID: 1843330661180098671}
   m_Layer: 0
   m_Name: Prop_StreetLight_05
   m_TagString: Untagged
@@ -156,7 +158,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Collider: {fileID: 5378154792464423300}
+--- !u!65 &-4663730295660190165
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4751962358461075404}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.48959047, y: 0.6512513, z: 0.5474262}
+  m_Center: {x: -0.003903538, y: 3.7812808, z: -0.0008239746}
+--- !u!65 &1843330661180098671
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4751962358461075404}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.105228156, y: 3.492162, z: 0.105858296}
+  m_Center: {x: -0.000000014901161, y: 1.7068843, z: 0.0045775324}
 --- !u!1 &6772806302832904043
 GameObject:
   m_ObjectHideFlags: 0

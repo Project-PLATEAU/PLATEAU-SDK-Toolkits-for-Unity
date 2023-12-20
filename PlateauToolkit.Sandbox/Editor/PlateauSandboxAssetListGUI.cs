@@ -1,4 +1,4 @@
-using PlateauToolkit.Editor;
+﻿using PlateauToolkit.Editor;
 using System;
 using System.Linq;
 using UnityEditor;
@@ -30,6 +30,7 @@ namespace PlateauToolkit.Sandbox.Editor
             PlateauSandboxAssetListState<TAsset> state)
             where TAsset : Component
         {
+            AssetPreview.SetPreviewTextureCacheSize(1024);
             EditorGUILayout.LabelField("アセット", EditorStyles.boldLabel);
 
             state.SelectedAssetType = GUILayout.Toolbar(

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2404745727860374976}
   - component: {fileID: 485166336068126986}
   - component: {fileID: 4378569089292582225}
+  - component: {fileID: -8391150513440538891}
   m_Layer: 0
   m_Name: Prop_Icon_Spot_01
   m_TagString: Untagged
@@ -96,3 +97,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &-8391150513440538891
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2142398709399169247}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 5, y: 6.9999995, z: 1.25}
+  m_Center: {x: -0.00000023841858, y: 3.4999998, z: 0}
