@@ -229,9 +229,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 プレイモードを実行し、配置したアバターや乗り物をクリックすると、デフォルトではそのオブジェクトの一人称視点に遷移します。<br>
 カメラインタラクション機能には一人称視点、三人称視点、三人称中心視点が用意されており、対象のオブジェクトを様々な視点から見ることができます。<br>
 
-<img width="300" alt="left" src="../Documentation~/Sandbox Images/left.png">
-<img width="300" alt="front" src="../Documentation~/Sandbox Images/front.png">
-<img width="300" alt="right" src="../Documentation~/Sandbox Images/right.png">
+<img width="200" alt="left" src="../Documentation~/Sandbox Images/left.png"><img width="200" alt="front" src="../Documentation~/Sandbox Images/front.png"><img width="200" alt="right" src="../Documentation~/Sandbox Images/right.png">
 
 なお、特定のエージェントに対しカメラインタラクション機能を設定したくない場合は、 `PlateauSandboxAvatar` の `Is Camera View Available` のチェックボックスを外します。<br>
 
