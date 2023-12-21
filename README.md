@@ -26,7 +26,8 @@ Toolkitを活用した下記の3種類のサンプルアプリプロジェクト
 - [Urban Scape](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-UrbanScape)
 - [City Rescue Multiplay](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
 - [AR Treasure Map](https://github.com/unity-shimizu/PLATEAU-Toolkits-Sample-ARTreasureMap)
-
+※サンプルシーンは今後さらに追加予定です。
+※サンプルシーンを題材とした開発チュートリアルを今後リリース予定です。
 
 ### 更新履歴
 
