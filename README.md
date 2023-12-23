@@ -31,7 +31,7 @@ Toolkitを活用した下記の3種類のサンプルアプリプロジェクト
 
 ### 更新履歴
 
-|  2023/12/22  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化 <br>Rendering Toolkitに頂点カラー機能を追加  <br>AR Extensionsにマーカー位置合わせ機能を追加 <br> サンプルシーンの追加|  Sandbox Toolkit v0.3.0（ベータ版） <br> Rendering Toolkit v0.3.0（ベータ版）<br> Maps Toolkit v0.3.0（ベータ版）<br> AR Extensions v0.3.0（ベータ版）<br> Urban Scape v1.0.0 <br> City Rescue Multiplay v1.0.0 <br> AR Treasure Map v1.0.0|
+|  2023/12/25  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化 <br>Rendering Toolkitに頂点カラー機能を追加  <br>AR Extensionsにマーカー位置合わせ機能を追加 <br> サンプルシーンの追加|  Sandbox Toolkit v0.3.0（ベータ版） <br> Rendering Toolkit v0.3.0（ベータ版）<br> Maps Toolkit v0.3.0（ベータ版）<br> AR Extensions v0.3.0（ベータ版）<br> Urban Scape v1.0.0 <br> City Rescue Multiplay v1.0.0 <br> AR Treasure Map v1.0.0|
 | :--- | :--- | :--- |
 |  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> AR Extensionsのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps Toolkit v0.2.1（ベータ版）<br>  AR Extensions v0.2.1（ベータ版） <br> Rendering Toolkit v0.2.1（ベータ版）   |
 |  2023/09/15  |  Windows Buildに関する不具合の修正  |  Rendering Toolkit v0.1.1（ベータ版） <br> Sandbox Toolkit v0.1.1（ベータ版）  |
