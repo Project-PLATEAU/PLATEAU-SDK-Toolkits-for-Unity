@@ -132,9 +132,10 @@ namespace PlateauToolkit.Sandbox.Editor
                         }
 
                         EditorGUILayout.Space(8);
-                        EditorGUILayout.HelpBox("ここにドラッグアンドドロップしてアイテムを追加", MessageType.Info);
-                        EditorGUILayout.Space(4);
                     }
+
+                    EditorGUILayout.HelpBox("ここにドラッグアンドドロップしてアイテムを追加", MessageType.Info);
+                    EditorGUILayout.Space(4);
 
                     // Apply the removed item.
                     if (removedIndex != -1)
