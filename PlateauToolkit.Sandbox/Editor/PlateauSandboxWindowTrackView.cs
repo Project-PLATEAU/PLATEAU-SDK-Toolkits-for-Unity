@@ -16,7 +16,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public string Name => "トラック";
 
-        public void OnBegin(PlateauSandboxContext context)
+        public void OnBegin(PlateauSandboxContext context, EditorWindow editorWindow)
         {
             RefreshTracksHierarchy(context);
         }

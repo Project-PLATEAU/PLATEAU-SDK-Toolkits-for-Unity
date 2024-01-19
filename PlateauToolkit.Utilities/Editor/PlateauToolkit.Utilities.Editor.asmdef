@@ -1,0 +1,37 @@
+{
+    "name": "PlateauToolkit.Utilities.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:df380645f10b7bc4b97d4f5eb6303d95",
+        "GUID:f31ea2bc62aff8541a07efe6906b6778",
+        "GUID:1ab15abfcfcfd64479e297170095b930",
+        "GUID:06bc5408c92469e4b918a190ab1490c8",
+        "GUID:2f611b55791fe6e49aafec04e8adcb97",
+        "GUID:c579267770062bf448e75eb160330b7f",
+        "GUID:15fc0a57446b3144c949da3e2b9737a9",
+        "GUID:5583122765da9804d8b3e6f2dccd809b",
+        "GUID:a93e25c2877348b44b5c243cea4181cb"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.render-pipelines.universal",
+            "expression": "",
+            "define": "UNITY_URP"
+        },
+        {
+            "name": "com.unity.render-pipelines.high-definition",
+            "expression": "",
+            "define": "UNITY_HDRP"
+        }
+    ],
+    "noEngineReferences": false
+}

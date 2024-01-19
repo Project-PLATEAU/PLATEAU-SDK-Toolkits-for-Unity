@@ -1,22 +1,7 @@
-﻿using UnityEditor;
-
-namespace PlateauToolkit.Sandbox.Editor
+﻿namespace PlateauToolkit.Sandbox.Editor
 {
-    class PlateauSandboxWindowPropsView : IPlateauSandboxWindowView
+    class PlateauSandboxWindowPropsView : PlateauSandboxWindowAssetsViewBase<PlateauSandboxProp>
     {
-        readonly PlateauSandboxAssetListState<PlateauSandboxProp> m_AssetListState = new();
-
-        public string Name => "アイテム";
-
-        public void OnGUI(PlateauSandboxContext context, EditorWindow window)
-        {
-            EditorGUILayout.LabelField("ツール", EditorStyles.boldLabel);
-            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
-            {
-                PlateauSandboxGUI.PlacementToolButton(context);
-            }
-
-            PlateauSandboxAssetListGUI.OnGUI(window.position.width, context, m_AssetListState);
-        }
+        public override string Name => "プロップ";
     }
 }

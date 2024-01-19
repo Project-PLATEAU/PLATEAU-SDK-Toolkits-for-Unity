@@ -29,6 +29,7 @@
         public static readonly string k_ObstacleLightPrefabPathUrp = $"{k_RuntimeRootFolder}/ObstacleLight/Prefabs/URP/ObstacleLight.prefab";
         public static readonly string k_BuildingTextureAssetHdrp = $"{k_EditorRootFolder}/Building Plateau Material Assignment Table HDRP.asset";
         public static readonly string k_SkyboxMaterialAssetUrp = $"{k_MaterialFolder}/DayNightCycle/URPPhysicallyBasedSky.mat";
+        public static readonly string k_ImageProcessingComputeShader = $"{k_EditorRootFolder}/ComputeShaders/PlateauRenderingFilterLibrary.compute";
     }
 
 }
