@@ -895,10 +895,10 @@ namespace PlateauToolkit.Rendering.Editor
                     EditorGUILayout.BeginHorizontal();
                     EditorGUILayout.LabelField("スケール", GUILayout.Width(120));
                     ShowScaleCheckbox(0, TextureDownscaleRatio.None);
-                    ShowScaleCheckbox(1, TextureDownscaleRatio.OneSixteenth);
-                    ShowScaleCheckbox(2, TextureDownscaleRatio.OneEighth);
-                    ShowScaleCheckbox(3, TextureDownscaleRatio.Quarter);
                     ShowScaleCheckbox(4, TextureDownscaleRatio.Half);
+                    ShowScaleCheckbox(3, TextureDownscaleRatio.Quarter);
+                    ShowScaleCheckbox(2, TextureDownscaleRatio.OneEighth);
+                    ShowScaleCheckbox(1, TextureDownscaleRatio.OneSixteenth);
                     EditorGUILayout.EndHorizontal();
                     #endregion
 
