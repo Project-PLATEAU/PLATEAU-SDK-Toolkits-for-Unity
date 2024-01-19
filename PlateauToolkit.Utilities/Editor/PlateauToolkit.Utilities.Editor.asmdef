@@ -1,18 +1,16 @@
 {
-    "name": "PlateauToolkit.Rendering.Editor",
-    "rootNamespace": "PlateauToolkit.Rendering.Editor",
+    "name": "PlateauToolkit.Utilities.Editor",
+    "rootNamespace": "",
     "references": [
         "GUID:df380645f10b7bc4b97d4f5eb6303d95",
         "GUID:f31ea2bc62aff8541a07efe6906b6778",
         "GUID:1ab15abfcfcfd64479e297170095b930",
-        "GUID:33a64a05e6961c84c910a8057df1e46a",
         "GUID:06bc5408c92469e4b918a190ab1490c8",
         "GUID:2f611b55791fe6e49aafec04e8adcb97",
         "GUID:c579267770062bf448e75eb160330b7f",
         "GUID:15fc0a57446b3144c949da3e2b9737a9",
         "GUID:5583122765da9804d8b3e6f2dccd809b",
-        "GUID:78bd2ddd6e276394a9615c203e574844",
-        "GUID:457756d89b35d2941b3e7b37b4ece6f1"
+        "GUID:a93e25c2877348b44b5c243cea4181cb"
     ],
     "includePlatforms": [
         "Editor"
@@ -33,11 +31,6 @@
             "name": "com.unity.render-pipelines.high-definition",
             "expression": "",
             "define": "UNITY_HDRP"
-        },
-        {
-            "name": "com.synesthesias.plateau-unity-sdk",
-            "expression": "2.2.2",
-            "define": "PLATEAU_SDK_222"
         }
     ],
     "noEngineReferences": false

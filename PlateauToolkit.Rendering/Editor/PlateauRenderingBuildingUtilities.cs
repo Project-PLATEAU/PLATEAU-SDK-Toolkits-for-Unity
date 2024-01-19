@@ -100,6 +100,22 @@ namespace PlateauToolkit.Rendering.Editor
             return false;
         }
 
+        public static T RetrieveTopmostParentWithComponent<T> (this Transform child) where T : Component
+        {
+            Transform currentParent = child.parent;
+            T root = null;
+            while (currentParent != null)
+            {
+                if (currentParent.TryGetComponent<T>(out root))
+                {
+                    return root;
+                }
+
+                currentParent = currentParent.parent;
+            }
+            return root;
+        }
+
 
         /// <summary>
         /// This method finds a sibling city model object with a different LOD level.
@@ -649,6 +665,11 @@ namespace PlateauToolkit.Rendering.Editor
             Undo.RegisterCreatedObjectUndo(parentObject, "Create Floor Emission Plane");
 
             return;
+        }
+
+        public static bool IsObjectAutoTextured(GameObject targetObject)
+        {
+            return targetObject.name.Contains(PlateauRenderingConstants.k_PostfixAutoTextured);
         }
     }
 }

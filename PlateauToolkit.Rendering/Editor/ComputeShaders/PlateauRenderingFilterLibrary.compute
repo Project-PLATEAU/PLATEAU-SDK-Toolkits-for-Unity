@@ -1,0 +1,156 @@
+﻿#pragma kernel HighPass
+#pragma kernel Contrast
+#pragma kernel Brightness
+#pragma kernel Sharpen
+
+Texture2D<float4> Source;
+RWTexture2D<float4> Destination;
+
+float contrastFactor;
+
+[numthreads(32,32,1)]
+void Contrast (uint3 id : SV_DispatchThreadID)
+{
+    int width, height;
+    Source.GetDimensions(width, height);
+
+    // Get the colour of the pixel
+    float4 color = Source[id.xy];
+
+    // Calculate intermediate colours (equivalent to 0.5 in greyscale).
+    float4 middleColor = float4(0.5, 0.5, 0.5, 1.0);
+
+    // Apply contrast processing.
+    float4 contrasted = middleColor + (color - middleColor) * contrastFactor;
+
+    // Conversion from linear space to gamma space.
+    contrasted.rgb = pow(contrasted.rgb, 1.0 / 2.2);
+
+    Destination[id.xy] = contrasted;
+}
+
+float brightnessFactor;
+
+[numthreads(32, 32, 1)]
+void Brightness(uint3 id : SV_DispatchThreadID)
+{
+    int width, height;
+    Source.GetDimensions(width, height);
+
+    // Get the colour of the pixel
+    float4 color = Source[id.xy];
+
+    if (brightnessFactor >= 0)
+    {
+        // Add for brightening
+        color.rgb += brightnessFactor;
+    }
+    else
+    {
+        // Multiply to darken
+        color.rgb *= 1.0 + brightnessFactor; // brightnessFactor は -1 から 0 の範囲
+    }
+
+    // Clamp to limit out-of-range values
+    color.rgb = saturate(color.rgb);
+
+    // Conversion to gamma space
+    color.rgb = pow(color.rgb, 1.0 / 2.2);
+
+    Destination[id.xy] = color;
+}
+
+float radius;
+
+[numthreads(32, 32, 1)]
+void HighPass(uint3 id : SV_DispatchThreadID)
+{
+    int width, height;
+    Source.GetDimensions(width, height);
+
+    // Calculate kernel size and sigma
+    int kernelSize = int((2 * radius) + 1);
+    float sigma = radius / 2.0;
+
+    float twoSigmaSquare = 2.0 * sigma * sigma;
+    float gaussianCoefficient = 1.0 / (3.14159265359 * twoSigmaSquare);
+    float4 blurred = 0.0;
+    float totalWeight = 0.0;
+
+    int halfKernel = kernelSize / 2;
+
+    for (int i = -halfKernel; i <= halfKernel; i++)
+    {
+        for (int j = -halfKernel; j <= halfKernel; j++)
+        {
+            int2 coord = int2(id.x + i, id.y + j);
+
+            // Process coordinates outside the range of the image.
+            coord.x = max(min(coord.x, width - 1), 0);
+            coord.y = max(min(coord.y, height - 1), 0);
+
+            // Calculate Gaussian weights.
+            float weight = gaussianCoefficient * exp(-(i * i + j * j) / twoSigmaSquare);
+            float4 color = Source[coord];
+            blurred += color * weight;
+            totalWeight += weight;
+        }
+    }
+
+    // Normalise results
+    blurred /= totalWeight;
+
+    // Subtract blurred image from original image, high-pass filtered.
+    float4 original = Source[id.xy];
+    float4 highPass = float4(original.rgb - blurred.rgb + 0.49f, original.a);
+
+    // Conversion from linear space to gamma space.
+    highPass.rgb = pow(highPass.rgb, 1.0 / 2.2);
+
+    Destination[id.xy] = highPass;
+}
+
+float sharpnessFactor;
+
+[numthreads(32, 32, 1)]
+void Sharpen(uint3 id : SV_DispatchThreadID)
+{
+    int width, height;
+    Source.GetDimensions(width, height);
+
+    float4 original = Source[id.xy];
+    float4 laplacian = 0.0;
+
+    // Laplacian filter kernel.
+    float weights[3][3] = {
+        { -1, -1, -1 },
+        { -1,  8, -1 },
+        { -1, -1, -1 }
+    };
+
+    for (int i = -1; i <= 1; i++)
+    {
+        for (int j = -1; j <= 1; j++)
+        {
+            int2 coord = int2(id.x + i, id.y + j);
+
+            // Process coordinates outside the range of the image.
+            coord.x = max(min(coord.x, width - 1), 0);
+            coord.y = max(min(coord.y, height - 1), 0);
+
+            float4 color = Source[coord];
+            laplacian += color * weights[i + 1][j + 1];
+        }
+    }
+
+    // Parameter to adjust the intensity of sharpness.
+    float4 color = original + (sharpnessFactor * laplacian);
+
+    // Clamp to limit out-of-range values
+    color.rgb = saturate(color.rgb);
+
+    // Conversion to gamma space
+    color.rgb = pow(color.rgb, 1.0 / 2.2);
+
+    Destination[id.xy] = color;
+}
