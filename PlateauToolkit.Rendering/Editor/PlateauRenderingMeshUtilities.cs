@@ -179,14 +179,14 @@ namespace PlateauToolkit.Rendering.Editor
             // Clone the colors array to keep the original colors intact
             var newColors = (Color[])originalColors.Clone();
 
-            // Apply the same random alpha value to all vertices
+            // ApplyFilter the same random alpha value to all vertices
             for (int i = 0; i < newColors.Length; i++)
             {
                 Color color = newColors[i];
                 newColors[i] = new Color(color.r, color.g, color.b, randomAlpha);
             }
 
-            // Apply the new colors to the mesh
+            // ApplyFilter the new colors to the mesh
             mesh.colors = newColors;
         }
 
@@ -1229,7 +1229,6 @@ namespace PlateauToolkit.Rendering.Editor
 
         public static void GetSelectedGameObjects(List<GameObject> results)
         {
-            results.Clear();
             GameObject[] selected = Selection.gameObjects;
             foreach (GameObject obj in selected)
             {
@@ -1237,50 +1236,56 @@ namespace PlateauToolkit.Rendering.Editor
             }
         }
 
-        public static Material GetSubmaterialByLargestFaceArea(Renderer renderer, Mesh mesh)
+        static int GetIndexOfLargestFaceAreaSubmesh(Mesh mesh)
         {
-            // Check if the Renderer component exists
-            if (renderer == null)
+            int maxVertices = -1;
+            int maxSubmeshIndex = -1;
+
+            for (int i = 0; i < mesh.subMeshCount; i++)
             {
-                return null;
+                int[] subMeshTriangles = mesh.GetTriangles(i);
+                if (subMeshTriangles.Length > maxVertices)
+                {
+                    maxVertices = subMeshTriangles.Length;
+                    maxSubmeshIndex = i;
+                }
             }
 
-            // Check if the sharedMaterials array is not empty
+            return maxSubmeshIndex;
+        }
+
+        public static Material GetSubMaterialByLargestFaceArea(Renderer renderer, Mesh mesh)
+        {
             if (renderer.sharedMaterials.Length == 0)
             {
                 return null;
             }
 
-            if (mesh.subMeshCount == 1)
-            {
-                // If there is only one submesh, return the last material.
-                return renderer.sharedMaterials[renderer.sharedMaterials.Length - 1];
-            }
-            else
-            {
-                // Count the number of vertices for each submesh.
-                int maxVertices = -1;
-                int maxSubmeshIndex = -1;
-                for (int i = 0; i < mesh.subMeshCount; i++)
-                {
-                    int[] subMeshTriangles = mesh.GetTriangles(i);
-                    if (subMeshTriangles.Length > maxVertices)
-                    {
-                        maxVertices = subMeshTriangles.Length;
-                        maxSubmeshIndex = i;
-                    }
-                }
+            int maxSubMeshIndex = GetIndexOfLargestFaceAreaSubmesh(mesh);
 
-                // Make sure the index is within the range of sharedMaterials array
-                if (maxSubmeshIndex >= renderer.sharedMaterials.Length)
-                {
-                    return renderer.sharedMaterials[0];
-                }
-
-                // Only preserve the material of the submesh with the most vertices.
-                Material maxMaterial = renderer.sharedMaterials[maxSubmeshIndex];
-                return maxMaterial;
+            if (maxSubMeshIndex >= renderer.sharedMaterials.Length || maxSubMeshIndex == -1)
+            {
+                return renderer.sharedMaterials.Length > 0 ? renderer.sharedMaterials[0] : null;
             }
+
+            return renderer.sharedMaterials[maxSubMeshIndex];
+        }
+
+        public static (Material, int) GetSubmaterialAndIndexByLargestFaceArea(Renderer renderer, Mesh mesh)
+        {
+            if (renderer.sharedMaterials.Length == 0)
+            {
+                return (null, -1);
+            }
+
+            int maxSubmeshIndex = GetIndexOfLargestFaceAreaSubmesh(mesh);
+
+            if (maxSubmeshIndex >= renderer.sharedMaterials.Length || maxSubmeshIndex == -1)
+            {
+                return (renderer.sharedMaterials.Length > 0 ? renderer.sharedMaterials[0] : null, 0);
+            }
+
+            return (renderer.sharedMaterials[maxSubmeshIndex], maxSubmeshIndex);
         }
 
         static void AddChildrenToList(Transform parent, List<GameObject> list)
@@ -1306,7 +1311,16 @@ namespace PlateauToolkit.Rendering.Editor
             int[] triangles = mesh.triangles;
 
             // Only preserve the material of the submesh with the most vertices.
-            Material preservedMaterial = GetSubmaterialByLargestFaceArea(renderer, mesh);
+            if (renderer == null)
+            {
+                throw new ArgumentNullException(nameof(renderer), "Parameter 'targetRenderer' cannot be null.");
+            }
+
+            if (mesh == null)
+            {
+                throw new ArgumentNullException(nameof(mesh), "Parameter 'targetRenderer' cannot be null.");
+            }
+            Material preservedMaterial = GetSubMaterialByLargestFaceArea(renderer, mesh);
 
             var newVertices = new List<VertexData>();
             int[] remapIndices = new int[vertices.Length];

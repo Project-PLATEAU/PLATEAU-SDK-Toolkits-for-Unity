@@ -11,7 +11,11 @@ namespace PlateauToolkit.Sandbox.Editor
     {
         string Name { get; }
 
-        void OnBegin(PlateauSandboxContext context)
+        void OnBegin(PlateauSandboxContext context, EditorWindow editorWindow)
+        {
+        }
+
+        void OnUpdate(EditorWindow editorWindow)
         {
         }
 
@@ -58,6 +62,11 @@ namespace PlateauToolkit.Sandbox.Editor
             m_Window.Repaint();
         }
 
+        void Update()
+        {
+            m_CurrentView?.OnUpdate(m_Window);
+        }
+
         void OnGUI()
         {
             if (m_Window == null)
@@ -67,7 +76,7 @@ namespace PlateauToolkit.Sandbox.Editor
             if (m_CurrentView == null)
             {
                 m_CurrentView = m_TrackView;
-                m_CurrentView.OnBegin(PlateauSandboxContext.GetCurrent());
+                m_CurrentView.OnBegin(PlateauSandboxContext.GetCurrent(), m_Window);
             }
 
             PlateauToolkitEditorGUILayout.HeaderLogo(m_Window.position.width);
@@ -111,8 +120,9 @@ namespace PlateauToolkit.Sandbox.Editor
             var imageButtonGUILayout = new PlateauToolkitImageButtonGUI(k_TabButtonSize, k_TabButtonSize);
             if (imageButtonGUILayout.Button(iconPath, buttonColor))
             {
+                m_CurrentView?.OnEnd(PlateauSandboxContext.GetCurrent());
                 m_CurrentView = tabView;
-                m_CurrentView.OnBegin(PlateauSandboxContext.GetCurrent());
+                m_CurrentView.OnBegin(PlateauSandboxContext.GetCurrent(), m_Window);
             }
         }
 

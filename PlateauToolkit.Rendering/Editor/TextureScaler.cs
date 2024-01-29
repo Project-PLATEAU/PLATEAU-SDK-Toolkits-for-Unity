@@ -107,15 +107,19 @@ namespace PlateauToolkit.Rendering.Editor
             }
         }
 
-        static Texture2D Resize(Texture2D texture2D, int targetX, int targetY)
+        public static Texture2D Resize(Texture2D texture2D, int targetX, int targetY)
         {
-            RenderTexture rt = new RenderTexture(targetX, targetY, 24);
-            RenderTexture.active = rt;
-            Graphics.Blit(texture2D, rt);
+            RenderTexture previous = RenderTexture.active;
+            RenderTexture current = new RenderTexture(targetX, targetY, 24);
+            RenderTexture.active = current;
+            Graphics.Blit(texture2D, current);
             Texture2D result = new Texture2D(targetX, targetY, TextureFormat.ARGB32, true);
             result.ReadPixels(new Rect(0, 0, targetX, targetY), 0, 0);
             result.Compress(true);
             result.Apply(false);
+
+            RenderTexture.active = previous;
+            current.Release();
 
             return result;
         }

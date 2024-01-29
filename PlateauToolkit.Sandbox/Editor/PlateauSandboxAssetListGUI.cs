@@ -8,13 +8,6 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
-    class PlateauSandboxAssetListState<TAsset> where TAsset : Component
-    {
-        public Vector2 ScrollPosition { get; set; }
-        public PlateauSandboxAsset<TAsset>[] Cache { get; set; }
-        public int SelectedAssetType { get; set; }
-    }
-
     /// <summary>
     /// Assets List GUI
     /// </summary>
@@ -27,27 +20,26 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public static void OnGUI<TAsset>(
             float windowWidth, PlateauSandboxContext context,
-            PlateauSandboxAssetListState<TAsset> state)
+            SandboxAssetListState<TAsset> state)
             where TAsset : Component
         {
-            AssetPreview.SetPreviewTextureCacheSize(1024);
             EditorGUILayout.LabelField("アセット", EditorStyles.boldLabel);
 
             state.SelectedAssetType = GUILayout.Toolbar(
                 state.SelectedAssetType,
                 new[] { "全て", "ユーザー", "ビルトイン" });
 
-            PlateauSandboxAssetType assetType;
+            SandboxAssetType assetType;
             switch (state.SelectedAssetType)
             {
                 case 0:
-                    assetType = PlateauSandboxAssetType.All;
+                    assetType = SandboxAssetType.All;
                     break;
                 case 1:
-                    assetType = PlateauSandboxAssetType.UserDefined;
+                    assetType = SandboxAssetType.UserDefined;
                     break;
                 case 2:
-                    assetType = PlateauSandboxAssetType.Builtin;
+                    assetType = SandboxAssetType.Builtin;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(state.SelectedAssetType));
@@ -74,26 +66,18 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            if (Event.current.type == EventType.Layout)
-            {
-                state.Cache = PlateauSandboxAssetUtility.FindAllAssets<TAsset>(assetType);
-            }
-            if (state.Cache == null)
-            {
-                return;
-            }
-
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
                 GUILayout.Space(8);
 
                 using (var scope = new EditorGUILayout.ScrollViewScope(state.ScrollPosition))
                 {
-                    Action[] buttonGuis = state.Cache
-                        .Select<PlateauSandboxAsset<TAsset>, Action>(propAsset =>
+                    Action[] buttonGuis = state.Assets
+                        .Where(asset => (asset.AssetType & assetType) == asset.AssetType)
+                        .Select<SandboxAsset<TAsset>, Action>(propAsset =>
                         {
                             return () => PlateauSandboxGUI.AssetButton(
-                                propAsset.Asset.gameObject,
+                                propAsset,
                                 context.IsSelectedObject(propAsset.Asset.gameObject),
                                 () =>
                                 {

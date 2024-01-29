@@ -78,7 +78,9 @@ namespace PlateauToolkit.Sandbox.Editor
             }
         }
 
-        public static void AssetButton(GameObject asset, bool isSelected = false, Action onClick = null, bool isDragEnabled = false)
+        public static void AssetButton<TAsset>(
+            SandboxAsset<TAsset> asset, bool isSelected = false, Action onClick = null, bool isDragEnabled = false)
+            where TAsset : Component
         {
             using (var scope = new EditorGUILayout.HorizontalScope())
             {
@@ -93,28 +95,13 @@ namespace PlateauToolkit.Sandbox.Editor
                     buttonRect.width - k_AssetButtonSelectedBorderSize * 2,
                     buttonRect.height - k_AssetButtonSelectedBorderSize * 2);
 
-                if (AssetPreview.IsLoadingAssetPreview(asset.GetInstanceID()))
+                if (asset.PreviewTexture != null)
                 {
-                    // Show the loading label
-                    s_LoadingLabelStyle ??= new GUIStyle(GUI.skin.label)
-                    {
-                        fontSize = 10,
-                        alignment = TextAnchor.MiddleCenter,
-                    };
-                    EditorGUI.DrawRect(textureRect, new Color(0.1f, 0.1f, 0.1f, 1f));
-                    EditorGUI.LabelField(textureRect, "ロード中...", s_LoadingLabelStyle);
+                    GUI.DrawTexture(textureRect, asset.PreviewTexture);
                 }
                 else
                 {
-                    Texture2D previewTexture = AssetPreview.GetAssetPreview(asset);
-                    if (previewTexture != null)
-                    {
-                        GUI.DrawTexture(textureRect, previewTexture);
-                    }
-                    else
-                    {
-                        GUI.DrawTexture(textureRect, AssetPreview.GetMiniThumbnail(asset));
-                    }
+                    GUI.DrawTexture(textureRect, AssetPreview.GetMiniThumbnail(asset.Asset.gameObject));
                 }
 
                 GUILayout.FlexibleSpace();
@@ -132,10 +119,10 @@ namespace PlateauToolkit.Sandbox.Editor
                     {
                         DragAndDrop.PrepareStartDrag();
                         DragAndDrop.paths = null;
-                        DragAndDrop.objectReferences = new Object[] { asset };
+                        DragAndDrop.objectReferences = new Object[] { asset.Asset.gameObject };
                         // Uncomment the following code if you need to have additional data for dragging.
                         // DragAndDrop.SetGenericData("data", data);
-                        DragAndDrop.StartDrag(asset.name);
+                        DragAndDrop.StartDrag(asset.Asset.name);
                     }
                 }
             }
@@ -143,7 +130,7 @@ namespace PlateauToolkit.Sandbox.Editor
             EditorGUILayout.Space(k_AssetButtonBottomMargin);
 
             EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.ObjectField(asset, typeof(PlateauSandboxVehicle), false);
+            EditorGUILayout.ObjectField(asset.Asset.gameObject, typeof(PlateauSandboxVehicle), false);
             EditorGUI.EndDisabledGroup();
         }
     }

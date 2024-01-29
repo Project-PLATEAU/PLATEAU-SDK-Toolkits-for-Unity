@@ -38,7 +38,18 @@ namespace PlateauToolkit.Rendering.Editor
 
             Renderer targetRenderer = target.GetComponent<Renderer>();
             Renderer referenceRenderer = reference.GetComponent<Renderer>();
-            Material preservedMaterial = PlateauRenderingMeshUtilities.GetSubmaterialByLargestFaceArea(targetRenderer, mesh);
+
+            if (targetRenderer == null)
+            {
+                throw new ArgumentNullException(nameof(targetRenderer), "Parameter 'targetRenderer' cannot be null.");
+            }
+
+            if (mesh == null)
+            {
+                throw new ArgumentNullException(nameof(mesh), "Parameter 'targetRenderer' cannot be null.");
+            }
+
+            Material preservedMaterial = PlateauRenderingMeshUtilities.GetSubMaterialByLargestFaceArea(targetRenderer, mesh);
 
             Vector3[] vertices = mesh.vertices;
             Bounds referenceBounds = reference.GetComponent<Renderer>().bounds;

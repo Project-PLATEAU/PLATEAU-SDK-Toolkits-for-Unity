@@ -1,4 +1,5 @@
 ﻿using PlateauToolkit.Editor;
+using System;
 using System.Collections;
 using UnityEditor;
 using UnityEngine;
@@ -86,6 +87,11 @@ namespace PlateauToolkit.Sandbox.Editor
                             fieldEnumerator.MoveNext();
                             SerializedProperty probabilityProperty = ((SerializedProperty)fieldEnumerator.Current)?.Copy();
                             Debug.Assert(probabilityProperty != null);
+
+                            if (fieldEnumerator is IDisposable enumeratorDisposable)
+                            {
+                                enumeratorDisposable.Dispose();
+                            }
 
                             Rect previewRect = EditorGUILayout.GetControlRect(k_ItemListThumbnailWidth, k_ItemListThumbnailHeight);
                             Texture2D previewTexture = AssetPreview.GetAssetPreview(prefabProperty.objectReferenceValue);
@@ -184,8 +190,13 @@ namespace PlateauToolkit.Sandbox.Editor
                                 SerializedProperty prefabProperty = ((SerializedProperty)fieldEnumerator.Current)?.Copy();
                                 Debug.Assert(prefabProperty != null);
 
+                                if (fieldEnumerator is IDisposable enumeratorDisposable)
+                                {
+                                    enumeratorDisposable.Dispose();
+                                }
+
                                 prefabProperty.objectReferenceValue = dragGameObject;
-                                dirtyInstance |= true;
+                                dirtyInstance = true;
                             }
 
                             DragAndDrop.activeControlID = 0;
@@ -219,12 +230,12 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 Undo.RecordObjects(targets, "Changing SplineInstantiate seed");
                 m_SplineInstantiate.Randomize();
-                updateInstances |= true;
+                updateInstances = true;
             }
 
             if (GUILayout.Button(new GUIContent("生成", "設定されているシード値でオブジェクトを生成します"), GUILayout.MaxWidth(100f)))
             {
-                updateInstances |= true;
+                updateInstances = true;
             }
 
             if (GUILayout.Button(new GUIContent("リセット", "生成されているオブジェクトをクリアします"), GUILayout.MaxWidth(100f)))
