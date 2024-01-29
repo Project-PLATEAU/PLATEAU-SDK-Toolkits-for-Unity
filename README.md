@@ -57,6 +57,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - 雲の量を調整する機能
 - ポストエフェクトを追加する機能
 - 頂点カラーの設定機能
+- テクスチャ調整機能
 
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Rendering)
 
