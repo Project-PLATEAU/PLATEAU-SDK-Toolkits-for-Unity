@@ -20,11 +20,11 @@ PLATEAUの3D都市モデルの選択、高さや位置の調整などの編集�
 
 PLATEAU SDK-Toolkits for Unityのインストール後、上部のメニューより PLATEAU > PLATEAU Toolkit > Utilities を選択します。
 
-![Screenshot 2024-01-18 at 14.58.21.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/6c5a4571-cc26-4e4c-9b90-9bdf23f8fcf0/Screenshot_2024-01-18_at_14.58.21.png)
+<img width="400" alt="utilites_open_menu" src="../Documentation~/Utilities Images/utilites_open_menu.png">
 
 PLATEAU Utilities ウィンドウのメインメニューが表示されます。
 
-![Screenshot 2024-01-18 at 15.00.29.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/c2084e31-9fa9-4eaf-ba94-a98fe00e5762/Screenshot_2024-01-18_at_15.00.29.png)
+<img width="400" alt="utilities_main_ui" src="../Documentation~/Utilities Images/utilities_main_ui.png">
 
 ## 1. メッシュレンダラーの選択
 
@@ -47,11 +47,11 @@ PLATEAU3D都市モデルでは、Unityの一般的なLODシステムとは異な
 
 PLATEAU Utilities ウィンドウのパネル最上段の「地物種別の接頭語」の欄に選択を行いたい地物を表す接頭語を入力し、「メッシュレンダラーの選択」を押下してください。この例では建築物を選択するため、”bldg”を指定します。
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/36887762-6f6f-4351-b4e6-cfa504226da2/Untitled.png)
+<img width="800" alt="utilities_meshrenderer_select" src="../Documentation~/Utilities Images/utilities_meshrenderer_select.png">
 
 親オブジェクト配下の該当するモデルが一括で選択状態になります。
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/7eba253f-20e8-46ed-93b3-1641284ad822/Untitled.png)
+<img width="800" alt="utilities_meshrenderer_selected" src="../Documentation~/Utilities Images/utilities_meshrenderer_selected.png">
 
 地物の接頭語については以下のドキュメントの”3.2.3 _ 地物ごとのフォルダ分け”をご参照ください。
 
@@ -66,7 +66,7 @@ PLATEAU 3D都市モデルの地面メッシュ（DEM）上のメッシュ頂点�
 1. 平面化を行いたいメッシュをヒエラルキーから選択してください。複数のメッシュを平面化したい場合には「メッシュレンダラーの選択」機能を利用すると簡単に一括選択を行えます。
 2. 平面化を行う高さを「高さ」の欄に入力し、「メッシュ頂点の平面化」を押下するとメッシュ頂点が平面化されます。
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/f9b0f63c-557d-4d44-bb0a-a52cc699d716/Untitled.png)
+<img width="800" alt="utilities_flatten" src="../Documentation~/Utilities Images/utilities_flatten.png">
 
 ## 3. 選択地物の整列
 
@@ -77,7 +77,7 @@ PLATEAU 3D都市モデルの地面メッシュ（DEM）上のメッシュ頂点�
 1. 整列を行いたいメッシュをヒエラルキーから選択してください。複数のメッシュを整列したい場合には「メッシュレンダラーの選択」機能を利用すると簡単に一括選択を行えます。
 2. 整列を行う高さを「高さ」の欄に入力し、「選択地物の整列」を押下すると地物が同一の高さに整列されます。
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/7aa18600-ee4d-4497-8d70-a79a2e2a9135/Untitled.png)
+<img width="800" alt="utilities_flatten" src="../Documentation~/Utilities Images/utilities_flatten.png">
 
 ## 4. プレハブへのライトマップの設定
 
@@ -87,7 +87,7 @@ PLATEAU 3D都市モデルの地面メッシュ（DEM）上のメッシュ頂点�
 
 事前にシーンにライトマップを作成し、適用したいプレハブをヒエラルキー上で選択した後に「プレハブへのライトマップの設定」を押下してください。
 
-![Untitled](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/5c50c28e-e656-4066-918b-a447e8aa116a/Untitled.png)
+<img width="800" alt="utilites_prefab_lightmap" src="../Documentation~/Utilities Images/utilites_prefab_lightmap.png">
 
 ライトマップについては[こちらのドキュメント](https://docs.unity3d.com/ja/2021.3/Manual/Lightmappers.html)をご参照ください。
 
@@ -101,7 +101,7 @@ PLATEAU 3D都市モデルの地面メッシュ（DEM）上のメッシュ頂点�
 
 ライトマップは、3Dオブジェクトやシーンの照明情報を保存するテクスチャです。照明効果をリアルタイムで計算するのではなく、事前に計算された照明情報をテクスチャに「ベイク」し、3Dモデルに適用します。このプロセスにより、特にパフォーマンスが重要なモバイルデバイス等で、リッチな照明効果を3Dシーンに提供します。
 
-![prefab_lightmapmain_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/0539bb46-f692-4856-a03f-25c4400b0a39/prefab_lightmapmain_00.png)
+<img width="800" alt="prefab_lightmapmain_00" src="../Documentation~/Utilities Images/prefab_lightmapmain_00.png">
 
 **ライトマップの作成**
 
@@ -132,7 +132,7 @@ Unityエディター上で3Dモデルにライトマップを適用するため�
 
 PLATEAU SDKのエクスポート機能を使って3D都市モデルをFBXにエクスポートします。
 
-![prefab_lightmap_export_city_model_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/77268642-b85b-4281-9d31-dcfef413a834/prefab_lightmap_export_city_model_00.png)
+<img width="500" alt="prefab_lightmap_export_city_model_00" src="../Documentation~/Utilities Images/prefab_lightmap_export_city_model_00.png">
 
 #### 4-1-4. 3D都市モデルのエクスポート設定
 
@@ -141,7 +141,7 @@ PLATEAU SDKのエクスポート機能を使って3D都市モデルをFBXにエ�
 3. FBXファイルとテクスチャを出力するフォルダのパスを指定します。
 4. 「エクスポート」を押下すると、指定されたフォルダにFBXファイルとテクスチャが出力されます。
 
-![prefab_lightmap_export_city_model_01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/6cddef4d-dd3f-4d64-9587-6192865a006f/prefab_lightmap_export_city_model_01.png)
+<img width="800" alt="prefab_lightmap_export_city_model_01" src="../Documentation~/Utilities Images/prefab_lightmap_export_city_model_01.png">
 
 #### 4-1-5. UnityエディターでFBXの設定を行う（ライトマップ用UVの作成）
 
@@ -151,61 +151,61 @@ Unityエディター上でFBX設定の項目のチェックを追加すること
 
 Unityエディター上でエクスポートしたFBXとテクスチャを読み込み、プロジェクトウインドウで3D都市モデルのFBXファイルを選択します。
 
-![prefab_lightmap_fbx_setting_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/bb156473-e879-4b09-a27e-2e1ef5148eee/prefab_lightmap_fbx_setting_00.png)
+<img width="500" alt="prefab_lightmap_fbx_setting_00" src="../Documentation~/Utilities Images/prefab_lightmap_fbx_setting_00.png"><br>
 
-![prefab_lightmap_fbx_setting_01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/e61537ba-58bc-49d7-a96d-fe038428b5bd/prefab_lightmap_fbx_setting_01.png)
+<img width="500" alt="prefab_lightmap_fbx_setting_01" src="../Documentation~/Utilities Images/prefab_lightmap_fbx_setting_01.png">
 
 インスペクターにFBX専用の設定項目が表示されます。「Model」タブから「Generate Lightmap UVs」にチェックボックスを「オン」にして、「Apply」ボタンを押下すると、ライトマップUVの生成が完了します。また、デフォルトの設定では3D都市モデルが100分の1にスケールされてモデルが読み込まれてしまうため、リアルスケールで3D都市モデルを読み込む場合は、「Convert Units」のチェックボックスは「オフ」にします。
 
-![2024-01-17_07h31_30.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/2a8a1372-c72c-40b5-9ce3-e2ba5f8fc29e/2024-01-17_07h31_30.png)
+<img width="500" alt="prefab_lightmap_fbx_setting_02" src="../Documentation~/Utilities Images/prefab_lightmap_fbx_setting_02.png">
 
 シーンのトップノードの配下のノードを設定が完了したFBXに置き換えて準備完了です。
 
-![prefab_lightmap_fbx_setting_03.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/1c8bfb14-ffe5-496a-a3e4-d39763e85727/prefab_lightmap_fbx_setting_03.png)
+<img width="800" alt="prefab_lightmap_fbx_setting_03" src="../Documentation~/Utilities Images/prefab_lightmap_fbx_setting_03.png">
 
 **ライトの設定 (RealtimeからBakedへ)**
 
 ベイクするライトをヒエラルキーから選択して、インスペクターの General > Mode の項目を「Realtime」から「Baked」に設定します。
 
-![prefab_lightmap_light_setting_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/2ee83ac5-a8ce-431f-8f2c-efcbbcb76eff/prefab_lightmap_light_setting_00.png)
+<img width="500" alt="prefab_lightmap_light_setting_00" src="../Documentation~/Utilities Images/prefab_lightmap_light_setting_00.png">
 
 **3D都市モデルのStaticフラグの設定 (Static Flag→ Contribute GI→ ON)**
 
 ヒエラルキーから3D都市モデルのトップノードを選択します。
 
-![prefab_lightmap_static_falg_setting_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/65177320-9438-45ad-a9f4-fb3f5771d821/prefab_lightmap_static_falg_setting_00.png)
+<img width="400" alt="prefab_lightmap_static_falg_setting_00" src="../Documentation~/Utilities Images/prefab_lightmap_static_falg_setting_00.png">
 
 インスペクター右上の「Static」の右のプルダウンボタン（下三角ボタン）から 「Contribute GI」を選択します。
 
-![prefab_lightmap_static_falg_setting_01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/47f498bd-14d0-4ba9-9961-c24aec36e09f/prefab_lightmap_static_falg_setting_01.png)
+<img width="400" alt="prefab_lightmap_static_falg_setting_01" src="../Documentation~/Utilities Images/prefab_lightmap_static_falg_setting_01.png">
 
 「Yes, change children」を押下し、配下のノードも含めて一括でフラグを有効化します。
 
-![prefab_lightmap_static_falg_setting_02.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/9737493a-59c3-41ab-821d-d2a6f8ae320f/prefab_lightmap_static_falg_setting_02.png)
+<img width="400" alt="prefab_lightmap_static_falg_setting_02" src="../Documentation~/Utilities Images/prefab_lightmap_static_falg_setting_02.png">
 
 以上で、配下のノード全てに「Contribute GI」にチェックマークがつき、設定が適用されます。
 
 ※ ライトマップは静的オブジェクト（動かないオブジェクト）にのみ作成される仕様となっているため、このフラグを有効化して明示的に静的オブジェクトに指定する必要があります。
 
-![prefab_lightmap_static_falg_setting_03.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/b43f04db-7f90-4ce0-8d7d-d35a189bd0b2/prefab_lightmap_static_falg_setting_03.png)
+<img width="500" alt="prefab_lightmap_static_falg_setting_03" src="../Documentation~/Utilities Images/prefab_lightmap_static_falg_setting_03.png">
 
 **ライトマップの設定とベイク**
 
 1. **ライトマップの設定にアクセス**
     - Unityエディターのメインメニューから Window > Rendering > Lighting を選択し、Lightingウィンドウを開きます。
     
-    ![prefab_lightmap_static_bake_setting_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/77da114e-1384-4396-aa26-091d6547b47c/prefab_lightmap_static_bake_setting_00.png)
+<img width="600" alt="prefab_lightmap_static_bake_setting_00" src="../Documentation~/Utilities Images/prefab_lightmap_static_bake_setting_00.png">
     
-2. **ライトマップの設定を調整**
+3. **ライトマップの設定を調整**
     - 「New Lighting Settings」を押下してライトマップの設定ファイルを作成します。
         
-        ![2024-01-17_10h43_07.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/0eb2f345-53e2-46cb-a6da-7a87a1c75c39/2024-01-17_10h43_07.png)
+      <img width="500" alt="prefab_lightmap_static_bake_setting_01" src="../Documentation~/Utilities Images/prefab_lightmap_static_bake_setting_01.png"> <br>
         
-        ![2024-01-17_10h44_59.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/3c44b16a-c7aa-4828-94f9-895bd7fdb29c/2024-01-17_10h44_59.png)
+      <img width="500" alt="prefab_lightmap_static_bake_setting_02" src="../Documentation~/Utilities Images/prefab_lightmap_static_bake_setting_02.png">
         
     - Lightingウィンドウではライトマップに関連する様々な設定を調整できます。
         
-        ![prefab_lightmap_static_bake_setting_01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/c09b9148-fc8a-44a7-97ac-f40f3120594d/prefab_lightmap_static_bake_setting_01.png)
+      <img width="500" alt="prefab_lightmap_static_bake_setting_03" src="../Documentation~/Utilities Images/prefab_lightmap_static_bake_setting_03.png">
         
     - **主に重要な項目（3D都市モデル用）**
     - Lightmapper: Progressive GPU (Preview)
@@ -217,16 +217,16 @@ Unityエディター上でエクスポートしたFBXとテクスチャを読み
     - その他各設定についてはUnityの公式マニュアルをご覧ください。
     https://docs.unity3d.com/ja/current/Manual/class-LightingSettings.html
     
-3. **ライトマップのベイク**
+4. **ライトマップのベイク**
     - ライトマップの設定を完了したら、「Generate Lighting」を押下します。これにより、シーンのライトマップのベイクが開始されます。
         
-        ![prefab_lightmap_light_setting_02.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/8cc01019-0f00-4a3a-b609-916161239d6f/prefab_lightmap_light_setting_02.png)
+      <img width="500" alt="prefab_lightmap_light_setting_02" src="../Documentation~/Utilities Images/prefab_lightmap_light_setting_02.png">
         
     - ベイクの進行状況はウィンドウの下部にあるプログレスバーで確認できます。
-4. **ベイク終了の確認**
+5. **ベイク終了の確認**
     - ベイクが完了すると、プログレスバーが消え、シーンにライトマップが適用された状態が表示されます。
         
-        ![prefab_lightmap_light_setting_04.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/7dc88bbe-0502-431c-ab5f-d43c99bac000/prefab_lightmap_light_setting_04.png)
+      <img width="800" alt="prefab_lightmap_light_setting_04" src="../Documentation~/Utilities Images/prefab_lightmap_light_setting_04.png">
         
 
 #### **4-1-6. 3D都市モデルのプレハブ化とプレハブへのライトマップ適用**
@@ -237,41 +237,41 @@ Unityエディター上でエクスポートしたFBXとテクスチャを読み
 
 まずは3D都市モデルをプレハブ化します。3D都市モデルのオブジェクトを選択して、プロジェクトウインドウの任意のフォルダにドラッグアンドドロップすることでそのフォルダにプレハブを作成することができます。
 
-![prefab_lightmap_prefab_create_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/519015bc-8f9a-437d-a99d-dde7501da177/prefab_lightmap_prefab_create_00.png)
+<img width="800" alt="prefab_lightmap_prefab_create_00" src="../Documentation~/Utilities Images/prefab_lightmap_prefab_create_00.png">
 
 プレハブ化されたシーン上のオブジェクトはヒエラルキーで青色に表示されます。
 
-![prefab_lightmap_prefab_create_01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/d77dd41e-ceac-49a3-bdd4-409f00935829/prefab_lightmap_prefab_create_01.png)
+<img width="800" alt="prefab_lightmap_prefab_create_01" src="../Documentation~/Utilities Images/prefab_lightmap_prefab_create_01.png">
 
 #### 4-1-8. PLATEAU ToolkitのUtilitiesツールでシーンにベイクしたライトマップを3D都市モデルのプレハブに適用
 
 メニューから PLATEAU > PLATEAU Toolkit > Utilities を選択肢、PLATEAU Utilities ウィンドウを開きます。
 
-![prefab_lightmap_utility_tool_0.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/61e048b5-4eaa-46af-9b79-dafb2a6f200b/prefab_lightmap_utility_tool_0.png)
+<img width="500" alt="prefab_lightmap_utility_tool_0" src="../Documentation~/Utilities Images/prefab_lightmap_utility_tool_0.png">
 
 プレハブ化した3D都市モデルオブジェクトを選択して、Utilities ウィンドウから「プレハブへのライトマップの設定」を押下します。
 
-![prefab_lightmap_utility_tool_00.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/78483194-9329-4a17-8157-7101e164e8b2/prefab_lightmap_utility_tool_00.png)
+<img width="800" alt="prefab_lightmap_utility_tool_00" src="../Documentation~/Utilities Images/prefab_lightmap_utility_tool_00.png">
 
 以下のダイアログが表示されるので「はい」を選択します。
 
-![prefab_lightmap_utility_tool_01.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/03c00008-b529-4a34-876c-f84bf1e2fde3/prefab_lightmap_utility_tool_01.png)
+<img width="500" alt="prefab_lightmap_utility_tool_01" src="../Documentation~/Utilities Images/prefab_lightmap_utility_tool_01.png">
 
 プレハブにライトマップを保存するための「Prefab Lightmap Data」コンポーネントが3D都市モデルオブジェクトに追加されます。
 
-![prefab_lightmap_utility_tool_02.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/1a879784-eae9-4001-857f-51a94390cbb0/prefab_lightmap_utility_tool_02.png)
+<img width="600" alt="prefab_lightmap_utility_tool_02" src="../Documentation~/Utilities Images/prefab_lightmap_utility_tool_02.png">
 
 もう一度プレハブ化した3D都市モデルオブジェクトをヒエラルキーから選択して、Utilities のパネルから「シーンのライトマップをプレハブに設定」を実行すると、シーンのライトマップ情報が「Prefab Lightmap Data」コンポーネントに格納されます。これでプレハブにライトマップが紐づきました。
 
-![prefab_lightmap_utility_tool_03.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/8bb9adc3-ec92-45ff-a48e-96ed03223c10/prefab_lightmap_utility_tool_03.png)
+<img width="600" alt="prefab_lightmap_utility_tool_03" src="../Documentation~/Utilities Images/prefab_lightmap_utility_tool_03.png">
 
 ライトを置いていない空のシーンに、プレハブ化した3D都市モデルをシーンにドラッグアンドドロップして確認します。プレハブに紐づいたライトマップが表示され、ライトがないシーンでも事前計算したライティングや影が3D都市モデルに反映されていることが確認できます。
 
-![prefab_lightmap_utility_tool_04.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/2476b852-9bec-4319-b5f8-c8f53452cdc4/prefab_lightmap_utility_tool_04.png)
+<img width="800" alt="prefab_lightmap_utility_tool_04" src="../Documentation~/Utilities Images/prefab_lightmap_utility_tool_04.png">
 
 比較画像: ライトがない場合、通常以下のような表示になります。
 
-![prefab_lightmap_utility_tool_05.png](https://prod-files-secure.s3.us-west-2.amazonaws.com/7f38f07b-eb12-41a8-b644-a03471bc3bae/ac74617e-2714-43e6-8e25-483627224c30/prefab_lightmap_utility_tool_05.png)
+<img width="800" alt="prefab_lightmap_utility_tool_05" src="../Documentation~/Utilities Images/prefab_lightmap_utility_tool_05.png">
 
 ## 5. 関連API
 
