@@ -22,6 +22,9 @@ PLATEAUの3D都市モデルのグラフィックスを向上させる処理を�
     + [5-1. 事前準備](#5-1-事前準備)
     + [5-2. 追加されるポストエフェクト](#5-2-追加されるポストエフェクト)
   * [6. 頂点カラーの設定](#6-頂点カラーの設定)
+  * [7. テクスチャ調整機能](#7-テクスチャ調整機能)
+    + [7-1. 画素調整機能](#7-1-画素調整機能)
+    + [7-2. 解像度変更機能](#7-2-解像度変更機能)   
 
 - [関連API](#関連api)
 
@@ -125,6 +128,9 @@ PLATEAU SDKでダウンロードした直後は専用親GameObject（下記の�
 「窓の表示切り替え」ボタンを押下すると、テクスチャに合わせた窓の表示もしくは非表示を切り替えることが可能です。  
 この機能は、現時点ではLOD2建築物モデルのみが対象となります。
 
+> **Note**
+> **最新バージョンではないPLATEAU SDK及びPLATEAU SDK-Toolkits を利用している場合、SDKのテクスチャ結合機能とToolkitの自動テクスチャ作成機能が競合して不具合を起こす場合があります。上記のバージョンで自動テクスチャ作成を行うと、以下のポップアップメッセージが表示され、選択している地物だけではなくすべての地物に対して自動テクスチャが行われます。
+<img width="400" alt="render_autotexture_popup" src="../Documentation~/Rendering Images/render_autotexture_popup.png">
 
 ## 3. LODグループ生成
 「LODグループ生成」ボタンを押すと、すべての3D都市モデルに対してUnityのLOD機能が設定されます。  
@@ -298,7 +304,95 @@ Rendering Toolkitのポストエフェクト機能では下記の3種類のエ�
 <br>
 <img width="600" alt="rendering_manual_20_vertexcolor_randomseed" src="../Documentation~/Rendering Images/render_vertexcolor3.png">
 
-頂点カラーの編集機能を用いたサンプルアプリを近日中に公開予定です。
+頂点カラーの編集機能の使い方はAR Miniature Sampleで解説しております。
+
+## 7. テクスチャ調整機能
+
+テクスチャ調整機能を使用することで、3D都市モデルのテクスチャの見え方の調整や、データ量の削減を行うことができます。<br>
+<img width="500" alt="render_texture_adj_ui" src="../Documentation~/Rendering Images/render_texture_adj_ui.png">
+
+### 7-1. 画素調整機能
+
+テクスチャの見え方を調整する機能です。
+
+**利用手順**
+
+1. プレビュー用のオブジェクトを選択します。
+    
+    画素調整パラメータをプレビュー表示するためのオブジェクトをヒエラルキーから選択してください。<br>
+    選択が完了したらパネル上の「編集開始」を押下します。<br>
+    
+   <img width="800" alt="render_pixel_control_1" src="../Documentation~/Rendering Images/render_pixel_control_1.png">
+    
+3. 画素調整のパラメータを調整します。
+    
+    スライダーまたは値の入力欄を使用し、各パラメータを調節します。<br>
+    
+    | パラメータ | 概要 |
+    | --- | --- |
+    | HighPass | ハイパスフィルタの設定値を調節します。ハイパスフィルタを使用することで、元のテクスチャから不要な影や光の影響を簡易的に取り除くことができます（ハイパスフィルタは、画像の周波数成分のうち高い周波数の部分を残し、低い周波数の部分を除去します）。 |
+    | Contrast | コントラストの設定値を調節します。コントラストを高く設定すると、明るい部分と暗い部分の差が大きくなり、はっきりとした画像になります。 |
+    | Brightness | 画像全体の明るさを調節します。ブライトネスを高く設定すると画像全体が明るくなります。 |
+    | Sharpness | 画像の輪郭の鮮明さを調節します。シャープネスを高く設定すると輪郭がはっきりと表示されます。 |
+    
+    パラメータを変更するとプレビュー用のオブジェクトの外観が変化します。<br>
+    
+    設定値を決めたら、「画素調整を保存する」を押下します。パラメータが保存され、プレビュー用のオブジェクトの外観がもとに戻ります。<br>
+
+   <img width="800" alt="render_pixel_control_2" src="../Documentation~/Rendering Images/render_pixel_control_2.png">
+    
+5. 画素調整を適用するオブジェクトを選択します。
+    
+    ヒエラルキーから、画素調整を一括で適用したいオブジェクトを選択してください。<br>
+
+   <img width="800" alt="render_pixel_control_3" src="../Documentation~/Rendering Images/render_pixel_control_3.png">
+    
+7. 画素調整を適用します。
+    
+    画素調整の対象となるオブジェクトが選択されている状態で、「選択したオブジェクトのテクスチャに保存済の画素パラメータをコピーする」を押下すると、選択したオブジェクト全体に画素調整が適用されます。<br>
+    ※選択するオブジェクトの数によってはこの処理に数分程度かかることがあります。<br>
+
+   <img width="800" alt="render_pixel_control_4" src="../Documentation~/Rendering Images/render_pixel_control_4.png">
+    
+
+### 7-2. 解像度変更機能
+
+テクスチャの解像度を下げることで、データ容量の削減を行えます。
+
+空中から俯瞰する形で3D都市モデルを使う場合など、テクスチャの解像度が低くてもよいユースケースで有効な機能です。
+
+**利用手順**
+
+1. プレビュー用のオブジェクトを選択します。
+    
+    解像度の設定をプレビュー表示するためのオブジェクトをヒエラルキーから選択してください。<br>
+    選択が完了したらパネル上の「解像度変更を開始する」を押下します。<br>
+    
+   <img width="800" alt="render_resolution_change_1" src="../Documentation~/Rendering Images/render_resolution_change_1.png">
+    
+3. 解像度変更のパラメータを調整します。
+    
+    テクスチャ調整ページ下部の「スケール」に表示されているチェックボックスで解像度スケールを選択します。スケールを小さくすればするほど画質は荒くなりますが、テクスチャの容量は削減されます。<br>
+    設定値を決めたら、「解像度変更の保存」を押下します。<br>
+
+   <img width="800" alt="render_resolution_change_2" src="../Documentation~/Rendering Images/render_resolution_change_2.png">
+    
+5. 解像度変更を適用するオブジェクトを選択します。
+    
+    ヒエラルキーから、解像度変更を一括で適用したいオブジェクトを選択してください。<br>
+
+   <img width="800" alt="render_resolution_change_3" src="../Documentation~/Rendering Images/render_resolution_change_3.png">
+    
+7. 解像度変更を適用します。
+    
+    解像度変更の対象となるオブジェクトが選択されている状態で、「選択したオブジェクトのテクスチャに保存済の解像度スケールをコピーする」を押下すると、選択したオブジェクト全体に解像度変更が適用されます。<br>
+    ※選択するオブジェクトの数によってはこの処理に数分程度かかることがあります。<br>
+
+   <img width="800" alt="render_resolution_change_4" src="../Documentation~/Rendering Images/render_resolution_change_4.png">
+    
+
+> **Note**
+> **画素調整や解像度変更を行いたい場合は、PLATEAU SDKで3D都市モデルをインポートする際にテクスチャ結合を選択しないでください。インポートの際にテクスチャ結合を行ってしまうと複数の地物のテクスチャが1つのファイルにまとめられてしまうため、選択されていない地物まで画素調整や解像度変更が適用されてしまう場合があります。
 
 
 ## 関連API

@@ -17,6 +17,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 
 - [Rendering Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Rendering)
 - [Sandbox Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
+- [PLATEAU Utilities ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/)
 - [Maps Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Maps-Toolkit-for-Unity)（別リポジトリ）
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)（別リポジトリ）
 
@@ -25,14 +26,17 @@ Toolkitを活用した下記の3種類のサンプルアプリプロジェクト
 
 - [Urban Scape](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-UrbanScape)
 - [City Rescue Multiplay](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
+- [AR Treasure Map](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)
+- [AR City Miniature ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)  
 - [AR Treasure Map](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)  
-※サンプルシーンは今後さらに追加予定です。  
+
 ※サンプルシーンを題材とした開発チュートリアルを今後リリース予定です。  
 
 ### 更新履歴
 
-|  2023/12/25  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化 <br>Rendering Toolkitに頂点カラー機能を追加  <br>AR Extensionsにマーカー位置合わせ機能を追加 <br> サンプルシーンの追加|  Sandbox Toolkit v0.3.0（ベータ版） <br> Rendering Toolkit v0.3.0（ベータ版）<br> Maps Toolkit v0.3.0（ベータ版）<br> AR Extensions v0.3.0（ベータ版）<br> Urban Scape v1.0.0 <br> City Rescue Multiplay v1.0.0 <br> AR Treasure Map v1.0.0|
+|  2024/01/30  |  4th Release <br> Rendering Toolkitにテクスチャ調整機能を追加、SDKのテクスチャ結合機能に対応　<br> PLATEAU Utilitiesを追加 <br> AR Extensionsにテンプレートを追加  <br> サンプルシーン: AR City Miniatureのリリース|  Sandbox Toolkit v1.0.0 <br> Rendering Toolkit v1.0.0 <br> Maps Toolkit v1.0.0 <br> AR Extensions v1.0.0 <br> AR City Miniature v1.0.0 |
 | :--- | :--- | :--- |
+|  2023/12/25  |  3rd Release <br> Sandbox Toolkitにおけるカメラインタラクション機能、その他調整　　<br>MapsToolkitを別パッケージ化 <br>Rendering Toolkitに頂点カラー機能を追加  <br>AR Extensionsにマーカー位置合わせ機能を追加 <br> サンプルシーン: Urban Scape, City Rescue Multiplay, AR Treasure Mapのリリース|  Sandbox Toolkit v0.3.0（ベータ版） <br> Rendering Toolkit v0.3.0（ベータ版）<br> Maps Toolkit v0.3.0（ベータ版）<br> AR Extensions v0.3.0（ベータ版）<br> Urban Scape v1.0.0 <br> City Rescue Multiplay v1.0.0 <br> AR Treasure Map v1.0.0|
 |  2023/10/28  |  2nd Release <br> MapsToolkitのリリース <br> AR Extensionsのリリース <br> Rendering Toolkitにおける雲量調整、ポストエフェクトの追加  |  Maps Toolkit v0.2.1（ベータ版）<br>  AR Extensions v0.2.1（ベータ版） <br> Rendering Toolkit v0.2.1（ベータ版）   |
 |  2023/09/15  |  Windows Buildに関する不具合の修正  |  Rendering Toolkit v0.1.1（ベータ版） <br> Sandbox Toolkit v0.1.1（ベータ版）  |
 |  2023/07/23  |  1st Release  |  Rendering Toolkit v0.1.0（ベータ版） <br> Sandbox Toolkit v0.1.0（ベータ版）  |
@@ -55,6 +59,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 - 雲の量を調整する機能
 - ポストエフェクトを追加する機能
 - 頂点カラーの設定機能
+- テクスチャ調整機能
 
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Rendering)
 
@@ -79,7 +84,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 
 
-## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/unity-shimizu/PLATEAU-SDK-Maps-Toolkit-for-Unity)
+## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 PLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。<br>
 
 https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/127069970/5ab8102d-046d-4423-9f7a-7a2029fca630
@@ -107,7 +112,22 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 - ARマーカーを用いた3D都市モデルの位置合わせ機能
 - ARオクルージョン機能
 
-[こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)からご利用ください。
+[こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)からご利用ください。<br>
+
+
+## [PLATEAU Utilities ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/)
+
+3D都市モデルの選択、高さや位置の調整などの編集の際に役立つ機能を提供します。 
+
+
+### リリース済の機能
+- メッシュレンダラーの選択機能
+- メッシュ頂点の平面化機能
+- 選択地物の整列機能
+- プレハブへのライトマップ設定機能
+  
+使い方は[こちら ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/)
+
 
 
 # セットアップ環境
@@ -178,7 +198,6 @@ Unityエディタが再起動します。
 - ソースコードおよび関連ドキュメントの著作権は国土交通省に帰属します。
 
 ## 注意事項/利用規約
-- 本ツールはベータバージョンです。バグ、動作不安定、予期せぬ挙動等が発生する可能性があり、動作保証はできかねますのでご了承ください。
 - 本ツールをアンインストールした場合、本ツールの機能で作成されたアセットの動作に不備が発生する可能性があります。
 - 本ツールをアップデートした際は、一度 Unity エディターを再起動することを推奨しています。
 - パフォーマンスの観点から、3km²の範囲に収まる3D都市モデルをダウンロード・インポートすることを推奨しています。
