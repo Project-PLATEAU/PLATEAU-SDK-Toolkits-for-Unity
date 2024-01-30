@@ -28,7 +28,6 @@ Toolkitを活用した下記の3種類のサンプルアプリプロジェクト
 - [City Rescue Multiplay](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
 - [AR Treasure Map](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)
 - [AR City Miniature ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)  
-- [AR Treasure Map](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)  
 
 ※サンプルシーンを題材とした開発チュートリアルを今後リリース予定です。  
 
