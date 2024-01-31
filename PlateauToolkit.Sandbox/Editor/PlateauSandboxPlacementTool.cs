@@ -128,30 +128,31 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            if (!m_Placement.IsPlaceable)
+            if (window.hasFocus && window == EditorWindow.mouseOverWindow)
             {
-                string notPlaceableMessage;
-                switch (m_Context.PlacementSettings.Location)
+                string notPlaceableMessage = null;
+
+                if (!m_Placement.IsPlaceable)
                 {
-                    case PlacementLocation.PlaceOnSurface:
-                        notPlaceableMessage = "オブジェクトを配置できるコライダーが見つかりません。";
-                        break;
-                    case PlacementLocation.PlaceAlongTrack:
-                        notPlaceableMessage = "オブジェクトを配置できるトラックが見つかりません。";
-                        break;
-                    default:
-                        notPlaceableMessage = null;
-                        break;
+                    switch (m_Context.PlacementSettings.Location)
+                    {
+                        case PlacementLocation.PlaceOnSurface:
+                            notPlaceableMessage = "オブジェクトを配置できるコライダーが見つかりません。";
+                            break;
+                        case PlacementLocation.PlaceAlongTrack:
+                            notPlaceableMessage = "オブジェクトを配置できるトラックが見つかりません。";
+                            break;
+                    }
                 }
 
                 if (notPlaceableMessage != null)
                 {
-                    EditorWindow.GetWindow<SceneView>().ShowNotification(new(notPlaceableMessage));
+                    window.ShowNotification(new(notPlaceableMessage), 0);
                 }
-            }
-            else
-            {
-                EditorWindow.GetWindow<SceneView>().RemoveNotification();
+                else
+                {
+                    window.RemoveNotification();
+                }
             }
 
             if (Event.current.keyCode == KeyCode.Escape)

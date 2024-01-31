@@ -302,7 +302,7 @@ namespace PlateauToolkit.Rendering.Editor
             List<Tuple<int, int>> newRoofEdges = null;
             if (sortedEdgeGroups.Count > 0)
             {
-                PlateauRenderingMeshUtilities.OffsetRoofEdgesResult result = PlateauRenderingMeshUtilities.OffsetRoofEdges(meshFilter.sharedMesh, sortedEdgeGroups[0], -0.8f, 0.01f);
+                PlateauRenderingMeshUtilities.OffsetRoofEdgesResult result = PlateauRenderingMeshUtilities.OffsetRoofEdges(meshFilter.sharedMesh, sortedEdgeGroups[0], -0.8f, 0.001f);
                 newRoofEdges = result.NewEdges;
             }
 

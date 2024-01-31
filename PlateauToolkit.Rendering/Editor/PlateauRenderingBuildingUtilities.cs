@@ -557,6 +557,10 @@ namespace PlateauToolkit.Rendering.Editor
             // Generate a single random alpha value for all vertices
             float randomAlpha = Random.Range(0f, 1f);
 
+            // Check if mesh has vertex colors, otherwise use default color (white)
+            Color[] originalColors = mesh.colors;
+            bool hasOriginalColors = originalColors != null && originalColors.Length == mesh.vertexCount;
+
             for (int i = 0; i < mesh.vertices.Length; i++)
             {
                 Vector3 worldVertex = go.transform.TransformPoint(mesh.vertices[i]);
@@ -569,6 +573,12 @@ namespace PlateauToolkit.Rendering.Editor
 
                 // Adjust the alpha for all colors to be the same random value.
                 vertexColor.a = randomAlpha;
+
+                if (hasOriginalColors)
+                {
+                    vertexColor.r = originalColors[i].r;
+                    vertexColor.b = originalColors[i].b;
+                }
 
                 colors[i] = vertexColor;
             }

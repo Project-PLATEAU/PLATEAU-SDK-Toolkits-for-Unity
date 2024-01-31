@@ -245,9 +245,9 @@ namespace PlateauToolkit.Utilities
                         {
                             PrefabUtility.ApplyPrefabInstance(instance.gameObject, InteractionMode.AutomatedAction);
                         }
-                        catch (Exception exception)
+                        catch (Exception)
                         {
-                            Debug.LogError(exception);
+                            // Exception is ignored
                         }
                         finally
                         {
