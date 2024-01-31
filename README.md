@@ -11,9 +11,6 @@ PLATEAU SDK-Toolkits for Unityは、PLATEAUの提供する「3D都市モデル�
 
 ## Toolkitsの構成要素
 PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構成されます。
-2023年度の開発はアジャイル方式で行われます。  
-**年度内に4回程度、各Toolkitのベータ版をリリースし、ユーザの皆様からのフィードバックを開発に反映する予定です。**  
-ベータ版についてのご意見やバグ報告等は、本リポジトリのIssues又はPull requestsをご利用ください。  
 
 - [Rendering Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Rendering)
 - [Sandbox Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
@@ -83,6 +80,21 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1377324
 使い方は[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
 
 
+## [PLATEAU Utilities ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/)
+
+3D都市モデルの選択、高さや位置の調整などの編集の際に役立つ機能を提供します。 
+
+
+### リリース済の機能
+- メッシュレンダラーの選択機能
+- メッシュ頂点の平面化機能
+- 選択地物の整列機能
+- プレハブへのライトマップ設定機能
+  
+使い方は[こちら ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/)
+
+
+
 ## [PLATEAU SDK-Maps-Toolkit for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-Maps-Toolkit-for-Unity)
 PLATEAUの3D都市モデルを利用したGIS開発向けツールキットです。Cesium SDK for Unityと連携してPLATEAUの3Dモデルをグローバルな地形モデルに配置することが可能です。また、BIMモデル（IFCファイル）やGISデータ（シェープファイル及びGeoJSON）を読み込んでCesium for Unity上に配置することが可能です。<br>
 
@@ -112,20 +124,6 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 - ARオクルージョン機能
 
 [こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)からご利用ください。<br>
-
-
-## [PLATEAU Utilities ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/)
-
-3D都市モデルの選択、高さや位置の調整などの編集の際に役立つ機能を提供します。 
-
-
-### リリース済の機能
-- メッシュレンダラーの選択機能
-- メッシュ頂点の平面化機能
-- 選択地物の整列機能
-- プレハブへのライトマップ設定機能
-  
-使い方は[こちら ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/)
 
 
 
