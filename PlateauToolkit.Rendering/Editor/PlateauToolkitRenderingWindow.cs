@@ -1204,7 +1204,7 @@ namespace PlateauToolkit.Rendering.Editor
                 string warningMessage = "";
                 if (m_TextureMerged)
                 {
-                    warningMessage += "テクスチャ結合が有効なため、すべての地物に自動テクスチャリングを行います。";
+                    warningMessage += "テクスチャが結合されている地物すべてに自動テクスチャリングを行います。";
                 }
                 if (m_MeshGranularity == MeshGranularity.PerCityModelArea || m_MeshGranularity == MeshGranularity.PerAtomicFeatureObject)
                 {
@@ -1214,7 +1214,7 @@ namespace PlateauToolkit.Rendering.Editor
                 if (!string.IsNullOrEmpty(warningMessage))
                 {
                     bool selection = EditorUtility.DisplayDialog(
-                                     "属性情報を付与",
+                                     "テクスチャ生成",
                                      warningMessage,
                                      "OK", "Cancel"
                                      );
@@ -1470,9 +1470,9 @@ namespace PlateauToolkit.Rendering.Editor
 
                 if (m_TextureEnhance != null)
                 {
+                    m_TextureEnhance.SaveImageParameter(ImageEditParameters.HighPass, m_HighPass);
                     m_TextureEnhance.SaveImageParameter(ImageEditParameters.Contrast, m_Contrast);
                     m_TextureEnhance.SaveImageParameter(ImageEditParameters.Brightness, m_Brightness);
-                    m_TextureEnhance.SaveImageParameter(ImageEditParameters.HighPass, m_HighPass);
                     m_TextureEnhance.SaveImageParameter(ImageEditParameters.Sharpness, m_Sharpness);
                 }
             }

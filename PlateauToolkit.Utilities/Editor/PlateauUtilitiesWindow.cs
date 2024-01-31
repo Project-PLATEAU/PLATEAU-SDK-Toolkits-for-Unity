@@ -41,7 +41,7 @@ namespace PlateauToolkit.Utilities.Editor
             m_SelectMeshRenderersPrefix = EditorGUILayout.TextField(m_SelectMeshRenderersPrefix);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
-            if (GUILayout.Button("メッシュレンダラーを選択"))
+            if (GUILayout.Button("メッシュレンダラーの選択"))
             {
                 PlateauUtilitiesMeshOperations.SelectMeshRenderersByPrefix(prefix: m_SelectMeshRenderersPrefix);
             }
@@ -54,7 +54,7 @@ namespace PlateauToolkit.Utilities.Editor
             m_FlattenMeshVerticesTargetHeight = EditorGUILayout.FloatField(m_FlattenMeshVerticesTargetHeight);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
-            if (GUILayout.Button("メッシュ頂点を平面化"))
+            if (GUILayout.Button("メッシュ頂点の平面化"))
             {
                 PlateauUtilitiesMeshOperations.FlattenSelectedMeshVertices(m_FlattenMeshVerticesTargetHeight);
             }
@@ -66,7 +66,7 @@ namespace PlateauToolkit.Utilities.Editor
             m_AlignMeshBottomsBaseHeight = EditorGUILayout.FloatField(m_AlignMeshBottomsBaseHeight);
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
-            if (GUILayout.Button("選択地物を整列"))
+            if (GUILayout.Button("選択地物の整列"))
             {
                 PlateauUtilitiesMeshOperations.AlignMeshBottomsToBaseHeight(m_AlignMeshBottomsBaseHeight);
             }
@@ -76,7 +76,7 @@ namespace PlateauToolkit.Utilities.Editor
             EditorGUILayout.BeginHorizontal();
             EditorGUILayout.EndHorizontal();
             EditorGUILayout.Space();
-            if (GUILayout.Button("シーンのライトマップをプレハブに設定"))
+            if (GUILayout.Button("プレハブへのライトマップの設定"))
             {
                 PrefabLightmapData.GenerateLightmapInfo();
             }
