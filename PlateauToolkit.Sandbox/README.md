@@ -114,6 +114,11 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 <img width="200" alt="world_surface_placement" src="../Documentation~/Sandbox Images/world_surface_placement.png">
 <img width="400" alt="world_track_placement" src="../Documentation~/Sandbox Images/world_track_placement.gif">
 
+> **Note**
+> 古いバージョンのUnity Editorバージョンを使用していると、配置オブジェクトのリスト表示に不具合が生じることがあります。<br>
+> Unity 2021.3.34以上を使用してください。
+
+
 ## 2. トラック機能
 
 ### 2-1. トラックの作成
