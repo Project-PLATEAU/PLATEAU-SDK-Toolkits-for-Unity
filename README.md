@@ -16,7 +16,7 @@ PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構�
 - [Maps Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Maps-Toolkit-for-Unity)（別リポジトリ）
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)（別リポジトリ）
 
-PLATEAU SDK-Toolkitsを活用した下記の3種類のサンプルアプリプロジェクトを提供しています。<br>
+PLATEAU SDK-Toolkitsを活用した下記の4種類のサンプルアプリプロジェクトを提供しています。<br>
 下記リポジトリよりご利用ください。
 
 - [Urban Scape](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-UrbanScape)
@@ -93,7 +93,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 - BIMモデルとの連携（IFCファイルの読み込み）
 - GISデータとの連携
 
-[こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-Maps-Toolkit-for-Unity)からご利用ください。
+[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Maps-Toolkit-for-Unity)のリポジトリからご利用ください。
 
 ## [PLATEAU SDK-AR-Extensions for Unity](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-extensions-for-Unity)
 PLATEAUの3D都市モデルを活用したARアプリ開発ツールです。AR空間に3Dモデルを配置し、位置のずれや地面の高さを調整できます。さらに、3Dオブジェクトを遮蔽するオクルージョン機能も備えています。ストリーミングにより配置された3D都市モデルを用いたARアプリ開発も可能です。
@@ -108,7 +108,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 - ARマーカーを用いた3D都市モデルの位置合わせ機能
 - ARオクルージョン機能
 
-[こちらのリポジトリ](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)からご利用ください。<br>
+[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)のリポジトリからご利用ください。<br>
 
 # セットアップ環境
 
