@@ -28,7 +28,6 @@ Toolkitを活用した下記の3種類のサンプルアプリプロジェクト
 - [City Rescue Multiplay](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
 - [AR Treasure Map](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)
 - [AR City Miniature ※リンク要修正](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)  
-- [AR Treasure Map](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)  
 
 ※サンプルシーンを題材とした開発チュートリアルを今後リリース予定です。  
 
@@ -141,7 +140,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 - macOS Ventura 13.2
 
 ### Unity Version
-- Unity 2021.3.30
+- Unity 2021.3.34
     - Unity 2021.3系であれば問題なく動作する見込みです。
 
 ### Rendering Pipeline
@@ -157,7 +156,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 
 ### 1. Unityでのプロジェクト作成
 
-Unity Version 2021.3.27f1(LTS)により新たにUnityプロジェクトを作成してください。  
+Unity Version 2021.3.34f1(LTS)により新たにUnityプロジェクトを作成してください。  
 その際のテンプレートとして「3D(URP)」もしくは「3D(HDRP)」を選択してください。
 
 <p align="center">
