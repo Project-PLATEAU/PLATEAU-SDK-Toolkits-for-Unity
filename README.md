@@ -8,7 +8,7 @@ PLATEAU SDK-Toolkits for Unityは、PLATEAUの提供する「3D都市モデル�
 ダウンロードリンクは[こちら](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/releases/)
 
 ## PLATEAU SDK-Toolkitsの構成要素
-PLATEAU SDK-Toolkits for Unityは以下の4つのコンポーネントから構成されます。
+PLATEAU SDK-Toolkits for Unityは以下の5つのコンポーネントから構成されます。
 
 - [Rendering Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Rendering)
 - [Sandbox Toolkit](https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/tree/main/PlateauToolkit.Sandbox)
