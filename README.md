@@ -137,7 +137,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 
 ### 1. Unityでのプロジェクト作成
 
-Unity バージョン 2021.3.34f1(LTS)で「3D(URP)」もしくは「3D(HDRP)」のテンプレートから Unity プロジェクトを作成してください。  
+Unity バージョン 2021.3.35f1(LTS)で「3D(URP)」もしくは「3D(HDRP)」のテンプレートから Unity プロジェクトを作成してください。  
 
 <p align="center">
 <img width="493" alt="toolkits_setup_select_urp" src="/Documentation~/Images/toolkits_setup_select_urp.png">
