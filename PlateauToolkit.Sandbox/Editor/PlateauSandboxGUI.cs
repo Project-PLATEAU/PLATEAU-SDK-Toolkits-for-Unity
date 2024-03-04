@@ -52,7 +52,7 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             if (ToolManager.activeToolType != typeof(PlateauSandboxPlacementTool))
             {
-                if (GUILayout.Button("配置ツールを起動"))
+                if (GUILayout.Button("配置ツールを起動") && !Application.isPlaying)
                 {
                     ToolManager.SetActiveTool<PlateauSandboxPlacementTool>();
                 }

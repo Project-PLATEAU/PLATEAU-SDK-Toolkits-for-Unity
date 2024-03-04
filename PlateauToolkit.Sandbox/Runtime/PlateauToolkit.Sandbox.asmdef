@@ -14,6 +14,12 @@
     "precompiledReferences": [],
     "autoReferenced": true,
     "defineConstraints": [],
-    "versionDefines": [],
+    "versionDefines": [
+        {
+            "name": "com.unity.splines",
+            "expression": "2.4",
+            "define": "UNITY_SPLINE_2_4_OR_NEWER"
+        }
+    ],
     "noEngineReferences": false
 }

@@ -582,6 +582,13 @@ namespace PlateauToolkit.Sandbox
             return curveLength;
         }
 
+#if UNITY_SPLINE_2_4_OR_NEWER
+        public float3 GetCurveUpVector(int index, float t)
+        {
+            return m_Spline.GetCurveUpVector(index, t);
+        }
+#endif
+
         public IEnumerator<BezierKnot> GetEnumerator()
         {
             return m_Spline.GetEnumerator();
