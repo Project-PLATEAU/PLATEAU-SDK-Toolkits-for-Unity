@@ -45,11 +45,13 @@ namespace PlateauToolkit.Sandbox.Editor
         void OnEnable()
         {
             ToolManager.activeToolChanged += OnToolChanged;
+            EditorApplication.playModeStateChanged += CheckTools;
         }
 
         void OnDisable()
         {
             ToolManager.activeToolChanged -= OnToolChanged;
+            EditorApplication.playModeStateChanged -= CheckTools;
         }
 
         void OnToolChanged()
@@ -123,6 +125,14 @@ namespace PlateauToolkit.Sandbox.Editor
                 m_CurrentView?.OnEnd(PlateauSandboxContext.GetCurrent());
                 m_CurrentView = tabView;
                 m_CurrentView.OnBegin(PlateauSandboxContext.GetCurrent(), m_Window);
+            }
+        }
+
+        void CheckTools(PlayModeStateChange state)
+        {
+            if (state == PlayModeStateChange.ExitingEditMode && ToolManager.activeToolType == typeof(PlateauSandboxPlacementTool))
+            {
+                ToolManager.RestorePreviousPersistentTool();
             }
         }
 
