@@ -1,7 +1,7 @@
 {
   "name": "com.unity.plateautoolkit",
   "displayName": "PLATEAU SDK-Toolkits for Unity",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "unity": "2021.3",
   "description": "PLATEAUの3D都市モデルを利用したUnity上でのアプリケーション開発を支援するツールキット群です。",
   "keywords": [
