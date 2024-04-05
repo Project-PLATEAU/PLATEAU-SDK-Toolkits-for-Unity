@@ -20,14 +20,13 @@ PLATEAU SDK-Toolkits for Unityは以下の5つのコンポーネントから構�
 - [AR Extensions](https://github.com/Project-PLATEAU/PLATEAU-SDK-AR-Extensions-for-Unity)（別リポジトリ）
 
 PLATEAU SDK-Toolkitsを活用した下記の4種類のサンプルアプリプロジェクトを提供しています。<br>
-下記リポジトリよりご利用ください。
+開発の要点をまとめたチュートリアルも提供しています。  
+詳しくは下記リポジトリをご覧ください。  
 
 - [Urban Scape](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-UrbanScape)
 - [City Rescue Multiplay](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-CityRescueMultiPlay)
 - [AR Treasure Map](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARTreasureMap)
 - [AR City Miniature](https://github.com/Project-PLATEAU/PLATEAU-Toolkits-Sample-ARCityMiniature)
-
-※サンプルシーンを題材とした開発チュートリアルを今後リリース予定です。  
 
 ### 更新履歴
 | 更新日時 | リリース | 更新内容 |
