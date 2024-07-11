@@ -41,6 +41,7 @@ namespace PlateauToolkit.Sandbox.Editor
         PlateauSandboxWindowAvatarView m_AvatarView = new();
         PlateauSandboxWindowVehicleView m_VehicleView = new();
         PlateauSandboxWindowPropsView m_PropsView = new();
+        PlateauSandboxWindowBulkPlaceView m_BulkPlaceView = new();
 
         void OnEnable()
         {
@@ -93,6 +94,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     () => TabButton(PlateauSandboxPaths.HumanIcon, m_AvatarView),
                     () => TabButton(PlateauSandboxPaths.VehicleIcon, m_VehicleView),
                     () => TabButton(PlateauSandboxPaths.PropsIcon, m_PropsView),
+                    () => TabButton(PlateauSandboxPaths.PropsIcon, m_BulkPlaceView),
                 });
 
             PlateauToolkitEditorGUILayout.Header(m_CurrentView.Name);
