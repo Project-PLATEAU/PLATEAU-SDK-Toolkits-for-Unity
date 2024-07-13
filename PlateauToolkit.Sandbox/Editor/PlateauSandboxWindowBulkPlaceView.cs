@@ -1,5 +1,6 @@
 ﻿using PlateauToolkit.Editor;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using UnityEditor;
@@ -127,6 +128,11 @@ namespace PlateauToolkit.Sandbox.Editor
                         var saveSuccess = new PlateauSandboxFileCsvParser().Save(filePath, templateData);
                         if (saveSuccess)
                         {
+                            var directoryName = Path.GetDirectoryName(filePath);
+                            if (!string.IsNullOrEmpty(directoryName))
+                            {
+                                System.Diagnostics.Process.Start(directoryName);
+                            }
                             Debug.Log($"CSVテンプレートを保存しました: {filePath}");
                         }
                     }
