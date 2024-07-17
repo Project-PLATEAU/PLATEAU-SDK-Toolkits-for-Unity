@@ -1,4 +1,5 @@
 ﻿using PlateauToolkit.Editor;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -27,6 +28,7 @@ namespace PlateauToolkit.Sandbox.Editor
         bool m_IsClickedAssetPlace;
         Vector2 m_ScrollPosition;
         int m_SelectedCategoryId = -1;
+        private PlateauSandboxFileParserValidationType m_IsValidLoadedFile;
 
         List<PlateauSandboxBulkPlaceHierarchyItem> m_HierarchyItems = new List<PlateauSandboxBulkPlaceHierarchyItem>();
 
@@ -74,7 +76,6 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
                 else
                 {
-                    var isValidFile = true;
                     if (GUILayout.Button("shapeファイル、csvファイルを読み込む"))
                     {
                         string filePath = EditorUtility.OpenFilePanel("Select File", "", "csv,shp");
@@ -83,23 +84,61 @@ namespace PlateauToolkit.Sandbox.Editor
                             m_LoadedFileName = System.IO.Path.GetFileName(filePath);
                             if (!string.IsNullOrEmpty(m_LoadedFileName))
                             {
-                                var csvParser = new PlateauSandboxFileCsvParser();
-                                isValidFile = csvParser.IsValidate(filePath);
-                                if (isValidFile)
+                                string fileExtension = Path.GetExtension(filePath);
+                                if (fileExtension == PlateauSandboxBulkPlaceData.k_CsvExtension)
                                 {
-                                    m_LoadedData = csvParser.Load(filePath);
-                                    if (m_LoadedData.Count > 0)
+                                    var parser = new PlateauSandboxFileCsvParser();
+                                    m_IsValidLoadedFile = parser.IsValidate(filePath);
+                                    if (m_IsValidLoadedFile == PlateauSandboxFileParserValidationType.k_Valid)
                                     {
-                                        RefreshTracksHierarchy(context);
+                                        m_LoadedData = parser.Load(filePath);
+                                        if (m_LoadedData.Count > 0)
+                                        {
+                                            RefreshTracksHierarchy(context);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        m_LoadedFileName = string.Empty;
+                                    }
+                                }
+                                else if (fileExtension == PlateauSandboxBulkPlaceData.k_ShapeFileExtension)
+                                {
+                                    var parser = new PlateauSandboxFileShapeFileParser();
+                                    m_IsValidLoadedFile = parser.IsValidate(filePath);
+                                    if (m_IsValidLoadedFile == PlateauSandboxFileParserValidationType.k_Valid)
+                                    {
+                                        m_LoadedData = parser.Load(filePath);
+                                        if (m_LoadedData.Count > 0)
+                                        {
+                                            RefreshTracksHierarchy(context);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        m_LoadedFileName = string.Empty;
                                     }
                                 }
                             }
                         }
                     }
-
-                    if (!isValidFile)
+                }
+                if (m_IsValidLoadedFile != PlateauSandboxFileParserValidationType.k_Valid)
+                {
+                    switch (m_IsValidLoadedFile)
                     {
-                        EditorGUILayout.HelpBox("ファイルにアクセスできませんでした", MessageType.Error);
+                        case PlateauSandboxFileParserValidationType.k_NotExistsFile:
+                            EditorGUILayout.HelpBox("csvもしくはshapeファイルが見つかりませんでした。", MessageType.Error);
+                            break;
+                        case PlateauSandboxFileParserValidationType.k_AccessControl:
+                            EditorGUILayout.HelpBox("ファイルにアクセスできませんでした。", MessageType.Error);
+                            break;
+                        case PlateauSandboxFileParserValidationType.k_FileOpened:
+                            EditorGUILayout.HelpBox("ファイルが開かれているためアクセスできませんでした。", MessageType.Error);
+                            break;
+                        case PlateauSandboxFileParserValidationType.k_NotExistsDbfFile:
+                            EditorGUILayout.HelpBox("DBFファイルが見つかりませんでした。", MessageType.Error);
+                            break;
                     }
                 }
                 if (GUILayout.Button("アセットを配置"))
@@ -120,15 +159,17 @@ namespace PlateauToolkit.Sandbox.Editor
                     string filePath = EditorUtility.SaveFilePanel("Save File", "", "PlateauSandboxCSVTemplate", "csv");
                     if (!string.IsNullOrEmpty(filePath))
                     {
-                        var templateData = new List<PlateauSandboxBulkPlaceData>()
-                        {
-                            new PlateauSandboxBulkPlaceData(0, "35.8994", "139.5333", "14.23", "イチョウ"),
-                            new PlateauSandboxBulkPlaceData(1, "35.9014", "139.5721", "16.3", "ユリノキ"),
-                        };
-                        var saveSuccess = new PlateauSandboxFileCsvParser().Save(filePath, templateData);
+                        var data = new PlateauSandboxBulkPlaceData();
+                        var templateData = new List<PlateauSandboxBulkPlaceData>();
+                        data.Set(0, 35.8994f, 139.5333f, 14.23f, new string[1]{"イチョウ"});
+                        templateData.Add(data);
+                        data.Set(1, 35.9014f, 139.5721f, 16.3f, new string[1]{"ユリノキ"});
+                        templateData.Add(data);
+
+                        bool saveSuccess = new PlateauSandboxFileCsvParser().Save(filePath, templateData);
                         if (saveSuccess)
                         {
-                            var directoryName = Path.GetDirectoryName(filePath);
+                            string directoryName = Path.GetDirectoryName(filePath);
                             if (!string.IsNullOrEmpty(directoryName))
                             {
                                 System.Diagnostics.Process.Start(directoryName);
@@ -179,17 +220,20 @@ namespace PlateauToolkit.Sandbox.Editor
                 if (!string.IsNullOrEmpty(m_LoadedFileName))
                 {
                     m_LoadedData
-                        .GroupBy(data => data.AssetType)
+                        .SelectMany(data => data.AssetTypes)
+                        .GroupBy(assetType => assetType)
                         .Select(group => (group.Key, group.Count()))
                         .Select((group, index) => (group, index))
                         .ToList()
                         .ForEach(asset =>
                         {
+                            string categoryName = asset.group.Key;
+                            int count = asset.group.Item2;
                             m_HierarchyItems.Add(new PlateauSandboxBulkPlaceHierarchyItem()
                             {
                                 Id = asset.index,
-                                CategoryName = asset.group.Key,
-                                Count = asset.group.Item2,
+                                CategoryName = string.IsNullOrEmpty(categoryName) ? "指定なし" : categoryName,
+                                Count = count,
                             });
                         });
                 }
