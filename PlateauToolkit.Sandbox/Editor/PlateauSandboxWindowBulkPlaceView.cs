@@ -159,10 +159,13 @@ namespace PlateauToolkit.Sandbox.Editor
                     string filePath = EditorUtility.SaveFilePanel("Save File", "", "PlateauSandboxCSVTemplate", "csv");
                     if (!string.IsNullOrEmpty(filePath))
                     {
-                        var data = new PlateauSandboxBulkPlaceData();
                         var templateData = new List<PlateauSandboxBulkPlaceData>();
+
+                        var data = new PlateauSandboxBulkPlaceData();
                         data.Set(0, 35.8994f, 139.5333f, 14.23f, new string[1]{"イチョウ"});
                         templateData.Add(data);
+
+                        data = new PlateauSandboxBulkPlaceData();
                         data.Set(1, 35.9014f, 139.5721f, 16.3f, new string[1]{"ユリノキ"});
                         templateData.Add(data);
 

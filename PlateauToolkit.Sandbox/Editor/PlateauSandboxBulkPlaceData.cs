@@ -7,6 +7,12 @@ namespace PlateauToolkit.Sandbox.Editor
 {
     public class PlateauSandboxBulkPlaceData
     {
+        public struct PrefabContext
+        {
+            public string m_AssetName;
+            public int m_ConstantId;
+        }
+
         public const string k_CsvExtension = ".csv";
         public const string k_ShapeFileExtension = ".shp";
         public const string k_DbfFileExtension = ".dbf";
@@ -16,13 +22,14 @@ namespace PlateauToolkit.Sandbox.Editor
         public const string k_HeightTitle = "高さ";
         public const string k_AssetType = "アセット種別";
 
-        public static readonly string[] k_AssetTypeSeparators = new string[] { ",", "，", "、", "・" };
+        readonly string[] m_AssetTypeSeparators = new string[] { ",", "，", "、", "・" };
 
         public int Id { get; protected set; }
         public float Longitude { get; protected set; }
         public float Latitude { get; protected set; }
         public float Height { get; protected set; }
-        public string[] AssetTypes { get; protected set; }
+
+        public List<PrefabContext> PrefabContexts { get; private set; } = new List<PrefabContext>();
 
         public void Set(int index, float longitude, float latitude, float height, string[] assetTypes)
         {
@@ -30,7 +37,7 @@ namespace PlateauToolkit.Sandbox.Editor
             Longitude = longitude;
             Latitude = latitude;
             Height = height;
-            AssetTypes = assetTypes;
+            SetPrefabContexts(assetTypes);
         }
 
         protected void ParseAssetType(string assetType)
@@ -43,8 +50,23 @@ namespace PlateauToolkit.Sandbox.Editor
             assetType = Regex.Replace(assetType, @"\s+", "");
 
             // Split by separators.
-            string pattern = string.Join("|", k_AssetTypeSeparators.Select(Regex.Escape));
-            AssetTypes = Regex.Split(assetType, pattern);
+            string pattern = string.Join("|", m_AssetTypeSeparators.Select(Regex.Escape));
+            string[] assetTypes = Regex.Split(assetType, pattern);
+
+            SetPrefabContexts(assetTypes);
+        }
+
+        void SetPrefabContexts(string[] assetTypes)
+        {
+            for (int i = 0; i < assetTypes.Length; i++)
+            {
+                var prefabContext = new PrefabContext()
+                {
+                    m_AssetName = assetTypes[i],
+                    m_ConstantId = -1,
+                };
+                PrefabContexts.Add(prefabContext);
+            }
         }
     }
 

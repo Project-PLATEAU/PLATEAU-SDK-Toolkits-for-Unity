@@ -96,7 +96,7 @@ namespace PlateauToolkit.Sandbox.Editor
             return csvData;
         }
 
-        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceData> data)
+        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceData> templateDatas)
         {
             try
             {
@@ -110,14 +110,14 @@ namespace PlateauToolkit.Sandbox.Editor
                         PlateauSandboxBulkPlaceData.k_AssetType,
                     };
                     writer.WriteLine(string.Join(",", titleLine));
-                    foreach (var bulkPlaceData in data)
+                    foreach (var bulkPlaceData in templateDatas)
                     {
                         string[] line = new string[]
                         {
                             bulkPlaceData.Longitude.ToString(),
                             bulkPlaceData.Latitude.ToString(),
                             bulkPlaceData.Height.ToString(),
-                            bulkPlaceData.AssetTypes.ToString(),
+                            string.Join(", ", bulkPlaceData.AssetTypes),
                         };
                         writer.WriteLine(string.Join(",", line));
                     }
