@@ -21,8 +21,7 @@ namespace PlateauToolkit.Sandbox.Editor
     /// <summary>
     /// Operate File Parse for Sandbox Toolkit.
     /// </summary>
-    public abstract class PlateauSandboxFileParserBase<TData>
-        where TData : PlateauSandboxBulkPlaceData
+    public abstract class PlateauSandboxFileParserBase
     {
         public virtual PlateauSandboxFileParserValidationType IsValidate(string filePath)
         {
@@ -55,11 +54,11 @@ namespace PlateauToolkit.Sandbox.Editor
             return PlateauSandboxFileParserValidationType.k_NotExistsFile;
         }
 
-        public abstract List<TData> Load(string filePath);
-        public abstract bool Save(string filePath, List<TData> data);
+        public abstract List<PlateauSandboxBulkPlaceData> Load(string filePath);
+        public abstract bool Save(string filePath, List<PlateauSandboxBulkPlaceData> data);
     }
 
-    public class PlateauSandboxFileCsvParser : PlateauSandboxFileParserBase<PlateauSandboxBulkPlaceData>
+    public class PlateauSandboxFileCsvParser : PlateauSandboxFileParserBase
     {
         public override List<PlateauSandboxBulkPlaceData> Load(string filePath)
         {
@@ -117,7 +116,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             bulkPlaceData.Longitude.ToString(),
                             bulkPlaceData.Latitude.ToString(),
                             bulkPlaceData.Height.ToString(),
-                            string.Join(", ", bulkPlaceData.AssetTypes),
+                            string.Join(", ", bulkPlaceData.AssetNames),
                         };
                         writer.WriteLine(string.Join(",", line));
                     }
@@ -132,7 +131,7 @@ namespace PlateauToolkit.Sandbox.Editor
         }
     }
 
-    public class PlateauSandboxFileShapeFileParser : PlateauSandboxFileParserBase<PlateauSandboxBulkPlaceData>
+    public class PlateauSandboxFileShapeFileParser : PlateauSandboxFileParserBase
     {
         private string GetDbfFilePath(string filePath) => filePath.Replace(PlateauSandboxBulkPlaceData.k_ShapeFileExtension, PlateauSandboxBulkPlaceData.k_DbfFileExtension);
 
@@ -169,12 +168,13 @@ namespace PlateauToolkit.Sandbox.Editor
 
                 for (int i = 0; i < listOfShapes.Count; i++)
                 {
-                    DbfRecord record;
-                    record = dbfReader.ReadNextRecord();
+                    DbfRecord record = dbfReader.ReadNextRecord();
 
                     var data = new PlateauSandboxBulkPlaceShapeData(
                         i, listOfShapes[i], dbfReader.GetFieldNames(), record.Fields);
                     shapeFileData.Add(data);
+
+                    Debug.Log($"ShapeData: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {string.Join(", ", data.AssetNames)}");
                 }
             }
             return shapeFileData;

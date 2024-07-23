@@ -7,12 +7,6 @@ namespace PlateauToolkit.Sandbox.Editor
 {
     public class PlateauSandboxBulkPlaceData
     {
-        public struct PrefabContext
-        {
-            public string m_AssetName;
-            public int m_ConstantId;
-        }
-
         public const string k_CsvExtension = ".csv";
         public const string k_ShapeFileExtension = ".shp";
         public const string k_DbfFileExtension = ".dbf";
@@ -23,13 +17,18 @@ namespace PlateauToolkit.Sandbox.Editor
         public const string k_AssetType = "アセット種別";
 
         readonly string[] m_AssetTypeSeparators = new string[] { ",", "，", "、", "・" };
+        private List<string> m_AssetNames = new List<string>();
 
         public int Id { get; protected set; }
         public float Longitude { get; protected set; }
         public float Latitude { get; protected set; }
         public float Height { get; protected set; }
 
-        public List<PrefabContext> PrefabContexts { get; private set; } = new List<PrefabContext>();
+        public List<string> AssetNames
+        {
+            get => m_AssetNames;
+            private set => m_AssetNames = value;
+        }
 
         public void Set(int index, float longitude, float latitude, float height, string[] assetTypes)
         {
@@ -58,14 +57,10 @@ namespace PlateauToolkit.Sandbox.Editor
 
         void SetPrefabContexts(string[] assetTypes)
         {
-            for (int i = 0; i < assetTypes.Length; i++)
+            for (int index = 0; index < assetTypes.Length; index++)
             {
-                var prefabContext = new PrefabContext()
-                {
-                    m_AssetName = assetTypes[i],
-                    m_ConstantId = -1,
-                };
-                PrefabContexts.Add(prefabContext);
+                string t = assetTypes[index];
+                AssetNames.Add(t);
             }
         }
     }

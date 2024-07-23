@@ -26,9 +26,8 @@ namespace PlateauToolkit.Sandbox.Editor
         string m_LoadedFileName;
         List<PlateauSandboxBulkPlaceData> m_LoadedData;
         bool m_IsClickedAssetPlace;
-        Vector2 m_ScrollPosition;
         int m_SelectedCategoryId = -1;
-        private PlateauSandboxFileParserValidationType m_IsValidLoadedFile;
+        PlateauSandboxFileParserValidationType m_IsValidLoadedFile;
 
         List<PlateauSandboxBulkPlaceHierarchyItem> m_HierarchyItems = new List<PlateauSandboxBulkPlaceHierarchyItem>();
 
@@ -143,6 +142,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
                 if (GUILayout.Button("アセットを配置"))
                 {
+                    PlaceAssets();
                     m_IsClickedAssetPlace = true;
                 }
                 if (string.IsNullOrEmpty(m_LoadedFileName) && m_IsClickedAssetPlace)
@@ -223,7 +223,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 if (!string.IsNullOrEmpty(m_LoadedFileName))
                 {
                     m_LoadedData
-                        .SelectMany(data => data.AssetTypes)
+                        .SelectMany(data => data.AssetNames)
                         .GroupBy(assetType => assetType)
                         .Select(group => (group.Key, group.Count()))
                         .Select((group, index) => (group, index))
@@ -310,6 +310,38 @@ namespace PlateauToolkit.Sandbox.Editor
 
             m_TreeView = new PlateauSandboxBulkPlaceHierarchyView(m_TreeViewState, header, m_HierarchyContext);
             m_TreeView.Reload();
+        }
+
+        void PlaceAssets()
+        {
+             var placement = new PlateauSandboxPrefabPlacement();
+             foreach (var placeData in m_LoadedData)
+             {
+                 foreach (string assetName in placeData.AssetNames)
+                 {
+                     var hierarchyItem = m_HierarchyItems.FirstOrDefault(item => item.CategoryName == assetName);
+                     if (hierarchyItem == null || hierarchyItem.PrefabConstantId < 0)
+                     {
+                         continue;
+                     }
+
+                     var prefab = m_AssetListState.Assets
+                         .FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == hierarchyItem.PrefabConstantId)?.Asset.gameObject;
+                     if (prefab == null)
+                     {
+                         continue;
+                     }
+
+                     placement.Place(new PlateauSandboxPrefabPlacement.PlacementContext()
+                     {
+                         m_Latitude = placeData.Latitude,
+                         m_Longitude = placeData.Longitude,
+                         m_Height = placeData.Height,
+                         m_Prefab = prefab,
+                     });
+                 }
+             }
+
         }
 
         public void OnEnd(PlateauSandboxContext context)
