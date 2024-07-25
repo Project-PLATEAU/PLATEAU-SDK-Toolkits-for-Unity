@@ -1,112 +1,216 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
-using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
-    public class PlateauSandboxBulkPlaceData
+    public enum PlateauSandboxBulkPlaceFileType
+    {
+        k_InValid = -1,
+        k_Csv = 0,
+        k_ShapeFile,
+    }
+
+    public enum PlateauSandboxBulkPlaceCategory
+    {
+        k_InValid = -1,
+        k_Longitude = 0,
+        k_Latitude,
+        k_Height,
+        k_AssetType,
+    }
+    static class PlateauSandboxBulkPlaceFileTypeExtensions
+    {
+        const string k_LongitudeTitle = "緯度";
+        const string k_LatitudeTitle = "経度";
+        const string k_HeightTitle = "高さ";
+        const string k_AssetType = "アセット種別";
+
+        public static bool IsMatch(this PlateauSandboxBulkPlaceCategory category, string target)
+        {
+            switch (category)
+            {
+                case PlateauSandboxBulkPlaceCategory.k_Longitude:
+                    return target.Equals("Longitude") || target.Equals(k_LongitudeTitle);
+                case PlateauSandboxBulkPlaceCategory.k_Latitude:
+                    return target.Equals("Latitude") || target.Equals(k_LatitudeTitle);
+                case PlateauSandboxBulkPlaceCategory.k_Height:
+                    return target.Equals("Height") || target.Equals(k_HeightTitle);
+                case PlateauSandboxBulkPlaceCategory.k_AssetType:
+                    return target.Equals("AssetType") || target.Equals(k_AssetType);
+                default:
+                    return false;
+            }
+        }
+        public static string Label(this PlateauSandboxBulkPlaceCategory category)
+        {
+            switch (category)
+            {
+                case PlateauSandboxBulkPlaceCategory.k_Longitude:
+                    return k_LongitudeTitle;
+                case PlateauSandboxBulkPlaceCategory.k_Latitude:
+                    return k_LatitudeTitle;
+                case PlateauSandboxBulkPlaceCategory.k_Height:
+                    return k_HeightTitle;
+                case PlateauSandboxBulkPlaceCategory.k_AssetType:
+                    return k_AssetType;
+                default:
+                    return "";
+            }
+        }
+    }
+
+    public abstract class PlateauSandboxBulkPlaceDataBase
     {
         public const string k_CsvExtension = ".csv";
         public const string k_ShapeFileExtension = ".shp";
         public const string k_DbfFileExtension = ".dbf";
 
-        public const string k_LongitudeTitle = "緯度";
-        public const string k_LatitudeTitle = "経度";
-        public const string k_HeightTitle = "高さ";
-        public const string k_AssetType = "アセット種別";
-
-        readonly string[] m_AssetTypeSeparators = new string[] { ",", "，", "、", "・" };
-        private List<string> m_AssetNames = new List<string>();
-
         public int Id { get; protected set; }
-        public float Longitude { get; protected set; }
-        public float Latitude { get; protected set; }
-        public float Height { get; protected set; }
+        public string Longitude { get; protected set; }
+        public string Latitude { get; protected set; }
+        public string Height { get; protected set; }
+        public string AssetType { get; protected set; }
 
-        public List<string> AssetNames
-        {
-            get => m_AssetNames;
-            private set => m_AssetNames = value;
-        }
+        public abstract void ReplaceField(int oldFieldIndex, int newFieldIndex);
+        public abstract List<string> GetFieldLabels();
+    }
 
-        public void Set(int index, float longitude, float latitude, float height, string[] assetTypes)
+    public class PlateauSandboxBulkPlaceCsvData : PlateauSandboxBulkPlaceDataBase
+    {
+        List<string> m_FieldNames;
+
+        public PlateauSandboxBulkPlaceCsvData(int index, string[] csvData, string[] fieldNames)
         {
             Id = index;
-            Longitude = longitude;
-            Latitude = latitude;
-            Height = height;
-            SetPrefabContexts(assetTypes);
+            Longitude = csvData[0];
+            Latitude = csvData[1];
+            Height = csvData[2];
+            AssetType = csvData[3];
+
+            m_FieldNames = fieldNames.ToList();
         }
 
-        protected void ParseAssetType(string assetType)
+        string GetFieldValue(int fieldIndex)
         {
-            if (string.IsNullOrEmpty(assetType))
+            switch (fieldIndex)
             {
-                return;
+                case (int)PlateauSandboxBulkPlaceCategory.k_Longitude:
+                    return Longitude;
+                case (int)PlateauSandboxBulkPlaceCategory.k_Latitude:
+                    return Latitude;
+                case (int)PlateauSandboxBulkPlaceCategory.k_Height:
+                    return Height;
+                case (int)PlateauSandboxBulkPlaceCategory.k_AssetType:
+                    return AssetType;
+                default:
+                    return string.Empty;
             }
-            // Remove WhiteSpace.
-            assetType = Regex.Replace(assetType, @"\s+", "");
-
-            // Split by separators.
-            string pattern = string.Join("|", m_AssetTypeSeparators.Select(Regex.Escape));
-            string[] assetTypes = Regex.Split(assetType, pattern);
-
-            SetPrefabContexts(assetTypes);
         }
 
-        void SetPrefabContexts(string[] assetTypes)
+        public override void ReplaceField(int oldFieldIndex, int newFieldIndex)
         {
-            for (int index = 0; index < assetTypes.Length; index++)
+            string oldValue = GetFieldValue(oldFieldIndex);
+
+            switch (oldFieldIndex)
             {
-                string t = assetTypes[index];
-                AssetNames.Add(t);
+                case (int)PlateauSandboxBulkPlaceCategory.k_Longitude:
+                    Longitude = GetFieldValue(newFieldIndex);
+                    break;
+                case (int)PlateauSandboxBulkPlaceCategory.k_Latitude:
+                    Latitude = GetFieldValue(newFieldIndex);
+                    break;
+                case (int)PlateauSandboxBulkPlaceCategory.k_Height:
+                    Height = GetFieldValue(newFieldIndex);
+                    break;
+                case (int)PlateauSandboxBulkPlaceCategory.k_AssetType:
+                    AssetType = GetFieldValue(newFieldIndex);
+                    break;
             }
+
+            switch (newFieldIndex)
+            {
+                case (int)PlateauSandboxBulkPlaceCategory.k_Longitude:
+                    Longitude = oldValue;
+                    break;
+                case (int)PlateauSandboxBulkPlaceCategory.k_Latitude:
+                    Latitude = oldValue;
+                    break;
+                case (int)PlateauSandboxBulkPlaceCategory.k_Height:
+                    Height = oldValue;
+                    break;
+                case (int)PlateauSandboxBulkPlaceCategory.k_AssetType:
+                    AssetType = oldValue;
+                    break;
+            }
+
+            // Replace FieldName.
+            (m_FieldNames[oldFieldIndex], m_FieldNames[newFieldIndex]) = (m_FieldNames[newFieldIndex], m_FieldNames[oldFieldIndex]);
+        }
+
+        public override List<string> GetFieldLabels()
+        {
+            return new List<string>() {
+                m_FieldNames[0] + $"（要素例：{Longitude})",
+                m_FieldNames[1] + $"（要素例：{Latitude})",
+                m_FieldNames[2] + $"（要素例：{Height})",
+                m_FieldNames[3] + $"（要素例：{AssetType})",
+            };
         }
     }
 
-    public class PlateauSandboxBulkPlaceCsvData : PlateauSandboxBulkPlaceData
+    public class PlateauSandboxBulkPlaceShapeData : PlateauSandboxBulkPlaceDataBase
     {
-        public PlateauSandboxBulkPlaceCsvData(int index, string[] csvData)
-        {
-            Id = index;
-            Longitude = float.Parse(csvData[0]);
-            Latitude = float.Parse(csvData[1]);
-            Height = float.Parse(csvData[2]);
-
-            ParseAssetType(csvData[3]);
-        }
-    }
-
-    public class PlateauSandboxBulkPlaceShapeData : PlateauSandboxBulkPlaceData
-    {
-        private const string k_AssetTypeName = "JUSHUMEI";
-
         struct DbfField
         {
             public string m_FieldName;
             public string m_FieldValue;
         }
 
-        private List<DbfField> m_Fields = new List<DbfField>();
+        List<DbfField> m_Fields = new List<DbfField>();
 
         public PlateauSandboxBulkPlaceShapeData(int index, IShape shape, string[] fieldNames, string[] fieldValues)
         {
             Id = index;
-            Longitude = shape.Points[0].x;
-            Latitude = shape.Points[0].z;
-            Height = shape.Points[0].y;
+            Longitude = shape.Points[0].x.ToString();
+            Latitude = shape.Points[0].z.ToString();
+            Height = shape.Points[0].y.ToString();
 
             for (int i = 0; i < fieldNames.Length; i++)
             {
+                string fieldValue = fieldValues[i].Replace(" ", "");
                 m_Fields.Add(new DbfField
                 {
                     m_FieldName = fieldNames[i],
-                    m_FieldValue =  fieldValues[i],
+                    m_FieldValue = string.IsNullOrEmpty(fieldValue) ? "指定なし" : fieldValue,
                 });
             }
-            DbfField assetType = m_Fields.FirstOrDefault(field => field.m_FieldName == k_AssetTypeName);
-            ParseAssetType(assetType.m_FieldValue);
+            DbfField assetField = m_Fields
+                .FirstOrDefault(field =>
+                {
+                    return PlateauSandboxFileShapeFileParser.k_AssetTypePatterns
+                        .Any(pattern => field.m_FieldName == pattern);
+                });
+            AssetType = assetField.m_FieldValue;
+
+            // Move AssetType to the top.
+            m_Fields.Remove(assetField);
+            m_Fields.Insert(0, assetField);
+        }
+
+        public override List<string> GetFieldLabels()
+        {
+            return m_Fields
+                .Select(field => $"{field.m_FieldName}（要素例：{field.m_FieldValue})")
+                .ToList();
+        }
+
+        public override void ReplaceField(int oldFieldIndex, int newFieldIndex)
+        {
+            if (m_Fields.Count <= newFieldIndex)
+            {
+                return;
+            }
+            AssetType = m_Fields[newFieldIndex].m_FieldValue;
         }
     }
 }

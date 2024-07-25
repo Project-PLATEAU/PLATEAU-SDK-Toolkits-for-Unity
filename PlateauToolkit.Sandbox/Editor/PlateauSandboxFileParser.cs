@@ -54,16 +54,17 @@ namespace PlateauToolkit.Sandbox.Editor
             return PlateauSandboxFileParserValidationType.k_NotExistsFile;
         }
 
-        public abstract List<PlateauSandboxBulkPlaceData> Load(string filePath);
-        public abstract bool Save(string filePath, List<PlateauSandboxBulkPlaceData> data);
+        public abstract List<PlateauSandboxBulkPlaceDataBase> Load(string filePath);
+        public abstract bool Save(string filePath, List<PlateauSandboxBulkPlaceDataBase> data);
     }
 
     public class PlateauSandboxFileCsvParser : PlateauSandboxFileParserBase
     {
-        public override List<PlateauSandboxBulkPlaceData> Load(string filePath)
+        public override List<PlateauSandboxBulkPlaceDataBase> Load(string filePath)
         {
             int lineNumber = 0;
-            var csvData = new List<PlateauSandboxBulkPlaceData>();
+            var csvData = new List<PlateauSandboxBulkPlaceDataBase>();
+            string[] fieldLabels = Array.Empty<string>();
 
             try
             {
@@ -72,19 +73,22 @@ namespace PlateauToolkit.Sandbox.Editor
                     while (!reader.EndOfStream)
                     {
                         string line = reader.ReadLine();
-                        lineNumber++;
-                        if (lineNumber == 1)
+                        if (line == null)
                         {
                             continue;
                         }
 
-                        if (line != null)
+                        lineNumber++;
+                        if (lineNumber == 1)
                         {
-                            int index = lineNumber - 1;
-                            string[] values = line.Split(',');
-                            var data = new PlateauSandboxBulkPlaceCsvData(index, values);
-                            csvData.Add(data);
+                            fieldLabels = line.Split(',');
+                            continue;
                         }
+
+                        int index = lineNumber - 1;
+                        string[] values = line.Split(',');
+                        var data = new PlateauSandboxBulkPlaceCsvData(index, values, fieldLabels);
+                        csvData.Add(data);
                     }
                 }
             }
@@ -95,7 +99,7 @@ namespace PlateauToolkit.Sandbox.Editor
             return csvData;
         }
 
-        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceData> templateDatas)
+        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceDataBase> templateDatas)
         {
             try
             {
@@ -103,10 +107,10 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     string[] titleLine = new string[]
                     {
-                        PlateauSandboxBulkPlaceData.k_LongitudeTitle,
-                        PlateauSandboxBulkPlaceData.k_LatitudeTitle,
-                        PlateauSandboxBulkPlaceData.k_HeightTitle,
-                        PlateauSandboxBulkPlaceData.k_AssetType,
+                        PlateauSandboxBulkPlaceCategory.k_Longitude.Label(),
+                        PlateauSandboxBulkPlaceCategory.k_Latitude.Label(),
+                        PlateauSandboxBulkPlaceCategory.k_Height.Label(),
+                        PlateauSandboxBulkPlaceCategory.k_AssetType.Label(),
                     };
                     writer.WriteLine(string.Join(",", titleLine));
                     foreach (var bulkPlaceData in templateDatas)
@@ -116,7 +120,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             bulkPlaceData.Longitude.ToString(),
                             bulkPlaceData.Latitude.ToString(),
                             bulkPlaceData.Height.ToString(),
-                            string.Join(", ", bulkPlaceData.AssetNames),
+                            bulkPlaceData.AssetType,
                         };
                         writer.WriteLine(string.Join(",", line));
                     }
@@ -133,7 +137,9 @@ namespace PlateauToolkit.Sandbox.Editor
 
     public class PlateauSandboxFileShapeFileParser : PlateauSandboxFileParserBase
     {
-        private string GetDbfFilePath(string filePath) => filePath.Replace(PlateauSandboxBulkPlaceData.k_ShapeFileExtension, PlateauSandboxBulkPlaceData.k_DbfFileExtension);
+        public static readonly string[] k_AssetTypePatterns = {"JUSHUMEI", "ASSET_TYPE"};
+
+        private string GetDbfFilePath(string filePath) => filePath.Replace(PlateauSandboxBulkPlaceDataBase.k_ShapeFileExtension, PlateauSandboxBulkPlaceDataBase.k_DbfFileExtension);
 
         public override PlateauSandboxFileParserValidationType IsValidate(string filePath)
         {
@@ -153,9 +159,9 @@ namespace PlateauToolkit.Sandbox.Editor
             return PlateauSandboxFileParserValidationType.k_NotExistsDbfFile;
         }
 
-        public override List<PlateauSandboxBulkPlaceData> Load(string filePath)
+        public override List<PlateauSandboxBulkPlaceDataBase> Load(string filePath)
         {
-            var shapeFileData = new List<PlateauSandboxBulkPlaceData>();
+            var shapeFileData = new List<PlateauSandboxBulkPlaceDataBase>();
             List<IShape> listOfShapes;
             using (var shapeFileReader = new PlateauSandboxShapeFileReader(filePath))
             {
@@ -171,16 +177,16 @@ namespace PlateauToolkit.Sandbox.Editor
                     DbfRecord record = dbfReader.ReadNextRecord();
 
                     var data = new PlateauSandboxBulkPlaceShapeData(
-                        i, listOfShapes[i], dbfReader.GetFieldNames(), record.Fields);
+                        i, listOfShapes[i], dbfReader.GetFieldNames().ToArray(), record.Fields);
                     shapeFileData.Add(data);
 
-                    Debug.Log($"ShapeData: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {string.Join(", ", data.AssetNames)}");
+                    Debug.Log($"ShapeData: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {data.AssetType}");
                 }
             }
             return shapeFileData;
         }
 
-        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceData> data)
+        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceDataBase> data)
         {
             return true;
         }
