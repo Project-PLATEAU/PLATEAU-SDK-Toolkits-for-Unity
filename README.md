@@ -31,6 +31,7 @@ PLATEAU SDK-Toolkitsを活用した下記の4種類のサンプルアプリプ�
 ### 更新履歴
 | 更新日時 | リリース | 更新内容 |
 | :--- | :--- | :--- |
+|  2024/07/26  |  **ドキュメント更新**| 対応バージョンについて追記 |
 |  2024/04/05  |  **ドキュメント更新**| サンプルアプリプロジェクトの開発チュートリアルを公開 |
 |  2024/03/06  |  **ドキュメント更新**|対応VersionをUnity Editor 2021.3.35/SDK 2.3.2に統一|
 |  2024/01/30  |  **4th Release** <br> Rendering Toolkitにテクスチャ調整機能を追加、SDKのテクスチャ結合機能に対応　<br> PLATEAU Utilitiesを追加 <br> AR Extensionsにテンプレートを追加  <br> サンプルシーン: AR City Miniatureのリリース|  Sandbox Toolkit v1.0.0 <br> Rendering Toolkit v1.0.0 <br> Maps Toolkit v1.0.0 <br> AR Extensions v1.0.0 <br> AR City Miniature v1.0.0 |
@@ -122,7 +123,8 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 - macOS Ventura 13.2
 
 ### Unity バージョン
-- Unity 2021.3.35
+- 動作確認環境：Unity 2021.3.35、Unity 2022.3.25
+- 推奨：Unity 2021.3.35以上
 
 ### レンダリングパイプライン
 - URP
@@ -131,14 +133,14 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 **Built-in Rendering Pipelineでは動作しません。**
 
 ## PLATEAU SDKバージョン
-- [PLATEAU SDK for Unity v2.3.2](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity/releases/tag/v2.3.2)
+- [PLATEAU SDK for Unity v2.3.2](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity/releases/tag/v2.3.2)以上
     - v2.3.1以前のバージョンを使用する場合、SDK-Toolkitsの一部機能が利用できません。
 
 ## 導入手順
 
 ### 1. Unityでのプロジェクト作成
 
-Unity バージョン 2021.3.35f1(LTS)で「3D(URP)」もしくは「3D(HDRP)」のテンプレートから Unity プロジェクトを作成してください。  
+「3D(URP)」もしくは「3D(HDRP)」のテンプレートから Unity プロジェクトを作成してください。  
 
 <p align="center">
 <img width="493" alt="toolkits_setup_select_urp" src="/Documentation~/Images/toolkits_setup_select_urp.png">
