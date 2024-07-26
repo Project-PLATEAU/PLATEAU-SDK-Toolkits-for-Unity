@@ -31,7 +31,7 @@ PLATEAU SDK-Toolkitsを活用した下記の4種類のサンプルアプリプ�
 ### 更新履歴
 | 更新日時 | リリース | 更新内容 |
 | :--- | :--- | :--- |
-|  2024/07/25  |  **ドキュメント更新**| 対応バージョンについて追記 |
+|  2024/07/26  |  **ドキュメント更新**| 対応バージョンについて追記 |
 |  2024/04/05  |  **ドキュメント更新**| サンプルアプリプロジェクトの開発チュートリアルを公開 |
 |  2024/03/06  |  **ドキュメント更新**|対応VersionをUnity Editor 2021.3.35/SDK 2.3.2に統一|
 |  2024/01/30  |  **4th Release** <br> Rendering Toolkitにテクスチャ調整機能を追加、SDKのテクスチャ結合機能に対応　<br> PLATEAU Utilitiesを追加 <br> AR Extensionsにテンプレートを追加  <br> サンプルシーン: AR City Miniatureのリリース|  Sandbox Toolkit v1.0.0 <br> Rendering Toolkit v1.0.0 <br> Maps Toolkit v1.0.0 <br> AR Extensions v1.0.0 <br> AR City Miniature v1.0.0 |
