@@ -123,8 +123,8 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 - macOS Ventura 13.2
 
 ### Unity バージョン
-- Unity 2021.3.35
-- Unity 2022.3.25
+- 動作確認環境：Unity 2021.3.35、Unity 2022.3.25
+- 推奨：Unity 2021.3.35以上
 
 ### レンダリングパイプライン
 - URP
