@@ -133,7 +133,7 @@ https://github.com/Project-PLATEAU/PLATEAU-SDK-Toolkits-for-Unity/assets/1270699
 **Built-in Rendering Pipelineでは動作しません。**
 
 ## PLATEAU SDKバージョン
-- [PLATEAU SDK for Unity v2.3.2](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity/releases/tag/v2.3.2)以降
+- [PLATEAU SDK for Unity v2.3.2](https://github.com/Project-PLATEAU/PLATEAU-SDK-for-Unity/releases/tag/v2.3.2)以上
     - v2.3.1以前のバージョンを使用する場合、SDK-Toolkitsの一部機能が利用できません。
 
 ## 導入手順
