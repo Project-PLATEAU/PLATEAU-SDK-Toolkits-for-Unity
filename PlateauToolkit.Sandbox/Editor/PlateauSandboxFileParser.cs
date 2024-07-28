@@ -1,10 +1,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
-using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -30,7 +32,32 @@ namespace PlateauToolkit.Sandbox.Editor
                 // for AccessControl.
                 try
                 {
-                    File.GetAccessControl(filePath);
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                    {
+                        File.GetAccessControl(filePath);
+                    }
+                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    {
+                        var process = new Process
+                        {
+                            StartInfo = new ProcessStartInfo
+                            {
+                                FileName = "stat",
+                                Arguments = $"-f %A {filePath}",
+                                RedirectStandardOutput = true,
+                                UseShellExecute = false,
+                                CreateNoWindow = true,
+                            }
+                        };
+                        process.Start();
+                        string result = process.StandardOutput.ReadToEnd();
+                        process.WaitForExit();
+
+                        if (string.IsNullOrWhiteSpace(result))
+                        {
+                            throw new Exception("Failed to get access control information.");
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
@@ -38,7 +65,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     return PlateauSandboxFileParserValidationType.k_AccessControl;
                 }
 
-                // fot File Opened.
+                // for File Opened.
                 try
                 {
                     using FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
