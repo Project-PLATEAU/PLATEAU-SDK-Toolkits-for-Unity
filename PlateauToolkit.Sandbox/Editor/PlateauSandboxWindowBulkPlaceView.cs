@@ -9,6 +9,12 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
+    enum BulkPlaceViewPageIndex
+    {
+        k_FieldSelect = 0,
+        k_AssetSelect = 1,
+    }
+
     class PlateauSandboxWindowBulkPlaceView : IPlateauSandboxWindowView
     {
         PlateauSandboxBulkPlaceHierarchyView m_TreeView;
@@ -16,14 +22,15 @@ namespace PlateauToolkit.Sandbox.Editor
         PlateauSandboxBulkPlaceHierarchyContext m_HierarchyContext;
         SandboxAssetListState<PlateauSandboxProp> m_AssetListState;
         CancellationTokenSource m_Cancellation;
-        bool m_IsReadyApplied;
-
-        bool m_IsClickedAssetPlace;
-        int m_SelectedCategoryId = -1;
         PlateauSandboxFileParserValidationType m_IsValidLoadedFile;
         List<PlateauSandboxBulkPlaceHierarchyItem> m_HierarchyItems = new List<PlateauSandboxBulkPlaceHierarchyItem>();
-        bool m_IsIgnoreHeight;
         PlateauSandboxBulkPlaceDataContext m_DataContext;
+
+        bool m_IsReadyApplied;
+        bool m_IsClickedAssetPlace;
+        int m_SelectedCategoryId = -1;
+        bool m_IsIgnoreHeight;
+        BulkPlaceViewPageIndex m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
 
         public string Name => "アセット一括配置";
 
@@ -72,6 +79,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             m_DataContext.Clear();
                             m_HierarchyItems.Clear();
                             RefreshTracksHierarchy(context);
+                            m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
                         }
                     }
                 }
@@ -143,16 +151,22 @@ namespace PlateauToolkit.Sandbox.Editor
                             break;
                     }
                 }
+
                 if (GUILayout.Button("アセットを配置"))
                 {
-                    PlaceAssets();
+                    if (m_DataContext.HasLoadedFile() && m_HierarchyItems.Any(item => item.PrefabConstantId >= 0))
+                    {
+                        PlaceAssets();
+                    }
                     m_IsClickedAssetPlace = true;
                 }
                 if (!m_DataContext.HasLoadedFile() && m_IsClickedAssetPlace)
                 {
                     EditorGUILayout.HelpBox("shapeファイル、csvファイルを読み込んでください", MessageType.Error);
                 }
-                else if (m_HierarchyItems.Any(item => item.PrefabConstantId < 0))
+                else if (
+                    m_HierarchyItems.All(item => item.PrefabConstantId == -1) &&
+                    m_IsClickedAssetPlace)
                 {
                     EditorGUILayout.HelpBox("プレファブを設定してください", MessageType.Warning);
                 }
@@ -193,6 +207,11 @@ namespace PlateauToolkit.Sandbox.Editor
 
         void OnGUIFieldType(PlateauSandboxContext context, EditorWindow window)
         {
+            if (m_ViewPageIndex != BulkPlaceViewPageIndex.k_FieldSelect)
+            {
+                return;
+            }
+
             if (!m_DataContext.HasLoadedFile())
             {
                 m_IsIgnoreHeight = false;
@@ -200,7 +219,13 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             EditorGUILayout.LabelField("パース対象設定", EditorStyles.boldLabel);
-            m_IsIgnoreHeight = EditorGUILayout.Toggle("ファイルの高さ情報を無視する", m_IsIgnoreHeight);
+
+            float originalValue = EditorGUIUtility.labelWidth;
+            EditorGUIUtility.labelWidth = 180; // Set the label width
+            m_IsIgnoreHeight = m_IsIgnoreHeight = EditorGUILayout.Toggle("ファイルの高さ情報を無視する",
+                                   m_IsIgnoreHeight,
+                                   GUILayout.Width(1000));
+            EditorGUIUtility.labelWidth = originalValue;
 
             EditorGUILayout.LabelField("利用する属性列の選択", EditorStyles.label);
 
@@ -240,10 +265,17 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             EditorGUILayout.EndVertical();
+
+            SetFooterButton(true);
         }
 
         void OnGUIAssetType(PlateauSandboxContext context, EditorWindow window)
         {
+            if (m_ViewPageIndex != BulkPlaceViewPageIndex.k_AssetSelect)
+            {
+                return;
+            }
+
             m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 150));
 
             if (m_AssetListState.IsReady)
@@ -254,6 +286,38 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 EditorGUILayout.HelpBox("アセットを読み込んでいます...", MessageType.Info);
             }
+
+            SetFooterButton(false);
+        }
+
+        void SetFooterButton(bool isNext)
+        {
+            GUILayout.Space(20);
+            EditorGUILayout.BeginHorizontal();
+            if (isNext)
+            {
+                // rightAlignment
+                GUILayout.FlexibleSpace();
+            }
+
+            if (GUILayout.Button(isNext ? "次へ" : "戻る", GUILayout.Width(150)))
+            {
+                if (isNext)
+                {
+                    m_ViewPageIndex++;
+                }
+                else
+                {
+                    m_ViewPageIndex--;
+                }
+            }
+            if (!isNext)
+            {
+                // leftAlignment
+                GUILayout.FlexibleSpace();
+            }
+            EditorGUILayout.EndHorizontal();
+            GUILayout.Space(20);
         }
 
         public void OnUpdate(EditorWindow editorWindow)
@@ -358,7 +422,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             },
                             new MultiColumnHeaderState.Column
                             {
-                                headerContent = new GUIContent("プレファブ名"),
+                                headerContent = new GUIContent("プレハブ名"),
                                 headerTextAlignment = TextAlignment.Center,
                                 canSort = true,
                                 width = 300,
