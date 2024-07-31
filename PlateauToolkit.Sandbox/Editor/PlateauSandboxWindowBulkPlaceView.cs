@@ -290,6 +290,11 @@ namespace PlateauToolkit.Sandbox.Editor
                         .ForEach(asset =>
                         {
                             string categoryName = asset.group.Key;
+                            int maxTextLength = 20; // Truncate if more than 20 characters
+                            categoryName = categoryName.Length > maxTextLength ?
+                                categoryName.Substring(0,  maxTextLength) + "..." :
+                                categoryName;
+
                             int count = asset.group.Item2;
                             m_HierarchyItems.Add(new PlateauSandboxBulkPlaceHierarchyItem()
                             {
@@ -336,7 +341,7 @@ namespace PlateauToolkit.Sandbox.Editor
                                 headerContent = new GUIContent("種別"),
                                 headerTextAlignment = TextAlignment.Center,
                                 canSort = true,
-                                width = 200,
+                                width = 250,
                                 minWidth = 10,
                                 autoResize = true,
                                 allowToggleVisibility = false,
@@ -373,33 +378,31 @@ namespace PlateauToolkit.Sandbox.Editor
 
         void PlaceAssets()
         {
-             // var placement = new PlateauSandboxPrefabPlacement();
-             // foreach (var placeData in m_LoadedData)
-             // {
-             //     foreach (string assetName in placeData.AssetNames)
-             //     {
-             //         var hierarchyItem = m_HierarchyItems.FirstOrDefault(item => item.CategoryName == assetName);
-             //         if (hierarchyItem == null || hierarchyItem.PrefabConstantId < 0)
-             //         {
-             //             continue;
-             //         }
-             //
-             //         var prefab = m_AssetListState.Assets
-             //             .FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == hierarchyItem.PrefabConstantId)?.Asset.gameObject;
-             //         if (prefab == null)
-             //         {
-             //             continue;
-             //         }
-             //
-             //         placement.Place(new PlateauSandboxPrefabPlacement.PlacementContext()
-             //         {
-             //             m_Latitude = placeData.Latitude,
-             //             m_Longitude = placeData.Longitude,
-             //             m_Height = placeData.Height,
-             //             m_Prefab = prefab,
-             //         });
-             //     }
-             // }
+            var placement = new PlateauSandboxPrefabPlacement();
+            foreach (var placeData in m_DataContext.Datas)
+            {
+                var hierarchyItem = m_HierarchyItems.FirstOrDefault(item => item.CategoryName == placeData.AssetType);
+                if (hierarchyItem == null || hierarchyItem.PrefabConstantId < 0)
+                {
+                    continue;
+                }
+
+                var prefab = m_AssetListState.Assets
+                    .FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == hierarchyItem.PrefabConstantId)?.Asset.gameObject;
+                if (prefab == null)
+                {
+                    continue;
+                }
+
+                placement.Place(new PlateauSandboxPrefabPlacement.PlacementContext()
+                {
+                    m_Latitude = float.Parse(placeData.Latitude),
+                    m_Longitude = float.Parse(placeData.Longitude),
+                    m_Height = float.Parse(placeData.Height),
+                    m_Prefab = prefab,
+                });
+            }
+
 
         }
 
