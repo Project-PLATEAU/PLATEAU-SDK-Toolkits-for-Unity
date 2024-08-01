@@ -128,7 +128,6 @@ namespace PlateauToolkit.Sandbox.Editor
 
         private void OnItemClicked(PlateauSandboxBulkPlaceHierarchyItem item)
         {
-            Debug.Log("Item clicked: " + item.CategoryName);
             item.OnClicked?.Invoke();
         }
     }

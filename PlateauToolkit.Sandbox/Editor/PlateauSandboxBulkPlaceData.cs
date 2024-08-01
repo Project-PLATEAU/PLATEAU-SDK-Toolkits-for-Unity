@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace PlateauToolkit.Sandbox.Editor
@@ -171,9 +172,9 @@ namespace PlateauToolkit.Sandbox.Editor
         public PlateauSandboxBulkPlaceShapeData(int index, IShape shape, string[] fieldNames, string[] fieldValues)
         {
             Id = index;
-            Longitude = shape.Points[0].x.ToString();
-            Latitude = shape.Points[0].z.ToString();
-            Height = shape.Points[0].y.ToString();
+            Longitude = shape.Points[0].x.ToString("G20");  // G20 is To maintain precision.
+            Latitude = shape.Points[0].z.ToString("G20");
+            Height = shape.Points[0].y.ToString("G20");
 
             for (int i = 0; i < fieldNames.Length; i++)
             {

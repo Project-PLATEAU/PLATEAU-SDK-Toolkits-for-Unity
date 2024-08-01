@@ -15,10 +15,19 @@ namespace PlateauToolkit.Sandbox.Editor
             public GameObject m_Prefab;
         }
 
+        PLATEAUInstancedCityModel m_CityModel;
+
+        public PlateauSandboxPrefabPlacement()
+        {
+            m_CityModel = UnityEngine.Object.FindObjectOfType<PLATEAUInstancedCityModel>();
+            if (m_CityModel == null)
+            {
+                Debug.LogError("CityModel is not found.");
+            }
+        }
+
         public void Place(PlacementContext context)
         {
-            var cityModel = UnityEngine.Object.FindObjectOfType<PLATEAUInstancedCityModel>();
-
             GameObject prefab = context.m_Prefab;
             if (prefab == null)
             {
@@ -29,10 +38,15 @@ namespace PlateauToolkit.Sandbox.Editor
             var gameObject = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
 
             gameObject.name = gameObjectName;
-            PlateauVector3d position = cityModel.GeoReference.Project(new GeoCoordinate(context.m_Latitude, context.m_Longitude, context.m_Height));
+            PlateauVector3d position = m_CityModel.GeoReference.Project(new GeoCoordinate(context.m_Latitude, context.m_Longitude, context.m_Height));
             gameObject.transform.position = new Vector3((float)position.X, (float)position.Y, (float)position.Z);
 
-            Debug.Log($"Asset Place. {gameObjectName} at {position}");
+            Debug.Log($"Asset Place. {gameObjectName} at {gameObject.transform.position.ToString()}");
+        }
+
+        public bool IsValid()
+        {
+            return m_CityModel != null;
         }
     }
 }

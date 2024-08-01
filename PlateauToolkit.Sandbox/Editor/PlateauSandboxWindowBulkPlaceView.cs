@@ -31,6 +31,7 @@ namespace PlateauToolkit.Sandbox.Editor
         int m_SelectedCategoryId = -1;
         bool m_IsIgnoreHeight;
         BulkPlaceViewPageIndex m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
+        bool m_IsValidPlaceAsset = true;
 
         public string Name => "アセット一括配置";
 
@@ -160,15 +161,23 @@ namespace PlateauToolkit.Sandbox.Editor
                     }
                     m_IsClickedAssetPlace = true;
                 }
-                if (!m_DataContext.HasLoadedFile() && m_IsClickedAssetPlace)
+
+                if (m_IsClickedAssetPlace)
                 {
-                    EditorGUILayout.HelpBox("shapeファイル、csvファイルを読み込んでください", MessageType.Error);
-                }
-                else if (
-                    m_HierarchyItems.All(item => item.PrefabConstantId == -1) &&
-                    m_IsClickedAssetPlace)
-                {
-                    EditorGUILayout.HelpBox("プレファブを設定してください", MessageType.Warning);
+                    if (!m_DataContext.HasLoadedFile())
+                    {
+                        EditorGUILayout.HelpBox("shapeファイル、csvファイルを読み込んでください", MessageType.Error);
+                    }
+
+                    if (m_HierarchyItems.All(item => item.PrefabConstantId == -1))
+                    {
+                        EditorGUILayout.HelpBox("プレファブを設定してください", MessageType.Warning);
+                    }
+
+                    if (!m_IsValidPlaceAsset)
+                    {
+                        EditorGUILayout.HelpBox("該当地区のデータをロードしてください", MessageType.Warning);
+                    }
                 }
 
                 if (GUILayout.Button("CSVテンプレートの生成"))
@@ -443,6 +452,12 @@ namespace PlateauToolkit.Sandbox.Editor
         void PlaceAssets()
         {
             var placement = new PlateauSandboxPrefabPlacement();
+            m_IsValidPlaceAsset = placement.IsValid();
+            if (!m_IsValidPlaceAsset)
+            {
+                return;
+            }
+
             foreach (var placeData in m_DataContext.Datas)
             {
                 var hierarchyItem = m_HierarchyItems.FirstOrDefault(item => item.CategoryName == placeData.AssetType);
