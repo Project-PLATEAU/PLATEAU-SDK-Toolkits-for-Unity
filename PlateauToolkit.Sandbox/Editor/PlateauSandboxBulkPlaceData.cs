@@ -70,8 +70,11 @@ namespace PlateauToolkit.Sandbox.Editor
         public string Longitude { get; protected set; }
         public string Latitude { get; protected set; }
         public string Height { get; protected set; }
-        public string AssetType { get; protected set; }
-
+        protected string m_AssetType;
+        public string AssetType
+        {
+            get => m_AssetType.Length > 20 ? m_AssetType.Substring(0, 20) + "..." : m_AssetType;
+        }
         public abstract void ReplaceField(int oldFieldIndex, int newFieldIndex);
         public abstract List<string> GetFieldLabels();
     }
@@ -86,7 +89,7 @@ namespace PlateauToolkit.Sandbox.Editor
             Longitude = csvData[0];
             Latitude = csvData[1];
             Height = csvData[2];
-            AssetType = csvData[3];
+            m_AssetType = csvData[3];
 
             m_FieldNames = fieldNames.ToList();
         }
@@ -124,7 +127,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     Height = GetFieldValue(newFieldIndex);
                     break;
                 case (int)PlateauSandboxBulkPlaceCategory.k_AssetType:
-                    AssetType = GetFieldValue(newFieldIndex);
+                    m_AssetType = GetFieldValue(newFieldIndex);
                     break;
             }
 
@@ -140,7 +143,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     Height = oldValue;
                     break;
                 case (int)PlateauSandboxBulkPlaceCategory.k_AssetType:
-                    AssetType = oldValue;
+                    m_AssetType = oldValue;
                     break;
             }
 
@@ -191,7 +194,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     return PlateauSandboxFileShapeFileParser.k_AssetTypePatterns
                         .Any(pattern => field.m_FieldName == pattern);
                 });
-            AssetType = assetField.m_FieldValue;
+            m_AssetType = assetField.m_FieldValue;
 
             // Move AssetType to the top.
             m_Fields.Remove(assetField);
@@ -211,7 +214,7 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 return;
             }
-            AssetType = m_Fields[newFieldIndex].m_FieldValue;
+            m_AssetType = m_Fields[newFieldIndex].m_FieldValue;
         }
     }
 }

@@ -363,11 +363,6 @@ namespace PlateauToolkit.Sandbox.Editor
                         .ForEach(asset =>
                         {
                             string categoryName = asset.group.Key;
-                            int maxTextLength = 20; // Truncate if more than 20 characters
-                            categoryName = categoryName.Length > maxTextLength ?
-                                categoryName.Substring(0,  maxTextLength) + "..." :
-                                categoryName;
-
                             int count = asset.group.Item2;
                             m_HierarchyItems.Add(new PlateauSandboxBulkPlaceHierarchyItem()
                             {
@@ -475,10 +470,11 @@ namespace PlateauToolkit.Sandbox.Editor
 
                 placement.Place(new PlateauSandboxPrefabPlacement.PlacementContext()
                 {
-                    m_Latitude = float.Parse(placeData.Latitude),
-                    m_Longitude = float.Parse(placeData.Longitude),
-                    m_Height = float.Parse(placeData.Height),
+                    m_Latitude = double.Parse(placeData.Latitude),
+                    m_Longitude = double.Parse(placeData.Longitude),
+                    m_Height = m_IsIgnoreHeight ? 0 : double.Parse(placeData.Height),
                     m_Prefab = prefab,
+                    m_AssetType = placeData.AssetType
                 });
             }
 
