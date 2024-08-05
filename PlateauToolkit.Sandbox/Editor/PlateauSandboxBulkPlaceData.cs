@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -174,10 +176,9 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public PlateauSandboxBulkPlaceShapeData(int index, IShape shape, string[] fieldNames, string[] fieldValues)
         {
-            Id = index;
-            Longitude = shape.Points[0].x.ToString("G20");  // G20 is To maintain precision.
-            Latitude = shape.Points[0].z.ToString("G20");
-            Height = shape.Points[0].y.ToString("G20");
+            Longitude = shape.Points[0].x.ToString();
+            Latitude = shape.Points[0].z.ToString();
+            Height = shape.Points[0].y.ToString();
 
             for (int i = 0; i < fieldNames.Length; i++)
             {
@@ -188,6 +189,30 @@ namespace PlateauToolkit.Sandbox.Editor
                     m_FieldValue = string.IsNullOrEmpty(fieldValue) ? "指定なし" : fieldValue,
                 });
             }
+
+            // Find ObjectId field.
+            foreach (DbfField dbfField in m_Fields)
+            {
+                if (PlateauSandboxFileShapeFileParser.k_ObjectIdPatterns
+                    .Any(pattern => pattern == dbfField.m_FieldName))
+                {
+                    try
+                    {
+                        Id = int.Parse(dbfField.m_FieldValue);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogWarning($"parse error: {dbfField.m_FieldValue}, {e.Message}");
+                    }
+                    break;
+                }
+            }
+            if (Id <= 0)
+            {
+                Id = index;
+            }
+
+            // Find AssetType field.
             DbfField assetField = m_Fields
                 .FirstOrDefault(field =>
                 {

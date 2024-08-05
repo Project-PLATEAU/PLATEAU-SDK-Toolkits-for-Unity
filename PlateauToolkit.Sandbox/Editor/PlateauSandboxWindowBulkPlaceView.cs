@@ -31,7 +31,8 @@ namespace PlateauToolkit.Sandbox.Editor
         int m_SelectedCategoryId = -1;
         bool m_IsIgnoreHeight;
         BulkPlaceViewPageIndex m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
-        bool m_IsValidPlaceAsset = true;
+        PlateauSandboxPrefabPlacement m_PrefabPlacement;
+
 
         public string Name => "アセット一括配置";
 
@@ -153,13 +154,27 @@ namespace PlateauToolkit.Sandbox.Editor
                     }
                 }
 
-                if (GUILayout.Button("アセットを配置"))
+                if (m_PrefabPlacement != null && m_PrefabPlacement.PlacingCount > 0)
                 {
-                    if (m_DataContext.HasLoadedFile() && m_HierarchyItems.Any(item => item.PrefabConstantId >= 0))
+                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
                     {
-                        PlaceAssets();
+                        if (GUILayout.Button("アセットを配置中です..."))
+                        {
+                            m_PrefabPlacement?.StopPlace();
+                            Debug.Log("アセットの一括配置を停止しました");
+                        }
                     }
-                    m_IsClickedAssetPlace = true;
+                }
+                else
+                {
+                    if (GUILayout.Button("アセットを配置"))
+                    {
+                        if (m_DataContext.HasLoadedFile() && m_HierarchyItems.Any(item => item.PrefabConstantId >= 0))
+                        {
+                            PlaceAssets();
+                        }
+                        m_IsClickedAssetPlace = true;
+                    }
                 }
 
                 if (m_IsClickedAssetPlace)
@@ -174,7 +189,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         EditorGUILayout.HelpBox("プレファブを設定してください", MessageType.Warning);
                     }
 
-                    if (!m_IsValidPlaceAsset)
+                    if (m_PrefabPlacement != null && !m_PrefabPlacement.IsValidCityModel())
                     {
                         EditorGUILayout.HelpBox("該当地区のデータをロードしてください", MessageType.Warning);
                     }
@@ -444,11 +459,10 @@ namespace PlateauToolkit.Sandbox.Editor
             m_TreeView.Reload();
         }
 
-        void PlaceAssets()
+        async void PlaceAssets()
         {
-            var placement = new PlateauSandboxPrefabPlacement();
-            m_IsValidPlaceAsset = placement.IsValid();
-            if (!m_IsValidPlaceAsset)
+            m_PrefabPlacement = new PlateauSandboxPrefabPlacement();
+            if (!m_PrefabPlacement.IsValidCityModel())
             {
                 return;
             }
@@ -468,17 +482,22 @@ namespace PlateauToolkit.Sandbox.Editor
                     continue;
                 }
 
-                placement.Place(new PlateauSandboxPrefabPlacement.PlacementContext()
+                var context = new PlateauSandboxPrefabPlacement.PlacementContext()
                 {
                     m_Latitude = double.Parse(placeData.Latitude),
                     m_Longitude = double.Parse(placeData.Longitude),
                     m_Height = m_IsIgnoreHeight ? 0 : double.Parse(placeData.Height),
                     m_Prefab = prefab,
-                    m_AssetType = placeData.AssetType
-                });
+                    m_AssetType = placeData.AssetType,
+                    m_ObjectId = placeData.Id.ToString(),
+                };
+
+                m_PrefabPlacement.AddContext(context);
             }
 
+            Debug.Log($"アセットの一括配置を開始しました。{m_PrefabPlacement.PlacingCount}個の配置");
 
+            m_PrefabPlacement.PlaceAll();
         }
 
         public void OnEnd(PlateauSandboxContext context)
@@ -491,6 +510,12 @@ namespace PlateauToolkit.Sandbox.Editor
 
             m_AssetListState.Dispose();
             m_AssetListState = null;
+
+            m_IsClickedAssetPlace = false;
+            m_SelectedCategoryId = -1;
+            m_IsIgnoreHeight = false;
+            m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
+            m_PrefabPlacement = null;
         }
     }
 }

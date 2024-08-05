@@ -68,7 +68,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 // for File Opened.
                 try
                 {
-                    using FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                    using FileStream stream = File.Open(filePath, FileMode.Open, FileAccess.Read, FileShare.None);
                     stream.Close();
                 }
                 catch (Exception e)
@@ -164,6 +164,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
     public class PlateauSandboxFileShapeFileParser : PlateauSandboxFileParserBase
     {
+        public static readonly string[] k_ObjectIdPatterns = {"OBJECTID"};
         public static readonly string[] k_AssetTypePatterns = {"JUSHUMEI", "ASSET_TYPE"};
 
         private string GetDbfFilePath(string filePath) => filePath.Replace(PlateauSandboxBulkPlaceDataBase.k_ShapeFileExtension, PlateauSandboxBulkPlaceDataBase.k_DbfFileExtension);
@@ -202,9 +203,11 @@ namespace PlateauToolkit.Sandbox.Editor
                 for (int i = 0; i < listOfShapes.Count; i++)
                 {
                     DbfRecord record = dbfReader.ReadNextRecord();
-
                     var data = new PlateauSandboxBulkPlaceShapeData(
-                        i, listOfShapes[i], dbfReader.GetFieldNames().ToArray(), record.Fields);
+                        i,
+                        listOfShapes[i],
+                        dbfReader.GetFieldNames().ToArray(),
+                        record.Fields);
                     shapeFileData.Add(data);
 
                     Debug.Log($"ShapeData: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {data.AssetType}");
