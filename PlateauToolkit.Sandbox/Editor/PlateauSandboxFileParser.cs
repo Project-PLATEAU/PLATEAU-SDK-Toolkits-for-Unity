@@ -135,8 +135,8 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     string[] titleLine = new string[]
                     {
-                        PlateauSandboxBulkPlaceCategory.k_Longitude.Label(),
                         PlateauSandboxBulkPlaceCategory.k_Latitude.Label(),
+                        PlateauSandboxBulkPlaceCategory.k_Longitude.Label(),
                         PlateauSandboxBulkPlaceCategory.k_Height.Label(),
                         PlateauSandboxBulkPlaceCategory.k_AssetType.Label(),
                     };
@@ -145,8 +145,8 @@ namespace PlateauToolkit.Sandbox.Editor
                     {
                         string[] line = new string[]
                         {
-                            bulkPlaceData.Longitude,
                             bulkPlaceData.Latitude,
+                            bulkPlaceData.Longitude,
                             bulkPlaceData.Height,
                             bulkPlaceData.AssetType,
                         };
