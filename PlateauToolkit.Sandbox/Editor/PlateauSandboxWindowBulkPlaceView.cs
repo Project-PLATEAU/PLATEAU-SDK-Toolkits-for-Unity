@@ -23,7 +23,7 @@ namespace PlateauToolkit.Sandbox.Editor
         SandboxAssetListState<PlateauSandboxProp> m_AssetListState;
         CancellationTokenSource m_Cancellation;
         PlateauSandboxFileParserValidationType m_IsValidLoadedFile;
-        List<PlateauSandboxBulkPlaceHierarchyItem> m_HierarchyItems = new List<PlateauSandboxBulkPlaceHierarchyItem>();
+        List<PlateauSandboxBulkPlaceHierarchyItem> m_HierarchyItem = new List<PlateauSandboxBulkPlaceHierarchyItem>();
         PlateauSandboxBulkPlaceDataContext m_DataContext;
 
         bool m_IsReadyApplied;
@@ -44,14 +44,28 @@ namespace PlateauToolkit.Sandbox.Editor
 
             _ = m_AssetListState.PrepareAsync(m_Cancellation.Token);
 
+            // Event For Asset List Item Clicked.
             context.OnSelectedObjectChanged.AddListener((selectedObject) =>
             {
-                if (m_SelectedCategoryId < 0 || m_HierarchyItems.Count == 0)
+                PlateauSandboxBulkPlaceHierarchyItem selectItem = m_HierarchyItem
+                    .FirstOrDefault(item => item.Id == m_SelectedCategoryId);
+                if (selectItem == null)
                 {
                     return;
                 }
-                m_HierarchyItems[m_SelectedCategoryId].PrefabName = selectedObject.name;
-                m_HierarchyItems[m_SelectedCategoryId].PrefabConstantId = selectedObject.GetInstanceID();
+
+                if (selectedObject == null && m_SelectedCategoryId >= 0)
+                {
+                    // Unselect the object
+                    selectItem.PrefabConstantId = -1;
+                    selectItem.PrefabName = string.Empty;
+                    m_SelectedCategoryId = -1;
+                }
+                else
+                {
+                    selectItem.PrefabName = selectedObject.name;
+                    selectItem.PrefabConstantId = selectedObject.GetInstanceID();
+                }
 
                 RefreshTracksHierarchy(context);
             });
@@ -61,12 +75,12 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)
         {
-            OnGUITool(context, window);
-            OnGUIFieldType(context, window);
+            OnGUITool(context);
+            OnGUIFieldType(context);
             OnGUIAssetType(context, window);
         }
 
-        void OnGUITool(PlateauSandboxContext context, EditorWindow window)
+        void OnGUITool(PlateauSandboxContext context)
         {
             EditorGUILayout.LabelField("ツール", EditorStyles.boldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
@@ -79,7 +93,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         {
                             m_IsClickedAssetPlace = false;
                             m_DataContext.Clear();
-                            m_HierarchyItems.Clear();
+                            m_HierarchyItem.Clear();
                             RefreshTracksHierarchy(context);
                             m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
                         }
@@ -101,7 +115,7 @@ namespace PlateauToolkit.Sandbox.Editor
                                     m_IsValidLoadedFile = parser.IsValidate(filePath);
                                     if (m_IsValidLoadedFile == PlateauSandboxFileParserValidationType.k_Valid)
                                     {
-                                        var parsedData = parser.Load(filePath);
+                                        List<PlateauSandboxBulkPlaceDataBase> parsedData = parser.Load(filePath);
                                         if (parsedData.Count > 0)
                                         {
                                             m_DataContext.SetAllData(parsedData);
@@ -119,7 +133,7 @@ namespace PlateauToolkit.Sandbox.Editor
                                     m_IsValidLoadedFile = parser.IsValidate(filePath);
                                     if (m_IsValidLoadedFile == PlateauSandboxFileParserValidationType.k_Valid)
                                     {
-                                        var parsedData = parser.Load(filePath);
+                                        List<PlateauSandboxBulkPlaceDataBase> parsedData = parser.Load(filePath);
                                         if (parsedData.Count > 0)
                                         {
                                             m_DataContext.SetAllData(parsedData);
@@ -154,13 +168,14 @@ namespace PlateauToolkit.Sandbox.Editor
                     }
                 }
 
-                if (m_PrefabPlacement != null && m_PrefabPlacement.PlacingCount > 0)
+                if (m_PrefabPlacement is {PlacingCount: > 0})
                 {
                     using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
                     {
                         if (GUILayout.Button("アセットを配置中です..."))
                         {
-                            m_PrefabPlacement?.StopPlace();
+                            m_Cancellation.Cancel();
+                            m_PrefabPlacement.StopPlace();
                             Debug.Log("アセットの一括配置を停止しました");
                         }
                     }
@@ -169,7 +184,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     if (GUILayout.Button("アセットを配置"))
                     {
-                        if (m_DataContext.HasLoadedFile() && m_HierarchyItems.Any(item => item.PrefabConstantId >= 0))
+                        if (m_DataContext.HasLoadedFile() && m_HierarchyItem.Any(item => item.PrefabConstantId >= 0))
                         {
                             PlaceAssets();
                         }
@@ -184,7 +199,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         EditorGUILayout.HelpBox("shapeファイル、csvファイルを読み込んでください", MessageType.Error);
                     }
 
-                    if (m_HierarchyItems.All(item => item.PrefabConstantId == -1))
+                    if (m_HierarchyItem.All(item => item.PrefabConstantId == -1))
                     {
                         EditorGUILayout.HelpBox("プレファブを設定してください", MessageType.Warning);
                     }
@@ -229,7 +244,7 @@ namespace PlateauToolkit.Sandbox.Editor
             }
         }
 
-        void OnGUIFieldType(PlateauSandboxContext context, EditorWindow window)
+        void OnGUIFieldType(PlateauSandboxContext context)
         {
             if (m_ViewPageIndex != BulkPlaceViewPageIndex.k_FieldSelect)
             {
@@ -264,7 +279,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     if (selectIndex != labelIndex)
                     {
                         m_DataContext.ReplaceField(labelIndex, selectIndex);
-                        m_HierarchyItems.Clear();
+                        m_HierarchyItem.Clear();
                         RefreshTracksHierarchy(context);
                     }
                     GUILayout.FlexibleSpace();
@@ -366,11 +381,11 @@ namespace PlateauToolkit.Sandbox.Editor
                 Debug.Assert(m_TreeView != null);
             }
 
-            if (m_HierarchyItems.Count == 0)
+            if (m_HierarchyItem.Count == 0)
             {
                 if (m_DataContext.HasLoadedFile())
                 {
-                    m_DataContext.Datas
+                    m_DataContext.Data
                         .GroupBy(data => data.AssetType)
                         .Select(group => (group.Key, group.Count()))
                         .Select((group, index) => (group, index))
@@ -379,7 +394,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         {
                             string categoryName = asset.group.Key;
                             int count = asset.group.Item2;
-                            m_HierarchyItems.Add(new PlateauSandboxBulkPlaceHierarchyItem()
+                            m_HierarchyItem.Add(new PlateauSandboxBulkPlaceHierarchyItem()
                             {
                                 Id = asset.index,
                                 CategoryName = string.IsNullOrEmpty(categoryName) ? "指定なし" : categoryName,
@@ -388,14 +403,14 @@ namespace PlateauToolkit.Sandbox.Editor
                         });
                 }
 
-                foreach (var item in m_HierarchyItems)
+                foreach (PlateauSandboxBulkPlaceHierarchyItem item in m_HierarchyItem)
                 {
                     item.OnClicked.AddListener(() =>
                     {
                         m_SelectedCategoryId = item.Id;
                         if (item.PrefabConstantId > 0)
                         {
-                            var selectedPrefab = m_AssetListState.Assets.FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == item.PrefabConstantId);
+                            SandboxAsset<PlateauSandboxProp> selectedPrefab = m_AssetListState.Assets.FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == item.PrefabConstantId);
                             if (selectedPrefab != null)
                             {
                                 context.SelectPlaceableObject(selectedPrefab.Asset.gameObject);
@@ -405,7 +420,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            m_HierarchyContext.Hierarchy.Items = m_HierarchyItems.ToArray();
+            m_HierarchyContext.Hierarchy.Items = m_HierarchyItem.ToArray();
             m_TreeView.Reload();
         }
 
@@ -459,7 +474,7 @@ namespace PlateauToolkit.Sandbox.Editor
             m_TreeView.Reload();
         }
 
-        async void PlaceAssets()
+        void PlaceAssets()
         {
             m_PrefabPlacement = new PlateauSandboxPrefabPlacement();
             if (!m_PrefabPlacement.IsValidCityModel())
@@ -467,15 +482,15 @@ namespace PlateauToolkit.Sandbox.Editor
                 return;
             }
 
-            foreach (var placeData in m_DataContext.Datas)
+            foreach (PlateauSandboxBulkPlaceDataBase placeData in m_DataContext.Data)
             {
-                var hierarchyItem = m_HierarchyItems.FirstOrDefault(item => item.CategoryName == placeData.AssetType);
+                PlateauSandboxBulkPlaceHierarchyItem hierarchyItem = m_HierarchyItem.FirstOrDefault(item => item.CategoryName == placeData.AssetType);
                 if (hierarchyItem == null || hierarchyItem.PrefabConstantId < 0)
                 {
                     continue;
                 }
 
-                var prefab = m_AssetListState.Assets
+                GameObject prefab = m_AssetListState.Assets
                     .FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == hierarchyItem.PrefabConstantId)?.Asset.gameObject;
                 if (prefab == null)
                 {
@@ -497,7 +512,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
             Debug.Log($"アセットの一括配置を開始しました。{m_PrefabPlacement.PlacingCount}個の配置");
 
-            m_PrefabPlacement.PlaceAll();
+            m_PrefabPlacement.PlaceAllAsync(m_Cancellation.Token);
         }
 
         public void OnEnd(PlateauSandboxContext context)

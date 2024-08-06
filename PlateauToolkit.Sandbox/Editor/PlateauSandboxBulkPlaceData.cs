@@ -73,10 +73,8 @@ namespace PlateauToolkit.Sandbox.Editor
         public string Latitude { get; protected set; }
         public string Height { get; protected set; }
         protected string m_AssetType;
-        public string AssetType
-        {
-            get => m_AssetType.Length > 20 ? m_AssetType.Substring(0, 20) + "..." : m_AssetType;
-        }
+        public string AssetType =>
+            m_AssetType.Length > 20 ? m_AssetType.Substring(0, 20) + "..." : m_AssetType;
         public abstract void ReplaceField(int oldFieldIndex, int newFieldIndex);
         public abstract List<string> GetFieldLabels();
     }
@@ -173,12 +171,11 @@ namespace PlateauToolkit.Sandbox.Editor
         }
 
         List<DbfField> m_Fields = new List<DbfField>();
-
         public PlateauSandboxBulkPlaceShapeData(int index, IShape shape, string[] fieldNames, string[] fieldValues)
         {
-            Longitude = shape.Points[0].x.ToString();
-            Latitude = shape.Points[0].z.ToString();
-            Height = shape.Points[0].y.ToString();
+            Longitude = shape.Points[0].x.ToString(CultureInfo.CurrentCulture);
+            Latitude = shape.Points[0].z.ToString(CultureInfo.CurrentCulture);
+            Height = shape.Points[0].y.ToString(CultureInfo.CurrentCulture);
 
             for (int i = 0; i < fieldNames.Length; i++)
             {

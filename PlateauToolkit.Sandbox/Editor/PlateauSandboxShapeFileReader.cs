@@ -9,13 +9,13 @@ namespace PlateauToolkit.Sandbox.Editor
     public class PlateauSandboxShapeFileReader : IDisposable
     {
         BinaryReader m_ShpReader;
-        string m_ShpPath;
+        readonly string m_ShpPath;
 
         enum ShapeType
         {
-            Polygon = 5,
-            Polyline = 3,
-            Point = 1
+            k_Polygon = 5,
+            k_Polyline = 3,
+            k_Point = 1
         }
         public int ShapeConstants => m_ShapeType;
         int m_ShapeType;
@@ -27,28 +27,28 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public List<IShape> ReadShapes()
         {
-            using (FileStream fileStream = new FileStream(m_ShpPath, FileMode.Open))
+            using (var fileStream = new FileStream(m_ShpPath, FileMode.Open))
             {
                 m_ShpReader = new BinaryReader(fileStream);
                 ReadHeader();
-                List<IShape> shapes = new List<IShape>();
+                var shapes = new List<IShape>();
 
                 while (m_ShpReader.BaseStream.Position < m_ShpReader.BaseStream.Length)
                 {
-                    m_ShpReader.ReadInt32BE(); // Record number
-                    m_ShpReader.ReadInt32BE(); // Content length
+                    m_ShpReader.ReadInt32Be(); // Record number
+                    m_ShpReader.ReadInt32Be(); // Content length
 
                     m_ShapeType = m_ShpReader.ReadInt32();
 
-                    if (m_ShapeType == (int)ShapeType.Polygon) // Cast to int since m_ShapeType is likely an int
+                    if (m_ShapeType == (int)ShapeType.k_Polygon) // Cast to int since m_ShapeType is likely an int
                     {
                         shapes.Add(ReadPolygonShape());
                     }
-                    else if (m_ShapeType == (int)ShapeType.Polyline)
+                    else if (m_ShapeType == (int)ShapeType.k_Polyline)
                     {
                         shapes.Add(ReadPolylineShape());
                     }
-                    else if (m_ShapeType == (int)ShapeType.Point)
+                    else if (m_ShapeType == (int)ShapeType.k_Point)
                     {
                         shapes.Add(ReadPointShape());
                     }
@@ -65,9 +65,9 @@ namespace PlateauToolkit.Sandbox.Editor
         void ReadHeader()
         {
             m_ShpReader.BaseStream.Seek(0, SeekOrigin.Begin);
-            m_ShpReader.ReadInt32BE(); // File code
+            m_ShpReader.ReadInt32Be(); // File code
             m_ShpReader.ReadBytes(20); // Skip 20 bytes
-            m_ShpReader.ReadInt32BE(); // File length
+            m_ShpReader.ReadInt32Be(); // File length
             m_ShpReader.ReadInt32();   // Version
             m_ShpReader.ReadInt32();   // Shape type
             m_ShpReader.ReadDouble();  // X min
@@ -81,7 +81,7 @@ namespace PlateauToolkit.Sandbox.Editor
         }
         PolylineShape ReadPolylineShape()
         {
-            PolylineShape shape = new PolylineShape();
+            var shape = new PolylineShape();
             m_ShpReader.ReadBytes(32); // Bounding box (X min, Y min, X max, Y max)
 
             int numParts = m_ShpReader.ReadInt32();
@@ -119,7 +119,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         PolygonShape ReadPolygonShape()
         {
-            PolygonShape shape = new PolygonShape();
+            var shape = new PolygonShape();
             m_ShpReader.ReadBytes(32); // Bounding box (X min, Y min, X max, Y max)
 
             int numParts = m_ShpReader.ReadInt32();
@@ -182,7 +182,7 @@ namespace PlateauToolkit.Sandbox.Editor
         // For a PointShape, we'll only ever have one point, but we're
         // implementing the IShape interface which requires a list.
         public List<Vector3> Points { get; } = new List<Vector3>();
-        public List<int> Parts { get; } = new List<int>(); // Points do not have parts but we include this for interface compliance.
+        public List<int> Parts { get; } = new List<int>(); // Points do not have parts But we include this for interface compliance.
 
         public PointShape(Vector3 point)
         {
@@ -192,11 +192,11 @@ namespace PlateauToolkit.Sandbox.Editor
 
     public static class BinaryReaderExtensions
     {
-        public static int ReadInt32BE(this BinaryReader reader)
+        public static int ReadInt32Be(this BinaryReader reader)
         {
             byte[] bytes = reader.ReadBytes(4);
-            System.Array.Reverse(bytes);
-            return System.BitConverter.ToInt32(bytes, 0);
+            Array.Reverse(bytes);
+            return BitConverter.ToInt32(bytes, 0);
         }
     }
 

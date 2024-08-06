@@ -31,9 +31,9 @@ namespace PlateauToolkit.Sandbox.Editor
             }
         }
 
-        BulkPlaceFile m_LoadedFile = new BulkPlaceFile();
-        public List<PlateauSandboxBulkPlaceDataBase> Datas { get; private set; } = new List<PlateauSandboxBulkPlaceDataBase>();
-        int m_SelectedFieldIndex = 0;
+        BulkPlaceFile m_LoadedFile;
+        public List<PlateauSandboxBulkPlaceDataBase> Data { get; private set; } = new List<PlateauSandboxBulkPlaceDataBase>();
+        int m_SelectedFieldIndex;
 
         public bool HasLoadedFile()
         {
@@ -59,14 +59,14 @@ namespace PlateauToolkit.Sandbox.Editor
             m_LoadedFile.SetFilePath(filePath);
         }
 
-        public void SetAllData(List<PlateauSandboxBulkPlaceDataBase> datas)
+        public void SetAllData(List<PlateauSandboxBulkPlaceDataBase> data)
         {
-            Datas = datas;
+            Data = data;
         }
 
         public void Clear()
         {
-            Datas.Clear();
+            Data.Clear();
             m_LoadedFile.Clear();
             m_SelectedFieldIndex = 0;
         }
@@ -85,13 +85,13 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public string[] GetFieldLabels()
         {
-            return Datas.FirstOrDefault()?.GetFieldLabels().ToArray() ?? null;
+            return Data.FirstOrDefault()?.GetFieldLabels().ToArray();
         }
 
         public void ReplaceField(int oldFieldIndex, int newFieldIndex)
         {
             m_SelectedFieldIndex = newFieldIndex;
-            Datas.ForEach(data => data.ReplaceField(oldFieldIndex, newFieldIndex));
+            Data.ForEach(data => data.ReplaceField(oldFieldIndex, newFieldIndex));
         }
     }
 }

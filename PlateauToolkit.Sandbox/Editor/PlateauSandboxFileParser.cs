@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -116,6 +115,8 @@ namespace PlateauToolkit.Sandbox.Editor
                         string[] values = line.Split(',');
                         var data = new PlateauSandboxBulkPlaceCsvData(index, values, fieldLabels);
                         csvData.Add(data);
+
+                        Debug.Log($"CSVファイル読み込み: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {data.AssetType}");
                     }
                 }
             }
@@ -126,7 +127,7 @@ namespace PlateauToolkit.Sandbox.Editor
             return csvData;
         }
 
-        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceDataBase> templateDatas)
+        public override bool Save(string filePath, List<PlateauSandboxBulkPlaceDataBase> templateData)
         {
             try
             {
@@ -140,13 +141,13 @@ namespace PlateauToolkit.Sandbox.Editor
                         PlateauSandboxBulkPlaceCategory.k_AssetType.Label(),
                     };
                     writer.WriteLine(string.Join(",", titleLine));
-                    foreach (var bulkPlaceData in templateDatas)
+                    foreach (PlateauSandboxBulkPlaceDataBase bulkPlaceData in templateData)
                     {
                         string[] line = new string[]
                         {
-                            bulkPlaceData.Longitude.ToString(),
-                            bulkPlaceData.Latitude.ToString(),
-                            bulkPlaceData.Height.ToString(),
+                            bulkPlaceData.Longitude,
+                            bulkPlaceData.Latitude,
+                            bulkPlaceData.Height,
                             bulkPlaceData.AssetType,
                         };
                         writer.WriteLine(string.Join(",", line));
@@ -167,7 +168,9 @@ namespace PlateauToolkit.Sandbox.Editor
         public static readonly string[] k_ObjectIdPatterns = {"OBJECTID"};
         public static readonly string[] k_AssetTypePatterns = {"JUSHUMEI", "ASSET_TYPE"};
 
-        private string GetDbfFilePath(string filePath) => filePath.Replace(PlateauSandboxBulkPlaceDataBase.k_ShapeFileExtension, PlateauSandboxBulkPlaceDataBase.k_DbfFileExtension);
+        private string GetDbfFilePath(string filePath) => filePath.Replace(
+            PlateauSandboxBulkPlaceDataBase.k_ShapeFileExtension,
+            PlateauSandboxBulkPlaceDataBase.k_DbfFileExtension);
 
         public override PlateauSandboxFileParserValidationType IsValidate(string filePath)
         {
@@ -196,7 +199,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 listOfShapes = shapeFileReader.ReadShapes();
             }
 
-            using (var dbfReader = new PlateauSandboxDbfReader(GetDbfFilePath(filePath), SupportedEncoding.UTF8))
+            using (var dbfReader = new PlateauSandboxDbfReader(GetDbfFilePath(filePath), SupportedEncoding.k_UTF8))
             {
                 dbfReader.ReadHeader();
 
@@ -210,7 +213,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         record.Fields);
                     shapeFileData.Add(data);
 
-                    Debug.Log($"ShapeData: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {data.AssetType}");
+                    Debug.Log($"シェープファイル読み込み: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {data.AssetType}");
                 }
             }
             return shapeFileData;

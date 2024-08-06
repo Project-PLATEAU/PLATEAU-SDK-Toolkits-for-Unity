@@ -68,12 +68,12 @@ namespace PlateauToolkit.Sandbox.Editor
 
         protected override IList<TreeViewItem> BuildRows(TreeViewItem root)
         {
-            var rows = GetRows() ?? new List<TreeViewItem>();
+            IList<TreeViewItem> rows = GetRows() ?? new List<TreeViewItem>();
             rows.Clear();
 
             if (m_Context.Hierarchy.Items != null)
             {
-                foreach (var item in m_Context.Hierarchy.Items)
+                foreach (PlateauSandboxBulkPlaceHierarchyItem item in m_Context.Hierarchy.Items)
                 {
                     var treeItem = new PlateauSandboxBulkPlaceHierarchyViewItem
                     {
@@ -101,10 +101,10 @@ namespace PlateauToolkit.Sandbox.Editor
                 OnItemClicked(viewItem.Item);
             }
 
-            for (var i = 0; i < args.GetNumVisibleColumns(); ++i)
+            for (int i = 0; i < args.GetNumVisibleColumns(); ++i)
             {
-                var cellRect = args.GetCellRect(i);
-                var columnIndex = args.GetColumn(i);
+                Rect cellRect = args.GetCellRect(i);
+                int columnIndex = args.GetColumn(i);
 
                 CenterRectUsingSingleLineHeight(ref cellRect);
 
@@ -114,14 +114,19 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
                 else if (columnIndex == 1)
                 {
-                    var style = new GUIStyle();
-                    style.alignment = TextAnchor.MiddleCenter;
-                    style.normal.textColor = Color.white;
+                    var style = new GUIStyle
+                    {
+                        alignment = TextAnchor.MiddleCenter,
+                        normal =
+                        {
+                            textColor = Color.white
+                        }
+                    };
                     GUI.Label(cellRect, viewItem.Item.Count.ToString(), style);
                 }
                 else if (columnIndex == 2)
                 {
-                    GUI.Label(cellRect, viewItem.Item.PrefabName.ToString());
+                    GUI.Label(cellRect, viewItem.Item.PrefabName);
                 }
             }
         }

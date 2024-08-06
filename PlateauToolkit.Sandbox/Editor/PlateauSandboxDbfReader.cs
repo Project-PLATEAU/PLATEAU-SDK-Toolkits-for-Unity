@@ -12,8 +12,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
     public enum SupportedEncoding
     {
-        ShiftJIS,      // 0
-        UTF8   // 1
+        k_ShiftJis,      // 0
+        k_UTF8   // 1
     }
 
     public class PlateauSandboxDbfReader : IDisposable
@@ -28,9 +28,9 @@ namespace PlateauToolkit.Sandbox.Editor
         int[] m_FieldLengths;
         string[] m_FieldNames;
 
-        string m_DbfFilePath;
+        readonly string m_DbfFilePath;
         FileStream m_FileStream;
-        SupportedEncoding m_SupportedEncoding;
+        readonly SupportedEncoding m_SupportedEncoding;
 
         public PlateauSandboxDbfReader(string filePath, SupportedEncoding supportedEncoding)
         {
@@ -89,12 +89,14 @@ namespace PlateauToolkit.Sandbox.Editor
                 return null;
             }
 
-            DbfRecord record = new DbfRecord();
-            record.IsDeleted = firstChar == '*';
+            var record = new DbfRecord
+            {
+                IsDeleted = firstChar == '*',
+                Fields = new string[m_FieldCount]
+            };
 
-            record.Fields = new string[m_FieldCount];
             Encoding stringEncoding = Encoding.UTF8;
-            if (m_SupportedEncoding == SupportedEncoding.ShiftJIS)
+            if (m_SupportedEncoding == SupportedEncoding.k_ShiftJis)
             {
                 stringEncoding = Encoding.GetEncoding(932);
             }
@@ -115,9 +117,9 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             // Print the field names
-            for (int i = 0; i < m_FieldNames.Length; i++)
+            foreach (string t in m_FieldNames)
             {
-                UnityEngine.Debug.Log(m_FieldNames[i] + "\t");
+                UnityEngine.Debug.Log(t + "\t");
             }
 
             int records = 0;

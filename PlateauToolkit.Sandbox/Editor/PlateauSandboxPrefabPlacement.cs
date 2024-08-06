@@ -1,5 +1,4 @@
 using PLATEAU.CityInfo;
-using PLATEAU.Geometries;
 using PLATEAU.Native;
 using System.Collections.Generic;
 using System.Threading;
@@ -22,7 +21,6 @@ namespace PlateauToolkit.Sandbox.Editor
         }
 
         PLATEAUInstancedCityModel m_CityModel;
-        SynchronizationContext m_MainThreadcontext;
         List<PlacementContext> m_PlacementContexts = new List<PlacementContext>();
 
         public int PlacingCount { get; private set; }
@@ -33,13 +31,11 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public PlateauSandboxPrefabPlacement()
         {
-            m_CityModel = UnityEngine.Object.FindObjectOfType<PLATEAUInstancedCityModel>();
+            m_CityModel = Object.FindObjectOfType<PLATEAUInstancedCityModel>();
             if (m_CityModel == null)
             {
                 Debug.LogError("CityModel is not found.");
             }
-
-            m_MainThreadcontext = SynchronizationContext.Current;
         }
 
         public void AddContext(PlacementContext context)
@@ -48,38 +44,30 @@ namespace PlateauToolkit.Sandbox.Editor
             PlacingCount++;
         }
 
-        public async void PlaceAll()
+        public async void PlaceAllAsync(CancellationToken cancellationToken)
         {
             // For the batch processing
             while (PlacingCount > 0)
             {
-                await PlaceAssetsBatch();
+                cancellationToken.ThrowIfCancellationRequested();
+                if (m_PlacementContexts.Count == 0 || m_PlacementContexts.Count < PlacingCount)
+                {
+                    break;
+                }
+                TryPlace(m_PlacementContexts[PlacingCount - 1]);
+
+                await Task.Yield();
+                PlacingCount--;
             }
 
             Debug.Log("アセットの一括配置が終了しました");
         }
 
-        async Task PlaceAssetsBatch()
-        {
-            // Place the asset on the main thread
-            m_MainThreadcontext.Post(_ =>
-            {
-                if (m_PlacementContexts.Count == 0 || m_PlacementContexts.Count < PlacingCount)
-                {
-                    return;
-                }
-                TryPlace(m_PlacementContexts[PlacingCount - 1]);
-            }, null);
-
-            await Task.Delay(1);
-            PlacingCount--;
-        }
-
-        bool TryPlace(PlacementContext context)
+        void TryPlace(PlacementContext context)
         {
             // Set the position of the asset
             var geoCoordinate = new GeoCoordinate(context.m_Latitude, context.m_Longitude, context.m_Height);
-            var plateauPosition = m_CityModel.GeoReference.Project(geoCoordinate);
+            PlateauVector3d plateauPosition = m_CityModel.GeoReference.Project(geoCoordinate);
             var unityPosition = new Vector3((float)plateauPosition.X, (float)plateauPosition.Y, (float)plateauPosition.Z);
             if (unityPosition.y <= 0)
             {
@@ -93,8 +81,8 @@ namespace PlateauToolkit.Sandbox.Editor
             var ray = new Ray(unityPosition + Vector3.up * k_PlacementCheckDistance, -Vector3.up);
             if (!Physics.Raycast(ray, k_PlacementCheckDistance))
             {
-                Debug.LogWarning($"{gameObjectName} : オブジェクトを配置できるコライダーが見つかりませんでした。");
-                return false;
+                Debug.LogWarning($"{gameObjectName} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
+                return;
             }
 
             // Check if a parent GameObject already exists
@@ -109,16 +97,10 @@ namespace PlateauToolkit.Sandbox.Editor
             // Create a new Asset GameObject
             var asset = (GameObject)PrefabUtility.InstantiatePrefab(context.m_Prefab);
             asset.name = gameObjectName;
-
-            // Set the parent GameObject
             asset.transform.SetParent(parentObject.transform);
-
-            // Set Position
             asset.transform.position = unityPosition;
 
             Debug.Log($"アセットを配置。{gameObjectName} at {asset.transform.position.ToString()}");
-
-            return true;
         }
 
         public void StopPlace()
@@ -129,7 +111,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         private float TryGetHeightPosition(Vector3 position)
         {
-            // If the height is not set, then raycast to get the height.
+            // If the height is not set, then RayCast to get the height.
             var rayStartPosition = new Vector3(position.x, k_HeightCheckDistance, position.z);
             var ray = new Ray(rayStartPosition, Vector3.down);
             if (Physics.Raycast(ray, out RaycastHit hit, k_HeightCheckDistance))
