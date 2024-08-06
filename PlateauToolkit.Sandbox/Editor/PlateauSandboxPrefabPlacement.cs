@@ -12,9 +12,9 @@ namespace PlateauToolkit.Sandbox.Editor
     {
         public struct PlacementContext
         {
-            public double m_Longitude;
-            public double m_Latitude;
-            public double m_Height;
+            public float m_Longitude;
+            public float m_Latitude;
+            public float m_Height;
             public GameObject m_Prefab;
             public string m_AssetType;
             public string m_ObjectId;

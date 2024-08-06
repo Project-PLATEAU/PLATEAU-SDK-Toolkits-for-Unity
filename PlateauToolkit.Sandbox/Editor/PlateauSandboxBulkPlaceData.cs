@@ -16,15 +16,15 @@ namespace PlateauToolkit.Sandbox.Editor
     public enum PlateauSandboxBulkPlaceCategory
     {
         k_InValid = -1,
-        k_Longitude = 0,
-        k_Latitude,
+        k_Latitude = 0,
+        k_Longitude,
         k_Height,
         k_AssetType,
     }
     static class PlateauSandboxBulkPlaceFileTypeExtensions
     {
-        const string k_LongitudeTitle = "緯度";
-        const string k_LatitudeTitle = "経度";
+        const string k_LongitudeTitle = "経度";
+        const string k_LatitudeTitle = "緯度";
         const string k_HeightTitle = "高さ";
         const string k_AssetType = "アセット種別";
 
@@ -83,15 +83,20 @@ namespace PlateauToolkit.Sandbox.Editor
     {
         List<string> m_FieldNames;
 
-        public PlateauSandboxBulkPlaceCsvData(int index, string[] csvData, string[] fieldNames)
+        public PlateauSandboxBulkPlaceCsvData(int index, List<string> csvData, List<string> fieldNames)
         {
             Id = index;
-            Longitude = csvData[0];
-            Latitude = csvData[1];
-            Height = csvData[2];
-            m_AssetType = csvData[3];
 
-            m_FieldNames = fieldNames.ToList();
+            int latitudeIndex = fieldNames.FindIndex(name => PlateauSandboxBulkPlaceCategory.k_Latitude.IsMatch(name));
+            int longitudeIndex = fieldNames.FindIndex(name => PlateauSandboxBulkPlaceCategory.k_Longitude.IsMatch(name));
+            int heightIndex = fieldNames.FindIndex(name => PlateauSandboxBulkPlaceCategory.k_Height.IsMatch(name));
+            int assetTypeIndex = fieldNames.FindIndex(name => PlateauSandboxBulkPlaceCategory.k_AssetType.IsMatch(name));
+
+            Latitude = csvData[latitudeIndex > 0 ? latitudeIndex : 0];
+            Longitude = csvData[longitudeIndex > 0 ? longitudeIndex : 1];
+            Height = csvData[heightIndex > 0 ? heightIndex : 2];
+            m_AssetType = csvData[assetTypeIndex > 0 ? assetTypeIndex : 3];
+            m_FieldNames = fieldNames;
         }
 
         string GetFieldValue(int fieldIndex)
@@ -154,8 +159,8 @@ namespace PlateauToolkit.Sandbox.Editor
         public override List<string> GetFieldLabels()
         {
             return new List<string>() {
-                m_FieldNames[0] + $"（要素例：{Longitude})",
-                m_FieldNames[1] + $"（要素例：{Latitude})",
+                m_FieldNames[0] + $"（要素例：{Latitude})",
+                m_FieldNames[1] + $"（要素例：{Longitude})",
                 m_FieldNames[2] + $"（要素例：{Height})",
                 m_FieldNames[3] + $"（要素例：{AssetType})",
             };

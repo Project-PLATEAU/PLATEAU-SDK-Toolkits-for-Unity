@@ -113,10 +113,10 @@ namespace PlateauToolkit.Sandbox.Editor
 
                         int index = lineNumber - 1;
                         string[] values = line.Split(',');
-                        var data = new PlateauSandboxBulkPlaceCsvData(index, values, fieldLabels);
+                        var data = new PlateauSandboxBulkPlaceCsvData(index, values.ToList(), fieldLabels.ToList());
                         csvData.Add(data);
 
-                        Debug.Log($"CSVファイル読み込み: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {data.AssetType}");
+                        Debug.Log($"CSVファイル読み込み: Id {data.Id}, Latitude {data.Latitude}, Longitude {data.Longitude}, Height {data.Height}, AssetType {data.AssetType}");
                     }
                 }
             }
@@ -213,9 +213,10 @@ namespace PlateauToolkit.Sandbox.Editor
                         record.Fields);
                     shapeFileData.Add(data);
 
-                    Debug.Log($"シェープファイル読み込み: {data.Id}, {data.Latitude}, {data.Longitude}, {data.Height}, {data.AssetType}");
+                    Debug.Log($"シェープファイル読み込み: Id {data.Id}, Latitude {data.Latitude}, Longitude {data.Longitude}, Height {data.Height}, AssetType {data.AssetType}");
                 }
             }
+            shapeFileData.Sort((a, b) => a.Id.CompareTo(b.Id));
             return shapeFileData;
         }
 
