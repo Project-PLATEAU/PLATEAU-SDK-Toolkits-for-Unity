@@ -48,9 +48,9 @@ namespace PlateauToolkit.Sandbox.Editor
             // Event For Asset List Item Clicked.
             context.OnSelectedObjectChanged.AddListener((selectedObject) =>
             {
-                PlateauSandboxBulkPlaceHierarchyItem selectItem = m_HierarchyItem
+                PlateauSandboxBulkPlaceHierarchyItem selectedItem = m_HierarchyItem
                     .FirstOrDefault(item => item.Id == m_SelectedCategoryId);
-                if (selectItem == null)
+                if (selectedItem == null)
                 {
                     return;
                 }
@@ -58,14 +58,14 @@ namespace PlateauToolkit.Sandbox.Editor
                 if (selectedObject == null && m_SelectedCategoryId >= 0)
                 {
                     // Unselect the object
-                    selectItem.PrefabConstantId = -1;
-                    selectItem.PrefabName = string.Empty;
+                    selectedItem.PrefabConstantId = -1;
+                    selectedItem.PrefabName = string.Empty;
                     m_SelectedCategoryId = -1;
                 }
                 else
                 {
-                    selectItem.PrefabName = selectedObject.name;
-                    selectItem.PrefabConstantId = selectedObject.GetInstanceID();
+                    selectedItem.PrefabName = selectedObject.name;
+                    selectedItem.PrefabConstantId = selectedObject.GetInstanceID();
                 }
 
                 RefreshTracksHierarchy(context);
@@ -102,7 +102,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
                 else
                 {
-                    if (GUILayout.Button("shapeファイル、csvファイルを読み込む"))
+                    if (GUILayout.Button("SHP、CSVファイルを読み込む"))
                     {
                         string filePath = EditorUtility.OpenFilePanel("Select File", "", "csv,shp");
                         if (!string.IsNullOrEmpty(filePath))
@@ -146,7 +146,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     switch (m_IsValidLoadedFile)
                     {
                         case PlateauSandboxFileParserValidationType.k_NotExistsFile:
-                            EditorGUILayout.HelpBox("csvもしくはshapeファイルが見つかりませんでした。", MessageType.Error);
+                            EditorGUILayout.HelpBox("CSVもしくはSHPファイルが見つかりませんでした。", MessageType.Error);
                             break;
                         case PlateauSandboxFileParserValidationType.k_AccessControl:
                             EditorGUILayout.HelpBox("ファイルにアクセスできませんでした。", MessageType.Error);
@@ -191,17 +191,17 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     if (!m_DataContext.HasLoadedFile())
                     {
-                        EditorGUILayout.HelpBox("shapeファイル、csvファイルを読み込んでください", MessageType.Error);
+                        EditorGUILayout.HelpBox("CSV、SHPファイルを読み込んでください", MessageType.Error);
                     }
 
                     if (m_HierarchyItem.All(item => item.PrefabConstantId == -1))
                     {
-                        EditorGUILayout.HelpBox("プレファブを設定してください", MessageType.Warning);
+                        EditorGUILayout.HelpBox("プレハブを設定してください", MessageType.Warning);
                     }
 
                     if (m_PrefabPlacement != null && !m_PrefabPlacement.IsValidCityModel())
                     {
-                        EditorGUILayout.HelpBox("該当地区のデータをロードしてください", MessageType.Warning);
+                        EditorGUILayout.HelpBox("配置範囲内に3D都市モデルが存在しません", MessageType.Warning);
                     }
                 }
 
