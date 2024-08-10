@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
-    public class PlateauSandboxShapeFileReader : IDisposable
+    public class PlateauSandboxShapefileReader : IDisposable
     {
         BinaryReader m_ShpReader;
         readonly string m_ShpPath;
@@ -20,7 +20,7 @@ namespace PlateauToolkit.Sandbox.Editor
         public int ShapeConstants => m_ShapeType;
         int m_ShapeType;
 
-        public PlateauSandboxShapeFileReader(string shpPath)
+        public PlateauSandboxShapefileReader(string shpPath)
         {
             m_ShpPath = shpPath;
         }

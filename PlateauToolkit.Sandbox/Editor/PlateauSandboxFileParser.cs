@@ -194,7 +194,7 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             var shapeFileData = new List<PlateauSandboxBulkPlaceDataBase>();
             List<IShape> listOfShapes;
-            using (var shapeFileReader = new PlateauSandboxShapeFileReader(filePath))
+            using (var shapeFileReader = new PlateauSandboxShapefileReader(filePath))
             {
                 listOfShapes = shapeFileReader.ReadShapes();
             }
