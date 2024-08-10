@@ -35,11 +35,11 @@ namespace PlateauToolkit.Sandbox.Editor
 
     class PlateauSandboxBulkPlaceHierarchyItem
     {
-        public int Id { get; set; }
+        public int ID { get; set; }
         public string CategoryName { get; set; }
         public int Count { get; set; }
         public string PrefabName { get; set; } = string.Empty;
-        public int PrefabConstantId { get; set; } = -1;
+        public int PrefabConstantID { get; set; } = -1;
         public UnityEvent OnClicked { get; private set; } = new UnityEvent();
     }
 
@@ -77,7 +77,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     var treeItem = new PlateauSandboxBulkPlaceHierarchyViewItem
                     {
-                        id = item.Id,
+                        id = item.ID,
                         displayName = item.CategoryName,
                         Item = item,
                     };

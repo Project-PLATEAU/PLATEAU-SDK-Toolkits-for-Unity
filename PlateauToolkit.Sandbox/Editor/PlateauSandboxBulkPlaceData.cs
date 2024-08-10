@@ -68,7 +68,7 @@ namespace PlateauToolkit.Sandbox.Editor
         public const string k_ShapeFileExtension = ".shp";
         public const string k_DbfFileExtension = ".dbf";
 
-        public int Id { get; protected set; }
+        public int ID { get; protected set; }
         public string Longitude { get; protected set; }
         public string Latitude { get; protected set; }
         public string Height { get; protected set; }
@@ -85,7 +85,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public PlateauSandboxBulkPlaceCsvData(int index, List<string> csvData, List<string> fieldNames)
         {
-            Id = index;
+            ID = index;
 
             int latitudeIndex = fieldNames.FindIndex(name => PlateauSandboxBulkPlaceCategory.k_Latitude.IsMatch(name));
             int longitudeIndex = fieldNames.FindIndex(name => PlateauSandboxBulkPlaceCategory.k_Longitude.IsMatch(name));
@@ -200,7 +200,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     try
                     {
-                        Id = int.Parse(dbfField.m_FieldValue);
+                        ID = int.Parse(dbfField.m_FieldValue);
                     }
                     catch (Exception e)
                     {
@@ -209,9 +209,9 @@ namespace PlateauToolkit.Sandbox.Editor
                     break;
                 }
             }
-            if (Id <= 0)
+            if (ID <= 0)
             {
-                Id = index;
+                ID = index;
             }
 
             // Find AssetType field.
