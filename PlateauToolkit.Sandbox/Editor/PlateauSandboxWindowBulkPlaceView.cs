@@ -19,21 +19,20 @@ namespace PlateauToolkit.Sandbox.Editor
     class PlateauSandboxWindowBulkPlaceView : IPlateauSandboxWindowView
     {
         PlateauSandboxBulkPlaceHierarchyView m_TreeView;
+        PlateauSandboxWindowBulkPlaceButtonView m_ButtonView;
         TreeViewState m_TreeViewState;
         PlateauSandboxBulkPlaceHierarchyContext m_HierarchyContext;
         SandboxAssetListState<PlateauSandboxProp> m_AssetListState;
         CancellationTokenSource m_Cancellation;
-        PlateauSandboxFileParserValidationType m_IsValidLoadedFile;
         List<PlateauSandboxBulkPlaceHierarchyItem> m_HierarchyItem = new List<PlateauSandboxBulkPlaceHierarchyItem>();
         PlateauSandboxBulkPlaceDataContext m_DataContext;
 
         bool m_IsReadyApplied;
-        bool m_IsClickedAssetPlace;
         int m_SelectedCategoryId = -1;
         bool m_IsIgnoreHeight;
+        Vector2 m_AssetScrollPosition = new Vector2();
         BulkPlaceViewPageIndex m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
         PlateauSandboxPrefabPlacement m_PrefabPlacement;
-
 
         public string Name => "アセット一括配置";
 
@@ -42,6 +41,7 @@ namespace PlateauToolkit.Sandbox.Editor
             m_AssetListState = new SandboxAssetListState<PlateauSandboxProp>();
             m_Cancellation = new CancellationTokenSource();
             m_DataContext = new PlateauSandboxBulkPlaceDataContext();
+            m_ButtonView = new PlateauSandboxWindowBulkPlaceButtonView(m_DataContext);
 
             _ = m_AssetListState.PrepareAsync(m_Cancellation.Token);
 
@@ -74,175 +74,131 @@ namespace PlateauToolkit.Sandbox.Editor
             RefreshTracksHierarchy(context);
         }
 
+        public void OnUpdate(EditorWindow editorWindow)
+        {
+            if (m_AssetListState.IsReady && !m_IsReadyApplied)
+            {
+                editorWindow.Repaint();
+                m_IsReadyApplied = true;
+            }
+        }
+
+        void IPlateauSandboxWindowView.OnHierarchyChange(PlateauSandboxContext context)
+        {
+            RefreshTracksHierarchy(context);
+        }
+
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)
         {
             OnGUITool(context);
             OnGUIFieldType(context);
             OnGUIAssetType(context, window);
+            OnGUIFooterButton(context);
         }
 
         void OnGUITool(PlateauSandboxContext context)
         {
+            if (m_ViewPageIndex != BulkPlaceViewPageIndex.k_FieldSelect)
+            {
+                return;
+            }
+
             EditorGUILayout.LabelField("ツール", EditorStyles.boldLabel);
             using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
             {
-                if (m_DataContext.HasLoadedFile())
+                DrawFileLoadTool(context);
+                DrawCsvTemplateTool(context);
+            }
+        }
+
+        void DrawFileLoadTool(PlateauSandboxContext context)
+        {
+            if (m_DataContext.HasLoadedFile())
+            {
+                if (!m_ButtonView.DrawButton(
+                        PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_FileLoaded))
                 {
-                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
-                    {
-                        if (GUILayout.Button($"{m_DataContext.GetFileName()} を読み込み済"))
-                        {
-                            m_IsClickedAssetPlace = false;
-                            m_DataContext.Clear();
-                            m_HierarchyItem.Clear();
-                            RefreshTracksHierarchy(context);
-                            m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
-                        }
-                    }
+                    return;
+                }
+
+                // Clear the data
+                m_DataContext.Clear();
+                m_HierarchyItem.Clear();
+                RefreshTracksHierarchy(context);
+            }
+            else
+            {
+                bool isClicked = m_ButtonView.DrawButton(
+                    PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_FileNotLoaded);
+
+                m_ButtonView.TryDrawHelperBox(PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_FileNotLoaded);
+
+                if (!isClicked)
+                {
+                    return;
+                }
+
+                // Load the file
+                string filePath = EditorUtility.OpenFilePanel("Select File", "", "csv,shp");
+                bool isParseSuccess = m_DataContext.TryFileParse(filePath);
+                if (isParseSuccess)
+                {
+                    m_ButtonView.SetInValidIndex(-1);
+                    RefreshTracksHierarchy(context);
                 }
                 else
                 {
-                    if (GUILayout.Button("SHP、CSVファイルを読み込む"))
-                    {
-                        string filePath = EditorUtility.OpenFilePanel("Select File", "", "csv,shp");
-                        if (!string.IsNullOrEmpty(filePath))
-                        {
-                            m_DataContext.SetFilePath(filePath);
-                            if (m_DataContext.HasLoadedFile())
-                            {
-                                PlateauSandboxFileParserBase parser = null;
-                                if (m_DataContext.GetFileType() == PlateauSandboxBulkPlaceFileType.k_Csv)
-                                {
-                                    parser = new PlateauSandboxFileCsvParser();
-                                }
-                                else if (m_DataContext.GetFileType() == PlateauSandboxBulkPlaceFileType.k_ShapeFile)
-                                {
-                                    parser = new PlateauSandboxFileShapeFileParser();
-                                }
-
-                                if (parser != null)
-                                {
-                                    m_IsValidLoadedFile = parser.IsValidate(filePath);
-                                    if (m_IsValidLoadedFile == PlateauSandboxFileParserValidationType.k_Valid)
-                                    {
-                                        List<PlateauSandboxBulkPlaceDataBase> parsedData = parser.Load(filePath);
-                                        if (parsedData.Count > 0)
-                                        {
-                                            m_DataContext.SetAllData(parsedData);
-                                            RefreshTracksHierarchy(context);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        m_DataContext.Clear();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-                if (m_IsValidLoadedFile != PlateauSandboxFileParserValidationType.k_Valid)
-                {
-                    switch (m_IsValidLoadedFile)
-                    {
-                        case PlateauSandboxFileParserValidationType.k_NotExistsFile:
-                            EditorGUILayout.HelpBox("CSVもしくはSHPファイルが見つかりませんでした。", MessageType.Error);
-                            break;
-                        case PlateauSandboxFileParserValidationType.k_AccessControl:
-                            EditorGUILayout.HelpBox("ファイルにアクセスできませんでした。", MessageType.Error);
-                            break;
-                        case PlateauSandboxFileParserValidationType.k_FileOpened:
-                            EditorGUILayout.HelpBox("ファイルが開かれているためアクセスできませんでした。", MessageType.Error);
-                            break;
-                        case PlateauSandboxFileParserValidationType.k_NotExistsDbfFile:
-                            EditorGUILayout.HelpBox("DBFファイルが見つかりませんでした。", MessageType.Error);
-                            break;
-                    }
-                }
-
-                if (m_PrefabPlacement is {PlacingCount: > 0})
-                {
-                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
-                    {
-                        if (GUILayout.Button("アセットを配置中です..."))
-                        {
-                            m_Cancellation.Cancel();
-                            m_Cancellation.Dispose();
-                            m_Cancellation = null;
-
-                            m_PrefabPlacement.StopPlace();
-                            Debug.Log("アセットの一括配置を停止しました");
-                        }
-                    }
-                }
-                else
-                {
-                    if (GUILayout.Button("アセットを配置"))
-                    {
-                        if (m_DataContext.HasLoadedFile() && m_HierarchyItem.Any(item => item.PrefabConstantID >= 0))
-                        {
-                            PlaceAssets();
-                        }
-                        m_IsClickedAssetPlace = true;
-                    }
-                }
-
-                if (m_IsClickedAssetPlace)
-                {
-                    if (!m_DataContext.HasLoadedFile())
-                    {
-                        EditorGUILayout.HelpBox("CSV、SHPファイルを読み込んでください", MessageType.Error);
-                    }
-
-                    if (m_HierarchyItem.All(item => item.PrefabConstantID == -1))
-                    {
-                        EditorGUILayout.HelpBox("プレハブを設定してください", MessageType.Warning);
-                    }
-
-                    if (m_PrefabPlacement != null && !m_PrefabPlacement.IsValidCityModel())
-                    {
-                        EditorGUILayout.HelpBox("配置範囲内に3D都市モデルが存在しません", MessageType.Warning);
-                    }
-                }
-
-                if (GUILayout.Button("CSVテンプレートの生成"))
-                {
-                    string filePath = EditorUtility.SaveFilePanel("Save File", "", "PlateauSandboxCSVTemplate", "csv");
-                    if (!string.IsNullOrEmpty(filePath))
-                    {
-                        var templateData = new List<PlateauSandboxBulkPlaceDataBase>();
-
-                        var data = new PlateauSandboxBulkPlaceCsvData(0, new List<string>()
-                        {
-                            "35.8994", "139.5333", "14.23", "イチョウ"
-                        }, new List<string>()
-                        {
-                            "緯度", "経度", "高さ", "アセット種別"
-                        });
-                        templateData.Add(data);
-
-                        data = new PlateauSandboxBulkPlaceCsvData(1, new List<string>()
-                        {
-                            "35.9014", "139.5721", "16.3", "ユリノキ"
-                        }, new List<string>()
-                        {
-                            "緯度", "経度", "高さ", "アセット種別"
-                        });
-                        templateData.Add(data);
-
-                        bool saveSuccess = new PlateauSandboxFileCsvParser().Save(filePath, templateData);
-                        if (saveSuccess)
-                        {
-                            string directoryName = Path.GetDirectoryName(filePath);
-                            if (!string.IsNullOrEmpty(directoryName))
-                            {
-                                System.Diagnostics.Process.Start(directoryName);
-                            }
-                            Debug.Log($"CSVテンプレートを保存しました: {filePath}");
-                        }
-                    }
+                    m_ButtonView.SetInValidIndex((int)m_DataContext.FileValidationType);
                 }
             }
+        }
+
+        void DrawCsvTemplateTool(PlateauSandboxContext context)
+        {
+            if (!m_ButtonView.DrawButton(
+                    PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_CsvTemplate))
+            {
+                return;
+            }
+
+            // Generate CSV Template
+            string filePath = EditorUtility.SaveFilePanel("Save File", "", "PlateauSandboxCSVTemplate", "csv");
+            if (string.IsNullOrEmpty(filePath))
+            {
+                return;
+            }
+
+            var templateData = new List<PlateauSandboxBulkPlaceDataBase>();
+            var data = new PlateauSandboxBulkPlaceCsvData(0, new List<string>()
+            {
+                "35.8994", "139.5333", "14.23", "イチョウ"
+            }, new List<string>()
+            {
+                "緯度", "経度", "高さ", "アセット種別"
+            });
+            templateData.Add(data);
+
+            data = new PlateauSandboxBulkPlaceCsvData(1, new List<string>()
+            {
+                "35.9014", "139.5721", "16.3", "ユリノキ"
+            }, new List<string>()
+            {
+                "緯度", "経度", "高さ", "アセット種別"
+            });
+            templateData.Add(data);
+
+            bool saveSuccess = new PlateauSandboxFileCsvParser().Save(filePath, templateData);
+            if (!saveSuccess)
+            {
+                return;
+            }
+
+            string directoryName = Path.GetDirectoryName(filePath);
+            if (!string.IsNullOrEmpty(directoryName))
+            {
+                System.Diagnostics.Process.Start(directoryName);
+            }
+            Debug.Log($"CSVテンプレートを保存しました: {filePath}");
         }
 
         void OnGUIFieldType(PlateauSandboxContext context)
@@ -305,8 +261,6 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             EditorGUILayout.EndVertical();
-
-            SetFooterButton(true);
         }
 
         void OnGUIAssetType(PlateauSandboxContext context, EditorWindow window)
@@ -316,69 +270,115 @@ namespace PlateauToolkit.Sandbox.Editor
                 return;
             }
 
-            m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 150));
+            GUILayout.Space(10);
 
-            if (m_AssetListState.IsReady)
+            // Add Vertical Scroll,
+            using (var scope = new EditorGUILayout.ScrollViewScope(m_AssetScrollPosition))
             {
-                PlateauSandboxAssetListGUI.OnGUI(window.position.width, context, m_AssetListState);
-            }
-            else
-            {
-                EditorGUILayout.HelpBox("アセットを読み込んでいます...", MessageType.Info);
-            }
+                EditorGUILayout.LabelField("アセット選択", EditorStyles.boldLabel);
 
-            SetFooterButton(false);
-        }
+                m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 150, GUILayout.ExpandHeight(true)));
 
-        void SetFooterButton(bool isNext)
-        {
-            GUILayout.Space(20);
-            EditorGUILayout.BeginHorizontal();
-            if (isNext)
-            {
-                // rightAlignment
-                GUILayout.FlexibleSpace();
-            }
+                GUILayout.Space(10);
 
-            if (GUILayout.Button(isNext ? "次へ" : "戻る", GUILayout.Width(150)))
-            {
-                if (isNext)
+                if (m_AssetListState.IsReady)
                 {
-                    m_ViewPageIndex++;
+                    using (new EditorGUILayout.VerticalScope(GUILayout.Height(500)))
+                    {
+                        PlateauSandboxAssetListGUI.OnGUI(window.position.width, context, m_AssetListState, false);
+                    }
                 }
                 else
                 {
-                    m_ViewPageIndex--;
+                    EditorGUILayout.HelpBox("アセットを読み込んでいます...", MessageType.Info);
+                }
+
+                m_AssetScrollPosition = scope.scrollPosition;
+            }
+        }
+
+        void OnGUIFooterButton(PlateauSandboxContext context)
+        {
+            GUILayout.Space(15);
+
+            if (!m_DataContext.HasLoadedFile())
+            {
+                return;
+            }
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                if (m_ViewPageIndex == BulkPlaceViewPageIndex.k_FieldSelect)
+                {
+                    GUILayout.FlexibleSpace();
+                    if (m_ButtonView.DrawButton(PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_Next))
+                    {
+                        m_ViewPageIndex++;
+                    }
+                }
+                else
+                {
+                    if (m_ButtonView.DrawButton(PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_Back))
+                    {
+                        m_ViewPageIndex--;
+                    }
+
+                    GUILayout.FlexibleSpace();
+                    DrawAssetPlace(context);
                 }
             }
-            if (!isNext)
+
+            if (m_ViewPageIndex == BulkPlaceViewPageIndex.k_AssetSelect)
             {
-                // leftAlignment
-                GUILayout.FlexibleSpace();
+                GUILayout.Space(5);
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    m_ButtonView.TryDrawHelperBox(PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_AssetNotPlace);
+                }
             }
-            EditorGUILayout.EndHorizontal();
-            GUILayout.Space(20);
+
+            GUILayout.Space(15);
         }
 
-        public void OnUpdate(EditorWindow editorWindow)
+        void DrawAssetPlace(PlateauSandboxContext context)
         {
-            if (m_AssetListState.IsReady && !m_IsReadyApplied)
+            if (m_PrefabPlacement?.PlacingCount > 0)
             {
-                editorWindow.Repaint();
-                m_IsReadyApplied = true;
-            }
-        }
+                if (!m_ButtonView.DrawButton(
+                        PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_AssetPlacing))
+                {
+                    return;
+                }
 
-        void IPlateauSandboxWindowView.OnHierarchyChange(PlateauSandboxContext context)
-        {
-            RefreshTracksHierarchy(context);
+                // Stop the Asset placement
+                m_Cancellation.Cancel();
+                m_Cancellation.Dispose();
+                m_Cancellation = null;
+                m_PrefabPlacement.StopPlace();
+
+                Debug.Log("アセットの一括配置を停止しました");
+            }
+            else
+            {
+                bool isClicked = m_ButtonView.DrawButton(
+                                     PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_AssetNotPlace);
+                if (!isClicked)
+                {
+                    return;
+                }
+
+                m_ButtonView.SetInValidIndex(-1);
+
+                // Place the assets
+                TryPlaceAssets();
+            }
         }
 
         void RefreshTracksHierarchy(PlateauSandboxContext context)
         {
             if (m_TreeView == null)
             {
-                SetUpTreeView();
+                DrawTreeView();
                 Debug.Assert(m_TreeView != null);
             }
 
@@ -425,7 +425,7 @@ namespace PlateauToolkit.Sandbox.Editor
             m_TreeView.Reload();
         }
 
-        void SetUpTreeView()
+        void DrawTreeView()
         {
             m_TreeViewState ??= new TreeViewState();
 
@@ -475,11 +475,18 @@ namespace PlateauToolkit.Sandbox.Editor
             m_TreeView.Reload();
         }
 
-        void PlaceAssets()
+        void TryPlaceAssets()
         {
             m_PrefabPlacement = new PlateauSandboxPrefabPlacement();
             if (!m_PrefabPlacement.IsValidCityModel())
             {
+                m_ButtonView.SetInValidIndex((int)PlateauSandboxWindowBulkPlaceButtonView.AssetPlaceValidationType.k_NoCityModel);
+                return;
+            }
+
+            if (m_HierarchyItem.All(item => item.PrefabConstantID < 0))
+            {
+                m_ButtonView.SetInValidIndex((int)PlateauSandboxWindowBulkPlaceButtonView.AssetPlaceValidationType.k_NoAssetSelected);
                 return;
             }
 
@@ -543,11 +550,141 @@ namespace PlateauToolkit.Sandbox.Editor
             m_AssetListState.Dispose();
             m_AssetListState = null;
 
-            m_IsClickedAssetPlace = false;
             m_SelectedCategoryId = -1;
             m_IsIgnoreHeight = false;
             m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
             m_PrefabPlacement = null;
+        }
+    }
+
+    /// <summary>
+    /// Class that draws buttons.
+    /// </summary>
+    class PlateauSandboxWindowBulkPlaceButtonView
+    {
+        public PlateauSandboxWindowBulkPlaceButtonView(PlateauSandboxBulkPlaceDataContext context)
+        {
+            m_DataContext = context;
+        }
+
+        public enum ToolButtonType
+        {
+            k_FileLoaded,
+            k_FileNotLoaded,
+            k_AssetPlacing,
+            k_AssetNotPlace,
+            k_CsvTemplate,
+
+            k_Next,
+            k_Back,
+        }
+
+        public enum AssetPlaceValidationType
+        {
+            k_NoError,
+            k_NoAssetSelected,
+            k_NoCityModel,
+        }
+
+        GUIStyle PrimaryButtonStyle => new GUIStyle(GUI.skin.button)
+        {
+            fontSize = 14,
+            fontStyle = FontStyle.Bold,
+            alignment = TextAnchor.MiddleCenter,
+            padding = new RectOffset(40, 40, 8, 8),
+        };
+
+        PlateauSandboxBulkPlaceDataContext m_DataContext;
+        public int InValidIndex { get; private set; } = -1;
+
+        public bool DrawButton(ToolButtonType type)
+        {
+            bool isClicked = false;
+            switch (type)
+            {
+                case ToolButtonType.k_FileLoaded:
+                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
+                    {
+                        isClicked = GUILayout.Button($"{m_DataContext.GetFileName()} を読み込み済");
+                    }
+                    break;
+                case ToolButtonType.k_FileNotLoaded:
+                    isClicked = GUILayout.Button("SHP、CSVファイルを読み込む");
+                    break;
+                case ToolButtonType.k_AssetPlacing:
+                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
+                    {
+                        isClicked = GUILayout.Button("アセットを配置中です...");
+                    }
+                    break;
+                case ToolButtonType.k_AssetNotPlace:
+                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
+                    {
+                        isClicked = GUILayout.Button("アセットを配置", PrimaryButtonStyle);
+                    }
+                    break;
+                case ToolButtonType.k_CsvTemplate:
+                    isClicked = GUILayout.Button("CSVテンプレートの生成");
+                    break;
+                case ToolButtonType.k_Next:
+                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
+                    {
+                        isClicked = GUILayout.Button("次へ", PrimaryButtonStyle);
+                    }
+                    break;
+                case ToolButtonType.k_Back:
+                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
+                    {
+                        isClicked = GUILayout.Button("戻る", PrimaryButtonStyle);
+                    }
+                    break;
+            }
+            return isClicked;
+        }
+
+        public void TryDrawHelperBox(ToolButtonType buttonType)
+        {
+            if (InValidIndex < 0)
+            {
+                return;
+            }
+
+            switch (buttonType)
+            {
+                case ToolButtonType.k_FileNotLoaded:
+                    switch (InValidIndex)
+                    {
+                        case (int)PlateauSandboxFileParserValidationType.k_NotExistsFile:
+                            EditorGUILayout.HelpBox("CSVもしくはSHPファイルが見つかりませんでした。", MessageType.Error);
+                            break;
+                        case (int)PlateauSandboxFileParserValidationType.k_AccessControl:
+                            EditorGUILayout.HelpBox("ファイルにアクセスできませんでした。", MessageType.Error);
+                            break;
+                        case (int)PlateauSandboxFileParserValidationType.k_FileOpened:
+                            EditorGUILayout.HelpBox("ファイルが開かれているためアクセスできませんでした。", MessageType.Error);
+                            break;
+                        case (int)PlateauSandboxFileParserValidationType.k_NotExistsDbfFile:
+                            EditorGUILayout.HelpBox("DBFファイルが見つかりませんでした。", MessageType.Error);
+                            break;
+                    }
+                    break;
+                case ToolButtonType.k_AssetNotPlace:
+                    switch (InValidIndex)
+                    {
+                        case (int)AssetPlaceValidationType.k_NoAssetSelected:
+                            EditorGUILayout.HelpBox("プレハブを設定してください", MessageType.Warning);
+                            break;
+                        case (int)AssetPlaceValidationType.k_NoCityModel:
+                            EditorGUILayout.HelpBox("配置範囲内に3D都市モデルが存在しません", MessageType.Warning);
+                            break;
+                    }
+                    break;
+            }
+        }
+
+        public void SetInValidIndex(int index)
+        {
+            InValidIndex = index;
         }
     }
 }

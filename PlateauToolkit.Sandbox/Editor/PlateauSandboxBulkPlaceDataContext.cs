@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -34,6 +36,7 @@ namespace PlateauToolkit.Sandbox.Editor
         BulkPlaceFile m_LoadedFile;
         public List<PlateauSandboxBulkPlaceDataBase> Data { get; private set; } = new List<PlateauSandboxBulkPlaceDataBase>();
         int m_SelectedFieldIndex;
+        public PlateauSandboxFileParserValidationType FileValidationType { get; private set; }
 
         public bool HasLoadedFile()
         {
@@ -50,18 +53,42 @@ namespace PlateauToolkit.Sandbox.Editor
             return m_LoadedFile.FileType;
         }
 
-        public void SetFilePath(string filePath)
+        public bool TryFileParse(string filePath)
         {
             if (string.IsNullOrEmpty(filePath))
             {
-                return;
+                return false;
             }
             m_LoadedFile.SetFilePath(filePath);
-        }
 
-        public void SetAllData(List<PlateauSandboxBulkPlaceDataBase> data)
-        {
-            Data = data;
+            PlateauSandboxFileParserBase parser = null;
+            switch (GetFileType())
+            {
+                case PlateauSandboxBulkPlaceFileType.k_Csv:
+                    parser = new PlateauSandboxFileCsvParser();
+                    break;
+                case PlateauSandboxBulkPlaceFileType.k_ShapeFile:
+                    parser = new PlateauSandboxFileShapeFileParser();
+                    break;
+                case PlateauSandboxBulkPlaceFileType.k_InValid:
+                default:
+                    Debug.LogWarning("Invalid file type.");
+                    return false;
+            }
+
+            FileValidationType = parser.IsValidate(filePath);
+            if (FileValidationType == PlateauSandboxFileParserValidationType.k_Valid)
+            {
+                List<PlateauSandboxBulkPlaceDataBase> parsedData = parser.Load(filePath);
+                if (parsedData.Count > 0)
+                {
+                    Data = parsedData;
+                    return true;
+                }
+            }
+
+            Clear();
+            return false;
         }
 
         public void Clear()
