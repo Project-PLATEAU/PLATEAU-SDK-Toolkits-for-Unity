@@ -171,7 +171,7 @@ namespace PlateauToolkit.Sandbox.Editor
             var templateData = new List<PlateauSandboxBulkPlaceDataBase>();
             var data = new PlateauSandboxBulkPlaceCsvData(0, new List<string>()
             {
-                "35.8994", "139.5333", "14.23", "イチョウ"
+                "34.9873", "135.7596", "14.23", "イチョウ"
             }, new List<string>()
             {
                 "緯度", "経度", "高さ", "アセット種別"
@@ -180,7 +180,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
             data = new PlateauSandboxBulkPlaceCsvData(1, new List<string>()
             {
-                "35.9014", "139.5721", "16.3", "ユリノキ"
+                "34.98742", "135.7596", "16.3", "ユリノキ"
             }, new List<string>()
             {
                 "緯度", "経度", "高さ", "アセット種別"
@@ -218,9 +218,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
             float originalValue = EditorGUIUtility.labelWidth;
             EditorGUIUtility.labelWidth = 180; // Set the label width
-            m_IsIgnoreHeight = m_IsIgnoreHeight = EditorGUILayout.Toggle("ファイルの高さ情報を無視する",
-                                   m_IsIgnoreHeight,
-                                   GUILayout.Width(1000));
+            m_IsIgnoreHeight = EditorGUILayout.Toggle("ファイルの高さ情報を無視する",
+                                   m_IsIgnoreHeight);
             EditorGUIUtility.labelWidth = originalValue;
 
             EditorGUILayout.LabelField("利用する属性列の選択", EditorStyles.label);
@@ -614,7 +613,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 case ToolButtonType.k_AssetPlacing:
                     using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
                     {
-                        isClicked = GUILayout.Button("アセットを配置中です...");
+                        isClicked = GUILayout.Button("アセットを配置中です...", PrimaryButtonStyle);
                     }
                     break;
                 case ToolButtonType.k_AssetNotPlace:

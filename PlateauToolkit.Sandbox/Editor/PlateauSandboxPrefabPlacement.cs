@@ -26,8 +26,8 @@ namespace PlateauToolkit.Sandbox.Editor
         public int PlacingCount { get; private set; }
 
         // For checking the height of the placed object.
-        const float k_HeightCheckDistance = 10000.0f;
-        const float k_PlacementCheckDistance = 1f;
+        const float k_GroundCheckDistance = 10000.0f;
+        const float k_GroundCheckDistanceOffset = 10.0f;
 
         public PlateauSandboxPrefabPlacement()
         {
@@ -69,21 +69,24 @@ namespace PlateauToolkit.Sandbox.Editor
             var geoCoordinate = new GeoCoordinate(context.m_Latitude, context.m_Longitude, context.m_Height);
             PlateauVector3d plateauPosition = m_CityModel.GeoReference.Project(geoCoordinate);
             var unityPosition = new Vector3((float)plateauPosition.X, (float)plateauPosition.Y, (float)plateauPosition.Z);
+
+            // Search for the collider to place the object
+            float hitPosition = TryGetHeightPosition(unityPosition);
+            if (hitPosition < 0)
+            {
+                Debug.LogWarning($"{context.m_ObjectId} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
+                return;
+            }
+
             if (unityPosition.y <= 0)
             {
-                unityPosition.y = TryGetHeightPosition(unityPosition);
+                // set the height of the object
+                unityPosition.y = hitPosition;
             }
 
             // Name for the GameObject
             string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null,
                 $"{context.m_ObjectId}_{context.m_AssetType}_{context.m_Prefab.name}");
-
-            var ray = new Ray(unityPosition + Vector3.up * k_PlacementCheckDistance, -Vector3.up);
-            if (!Physics.Raycast(ray, k_PlacementCheckDistance))
-            {
-                Debug.LogWarning($"{gameObjectName} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
-                return;
-            }
 
             // Check if a parent GameObject already exists
             string parentName = $"アセット一括配置";
@@ -112,13 +115,15 @@ namespace PlateauToolkit.Sandbox.Editor
         private float TryGetHeightPosition(Vector3 position)
         {
             // If the height is not set, then RayCast to get the height.
-            var rayStartPosition = new Vector3(position.x, k_HeightCheckDistance, position.z);
+            var rayStartPosition = new Vector3(position.x, k_GroundCheckDistance, position.z);
             var ray = new Ray(rayStartPosition, Vector3.down);
-            if (Physics.Raycast(ray, out RaycastHit hit, k_HeightCheckDistance))
+            if (Physics.Raycast(ray, out RaycastHit hit, k_GroundCheckDistance + k_GroundCheckDistanceOffset))
             {
                 return hit.point.y;
             }
-            return 0;
+
+            // Not found.
+            return -1;
         }
 
         public bool IsValidCityModel()
