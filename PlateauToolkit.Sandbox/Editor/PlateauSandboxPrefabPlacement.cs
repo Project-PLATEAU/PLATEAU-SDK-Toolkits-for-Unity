@@ -118,7 +118,9 @@ namespace PlateauToolkit.Sandbox.Editor
             bool isIgnoreHeight = (int)position.y == 0;
 
             // If the height is not set, then RayCast to get the height.
-            var rayStartPosition = new Vector3(position.x, isIgnoreHeight ? k_GroundCheckDistance : position.y, position.z);
+            var rayStartPosition = new Vector3(position.x, 0, position.z);
+            rayStartPosition.y = isIgnoreHeight ? k_GroundCheckDistance : position.y + k_GroundCheckDistanceOffset;
+
             float rayDistance = isIgnoreHeight ? k_GroundCheckDistance + k_GroundCheckDistanceOffset : k_GroundCheckDistanceOffset;
 
             var ray = new Ray(rayStartPosition, Vector3.down);
