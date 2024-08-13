@@ -27,7 +27,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         // For checking the height of the placed object.
         const float k_GroundCheckDistance = 10000.0f;
-        const float k_GroundCheckDistanceOffset = 10.0f;
+        const float k_GroundCheckDistanceOffset = 0.5f;
 
         public PlateauSandboxPrefabPlacement()
         {
@@ -70,8 +70,9 @@ namespace PlateauToolkit.Sandbox.Editor
             PlateauVector3d plateauPosition = m_CityModel.GeoReference.Project(geoCoordinate);
             var unityPosition = new Vector3((float)plateauPosition.X, (float)plateauPosition.Y, (float)plateauPosition.Z);
 
+
             // Search for the collider to place the object
-            float hitPosition = TryGetHeightPosition(unityPosition);
+            float hitPosition = TryGetColliderHeight(unityPosition);
             if (hitPosition < 0)
             {
                 Debug.LogWarning($"{context.m_ObjectId} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
@@ -112,12 +113,16 @@ namespace PlateauToolkit.Sandbox.Editor
             m_PlacementContexts.Clear();
         }
 
-        private float TryGetHeightPosition(Vector3 position)
+        private float TryGetColliderHeight(Vector3 position)
         {
+            bool isIgnoreHeight = (int)position.y == 0;
+
             // If the height is not set, then RayCast to get the height.
-            var rayStartPosition = new Vector3(position.x, k_GroundCheckDistance, position.z);
+            var rayStartPosition = new Vector3(position.x, isIgnoreHeight ? k_GroundCheckDistance : position.y, position.z);
+            float rayDistance = isIgnoreHeight ? k_GroundCheckDistance + k_GroundCheckDistanceOffset : k_GroundCheckDistanceOffset;
+
             var ray = new Ray(rayStartPosition, Vector3.down);
-            if (Physics.Raycast(ray, out RaycastHit hit, k_GroundCheckDistance + k_GroundCheckDistanceOffset))
+            if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
             {
                 return hit.point.y;
             }
