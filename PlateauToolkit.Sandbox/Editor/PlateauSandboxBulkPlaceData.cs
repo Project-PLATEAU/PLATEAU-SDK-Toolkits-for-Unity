@@ -75,6 +75,7 @@ namespace PlateauToolkit.Sandbox.Editor
         protected string m_AssetType;
         public string AssetType =>
             m_AssetType.Length > 20 ? m_AssetType.Substring(0, 20) + "..." : m_AssetType;
+        public bool IsIgnoreHeight { get; protected set; }
         public abstract void ReplaceField(int oldFieldIndex, int newFieldIndex);
         public abstract List<string> GetFieldLabels();
     }
@@ -97,6 +98,7 @@ namespace PlateauToolkit.Sandbox.Editor
             Height = csvData[heightIndex > 0 ? heightIndex : 2];
             m_AssetType = csvData[assetTypeIndex > 0 ? assetTypeIndex : 3];
             m_FieldNames = fieldNames;
+            IsIgnoreHeight = false;
         }
 
         string GetFieldValue(int fieldIndex)
@@ -226,6 +228,9 @@ namespace PlateauToolkit.Sandbox.Editor
             // Move AssetType to the top.
             m_Fields.Remove(assetField);
             m_Fields.Insert(0, assetField);
+
+            // For ShapeFile Set the flag to ignore the height.
+            IsIgnoreHeight = true;
         }
 
         public override List<string> GetFieldLabels()

@@ -18,6 +18,7 @@ namespace PlateauToolkit.Sandbox.Editor
             public GameObject m_Prefab;
             public string m_AssetType;
             public string m_ObjectId;
+            public bool m_IsIgnoreHeight;
         }
 
         PLATEAUInstancedCityModel m_CityModel;
@@ -69,7 +70,7 @@ namespace PlateauToolkit.Sandbox.Editor
             PlateauVector3d plateauPosition = m_CityModel.GeoReference.Project(geoCoordinate);
             var unityPosition = new Vector3((float)plateauPosition.X, (float)plateauPosition.Y, (float)plateauPosition.Z);
 
-            if (unityPosition.y == 0.0f)
+            if (context.m_IsIgnoreHeight)
             {
                 // If the height is not set, then RayCast to get the height.
                 bool isColliderFound = TryGetColliderHeight(unityPosition, out float colliderHeight);
