@@ -25,9 +25,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public int PlacingCount { get; private set; }
 
-        // For checking the height of the placed object.
-        const float k_GroundCheckDistance = 10000.0f;
-        const float k_GroundCheckDistanceOffset = 0.5f;
+        // Check the length to the collider.
+        const float k_GroundCheckLength = 10000.0f;
 
         public PlateauSandboxPrefabPlacement()
         {
@@ -70,19 +69,17 @@ namespace PlateauToolkit.Sandbox.Editor
             PlateauVector3d plateauPosition = m_CityModel.GeoReference.Project(geoCoordinate);
             var unityPosition = new Vector3((float)plateauPosition.X, (float)plateauPosition.Y, (float)plateauPosition.Z);
 
-
-            // Search for the collider to place the object
-            float hitPosition = TryGetColliderHeight(unityPosition);
-            if (hitPosition < 0)
+            if (unityPosition.y == 0.0f)
             {
-                Debug.LogWarning($"{context.m_ObjectId} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
-                return;
-            }
+                // If the height is not set, then RayCast to get the height.
+                bool isColliderFound = TryGetColliderHeight(unityPosition, out float colliderHeight);
+                if (!isColliderFound)
+                {
+                    Debug.LogWarning($"{context.m_ObjectId} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
+                    return;
+                }
 
-            if (unityPosition.y <= 0)
-            {
-                // set the height of the object
-                unityPosition.y = hitPosition;
+                unityPosition.y = colliderHeight;
             }
 
             // Name for the GameObject
@@ -113,24 +110,22 @@ namespace PlateauToolkit.Sandbox.Editor
             m_PlacementContexts.Clear();
         }
 
-        private float TryGetColliderHeight(Vector3 position)
+        private bool TryGetColliderHeight(Vector3 position, out float colliderHeight)
         {
-            bool isIgnoreHeight = (int)position.y == 0;
+            var rayStartPosition = new Vector3(position.x, k_GroundCheckLength, position.z);
+            float rayDistance = k_GroundCheckLength * 2;
 
-            // If the height is not set, then RayCast to get the height.
-            var rayStartPosition = new Vector3(position.x, 0, position.z);
-            rayStartPosition.y = isIgnoreHeight ? k_GroundCheckDistance : position.y + k_GroundCheckDistanceOffset;
-
-            float rayDistance = isIgnoreHeight ? k_GroundCheckDistance + k_GroundCheckDistanceOffset : k_GroundCheckDistanceOffset;
-
+            // Send a ray downward to get the height of the collider.
             var ray = new Ray(rayStartPosition, Vector3.down);
             if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
             {
-                return hit.point.y;
+                colliderHeight = hit.point.y;
+                return true;
             }
 
             // Not found.
-            return -1;
+            colliderHeight = 0.0f;
+            return false;
         }
 
         public bool IsValidCityModel()
