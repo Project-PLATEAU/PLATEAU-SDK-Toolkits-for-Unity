@@ -96,7 +96,10 @@ namespace PlateauToolkit.Sandbox.Editor
             Latitude = csvData[latitudeIndex > 0 ? latitudeIndex : 0];
             Longitude = csvData[longitudeIndex > 0 ? longitudeIndex : 1];
             Height = csvData[heightIndex > 0 ? heightIndex : 2];
-            m_AssetType = csvData[assetTypeIndex > 0 ? assetTypeIndex : 3];
+            
+            string assetType = csvData[assetTypeIndex > 0 ? assetTypeIndex : 3];
+            m_AssetType = string.IsNullOrEmpty(assetType) ? "指定なし" : assetType;
+
             m_FieldNames = fieldNames;
             IsIgnoreHeight = false;
         }

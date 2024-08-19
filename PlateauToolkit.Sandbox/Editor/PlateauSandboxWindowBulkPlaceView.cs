@@ -397,7 +397,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             m_HierarchyItem.Add(new PlateauSandboxBulkPlaceHierarchyItem()
                             {
                                 ID = asset.index,
-                                CategoryName = string.IsNullOrEmpty(categoryName) ? "指定なし" : categoryName,
+                                CategoryName = categoryName,
                                 Count = count,
                             });
                         });
@@ -506,15 +506,16 @@ namespace PlateauToolkit.Sandbox.Editor
 
                 try
                 {
+                    bool isIgnoreHeight = placeData.IsIgnoreHeight | m_IsIgnoreHeight;
                     var context = new PlateauSandboxPrefabPlacement.PlacementContext()
                     {
                         m_Latitude = float.Parse(placeData.Latitude),
                         m_Longitude = float.Parse(placeData.Longitude),
-                        m_Height = float.Parse(placeData.Height),
+                        m_Height = isIgnoreHeight ? 0 : float.Parse(placeData.Height),
                         m_Prefab = prefab,
                         m_AssetType = placeData.AssetType,
                         m_ObjectId = placeData.ID.ToString(),
-                        m_IsIgnoreHeight = placeData.IsIgnoreHeight | m_IsIgnoreHeight,
+                        m_IsIgnoreHeight = isIgnoreHeight,
                     };
                     m_PrefabPlacement.AddContext(context);
                 }
