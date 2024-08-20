@@ -17,6 +17,9 @@ PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミ�
   - [3. カメラインタラクション機能](#3-カメラインタラクション機能)
     - [3-1. 操作方法](#3-1-操作方法)
     - [3-2. カメラのデフォルト位置の変更](#3-2-カメラのデフォルト位置の変更)
+  - [4. 広告変更機能](#4-広告変更機能)
+    - [4-1. テクスチャ切り替え](#4-1-テクスチャ切り替え)
+    - [4-2. ビデオクリップ切り替え](#4-2-ビデオクリップ切り替え)
 - [関連API](#関連api)
 
 # 利用手順
@@ -373,6 +376,31 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | ThirdPersonOrbitInitialRotation      | 見回しモードの注視点デフォルト位置       |
 | ThirdPersonOrbitOffset               | 見回しモードの注視点の原点からのオフセット   |
 | ThirdPersonOrbitDefaultDistance      | 見回しモードの注視点からカメラへの距離の初期値 |
+
+
+## 4. 広告変更機能
+
+配置可能アセットの中には看板アセットのように広告物シミュレーションを行うための広告コンポーネント ( `PlateauSandboxAdvertisement` ) がアタッチされているものがあります。表示させたいテクスチャやビデオクリップを設定することで広告物の内容を変更できます。
+
+<img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_ad_board.png">
+
+### 4-1. テクスチャ切り替え
+
+広告コンポーネントの `Advertisement Type` フィールドを `Image` に変更し、 `Advertisement Texture` フィールドに表示させたいテクスチャをドラッグアンドドロップまたはテクスチャ選択ウィンドウから選択することで広告物の内容を変更できます。
+
+<img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_ad_tex_replace.png">
+
+テクスチャの推奨アスペクト比を `Aspect Ratio` フィールドに表示しているので、そのアスペクト比に合わせてテクスチャを設定してください。スケール変更時のアスペクト比率は最下部の `Info Box` にて表示しているのでご確認ください。
+
+<img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_ad_tex_replaced.png">
+
+### 4-2. ビデオクリップ切り替え
+
+広告コンポーネントの `Advertisement Type` フィールドを `Video` に変更し、 `Advertisement Video` フィールドに表示させたいビデオクリップをドラッグアンドドロップまたはビデオクリップ選択ウィンドウから選択することで広告物の内容を変更できます。
+
+<img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_ad_video_replace.png">
+
+<img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_ad_video_replaced.gif">
 
 # 関連API
 

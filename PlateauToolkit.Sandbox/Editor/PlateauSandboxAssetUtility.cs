@@ -57,6 +57,31 @@ namespace PlateauToolkit.Sandbox.Editor
         }
 
         /// <summary>
+        /// Find a asset by the type <see cref="TComponent" /> in assets.
+        /// </summary>
+        public static (TComponent, string) FindAsset<TComponent>()
+            where TComponent : Component
+        {
+            string[] assetGuids = AssetDatabase.FindAssets("t:prefab", k_SearchInFolder);
+            if (assetGuids.Length == 0)
+            {
+                return (null, "");
+            }
+
+            foreach (string assetGuid in assetGuids)
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath(assetGuid);
+                GameObject assetObject = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+                if (assetObject.TryGetComponent(out TComponent component))
+                {
+                    return (component, assetPath);
+                }
+            }
+
+            return (null, "");
+        }
+
+        /// <summary>
         /// Find all assets by the type <see cref="TComponent" /> in assets.
         /// </summary>
         internal static (TComponent, SandboxAssetType)[] FindAllAssets<TComponent>()
