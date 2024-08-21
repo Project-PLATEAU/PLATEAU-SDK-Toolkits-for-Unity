@@ -35,6 +35,7 @@ namespace PlateauToolkit.Sandbox.Editor
         PlateauSandboxPrefabPlacement m_PrefabPlacement;
 
         public string Name => "アセット一括配置";
+        readonly string[] m_AssetHeightLabels = { "ファイルの高さ情報を利用", "地面に設置" };
 
         public void OnBegin(PlateauSandboxContext context, EditorWindow editorWindow)
         {
@@ -215,11 +216,16 @@ namespace PlateauToolkit.Sandbox.Editor
 
             EditorGUILayout.LabelField("パース対象設定", EditorStyles.boldLabel);
 
-            float originalValue = EditorGUIUtility.labelWidth;
-            EditorGUIUtility.labelWidth = 180; // Set the label width
-            m_IsIgnoreHeight = EditorGUILayout.Toggle("ファイルの高さ情報を無視する",
-                                   m_IsIgnoreHeight);
-            EditorGUIUtility.labelWidth = originalValue;
+            if (m_DataContext.GetFileType() == PlateauSandboxBulkPlaceFileType.k_Csv)
+            {
+                int labelIndex = m_IsIgnoreHeight ? 1 : 0;
+                int selectedIndex = EditorGUILayout.Popup("アセットの配置高さ", labelIndex, m_AssetHeightLabels, GUILayout.Width(340));
+
+                if (selectedIndex != labelIndex)
+                {
+                    m_IsIgnoreHeight = !m_IsIgnoreHeight;
+                }
+            }
 
             EditorGUILayout.LabelField("利用する属性列の選択", EditorStyles.label);
 
