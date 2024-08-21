@@ -382,6 +382,9 @@ namespace PlateauToolkit.Sandbox.Editor
 
             if (m_HierarchyItem.Count == 0)
             {
+                // clear the selection
+                m_TreeView.SetSelection(new List<int>());
+
                 if (m_DataContext.HasLoadedFile())
                 {
                     m_DataContext.Data
