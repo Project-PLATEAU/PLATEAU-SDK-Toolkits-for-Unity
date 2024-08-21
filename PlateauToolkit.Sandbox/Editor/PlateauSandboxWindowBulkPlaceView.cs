@@ -554,6 +554,9 @@ namespace PlateauToolkit.Sandbox.Editor
             m_IsIgnoreHeight = false;
             m_ViewPageIndex = BulkPlaceViewPageIndex.k_FieldSelect;
             m_PrefabPlacement = null;
+
+            m_HierarchyItem.Clear();
+            m_DataContext.Clear();
         }
     }
 
