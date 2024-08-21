@@ -60,7 +60,6 @@ namespace PlateauToolkit.Sandbox.Editor
                     // Unselect the object
                     selectedItem.PrefabConstantID = -1;
                     selectedItem.PrefabName = string.Empty;
-                    m_SelectedCategoryId = -1;
                 }
                 else
                 {
