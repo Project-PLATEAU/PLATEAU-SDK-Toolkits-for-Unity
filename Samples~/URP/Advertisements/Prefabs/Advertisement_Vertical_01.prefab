@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1221056664566577169}
   - component: {fileID: 4936123778686702412}
-  - component: {fileID: -8301573565973562821}
+  - component: {fileID: 1489830008636659220}
   - component: {fileID: 5833962460649214087}
   m_Layer: 0
   m_Name: Advertisement_Vertical_01
@@ -56,7 +56,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.17818011, y: 2.8053503, z: 0.85449386}
   m_Center: {x: 0.000000007450581, y: 0.0026946068, z: 0.42304492}
---- !u!114 &-8301573565973562821
+--- !u!114 &1489830008636659220
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -69,17 +69,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textureAspectWidth: 1
-  textureAspectHeight: 1
+  textureAspectHeight: 5
   targetMaterialNumber: 1
-  targetTextureProperty: _BaseColorMap
+  targetTextureProperty: _BaseMap
   frontAxis: 0
   advertisementType: 0
   advertisementMaterials:
-  - gameObjectName: Prop_Sign_Vertical_01
+  - gameObjectName: Advertisement_Vertical_01_LOD0
     materials:
     - {fileID: 2100000, guid: 47cc0e39cb26a2c4a92c09d676740ccd, type: 2}
     - {fileID: 2100000, guid: 6b8a9f0555820ee4ca1089a076b1468a, type: 2}
-  advertisementTexture: {fileID: 2800000, guid: 2d8574ec98c9aa346ac144dd93c8d9ee, type: 3}
+  advertisementTexture: {fileID: 2800000, guid: 3280b80a8ed8a4fdaa75254607b0dbcc, type: 3}
   advertisementVideoClip: {fileID: 0}
 --- !u!328 &5833962460649214087
 VideoPlayer:
@@ -129,7 +129,7 @@ GameObject:
   - component: {fileID: 5788880320737415789}
   - component: {fileID: 7815771097721319685}
   m_Layer: 0
-  m_Name: Advertisement_Vertical_01
+  m_Name: Advertisement_Vertical_01_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -178,7 +178,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: c8da4f2f13fe5a74dbe538ee47e6260c, type: 2}
+  - {fileID: 2100000, guid: 47cc0e39cb26a2c4a92c09d676740ccd, type: 2}
   - {fileID: 2100000, guid: 6b8a9f0555820ee4ca1089a076b1468a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

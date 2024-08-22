@@ -108,7 +108,7 @@ MonoBehaviour:
     materials:
     - {fileID: 2100000, guid: 619cebd6295c511459ab8aae7a1db8f9, type: 2}
     - {fileID: 2100000, guid: 40388e63c288d534c8119eb00540fcbd, type: 2}
-  advertisementTexture: {fileID: 2800000, guid: d4673bf7eb46419479fee7354986acb3, type: 3}
+  advertisementTexture: {fileID: 0}
   advertisementVideoClip: {fileID: 0}
 --- !u!328 &274440160449288870
 VideoPlayer:
@@ -186,7 +186,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5591624345906315195}
-  m_Mesh: {fileID: -4009496625405145212, guid: 0b2a70435176fab4e9f82edc65b21546, type: 3}
+  m_Mesh: {fileID: -4009496625405145212, guid: a97143f951bb9cc4b9cdf1ab998a5d03, type: 3}
 --- !u!23 &924474464536054005
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -270,7 +270,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5741824902652253086}
-  m_Mesh: {fileID: -258069743824170035, guid: 0b2a70435176fab4e9f82edc65b21546, type: 3}
+  m_Mesh: {fileID: -258069743824170035, guid: a97143f951bb9cc4b9cdf1ab998a5d03, type: 3}
 --- !u!23 &6079271141268157304
 MeshRenderer:
   m_ObjectHideFlags: 0
