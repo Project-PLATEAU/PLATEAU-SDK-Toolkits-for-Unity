@@ -96,7 +96,8 @@ GameObject:
   - component: {fileID: 5440136044179222120}
   - component: {fileID: 947199863460157721}
   - component: {fileID: 161449479910330290}
-  - component: {fileID: 7838593126014537131}
+  - component: {fileID: 3814377632051983604}
+  - component: {fileID: 2976417206683224900}
   m_Layer: 0
   m_Name: Advertisement_RooftopAdTower_01
   m_TagString: Untagged
@@ -165,7 +166,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 15.316555, y: 6.4375367, z: 15.247722}
   m_Center: {x: 0.03441429, y: 3.131746, z: -0.00000047683716}
---- !u!114 &7838593126014537131
+--- !u!114 &3814377632051983604
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -174,9 +175,64 @@ MonoBehaviour:
   m_GameObject: {fileID: 4626584693606298834}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 808971fab4bf0204e8c0aa8779225b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureAspectWidth: 3
+  textureAspectHeight: 1
+  targetMaterialNumber: 1
+  targetTextureProperty: _BaseColorMap
+  frontAxis: 1
+  advertisementType: 0
+  advertisementMaterials:
+  - gameObjectName: Advertisement_RooftopAdTower_01_Mesh_LOD0
+    materials:
+    - {fileID: 2100000, guid: 8029529d302c81b4f86ccc00499675e5, type: 2}
+    - {fileID: 2100000, guid: ef57c69174baafa4e89731d48919dc78, type: 2}
+    - {fileID: 2100000, guid: f8efc3c0e3bc9e14498c93deab6c4177, type: 2}
+  - gameObjectName: Advertisement_RooftopAdTower_01_Mesh_LOD1
+    materials:
+    - {fileID: 2100000, guid: 8029529d302c81b4f86ccc00499675e5, type: 2}
+    - {fileID: 2100000, guid: ef57c69174baafa4e89731d48919dc78, type: 2}
+    - {fileID: 2100000, guid: f8efc3c0e3bc9e14498c93deab6c4177, type: 2}
+  advertisementTexture: {fileID: 0}
+  advertisementVideoClip: {fileID: 0}
+--- !u!328 &2976417206683224900
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4626584693606298834}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1 &5393195068551931296
 GameObject:
   m_ObjectHideFlags: 0

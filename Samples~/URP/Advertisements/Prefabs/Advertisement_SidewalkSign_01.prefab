@@ -61,8 +61,8 @@ MeshRenderer:
   m_RenderingLayerMask: 257
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 14756dea6918f6e43be38df75d45356b, type: 2}
-  - {fileID: 2100000, guid: fd7de171e96d75149a9376d329761e45, type: 2}
+  - {fileID: 2100000, guid: d870569252aa32145b19021a27f57a4d, type: 2}
+  - {fileID: 2100000, guid: 4096a8f9ae9749f4fb6e41ffd33ac595, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -96,7 +96,8 @@ GameObject:
   - component: {fileID: 8287191868844952223}
   - component: {fileID: 790165855332136060}
   - component: {fileID: 3887903260275137931}
-  - component: {fileID: -3017940807337275985}
+  - component: {fileID: 4107404396141037072}
+  - component: {fileID: 2064414411281376056}
   m_Layer: 0
   m_Name: Advertisement_SidewalkSign_01
   m_TagString: Untagged
@@ -181,7 +182,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 6771818021064677442}
   m_Enabled: 1
---- !u!114 &-3017940807337275985
+--- !u!114 &4107404396141037072
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -190,6 +191,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 6297220046705320078}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 808971fab4bf0204e8c0aa8779225b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureAspectWidth: 3
+  textureAspectHeight: 4
+  targetMaterialNumber: 1
+  targetTextureProperty: _BaseMap
+  frontAxis: 1
+  advertisementType: 0
+  advertisementMaterials:
+  - gameObjectName: Advertisement_SidewalkSign_01_Mesh_LOD2
+    materials:
+    - {fileID: 2100000, guid: d870569252aa32145b19021a27f57a4d, type: 2}
+    - {fileID: 2100000, guid: 4096a8f9ae9749f4fb6e41ffd33ac595, type: 2}
+  advertisementTexture: {fileID: 2800000, guid: af1c6788bb80b8d49a4b543c814a9377, type: 3}
+  advertisementVideoClip: {fileID: 0}
+--- !u!328 &2064414411281376056
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6297220046705320078}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 0
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []

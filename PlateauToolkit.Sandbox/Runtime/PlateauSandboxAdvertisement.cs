@@ -24,8 +24,8 @@ namespace PlateauToolkit.Sandbox.Runtime
             Z,
         }
 
-        public int textureAspectWidth = 1;
-        public int textureAspectHeight = 3;
+        public float textureAspectWidth = 1;
+        public float textureAspectHeight = 3;
         public int targetMaterialNumber;
         public string targetTextureProperty = "_MainTex";
         public FrontAxis frontAxis;

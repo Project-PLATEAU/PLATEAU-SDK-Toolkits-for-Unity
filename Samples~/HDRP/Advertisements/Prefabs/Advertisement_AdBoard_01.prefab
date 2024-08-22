@@ -179,7 +179,8 @@ GameObject:
   - component: {fileID: 1815072313473419230}
   - component: {fileID: 9109409192452595551}
   - component: {fileID: 1085259847711829020}
-  - component: {fileID: 4011803187518939259}
+  - component: {fileID: -2624199261468910761}
+  - component: {fileID: 4148519929025672550}
   m_Layer: 0
   m_Name: Advertisement_AdBoard_01
   m_TagString: Untagged
@@ -253,7 +254,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2, y: 2, z: 0.16}
   m_Center: {x: 0, y: 1, z: 0}
---- !u!114 &4011803187518939259
+--- !u!114 &-2624199261468910761
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -262,9 +263,66 @@ MonoBehaviour:
   m_GameObject: {fileID: 6117464502535036712}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 808971fab4bf0204e8c0aa8779225b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  textureAspectWidth: 2
+  textureAspectHeight: 1
+  targetMaterialNumber: 1
+  targetTextureProperty: _BaseColorMap
+  frontAxis: 1
+  advertisementType: 0
+  advertisementMaterials:
+  - gameObjectName: Advertisement_AdBoard_01_Mesh_LOD0
+    materials:
+    - {fileID: 2100000, guid: 8f6550a5f9687f148bdb6caaf0102506, type: 2}
+    - {fileID: 2100000, guid: 31b57d81f77c6e840af7014cc49c648e, type: 2}
+  - gameObjectName: Advertisement_AdBoard_01_Mesh_LOD1
+    materials:
+    - {fileID: 2100000, guid: 8f6550a5f9687f148bdb6caaf0102506, type: 2}
+    - {fileID: 2100000, guid: 31b57d81f77c6e840af7014cc49c648e, type: 2}
+  - gameObjectName: Advertisement_AdBoard_01_Mesh_LOD2
+    materials:
+    - {fileID: 2100000, guid: 8f6550a5f9687f148bdb6caaf0102506, type: 2}
+    - {fileID: 2100000, guid: 31b57d81f77c6e840af7014cc49c648e, type: 2}
+  advertisementTexture: {fileID: 2800000, guid: 8441506381d44714fb43e26649f309a2, type: 3}
+  advertisementVideoClip: {fileID: 0}
+--- !u!328 &4148519929025672550
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6117464502535036712}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 1
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
 --- !u!1 &8749668024523834016
 GameObject:
   m_ObjectHideFlags: 0

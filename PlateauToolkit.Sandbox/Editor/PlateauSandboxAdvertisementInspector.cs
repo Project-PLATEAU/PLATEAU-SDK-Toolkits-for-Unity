@@ -1,6 +1,5 @@
 using PlateauToolkit.Sandbox.Runtime;
 using System;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Video;
@@ -40,65 +39,15 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
 
         private bool IsValidAdMaterials()
         {
-            // マテリアルが設定されていない
-            // 指定したマテリアル番号が存在しない
-            // マテリアルが存在しない
-            // 上記の内どれか１つでも当てはまれば有効ではない
+            // マテリアルが設定されている
+            // 指定したマテリアル番号が存在する
+            // マテリアルが存在する
+            // マテリアルが指定プロパティを持っている
+            // 上記が全て当てはまれば有効
             return m_Target.advertisementMaterials.Count > 0 &&
-                   m_Target.advertisementMaterials.Count > m_Target.targetMaterialNumber &&
-                   m_Target.advertisementMaterials[m_Target.targetMaterialNumber] != null;
-        }
-
-        private string GetMaterialDirPath()
-        {
-            (PlateauSandboxAdvertisement, string) foundAsset = PlateauSandboxAssetUtility.FindAsset<PlateauSandboxAdvertisement>();
-            if (foundAsset.Item1 == null)
-            {
-                return "Assets/Samples/PLATEAU SDK-Toolkits for Unity/0.0.0/Sample Assets/Advertisement/Materials";
-            }
-
-            string materialDirPath = foundAsset.Item2.Split("Props")[0];
-            materialDirPath += "Advertisement/Materials";
-            if (!Directory.Exists(materialDirPath))
-            {
-                Directory.CreateDirectory(materialDirPath);
-            }
-
-            return materialDirPath;
-        }
-
-        private string GetDuplicatedMaterialPath(string inMatDirPath)
-        {
-            Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
-            string matFilePath = AssetDatabase.GetAssetPath(mat);
-            return inMatDirPath + "/" + Path.GetFileName(matFilePath);
-        }
-
-        private string GetRenderTexturePath(string inMatDirPath)
-        {
-            Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
-            string matFilePath = AssetDatabase.GetAssetPath(mat);
-            string matFileName = Path.GetFileNameWithoutExtension(matFilePath);
-            return inMatDirPath + "/" + matFileName + ".renderTexture";
-        }
-
-        private bool DuplicateMaterial(string inDuplicatedMatPath)
-        {
-            // 対象テクスチャプロパティが存在するか？
-            Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
-            if (!mat.HasProperty(m_Target.targetTextureProperty))
-            {
-                return false;
-            }
-
-            string matFilePath = AssetDatabase.GetAssetPath(mat);
-            if (!File.Exists(inDuplicatedMatPath))
-            {
-                AssetDatabase.CopyAsset(matFilePath, inDuplicatedMatPath);
-                AssetDatabase.SaveAssets();
-            }
-
-            return true;
+                   m_Target.advertisementMaterials[0].materials.Count > m_Target.targetMaterialNumber &&
+                   m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber] != null &&
+                   m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber].HasProperty(m_Target.targetTextureProperty);
         }
 
         public override void OnInspectorGUI()
@@ -112,7 +61,7 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
 
             if (!IsValidAdMaterials())
             {
-                EditorGUILayout.HelpBox($"コンポーネントをリセットして下さい。", MessageType.Info);
+                EditorGUILayout.HelpBox("コンポーネントをリセットして下さい。", MessageType.Info);
                 return;
             }
 
@@ -132,6 +81,10 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
                     case PlateauSandboxAdvertisement.AdvertisementType.Image:
                     {
                         // マテリアルにテクスチャを割り当てる
+                        if (m_Target.advertisementTexture == null)
+                        {
+                            return;
+                        }
                         Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
                         mat.SetTexture(m_Target.targetTextureProperty, m_Target.advertisementTexture);
 
@@ -143,32 +96,26 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
                     }
                     case PlateauSandboxAdvertisement.AdvertisementType.Video:
                     {
-                        // VideoClip、RenderTextureを割当てる
-                        string matDirPath = GetMaterialDirPath();
-                        string duplicatedMatPath = GetDuplicatedMaterialPath(matDirPath);
-                        if (File.Exists(duplicatedMatPath))
+                        // マテリアルにレンダーテクスチャを割り当てる
+                        if (m_Target.advertisementVideoClip == null)
                         {
-                            if (m_Target.advertisementVideoClip != null)
-                            {
-                                m_Target.VideoPlayer.clip = m_Target.advertisementVideoClip;
-                            }
+                            return;
+                        }
+                        Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
+                        m_Target.VideoPlayer.clip = m_Target.advertisementVideoClip;
 
-                            string renderTexturePath = GetRenderTexturePath(matDirPath);
-                            RenderTexture renderTexture = AssetDatabase.LoadAssetAtPath<RenderTexture>(renderTexturePath);
-                            if (renderTexture != null)
-                            {
-                                Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
-                                renderTexture.Release();
-                                renderTexture.width = (int)m_Target.VideoPlayer.width <= 0 ? 1 : (int)m_Target.VideoPlayer.width;
-                                renderTexture.height = (int)m_Target.VideoPlayer.height <= 0 ? 1 : (int)m_Target.VideoPlayer.height;
-                                renderTexture.Create();
-                                mat.SetTexture(m_Target.targetTextureProperty, renderTexture);
-                            }
+                        // RenderTexture作成
+                        var renderTexture = new RenderTexture(
+                            (int)m_Target.VideoPlayer.width <= 0 ? 1 : (int)m_Target.VideoPlayer.width,
+                            (int)m_Target.VideoPlayer.height <= 0 ? 1 : (int)m_Target.VideoPlayer.height,
+                            0);
+                        renderTexture.Create();
+                        m_Target.VideoPlayer.targetTexture = renderTexture;
+                        mat.SetTexture(m_Target.targetTextureProperty, renderTexture);
 
-                            if (EditorApplication.isPlaying)
-                            {
-                                m_Target.VideoPlayer.Play();
-                            }
+                        if (EditorApplication.isPlaying)
+                        {
+                            m_Target.VideoPlayer.Play();
                         }
                         break;
                     }
@@ -230,19 +177,12 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
 
                 m_Target.advertisementTexture = adTexture;
 
-                // マテリアルを複製
-                string matDirPath = GetMaterialDirPath();
-                string duplicatedMatPath = GetDuplicatedMaterialPath(matDirPath);
-                if (!DuplicateMaterial(duplicatedMatPath))
-                {
-                    return true;
-                }
-
-                // マテリアルにテクスチャを割り当てる
-                Material duplicatedMat = AssetDatabase.LoadAssetAtPath<Material>(duplicatedMatPath);
+                // マテリアル複製
+                Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
+                var duplicatedMat = new Material(mat);
                 duplicatedMat.SetTexture(m_Target.targetTextureProperty, m_Target.advertisementTexture);
 
-                // マテリアルを差し替える
+                // マテリアルを差し替え
                 foreach (PlateauSandboxAdvertisement.AdvertisementMaterials advertisementMaterial in m_Target.advertisementMaterials)
                 {
                     advertisementMaterial.materials[m_Target.targetMaterialNumber] = duplicatedMat;
@@ -276,41 +216,19 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
                 }
 
                 m_Target.advertisementVideoClip = adVideoClip;
-
-                // マテリアルを複製
-                string matDirPath = GetMaterialDirPath();
-                string duplicatedMatPath = GetDuplicatedMaterialPath(matDirPath);
-                if (!DuplicateMaterial(duplicatedMatPath))
-                {
-                    return true;
-                }
-
                 m_Target.VideoPlayer.clip = adVideoClip;
 
-                // RenderTextureが存在しない場合は作成
-                string duplicatedMatFileName = Path.GetFileNameWithoutExtension(duplicatedMatPath);
-                string renderTexturePath = matDirPath + "/" + duplicatedMatFileName + ".renderTexture";
-                RenderTexture renderTexture;
-                if (!File.Exists(renderTexturePath))
-                {
-                    renderTexture = new RenderTexture((int)m_Target.VideoPlayer.width, (int)m_Target.VideoPlayer.height, 0);
-                    renderTexture.Create();
-                    AssetDatabase.CreateAsset(renderTexture, renderTexturePath);
-                    AssetDatabase.SaveAssets();
-                }
-                else
-                {
-                    renderTexture = AssetDatabase.LoadAssetAtPath<RenderTexture>(renderTexturePath);
-                    renderTexture.Release();
-                    renderTexture.width = (int)m_Target.VideoPlayer.width <= 0 ? 1 : (int)m_Target.VideoPlayer.width;
-                    renderTexture.height = (int)m_Target.VideoPlayer.height <= 0 ? 1 : (int)m_Target.VideoPlayer.height;
-                    renderTexture.Create();
-                }
+                // マテリアル複製
+                Material mat = m_Target.advertisementMaterials[0].materials[m_Target.targetMaterialNumber];
+                var duplicatedMat = new Material(mat);
 
+                // RenderTexture作成
+                var renderTexture = new RenderTexture(
+                    (int)m_Target.VideoPlayer.width <= 0 ? 1 : (int)m_Target.VideoPlayer.width,
+                    (int)m_Target.VideoPlayer.height <= 0 ? 1 : (int)m_Target.VideoPlayer.height,
+                    0);
+                renderTexture.Create();
                 m_Target.VideoPlayer.targetTexture = renderTexture;
-
-                // マテリアルにRenderTextureを割り当てる
-                Material duplicatedMat = AssetDatabase.LoadAssetAtPath<Material>(duplicatedMatPath);
                 duplicatedMat.SetTexture(m_Target.targetTextureProperty, renderTexture);
 
                 // マテリアルを差し替える
@@ -348,29 +266,46 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
             float textureAspectWidthScale;
             float textureAspectHeightScale;
             Vector3 localScale = m_Target.transform.transform.localScale;
+            bool isEditedScale = false;
             switch (m_Target.frontAxis)
             {
                 case PlateauSandboxAdvertisement.FrontAxis.X:
                     textureAspectWidthScale = localScale.z;
                     textureAspectHeightScale = localScale.y;
+                    if (!Mathf.Approximately(localScale.y, 1) || !Mathf.Approximately(localScale.z, 1))
+                    {
+                        isEditedScale = true;
+                    }
                     break;
                 case PlateauSandboxAdvertisement.FrontAxis.Z:
                     textureAspectWidthScale = localScale.x;
                     textureAspectHeightScale = localScale.y;
+                    if (!Mathf.Approximately(localScale.x, 1) || !Mathf.Approximately(localScale.y, 1))
+                    {
+                        isEditedScale = true;
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            float d = GetFloatGcd(m_Target.textureAspectWidth * textureAspectWidthScale, m_Target.textureAspectHeight * textureAspectHeightScale);
-            float scaledWidth = m_Target.textureAspectWidth * textureAspectWidthScale / d;
-            float scaledHeight = m_Target.textureAspectHeight * textureAspectHeightScale / d;
-            if (scaledWidth % Mathf.FloorToInt(scaledWidth) == 0 && scaledHeight % Mathf.FloorToInt(scaledHeight) == 0)
+
+            if (isEditedScale)
             {
-                EditorGUILayout.HelpBox($"スケールを考慮したアスペクト比　W: {scaledWidth}  H: {scaledHeight}", MessageType.Info);
+                float d = GetFloatGcd(m_Target.textureAspectWidth * textureAspectWidthScale, m_Target.textureAspectHeight * textureAspectHeightScale);
+                float scaledWidth = m_Target.textureAspectWidth * textureAspectWidthScale / d;
+                float scaledHeight = m_Target.textureAspectHeight * textureAspectHeightScale / d;
+                if (scaledWidth % Mathf.FloorToInt(scaledWidth) == 0 && scaledHeight % Mathf.FloorToInt(scaledHeight) == 0)
+                {
+                    EditorGUILayout.HelpBox($"スケールを考慮したアスペクト比　W: {scaledWidth}  H: {scaledHeight}", MessageType.Info);
+                }
+                else
+                {
+                    EditorGUILayout.HelpBox($"スケールを考慮したアスペクト比　W: {scaledWidth:.0}  H: {scaledHeight:.0}", MessageType.Info);
+                }
             }
             else
             {
-                EditorGUILayout.HelpBox($"スケールを考慮したアスペクト比　W: {scaledWidth:.0}  H: {scaledHeight:.0}", MessageType.Info);
+                EditorGUILayout.HelpBox($"スケールを考慮したアスペクト比　W: {m_Target.textureAspectWidth}  H: {m_Target.textureAspectHeight}", MessageType.Info);
             }
         }
 
