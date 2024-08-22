@@ -9,6 +9,7 @@
         public static string TracksIcon { get; } = $"{k_SpritesFolder}/PlateauToolkitSandbox_TrackIcon.png";
         public static string HumanIcon { get; } = $"{k_SpritesFolder}/PlateauToolkitSandbox_HumanIcon.png";
         public static string PropsIcon { get; } = $"{k_SpritesFolder}/PlateauToolkitSandbox_PropsIcon.png";
+        public static string BuildingIcon { get; } = $"{k_SpritesFolder}/PlateauToolkitSandbox_BuildingIcon.png";
 
         public static string PlacementToolOverlayUxml { get; } = $"{k_UIFolder}/PlacementToolOverlay.uxml";
     }

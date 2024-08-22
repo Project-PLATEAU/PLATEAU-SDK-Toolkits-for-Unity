@@ -1,0 +1,193 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Common;
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib;
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings;
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Configs;
+using ProceduralToolkit;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
+{
+    public class PlateauSandboxBuilding : MonoBehaviour
+    {
+        private const int k_DefaultBuildingWidth = 5;
+        private const int k_DefaultBuildingDepth = 5;
+        private readonly BuildingGenerator.Config m_Config = new();
+
+        [HideInInspector]
+        public BuildingType buildingType = BuildingType.k_SkyscraperCondominium;
+        [HideInInspector]
+        public float buildingHeight = 5;
+        [HideInInspector]
+        public float buildingWidth = 5;
+        [HideInInspector]
+        public float buildingDepth = 5;
+        [HideInInspector]
+        public bool useTexture = true;
+
+        public SkyscraperCondominiumConfig.Params skyscraperCondominiumParams = new();
+        public SkyscraperCondominiumConfig.VertexColorPalette skyscraperCondominiumVertexColorPalette = new();
+        public SkyscraperCondominiumConfig.VertexColorMaterialPalette skyscraperCondominiumVertexColorMaterialPalette = new();
+        public SkyscraperCondominiumConfig.MaterialPalette skyscraperCondominiumMaterialPalette = new();
+
+        public OfficeBuildingConfig.Params officeBuildingParams = new();
+        public OfficeBuildingConfig.VertexColorPalette officeBuildingVertexColorPalette = new();
+        public OfficeBuildingConfig.VertexColorMaterialPalette officeBuildingVertexColorMaterialPalette = new();
+        public OfficeBuildingConfig.MaterialPalette officeBuildingMaterialPalette = new();
+
+        public ResidenceConfig.Params residenceParams = new();
+        public ResidenceConfig.VertexColorPalette residenceVertexColorPalette = new();
+        public ResidenceConfig.VertexColorMaterialPalette residenceVertexColorMaterialPalette = new();
+        public ResidenceConfig.MaterialPalette residenceMaterialPalette = new();
+
+        public ConvenienceStoreConfig.Params conveniParams = new();
+        public ConvenienceStoreConfig.VertexColorPalette conveniVertexColorPalette = new();
+        public ConvenienceStoreConfig.VertexColorMaterialPalette conveniVertexColorMaterialPalette = new();
+        public ConvenienceStoreConfig.MaterialPalette conveniMaterialPalette = new();
+
+        public CommercialFacilityConfig.Params commercialFacilityParams = new();
+        public CommercialFacilityConfig.VertexColorPalette commercialFacilityVertexColorPalette = new();
+        public CommercialFacilityConfig.VertexColorMaterialPalette commercialFacilityVertexColorMaterialPalette = new();
+        public CommercialFacilityConfig.MaterialPalette commercialFacilityMaterialPalette = new();
+
+        public HotelConfig.Params hotelParams = new();
+        public HotelConfig.VertexColorPalette hotelVertexColorPalette = new();
+        public HotelConfig.VertexColorMaterialPalette hotelVertexColorMaterialPalette = new();
+        public HotelConfig.MaterialPalette hotelMaterialPalette = new();
+
+        public string buildingName = "Building_Name";
+        public FacadePlanner facadePlanner;
+        public FacadeConstructor facadeConstructor;
+        public RoofPlanner roofPlanner;
+        public RoofConstructor roofConstructor;
+
+        public void GenerateMesh(int inLodNum, float inBuildingWidth, float inBuildingDepth)
+        {
+            m_Config.buildingType = buildingType;
+            m_Config.buildingHeight = buildingHeight;
+            m_Config.useTexture = useTexture;
+
+            m_Config.skyscraperCondominiumParams = skyscraperCondominiumParams;
+            m_Config.skyscraperCondominiumVertexColorPalette = skyscraperCondominiumVertexColorPalette;
+            m_Config.skyscraperCondominiumVertexColorMaterialPalette = skyscraperCondominiumVertexColorMaterialPalette;
+            m_Config.skyscraperCondominiumMaterialPalette = skyscraperCondominiumMaterialPalette;
+
+            m_Config.officeBuildingParams = officeBuildingParams;
+            m_Config.officeBuildingVertexColorPalette = officeBuildingVertexColorPalette;
+            m_Config.officeBuildingVertexColorMaterialPalette = officeBuildingVertexColorMaterialPalette;
+            m_Config.officeBuildingMaterialPalette = officeBuildingMaterialPalette;
+
+            m_Config.residenceParams = residenceParams;
+            m_Config.residenceVertexColorPalette = residenceVertexColorPalette;
+            m_Config.residenceVertexColorMaterialPalette = residenceVertexColorMaterialPalette;
+            m_Config.residenceMaterialPalette = residenceMaterialPalette;
+
+            m_Config.conveniParams = conveniParams;
+            m_Config.conveniVertexColorPalette = conveniVertexColorPalette;
+            m_Config.conveniVertexColorMaterialPalette = conveniVertexColorMaterialPalette;
+            m_Config.conveniMaterialPalette = conveniMaterialPalette;
+
+            m_Config.commercialFacilityParams = commercialFacilityParams;
+            m_Config.commercialFacilityVertexColorPalette = commercialFacilityVertexColorPalette;
+            m_Config.commercialFacilityVertexColorMaterialPalette = commercialFacilityVertexColorMaterialPalette;
+            m_Config.commercialFacilityMaterialPalette = commercialFacilityMaterialPalette;
+
+            m_Config.hotelParams = hotelParams;
+            m_Config.hotelVertexColorPalette = hotelVertexColorPalette;
+            m_Config.hotelVertexColorMaterialPalette = hotelVertexColorMaterialPalette;
+            m_Config.hotelMaterialPalette = hotelMaterialPalette;
+
+            m_Config.lodNum = inLodNum;
+
+            float buildingWidthDiff = (inBuildingWidth - k_DefaultBuildingWidth) * 1f;
+            float buildingDepthDiff = (inBuildingDepth - k_DefaultBuildingDepth) * 1f;
+            const float halfBoundingBoxMultiplier = 0.5f;
+            var lsFoundationPolygonVertex = new List<Vector2>
+            {
+                new((k_DefaultBuildingWidth + buildingWidthDiff) * halfBoundingBoxMultiplier, (-k_DefaultBuildingDepth - buildingDepthDiff) * halfBoundingBoxMultiplier),
+                new((-k_DefaultBuildingWidth - buildingWidthDiff) * halfBoundingBoxMultiplier, (-k_DefaultBuildingDepth - buildingDepthDiff) * halfBoundingBoxMultiplier),
+                new((-k_DefaultBuildingWidth - buildingWidthDiff) * halfBoundingBoxMultiplier, (k_DefaultBuildingDepth + buildingDepthDiff) * halfBoundingBoxMultiplier),
+                new((k_DefaultBuildingWidth + buildingWidthDiff) * halfBoundingBoxMultiplier, (k_DefaultBuildingDepth + buildingDepthDiff) * halfBoundingBoxMultiplier)
+            };
+
+            try
+            {
+                var generator = new BuildingGenerator();
+                generator.SetFacadePlanner(facadePlanner);
+                generator.SetFacadeConstructor(facadeConstructor);
+                generator.SetRoofPlanner(roofPlanner);
+                generator.SetRoofConstructor(roofConstructor);
+
+                var lsLodObject = gameObject.GetComponentsInChildrenWithoutSelf<Transform>().ToList();
+                foreach (Transform lodObject in lsLodObject)
+                {
+                    if (!lodObject.name.Contains($"{inLodNum}"))
+                    {
+                        continue;
+                    }
+
+                    float facadesHeight = 0;
+                    Transform facadesObject = lodObject.Find("Facades");
+                    if (facadesObject)
+                    {
+                        MeshFilter meshFilter = facadesObject.GetComponent<MeshFilter>();
+                        MeshRenderer meshRenderer = facadesObject.GetComponent<MeshRenderer>();
+                        (CompoundMeshDraft, float) generatedResult = generator.GenerateFacadesMesh(lsFoundationPolygonVertex, m_Config);
+                        CompoundMeshDraft facadesDraft = generatedResult.Item1;
+                        facadesHeight = generatedResult.Item2;
+                        Mesh mesh = facadesDraft.ToMeshWithSubMeshes();
+                        NormalSolver.RecalculateNormals(mesh, 0);
+                        meshFilter.mesh = mesh;
+
+                        var materials = new List<Material>();
+                        foreach (MeshDraft draft in facadesDraft)
+                        {
+                            materials.AddRange(draft.materials);
+                        }
+                        meshRenderer.materials = materials.ToArray();
+
+                        if (!facadesObject.TryGetComponent(out BoxCollider boxCollider))
+                        {
+                            boxCollider = facadesObject.gameObject.AddComponent<BoxCollider>();
+                        }
+
+                        boxCollider.center = meshFilter.sharedMesh.bounds.center;
+                        boxCollider.size = meshFilter.sharedMesh.bounds.size;
+                    }
+
+                    Transform roofObject = lodObject.Find("Roof");
+                    if (roofObject != null)
+                    {
+                        MeshFilter meshFilter = roofObject.GetComponent<MeshFilter>();
+                        MeshRenderer meshRenderer = roofObject.GetComponent<MeshRenderer>();
+                        CompoundMeshDraft roofMesh = generator.GenerateRoofMesh(lsFoundationPolygonVertex, m_Config, facadesHeight);
+                        Mesh mesh = roofMesh.ToMeshWithSubMeshes();
+                        NormalSolver.RecalculateNormals(mesh, 0);
+                        meshFilter.mesh = mesh;
+
+                        var materials = new List<Material>();
+                        foreach (MeshDraft draft in roofMesh)
+                        {
+                            materials.AddRange(draft.materials);
+                        }
+                        meshRenderer.materials = materials.ToArray();
+
+                        if (!roofObject.TryGetComponent(out BoxCollider boxCollider))
+                        {
+                            boxCollider = roofObject.gameObject.AddComponent<BoxCollider>();
+                        }
+
+                        boxCollider.center = meshFilter.sharedMesh.bounds.center;
+                        boxCollider.size = meshFilter.sharedMesh.bounds.size;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
+        }
+    }
+}
