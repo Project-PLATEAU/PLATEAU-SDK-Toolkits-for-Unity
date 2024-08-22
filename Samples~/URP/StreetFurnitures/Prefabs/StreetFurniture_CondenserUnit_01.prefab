@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 7133796122534114260}
   - component: {fileID: 2691545571071280293}
   - component: {fileID: 2674421200254834401}
-  - component: {fileID: -5578940510071309086}
+  - component: {fileID: -3129732107818849527}
   m_Layer: 0
   m_Name: StreetFurniture_CondenserUnit_01
   m_TagString: Untagged
@@ -163,7 +163,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7614895, y: 0.5601845, z: 0.35308117}
   m_Center: {x: 0.000000059604645, y: 0.2771876, z: 0}
---- !u!114 &-5578940510071309086
+--- !u!114 &-3129732107818849527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7515247095608256878}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7739947508456424589

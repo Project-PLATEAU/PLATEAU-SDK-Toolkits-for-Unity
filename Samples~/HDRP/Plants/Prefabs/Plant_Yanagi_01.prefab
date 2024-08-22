@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7296577636409173773}
   - component: {fileID: 401394435598129546}
   - component: {fileID: 8086887775979972982}
-  - component: {fileID: -7315317260034627640}
+  - component: {fileID: 1330819316461727947}
   m_Layer: 0
   m_Name: Plant_Yanagi_01
   m_TagString: Untagged
@@ -102,7 +102,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.869193, y: 3.8756819, z: 2.437841}
   m_Center: {x: -0.25162196, y: 3.5227103, z: -0.1437841}
---- !u!114 &-7315317260034627640
+--- !u!114 &1330819316461727947
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2905782416318958278}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: e0d24e4b8b09407ca0f52fc8d4e5b865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &2961405160491557935

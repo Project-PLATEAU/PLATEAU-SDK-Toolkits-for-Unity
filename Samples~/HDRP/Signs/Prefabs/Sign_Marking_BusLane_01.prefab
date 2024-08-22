@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1764116131363023121}
   - component: {fileID: 1550163756427574537}
   - component: {fileID: 1201367250563793324}
-  - component: {fileID: -7262238244726043935}
+  - component: {fileID: 5948559190722333234}
   m_Layer: 0
   m_Name: Sign_Marking_BusLane_01
   m_TagString: Untagged
@@ -84,7 +84,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.1, y: 0.0000021771514, z: 14.299998}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &-7262238244726043935
+--- !u!114 &5948559190722333234
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,7 +93,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2638948301119077390}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5930222299651226966

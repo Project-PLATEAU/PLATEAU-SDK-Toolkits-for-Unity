@@ -47,7 +47,6 @@ namespace PlateauToolkit.Sandbox.Editor
                             RefreshTracksHierarchy(context);
                         };
                     }
-
                 }
                 else
                 {
@@ -87,7 +86,6 @@ namespace PlateauToolkit.Sandbox.Editor
                     }
                 }
             }
-
             EditorGUILayout.Space(15);
 
             m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 200));

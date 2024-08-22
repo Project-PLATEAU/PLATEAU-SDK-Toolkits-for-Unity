@@ -178,10 +178,10 @@ GameObject:
   m_Component:
   - component: {fileID: 9036544551292071158}
   - component: {fileID: 4265576031954393991}
-  - component: {fileID: 8854912604535786267}
   - component: {fileID: -196009395890315186}
   - component: {fileID: 6093869205057432869}
   - component: {fileID: -2804986729978159463}
+  - component: {fileID: 2139817681153484128}
   m_Layer: 0
   m_Name: Sign_CircularPost_01_10
   m_TagString: Untagged
@@ -229,18 +229,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 9046317915845723194}
   m_Enabled: 1
---- !u!114 &8854912604535786267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8512808012370490956}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &-196009395890315186
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -304,3 +292,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3093673, y: 0.044173613, z: 0.2983016}
   m_Center: {x: 0.0018933117, y: 0.004146442, z: -0.0022674352}
+--- !u!114 &2139817681153484128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512808012370490956}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

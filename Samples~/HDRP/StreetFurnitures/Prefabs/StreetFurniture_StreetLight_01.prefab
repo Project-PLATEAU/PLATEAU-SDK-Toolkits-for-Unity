@@ -227,9 +227,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3073680648118350217}
   - component: {fileID: 452601335739110080}
-  - component: {fileID: 7475492212040066281}
   - component: {fileID: -1818696827692491232}
   - component: {fileID: -7895518074608605348}
+  - component: {fileID: -1029256773206171927}
   m_Layer: 0
   m_Name: StreetFurniture_StreetLight_01
   m_TagString: Untagged
@@ -274,18 +274,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 1237094919123391298}
   m_Enabled: 1
---- !u!114 &7475492212040066281
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2444391297619225395}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &-1818696827692491232
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -328,6 +316,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.40698266, y: 0.75193787, z: 2.9180212}
   m_Center: {x: -0.0063995123, y: 9.521137, z: 1.5961843}
+--- !u!114 &-1029256773206171927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2444391297619225395}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4469090303854903868
 GameObject:
   m_ObjectHideFlags: 0

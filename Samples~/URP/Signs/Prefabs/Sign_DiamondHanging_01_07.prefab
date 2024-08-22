@@ -93,8 +93,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7227535579694689422}
-  - component: {fileID: 2517141299374450123}
   - component: {fileID: 7079586905943992910}
+  - component: {fileID: 5265210289276115447}
   m_Layer: 0
   m_Name: Sign_DiamondHanging_01_07
   m_TagString: Untagged
@@ -118,18 +118,6 @@ Transform:
   - {fileID: 6581280144938823518}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2517141299374450123
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8000237908378433076}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &7079586905943992910
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -151,3 +139,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.43397623, y: 0.867744, z: 0.87732196}
   m_Center: {x: 0.35471675, y: 0.3164108, z: 0.00038820505}
+--- !u!114 &5265210289276115447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8000237908378433076}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

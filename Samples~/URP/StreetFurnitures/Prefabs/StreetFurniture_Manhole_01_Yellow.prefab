@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 9114277613329963897}
   - component: {fileID: 4242969953434825377}
   - component: {fileID: 1007919780810954237}
-  - component: {fileID: -7596708693858644700}
+  - component: {fileID: 2032000561856079925}
   m_Layer: 0
   m_Name: StreetFurniture_Manhole_01_Yellow
   m_TagString: Untagged
@@ -75,7 +75,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 2353811528361055163}
   m_Enabled: 1
---- !u!114 &-7596708693858644700
+--- !u!114 &2032000561856079925
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4029080096969417111}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &4613733895955476166

@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 1458455124401088401}
   - component: {fileID: 1508660612443986763}
   - component: {fileID: 5086117024744611635}
-  - component: {fileID: 276081187583522160}
+  - component: {fileID: 2651146680409717023}
   m_Layer: 0
   m_Name: StreetFurniture_GardenChair_01
   m_TagString: Untagged
@@ -229,7 +229,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4368398, y: 0.42599916, z: 0.22938812}
   m_Center: {x: 0.0010718852, y: 0.6087887, z: -0.024418324}
---- !u!114 &276081187583522160
+--- !u!114 &2651146680409717023
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -238,7 +238,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4481534904350979045}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &5417872979776618226

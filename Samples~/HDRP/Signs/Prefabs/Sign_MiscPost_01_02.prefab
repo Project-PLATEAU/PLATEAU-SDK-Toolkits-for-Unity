@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7650628011096072669}
   - component: {fileID: -5884221035808550350}
   - component: {fileID: -4832814756088992413}
-  - component: {fileID: -2596501796090530065}
+  - component: {fileID: -1966188828353800630}
   m_Layer: 0
   m_Name: Sign_MiscPost_01_02
   m_TagString: Untagged
@@ -99,7 +99,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.028364249, y: 0.63035774, z: 0.61351407}
   m_Center: {x: 0.0517102, y: 2.13722, z: 0.00070279837}
---- !u!114 &-2596501796090530065
+--- !u!114 &-1966188828353800630
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -108,7 +108,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3193479295218642821}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7187834565735275617

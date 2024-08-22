@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4008343364099049050}
   - component: {fileID: 2207474971860549720}
   - component: {fileID: 4088176406395033171}
-  - component: {fileID: 1788305111190964164}
+  - component: {fileID: 7790007745254881765}
   m_Layer: 0
   m_Name: Sign_Marking_ZebraZone_01
   m_TagString: Untagged
@@ -75,7 +75,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.749352, y: 0.01, z: 29.3}
   m_Center: {x: -0.00090384483, y: 0, z: 0}
---- !u!114 &1788305111190964164
+--- !u!114 &7790007745254881765
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -84,7 +84,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1801047767402921443}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &5652817259394388903

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4373870064511124333}
   - component: {fileID: 8856614605664302108}
-  - component: {fileID: 8758681366145673327}
+  - component: {fileID: 1761049907460636423}
   m_Layer: 0
   m_Name: Sign_Marking_CrossWalk_01
   m_TagString: Untagged
@@ -58,7 +58,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 3936274388299085358}
   m_Enabled: 1
---- !u!114 &8758681366145673327
+--- !u!114 &1761049907460636423
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4033196714320386519}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6063552659651109492

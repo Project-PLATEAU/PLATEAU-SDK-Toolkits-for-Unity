@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 7076468870290798204}
   - component: {fileID: 8391608242402732554}
   - component: {fileID: 2892107301496639834}
-  - component: {fileID: 1626210089963549095}
+  - component: {fileID: -5333650703249378682}
   m_Layer: 0
   m_Name: Sign_SquareHanging_01_05
   m_TagString: Untagged
@@ -159,7 +159,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 7216094847096203115}
   m_Enabled: 1
---- !u!114 &1626210089963549095
+--- !u!114 &-5333650703249378682
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,6 +168,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7601929237074455750}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

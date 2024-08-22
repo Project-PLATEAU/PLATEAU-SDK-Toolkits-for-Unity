@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 747976527159586961}
   - component: {fileID: 4453641276581117748}
   - component: {fileID: 1885447405201165310}
-  - component: {fileID: 2772079384574664837}
+  - component: {fileID: -7497363615948572238}
   m_Layer: 0
   m_Name: Sign_Marking_StreetSymbol_01
   m_TagString: Untagged
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!114 &2772079384574664837
+--- !u!114 &-7497363615948572238
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -93,6 +93,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 84029200576358955}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

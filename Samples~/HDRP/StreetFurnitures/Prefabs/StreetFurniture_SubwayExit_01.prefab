@@ -93,10 +93,10 @@ GameObject:
   m_Component:
   - component: {fileID: 962493152130435498}
   - component: {fileID: 5404717323803541211}
-  - component: {fileID: 803923173520451933}
   - component: {fileID: 415645206095118973}
   - component: {fileID: 231099723823037878}
   - component: {fileID: 5950773141022815137}
+  - component: {fileID: -68258078131053985}
   m_Layer: 0
   m_Name: StreetFurniture_SubwayExit_01
   m_TagString: Untagged
@@ -145,18 +145,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 1967813644007796239}
   m_Enabled: 1
---- !u!114 &803923173520451933
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 437032509663564560}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &415645206095118973
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -220,6 +208,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.569563, y: 1.667192, z: 2.7609484}
   m_Center: {x: 0.010445297, y: 3.5492413, z: 0.9789125}
+--- !u!114 &-68258078131053985
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 437032509663564560}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4619020162770095592
 GameObject:
   m_ObjectHideFlags: 0

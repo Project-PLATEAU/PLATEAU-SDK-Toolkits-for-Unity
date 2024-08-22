@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 939807021236354600}
   - component: {fileID: 5427051032095705433}
   - component: {fileID: 5877690454577714412}
-  - component: {fileID: -8499357087294977297}
+  - component: {fileID: 6978322665270282245}
   m_Layer: 0
   m_Name: Sign_CircularHanging_01_26
   m_TagString: Untagged
@@ -85,7 +85,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.46356887, y: 0.73472977, z: 0.6239351}
   m_Center: {x: 0.36951306, y: 0.24990368, z: 0.0031624883}
---- !u!114 &-8499357087294977297
+--- !u!114 &6978322665270282245
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 450655925452514450}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &980079350402109286

@@ -508,9 +508,9 @@ GameObject:
   m_Component:
   - component: {fileID: 6996708372301488818}
   - component: {fileID: 2829195806186575299}
-  - component: {fileID: 8224217505838171575}
   - component: {fileID: -7237861758523388450}
   - component: {fileID: -7543428427206123284}
+  - component: {fileID: 4611220035595071092}
   m_Layer: 0
   m_Name: StreetFurniture_ElectricPost_01
   m_TagString: Untagged
@@ -571,18 +571,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 5899716058287351339}
   m_Enabled: 1
---- !u!114 &8224217505838171575
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7661359215133882376}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &-7237861758523388450
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -625,6 +613,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.90698385, y: 2.2743492, z: 1.0946417}
   m_Center: {x: -0.23658241, y: 6.609647, z: -0.0067601204}
+--- !u!114 &4611220035595071092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7661359215133882376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8317128323620906524
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 334830733963869274}
   - component: {fileID: 4827737227566123819}
-  - component: {fileID: 6741312004250370112}
   - component: {fileID: 7782588765731397643}
   - component: {fileID: -7625408344861475185}
   - component: {fileID: -8349629914852309778}
+  - component: {fileID: 422253103008147889}
   m_Layer: 0
   m_Name: StreetFurniture_BusStop_01
   m_TagString: Untagged
@@ -67,18 +67,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 4791992746534775790}
   m_Enabled: 1
---- !u!114 &6741312004250370112
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1147958772295853792}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &7782588765731397643
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -142,6 +130,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 3.9983187, y: 0.52082443, z: 1.1331044}
   m_Center: {x: -0.18171644, y: 2.9442677, z: -0.646887}
+--- !u!114 &422253103008147889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1147958772295853792}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2501927674351744086
 GameObject:
   m_ObjectHideFlags: 0

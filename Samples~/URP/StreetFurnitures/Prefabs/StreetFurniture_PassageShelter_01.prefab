@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1578928636588886413}
   - component: {fileID: 6031274912367001340}
-  - component: {fileID: 1904326666924458919}
   - component: {fileID: 1822593497760367833}
   - component: {fileID: 1822593497760367832}
   - component: {fileID: 1822593497760367835}
@@ -20,6 +19,7 @@ GameObject:
   - component: {fileID: 1822593497760368423}
   - component: {fileID: 5162046056527710792}
   - component: {fileID: 5628335906194071000}
+  - component: {fileID: -185801663351834854}
   m_Layer: 0
   m_Name: StreetFurniture_PassageShelter_01
   m_TagString: Untagged
@@ -72,18 +72,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 325869476266550724}
   m_Enabled: 1
---- !u!114 &1904326666924458919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2207515428755002167}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &1822593497760367833
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -273,6 +261,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.16690636, y: 2.8375854, z: 0.13118637}
   m_Center: {x: -5.8384438, y: 1.374928, z: -1.6732395}
+--- !u!114 &-185801663351834854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2207515428755002167}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2934040892121449062
 GameObject:
   m_ObjectHideFlags: 0

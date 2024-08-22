@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6429630458154828775}
   - component: {fileID: 7806903563888350043}
   - component: {fileID: 7593509617159158736}
-  - component: {fileID: 3895479869726060573}
+  - component: {fileID: 6862853993837069654}
   m_Layer: 0
   m_Name: Plant_DeciduousTree_01
   m_TagString: Untagged
@@ -207,7 +207,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.81919533, y: 1.7501488, z: 1.176923}
   m_Center: {x: -0.07412234, y: 2.7783055, z: -0.15277421}
---- !u!114 &3895479869726060573
+--- !u!114 &6862853993837069654
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2745743753075594605}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: e0d24e4b8b09407ca0f52fc8d4e5b865, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8750511719958442794

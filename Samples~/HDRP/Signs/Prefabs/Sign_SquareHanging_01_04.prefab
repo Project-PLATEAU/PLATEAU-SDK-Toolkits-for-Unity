@@ -93,8 +93,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6805367022540766697}
-  - component: {fileID: 6317496708494611998}
   - component: {fileID: 2568615509547402928}
+  - component: {fileID: -7956276616972957848}
   m_Layer: 0
   m_Name: Sign_SquareHanging_01_04
   m_TagString: Untagged
@@ -118,18 +118,6 @@ Transform:
   - {fileID: 4746121066921285732}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6317496708494611998
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6141315516960302931}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &2568615509547402928
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -151,3 +139,15 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4535902, y: 0.737568, z: 0.62739444}
   m_Center: {x: 0.34049085, y: 0.25158507, z: -0.0010633469}
+--- !u!114 &-7956276616972957848
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6141315516960302931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

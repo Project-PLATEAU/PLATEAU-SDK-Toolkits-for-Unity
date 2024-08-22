@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 1822141036504081109}
   - component: {fileID: 6850982422116455844}
   - component: {fileID: 1792004194062196281}
-  - component: {fileID: 2093531747139272551}
+  - component: {fileID: -6528962236401492403}
   m_Layer: 0
   m_Name: StreetFurniture_EarthenWall_02
   m_TagString: Untagged
@@ -163,7 +163,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1.5463574, z: 0.1577628}
   m_Center: {x: 0, y: 0.75797474, z: -0.00173302}
---- !u!114 &2093531747139272551
+--- !u!114 &-6528962236401492403
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,7 +172,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1297699916194035823}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6815434826295448168

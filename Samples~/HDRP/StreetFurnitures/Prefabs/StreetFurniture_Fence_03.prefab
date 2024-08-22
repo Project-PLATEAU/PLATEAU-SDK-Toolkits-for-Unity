@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1079630975520036419}
   - component: {fileID: 5233606146286149938}
-  - component: {fileID: 3676143511789469485}
   - component: {fileID: -257369369831840389}
+  - component: {fileID: -2324095432310639523}
   m_Layer: 0
   m_Name: StreetFurniture_Fence_03
   m_TagString: Untagged
@@ -65,18 +65,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 2232878685154979153}
   m_Enabled: 1
---- !u!114 &3676143511789469485
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 409913372739439865}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &-257369369831840389
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -98,6 +86,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 14.661875, y: 1.5898788, z: 0.26410443}
   m_Center: {x: 0.0366385, y: 0.7695863, z: 0.048405528}
+--- !u!114 &-2324095432310639523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 409913372739439865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1525196690880694607
 GameObject:
   m_ObjectHideFlags: 0

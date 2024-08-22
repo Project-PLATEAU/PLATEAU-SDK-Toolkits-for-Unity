@@ -178,9 +178,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3316347776866025513}
   - component: {fileID: 7519910844617930584}
-  - component: {fileID: 7761647410397344011}
   - component: {fileID: 2643821424039650802}
   - component: {fileID: 3678277474222225199}
+  - component: {fileID: -8733005141660105184}
   m_Layer: 0
   m_Name: Plant_TreeMedium_01
   m_TagString: Untagged
@@ -238,18 +238,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 912092240887355840}
   m_Enabled: 1
---- !u!114 &7761647410397344011
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2688042149889563283}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &2643821424039650802
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -292,6 +280,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 11.1898775, y: 7.4656563, z: 10.543308}
   m_Center: {x: 0.077587605, y: 8.663982, z: -0.5819092}
+--- !u!114 &-8733005141660105184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2688042149889563283}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e0d24e4b8b09407ca0f52fc8d4e5b865, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4016916189469101818
 GameObject:
   m_ObjectHideFlags: 0

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 800433610631954985}
   - component: {fileID: 5566917022963397976}
-  - component: {fileID: 905521895317513664}
   - component: {fileID: -714370903633863070}
+  - component: {fileID: -3211740672459251533}
   m_Layer: 0
   m_Name: Sign_CircularHanging_01_13
   m_TagString: Untagged
@@ -64,18 +64,6 @@ LODGroup:
     renderers:
     - renderer: {fileID: 8262471719826079292}
   m_Enabled: 1
---- !u!114 &905521895317513664
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 22630751206906003}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!65 &-714370903633863070
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -97,6 +85,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.46356887, y: 0.73472977, z: 0.6239351}
   m_Center: {x: 0.36951306, y: 0.24990368, z: 0.0031624883}
+--- !u!114 &-3211740672459251533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 22630751206906003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &5215860156716528420
 GameObject:
   m_ObjectHideFlags: 0

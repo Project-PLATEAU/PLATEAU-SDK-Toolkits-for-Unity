@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 8702610559703039135}
   - component: {fileID: 1343232806339524625}
   - component: {fileID: 390388391720785252}
-  - component: {fileID: -2372721790707598979}
+  - component: {fileID: 8527650656480076317}
   m_Layer: 0
   m_Name: Sign_CircularPost_01_26
   m_TagString: Untagged
@@ -208,7 +208,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.3093673, y: 0.044173613, z: 0.2983016}
   m_Center: {x: 0.0018933117, y: 0.004146442, z: -0.0022674352}
---- !u!114 &-2372721790707598979
+--- !u!114 &8527650656480076317
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -217,7 +217,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 423239337246045700}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3868192140063442907

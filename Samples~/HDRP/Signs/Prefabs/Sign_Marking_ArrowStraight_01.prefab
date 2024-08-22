@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 658346418039047298}
   - component: {fileID: 5726596568972325875}
-  - component: {fileID: 4235559017091339848}
+  - component: {fileID: 1053236176481414870}
   m_Layer: 0
   m_Name: Sign_Marking_ArrowStraight_01
   m_TagString: Untagged
@@ -58,7 +58,7 @@ LODGroup:
     renderers:
     - renderer: {fileID: 437228057147739883}
   m_Enabled: 1
---- !u!114 &4235559017091339848
+--- !u!114 &1053236176481414870
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -67,7 +67,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 173734076462538296}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: 51ea1f1c42be4fada96f2312973a6bee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &3739646317098123604

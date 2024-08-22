@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4814665549976436141}
   - component: {fileID: 2795045314186849102}
   - component: {fileID: 8863538120888262275}
-  - component: {fileID: 4190068642307047238}
+  - component: {fileID: 3202125484949092925}
   m_Layer: 0
   m_Name: StreetFurniture_GardenUmbrella_01
   m_TagString: Untagged
@@ -102,7 +102,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.0719147, y: 1.9338009, z: 0.067801744}
   m_Center: {x: 0.0013935119, y: 0.9561597, z: -0.000000014901161}
---- !u!114 &4190068642307047238
+--- !u!114 &3202125484949092925
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1135170762258845798}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7d79db0dc7a4614f96d0c145b257c0b, type: 3}
+  m_Script: {fileID: 11500000, guid: ca36078c10c7806438980fdf50bd7669, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7603234189572406640
