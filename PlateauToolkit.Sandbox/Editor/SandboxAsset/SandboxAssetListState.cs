@@ -12,7 +12,7 @@ namespace PlateauToolkit.Sandbox.Editor
         public bool IsReady { get; private set; }
         public SandboxAsset<TAsset>[] Assets { get; private set; }
         public Vector2 ScrollPosition { get; set; }
-        public int SelectedAssetType { get; set; }
+        public SandboxAssetType SelectedAssetType { get; set; }
 
         public async Task PrepareAsync(CancellationToken cancellationToken)
         {
@@ -51,6 +51,11 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void Dispose()
         {
+            if (Assets == null)
+            {
+                return;
+            }
+
             foreach (SandboxAsset<TAsset> asset in Assets)
             {
                 if (asset.PreviewTexture != null)

@@ -36,7 +36,7 @@ namespace PlateauToolkit.Rendering.Editor
 
         public static void Header(string label)
         {
-            EditorGUILayout.Space(8);
+            EditorGUILayout.Space(15);
 
             BorderLine();
 
@@ -44,19 +44,14 @@ namespace PlateauToolkit.Rendering.Editor
             {
                 EditorGUI.DrawRect(scope.rect, PlateauToolkitGUIStyles.k_HeaderBackgroundColor);
 
-                GUILayout.FlexibleSpace();
                 using (new EditorGUILayout.HorizontalScope(PlateauToolkitGUIStyles.HeaderContentStyle))
                 {
-                    GUILayout.FlexibleSpace();
                     GUILayout.Label(label, GUILayout.ExpandWidth(false));
                     GUILayout.FlexibleSpace();
                 }
-                GUILayout.FlexibleSpace();
             }
 
-            BorderLine();
-
-            EditorGUILayout.Space(8);
+            EditorGUILayout.Space(15);
         }
 
         public static void GridLayout(float width, float cellWidth, Action[] cellGuis)

@@ -2,9 +2,8 @@
 {
     enum PlateauSandboxTab
     {
-        Human,
-        Vehicle,
-        Props,
         Tracks,
+        AssetPlace,
+        BulkPlace,
     }
 }

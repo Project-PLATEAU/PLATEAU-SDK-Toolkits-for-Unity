@@ -22,12 +22,11 @@ namespace PlateauToolkit.Sandbox.Editor
         PlateauSandboxWindowBulkPlaceButtonView m_ButtonView;
         TreeViewState m_TreeViewState;
         PlateauSandboxBulkPlaceHierarchyContext m_HierarchyContext;
-        SandboxAssetListState<PlateauSandboxProp> m_AssetListState;
         CancellationTokenSource m_Cancellation;
         List<PlateauSandboxBulkPlaceHierarchyItem> m_HierarchyItem = new List<PlateauSandboxBulkPlaceHierarchyItem>();
         PlateauSandboxBulkPlaceDataContext m_DataContext;
+        PlateauSandboxAssetContainerView m_AssetContainerView;
 
-        bool m_IsReadyApplied;
         int m_SelectedCategoryId = -1;
         bool m_IsIgnoreHeight;
         Vector2 m_AssetScrollPosition = new Vector2();
@@ -39,12 +38,11 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void OnBegin(PlateauSandboxContext context, EditorWindow editorWindow)
         {
-            m_AssetListState = new SandboxAssetListState<PlateauSandboxProp>();
-            m_Cancellation = new CancellationTokenSource();
             m_DataContext = new PlateauSandboxBulkPlaceDataContext();
             m_ButtonView = new PlateauSandboxWindowBulkPlaceButtonView(m_DataContext);
+            m_AssetContainerView = new PlateauSandboxAssetContainerView(isShowAssetCreate: false);
 
-            _ = m_AssetListState.PrepareAsync(m_Cancellation.Token);
+            m_AssetContainerView.OnBegin(context, editorWindow);
 
             // Event For Asset List Item Clicked.
             context.OnSelectedObjectChanged.AddListener((selectedObject) =>
@@ -74,15 +72,6 @@ namespace PlateauToolkit.Sandbox.Editor
             RefreshTracksHierarchy(context);
         }
 
-        public void OnUpdate(EditorWindow editorWindow)
-        {
-            if (m_AssetListState.IsReady && !m_IsReadyApplied)
-            {
-                editorWindow.Repaint();
-                m_IsReadyApplied = true;
-            }
-        }
-
         void IPlateauSandboxWindowView.OnHierarchyChange(PlateauSandboxContext context)
         {
             RefreshTracksHierarchy(context);
@@ -103,12 +92,9 @@ namespace PlateauToolkit.Sandbox.Editor
                 return;
             }
 
-            EditorGUILayout.LabelField("ツール", EditorStyles.boldLabel);
-            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
-            {
-                DrawFileLoadTool(context);
-                DrawCsvTemplateTool(context);
-            }
+            PlateauToolkitEditorGUILayout.Header("ツール");
+            DrawFileLoadTool(context);
+            DrawCsvTemplateTool(context);
         }
 
         void DrawFileLoadTool(PlateauSandboxContext context)
@@ -214,7 +200,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 return;
             }
 
-            EditorGUILayout.LabelField("パース対象設定", EditorStyles.boldLabel);
+            PlateauToolkitEditorGUILayout.Header("パース対象設定");
 
             if (m_DataContext.GetFileType() == PlateauSandboxBulkPlaceFileType.k_Csv)
             {
@@ -279,23 +265,13 @@ namespace PlateauToolkit.Sandbox.Editor
             // Add Vertical Scroll,
             using (var scope = new EditorGUILayout.ScrollViewScope(m_AssetScrollPosition))
             {
-                EditorGUILayout.LabelField("アセット選択", EditorStyles.boldLabel);
+                PlateauToolkitEditorGUILayout.Header("アセット選択", 15, 0);
 
-                m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 150, GUILayout.ExpandHeight(true)));
+                m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 100, GUILayout.ExpandHeight(true)));
 
                 GUILayout.Space(10);
 
-                if (m_AssetListState.IsReady)
-                {
-                    using (new EditorGUILayout.VerticalScope(GUILayout.Height(500)))
-                    {
-                        PlateauSandboxAssetListGUI.OnGUI(window.position.width, context, m_AssetListState, false);
-                    }
-                }
-                else
-                {
-                    EditorGUILayout.HelpBox("アセットを読み込んでいます...", MessageType.Info);
-                }
+                m_AssetContainerView.OnGUI(context, window);
 
                 m_AssetScrollPosition = scope.scrollPosition;
             }
@@ -303,8 +279,6 @@ namespace PlateauToolkit.Sandbox.Editor
 
         void OnGUIFooterButton(PlateauSandboxContext context)
         {
-            GUILayout.Space(15);
-
             if (!m_DataContext.HasLoadedFile())
             {
                 return;
@@ -312,12 +286,14 @@ namespace PlateauToolkit.Sandbox.Editor
 
             using (new EditorGUILayout.HorizontalScope())
             {
+                GUILayout.Space(15);
                 if (m_ViewPageIndex == BulkPlaceViewPageIndex.k_FieldSelect)
                 {
                     GUILayout.FlexibleSpace();
                     if (m_ButtonView.DrawButton(PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_Next))
                     {
                         m_ViewPageIndex++;
+                        m_ButtonView.SetInValidIndex(-1);
                     }
                 }
                 else
@@ -325,23 +301,23 @@ namespace PlateauToolkit.Sandbox.Editor
                     if (m_ButtonView.DrawButton(PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_Back))
                     {
                         m_ViewPageIndex--;
+                        m_ButtonView.SetInValidIndex(-1);
                     }
 
                     GUILayout.FlexibleSpace();
                     DrawAssetPlace(context);
                 }
+                GUILayout.Space(15);
             }
 
             if (m_ViewPageIndex == BulkPlaceViewPageIndex.k_AssetSelect)
             {
-                GUILayout.Space(5);
+                GUILayout.Space(10);
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     m_ButtonView.TryDrawHelperBox(PlateauSandboxWindowBulkPlaceButtonView.ToolButtonType.k_AssetNotPlace);
                 }
             }
-
-            GUILayout.Space(15);
         }
 
         void DrawAssetPlace(PlateauSandboxContext context)
@@ -418,10 +394,10 @@ namespace PlateauToolkit.Sandbox.Editor
                         m_SelectedCategoryId = item.ID;
                         if (item.PrefabConstantID > 0)
                         {
-                            SandboxAsset<PlateauSandboxProp> selectedPrefab = m_AssetListState.Assets.FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == item.PrefabConstantID);
+                            var selectedPrefab = m_AssetContainerView.GetSelectedAsset(item.PrefabConstantID);
                             if (selectedPrefab != null)
                             {
-                                context.SelectPlaceableObject(selectedPrefab.Asset.gameObject);
+                                context.SelectPlaceableObject(selectedPrefab);
                             }
                         }
                     });
@@ -505,8 +481,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     continue;
                 }
 
-                GameObject prefab = m_AssetListState.Assets
-                    .FirstOrDefault(asset => asset.Asset.gameObject.GetInstanceID() == hierarchyItem.PrefabConstantID)?.Asset.gameObject;
+                var prefab = m_AssetContainerView.GetSelectedAsset(hierarchyItem.PrefabConstantID);
                 if (prefab == null)
                 {
                     continue;
@@ -550,14 +525,12 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void OnEnd(PlateauSandboxContext context)
         {
-            m_IsReadyApplied = false;
-
-            m_Cancellation.Cancel();
-            m_Cancellation.Dispose();
-            m_Cancellation = null;
-
-            m_AssetListState.Dispose();
-            m_AssetListState = null;
+            if (m_Cancellation != null)
+            {
+                m_Cancellation.Cancel();
+                m_Cancellation.Dispose();
+                m_Cancellation = null;
+            }
 
             m_SelectedCategoryId = -1;
             m_IsIgnoreHeight = false;
@@ -615,40 +588,52 @@ namespace PlateauToolkit.Sandbox.Editor
             switch (type)
             {
                 case ToolButtonType.k_FileLoaded:
-                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
-                    {
-                        isClicked = GUILayout.Button($"{m_DataContext.GetFileName()} を読み込み済");
-                    }
+                    int textLength = m_DataContext.GetFileName().Length;
+                    isClicked = new PlateauToolkitImageButtonGUI(
+                            200 + (textLength * 6),
+                            40,
+                            PlateauToolkitGUIStyles.k_ButtonCancelColor).Button($"{m_DataContext.GetFileName()} を読み込み済");
                     break;
                 case ToolButtonType.k_FileNotLoaded:
-                    isClicked = GUILayout.Button("SHP、CSVファイルを読み込む");
+                    isClicked = new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button($"SHP、CSVファイルを読み込む");
                     break;
                 case ToolButtonType.k_AssetPlacing:
-                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
-                    {
-                        isClicked = GUILayout.Button("アセットを配置中です...", PrimaryButtonStyle);
-                    }
+                    isClicked = new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonCancelColor,
+                        false).Button($"アセットを配置中です...");
                     break;
                 case ToolButtonType.k_AssetNotPlace:
-                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
-                    {
-                        isClicked = GUILayout.Button("アセットを配置", PrimaryButtonStyle);
-                    }
+                    isClicked = new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonPrimaryColor,
+                        false).Button($"アセットを配置");
                     break;
                 case ToolButtonType.k_CsvTemplate:
-                    isClicked = GUILayout.Button("CSVテンプレートの生成");
+                    EditorGUILayout.Space(10);
+                    isClicked = new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button($"CSVテンプレートの生成");
                     break;
                 case ToolButtonType.k_Next:
-                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
-                    {
-                        isClicked = GUILayout.Button("次へ", PrimaryButtonStyle);
-                    }
+                    isClicked = new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonPrimaryColor,
+                        false).Button($"次へ");
                     break;
                 case ToolButtonType.k_Back:
-                    using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
-                    {
-                        isClicked = GUILayout.Button("戻る", PrimaryButtonStyle);
-                    }
+                    isClicked = new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonPrimaryColor,
+                        false).Button($"戻る");
                     break;
             }
             return isClicked;

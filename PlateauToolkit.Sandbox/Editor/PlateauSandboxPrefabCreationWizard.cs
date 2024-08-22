@@ -1,4 +1,5 @@
 ﻿using PlateauToolkit.Editor;
+using PlateauToolkit.Sandbox.Runtime;
 using System;
 using System.IO;
 using UnityEditor;
@@ -11,9 +12,14 @@ namespace PlateauToolkit.Sandbox.Editor
     {
         enum Type
         {
-            Vehicle,
             Avatar,
-            Props,
+            Vehicle,
+            Building,
+            Plant,
+            Advertisement,
+            StreetFurniture,
+            Sign,
+            Miscellaneous,
         }
 
         PlateauSandboxPrefabCreationWizard m_Window;
@@ -67,14 +73,29 @@ namespace PlateauToolkit.Sandbox.Editor
             variant.name = m_BaseObject.name;
             switch (m_Type)
             {
-                case Type.Vehicle:
-                    variant.AddComponent<PlateauSandboxVehicle>();
-                    break;
                 case Type.Avatar:
                     variant.AddComponent<PlateauSandboxAvatar>();
                     break;
-                case Type.Props:
-                    variant.AddComponent<PlateauSandboxProp>();
+                case Type.Vehicle:
+                    variant.AddComponent<PlateauSandboxVehicle>();
+                    break;
+                case Type.Building:
+                    variant.AddComponent<PlateauSandboxBuilding>();
+                    break;
+                case Type.Plant:
+                    variant.AddComponent<PlateauSandboxPlant>();
+                    break;
+                case Type.Advertisement:
+                    variant.AddComponent<PlateauSandboxAdvertisement>();
+                    break;
+                case Type.StreetFurniture:
+                    variant.AddComponent<PlateauSandboxStreetFurniture>();
+                    break;
+                case Type.Sign:
+                    variant.AddComponent<PlateauSandboxSign>();
+                    break;
+                case Type.Miscellaneous:
+                    variant.AddComponent<PlateauSandboxMiscellaneous>();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(Type));

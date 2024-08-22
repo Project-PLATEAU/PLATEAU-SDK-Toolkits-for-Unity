@@ -84,11 +84,11 @@ namespace PlateauToolkit.Editor
 
         public static void HeaderLogo(float windowWidth)
         {
-            EditorGUILayout.Space(6f);
+            EditorGUILayout.Space(25f);
 
             var logoTexture =(Texture2D)AssetDatabase.LoadAssetAtPath(
                     PlateauToolkitPaths.PlateauLogo, typeof(Texture2D));
-            float width = Mathf.Min(windowWidth - 20, 260f);
+            float width = Mathf.Min(windowWidth - 20, 170f);
             float height = (float)logoTexture.height / logoTexture.width * width;
 
             using (new EditorGUILayout.HorizontalScope())
@@ -99,7 +99,7 @@ namespace PlateauToolkit.Editor
                 GUILayout.FlexibleSpace();
             }
 
-            EditorGUILayout.Space(10f);
+            EditorGUILayout.Space(15f);
         }
 
         public static void BorderLine()
@@ -108,52 +108,98 @@ namespace PlateauToolkit.Editor
             EditorGUI.DrawRect(borderRect, PlateauToolkitGUIStyles.k_LineColor);
         }
 
-        public static void Header(string label)
+        public static void Title(float windowWidth, string label)
         {
-            EditorGUILayout.Space(8);
+            EditorGUILayout.Space(15);
+
+            float imageWidth = 40f;
+            float imageHeight = 1f;
+            float imageOffset = 3f;
+            float textWidth = 120f;
+            float textHeight = 17f;
+
+            Texture2D titleImage = AssetDatabase.LoadAssetAtPath<Texture2D>(PlateauToolkitPaths.PlateauTitleBackground);
+            Rect imageRect = EditorGUILayout.GetControlRect(GUILayout.Width(imageWidth), GUILayout.Height(imageHeight));
+            imageRect.y += (textHeight / 2) + imageOffset;
+
+            using (new EditorGUILayout.HorizontalScope(GUILayout.Height(textHeight)))
+            {
+                GUILayout.FlexibleSpace();
+
+                imageRect.x = (windowWidth / 2) - (textWidth / 2) - imageWidth;
+                GUI.DrawTexture(imageRect, titleImage);
+
+                EditorGUILayout.LabelField(label,
+                    PlateauToolkitGUIStyles.TitleTextStyle,
+                    GUILayout.Height(textHeight),
+                    GUILayout.Width(textWidth));
+
+                imageRect.x = (windowWidth / 2) + (textWidth / 2);
+
+                // Draw the image upside down
+                GUIUtility.RotateAroundPivot (180f, imageRect.center);
+                GUI.DrawTexture(imageRect, titleImage);
+                GUI.matrix = Matrix4x4.identity;
+
+                GUILayout.FlexibleSpace();
+            }
+        }
+
+        public static void Header(string label, int topMargin = 15, int bottomMargin = 15)
+        {
+            EditorGUILayout.Space(topMargin);
 
             BorderLine();
-
-            using (var scope = new EditorGUILayout.VerticalScope(PlateauToolkitGUIStyles.HeaderBoxStyle, GUILayout.Height(24)))
+            using (var scope = new EditorGUILayout.VerticalScope(PlateauToolkitGUIStyles.HeaderBoxStyle, GUILayout.Height(28)))
             {
-                EditorGUI.DrawRect(scope.rect, PlateauToolkitGUIStyles.k_HeaderBackgroundColor);
-
                 GUILayout.FlexibleSpace();
                 using (new EditorGUILayout.HorizontalScope(PlateauToolkitGUIStyles.HeaderContentStyle))
                 {
-                    GUILayout.FlexibleSpace();
-                    GUILayout.Label(label, GUILayout.ExpandWidth(false));
+                    EditorGUI.DrawRect(scope.rect, PlateauToolkitGUIStyles.k_HeaderBackgroundColor);
+                    GUILayout.Label(label, PlateauToolkitGUIStyles.HeaderTextStyle,  GUILayout.ExpandWidth(false));
                     GUILayout.FlexibleSpace();
                 }
                 GUILayout.FlexibleSpace();
             }
 
-            BorderLine();
+            EditorGUILayout.Space(bottomMargin);
+        }
 
-            EditorGUILayout.Space(8);
+        public static EditorGUILayout.HorizontalScope TabScope(float width)
+        {
+            var scope = new EditorGUILayout.HorizontalScope(PlateauToolkitGUIStyles.TabBoxStyle,
+                GUILayout.Height(64));
+            GUILayoutUtility.GetRect(width, 64);
+            return scope;
         }
 
         public static EditorGUILayout.VerticalScope FooterScope()
         {
-            BorderLine();
-
-            var scope = new EditorGUILayout.VerticalScope(PlateauToolkitGUIStyles.FooterBoxStyle, GUILayout.Height(24));
-            EditorGUI.DrawRect(scope.rect, PlateauToolkitGUIStyles.k_FooterBackgroundColor);
-
+            var scope = new EditorGUILayout.VerticalScope( GUILayout.Height(24));
             return scope;
         }
     }
 
     public static class PlateauToolkitGUIStyles
     {
-        public static readonly Color k_LineColor = new Color(40 / 255f, 40 / 255f, 40 / 255f, 1);
-        public static readonly Color k_HeaderBackgroundColor = new Color(51 / 255f, 51 / 255f, 51 / 255f, 1);
+        public static readonly Color k_LineColor = new Color(33 / 255f, 33 / 255f, 33 / 255f, 1);
+        public static readonly Color k_HeaderBackgroundColor = new Color(62 / 255f, 62 / 255f, 62 / 255f, 1);
         public static readonly Color k_FooterBackgroundColor = new Color(51 / 255f, 51 / 255f, 51 / 255f, 1);
+        public static readonly Color k_TabBackgroundColor = new Color(0, 0, 0, 0.5f);
+        public static readonly Color k_TabActiveColor = new Color(88 / 255f, 88 / 255f, 88 / 255f, 1);
+        public static readonly Color k_ButtonNormalColor = new Color(103 / 255f, 103 / 255f, 103 / 255f, 1);
+        public static readonly Color k_ButtonPrimaryColor = new Color(0, 88 / 255f, 88 / 255f, 1);
+        public static readonly Color k_ButtonDisableColor = new Color(0, 88 / 255f, 88 / 255f, 0.25f);
+        public static readonly Color k_ButtonCancelColor = new Color(183 / 255f, 0, 0, 0.25f);
 
         public static GUIStyle BorderStyle { get; }
         public static GUIStyle HeaderBoxStyle { get; }
         public static GUIStyle HeaderContentStyle { get; }
         public static GUIStyle FooterBoxStyle { get; }
+        public static GUIStyle TabBoxStyle { get; }
+        public static GUIStyle ButtonStyle { get; }
+        public static GUIStyle TitleTextStyle { get; }
+        public static GUIStyle HeaderTextStyle { get; }
 
         static PlateauToolkitGUIStyles()
         {
@@ -173,47 +219,136 @@ namespace PlateauToolkit.Editor
 
             HeaderContentStyle = new GUIStyle(GUI.skin.box);
             HeaderContentStyle.normal.textColor = Color.white;
-            HeaderContentStyle.alignment = TextAnchor.MiddleCenter;
+            HeaderContentStyle.alignment = TextAnchor.MiddleLeft;
             HeaderContentStyle.margin = new RectOffset(0, 0, 0, 0);
-            HeaderContentStyle.padding = new RectOffset(5, 5, 5, 5);
+            HeaderContentStyle.padding = new RectOffset(15, 15, 10, 10);
+
+            TabBoxStyle = new GUIStyle( GUIStyle.none);
+            TabBoxStyle.normal.textColor = Color.white;
+            TabBoxStyle.alignment = TextAnchor.MiddleCenter;
+            TabBoxStyle.margin = new RectOffset(15, 15, 0, 0);
+            TabBoxStyle.padding = new RectOffset(20, 20, 0, 0);
+
+            ButtonStyle = new GUIStyle(GUIStyle.none)
+            {
+                fontSize = 12,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = Color.white}
+            };
+
+            TitleTextStyle = new GUIStyle(EditorStyles.boldLabel)
+            {
+                fontSize = 14,
+                alignment = TextAnchor.MiddleCenter,
+                normal = { textColor = Color.white }
+            };
+
+            HeaderTextStyle = new GUIStyle()
+            {
+                fontSize = 12,
+                normal = { textColor = Color.white }
+            };
         }
     }
 
     public readonly struct PlateauToolkitImageButtonGUI
     {
+        static Texture2D s_WhiteTexture;
+        static Texture2D WhiteTexture
+        {
+            get
+            {
+                if (s_WhiteTexture == null)
+                {
+                    Color[] pixels = { Color.white };
+                    var texture = new Texture2D(1, 1);
+                    texture.SetPixels(pixels);
+                    texture.Apply();
+
+                    s_WhiteTexture = texture;
+                }
+                return s_WhiteTexture;
+            }
+        }
+
         readonly float m_Width;
         readonly float m_Height;
+        readonly Color m_Color;
+        readonly bool m_IsPositionCenter;
 
-        public PlateauToolkitImageButtonGUI(float width, float height)
+        public PlateauToolkitImageButtonGUI(float width, float height, Color color, bool isPositionCenter = true)
         {
             m_Width = width;
             m_Height = height;
+            m_Color = color;
+            m_IsPositionCenter = isPositionCenter;
         }
 
-        public bool Button(string iconTexturePath, Color? buttonColor = null)
+        public bool TabButton(
+            string iconTexturePath,
+            Rect rect,
+            bool isActive)
         {
-            Color defaultColor = GUI.backgroundColor;
-            using (PlateauToolkitEditorGUILayout.BackgroundColorScope(buttonColor.GetValueOrDefault(defaultColor)))
+            if (isActive)
             {
-                bool button = GUILayout.Button(
-                    (Texture2D)AssetDatabase.LoadAssetAtPath(iconTexturePath, typeof(Texture2D)),
-                    GUILayout.Width(m_Width),
-                    GUILayout.Height(m_Height));
+                GUI.DrawTexture(rect, WhiteTexture, ScaleMode.StretchToFill, true, 0, m_Color, 0, 4);
+            }
 
+            var buttonStyle = new GUIStyle(GUIStyle.none);
+            bool button = GUI.Button(
+                rect,
+                (Texture2D)AssetDatabase.LoadAssetAtPath(iconTexturePath, typeof(Texture2D)),
+                buttonStyle);
+
+            return button;
+        }
+
+        public bool Button(string label)
+        {
+            float scopeWidth = m_IsPositionCenter ? 0 : m_Width;
+            using (var scope = new EditorGUILayout.HorizontalScope(GUILayout.Height(m_Height), GUILayout.Width(scopeWidth)))
+            {
+                GUILayout.FlexibleSpace();
+
+                float centerY = (scope.rect.height - m_Height) / 2;
+                float centerX = (scope.rect.width - m_Width) / 2;
+                var buttonRect = new Rect(scope.rect.x + centerX, scope.rect.y + centerY, m_Width, m_Height);
+
+                GUI.DrawTexture(buttonRect, WhiteTexture, ScaleMode.StretchToFill, true, 0, m_Color, 0, 5);
+
+                bool button = GUILayout.Button(
+                    label,
+                    PlateauToolkitGUIStyles.ButtonStyle,
+                    GUILayout.Height(m_Height),
+                    GUILayout.Width(m_Width));
+
+                GUILayout.FlexibleSpace();
                 return button;
             }
         }
 
-        public bool Button(Texture2D texture2D, Color? buttonColor = null)
+        public bool Button(Texture2D texture2D, RectOffset padding)
         {
-            Color defaultColor = GUI.backgroundColor;
-            using (PlateauToolkitEditorGUILayout.BackgroundColorScope(buttonColor.GetValueOrDefault(defaultColor)))
+            using (var scope = new EditorGUILayout.HorizontalScope(GUILayout.Height(m_Height)))
             {
+                GUILayout.FlexibleSpace();
+
+                float centerY = (scope.rect.height - m_Height) / 2;
+                float centerX = (scope.rect.width - m_Width) / 2;
+                var buttonRect = new Rect(scope.rect.x + centerX, scope.rect.y + centerY, m_Width, m_Height);
+
+                GUI.DrawTexture(buttonRect, WhiteTexture, ScaleMode.StretchToFill, true, 0, m_Color, 0, 5);
+
+                var style = PlateauToolkitGUIStyles.ButtonStyle;
+                style.padding = padding;
+
                 bool button = GUILayout.Button(
                     texture2D,
-                    GUILayout.Width(m_Width),
-                    GUILayout.Height(m_Height));
+                    style,
+                    GUILayout.Height(m_Height),
+                    GUILayout.Width(m_Width));
 
+                GUILayout.FlexibleSpace();
                 return button;
             }
         }
