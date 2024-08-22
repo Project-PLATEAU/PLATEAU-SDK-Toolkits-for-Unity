@@ -20,7 +20,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public static void OnGUI<TAsset>(
             float windowWidth, PlateauSandboxContext context,
-            SandboxAssetListState<TAsset> state)
+            SandboxAssetListState<TAsset> state,
+            bool canAssetCreate = true)
             where TAsset : Component
         {
             EditorGUILayout.LabelField("アセット", EditorStyles.boldLabel);
@@ -112,9 +113,12 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     GUILayout.FlexibleSpace();
 
-                    if (GUILayout.Button("アセットを作成"))
+                    if (canAssetCreate)
                     {
-                        PlateauSandboxPrefabCreationWizard.DisplayWizard();
+                        if (GUILayout.Button("アセットを作成"))
+                        {
+                            PlateauSandboxPrefabCreationWizard.DisplayWizard();
+                        }
                     }
 
                     if (PlateauSandboxAssetUtility.GetSample(out Sample sample))
