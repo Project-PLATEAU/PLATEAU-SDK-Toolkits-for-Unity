@@ -1,4 +1,3 @@
-using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime;
 using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings;
 using System;
 using System.Collections.Generic;
@@ -456,17 +455,15 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             }
 
             string meshAssetsFolderPath = BuildingMeshUtility.GetMeshAssetsFolderPath();
-            if (meshAssetsFolderPath == "")
+            if (!Directory.Exists(meshAssetsFolderPath))
             {
-                EditorUtility.DisplayDialog("サンプルフォルダ確認", "メッシュフォルダがありません。サンプルを再インポートして下さい。", "はい");
-                return;
+                Directory.CreateDirectory(meshAssetsFolderPath);
             }
 
             string prefabAssetsFolderPath = BuildingMeshUtility.GetPrefabAssetsFolderPath();
-            if (prefabAssetsFolderPath == "")
+            if (!Directory.Exists(prefabAssetsFolderPath))
             {
-                EditorUtility.DisplayDialog("サンプルフォルダ確認", "プレハブフォルダがありません。サンプルを再インポートして下さい。", "はい");
-                return;
+                Directory.CreateDirectory(prefabAssetsFolderPath);
             }
 
             Match matchRes = Regex.Match(m_Generator.buildingName, "[0-9]+$");

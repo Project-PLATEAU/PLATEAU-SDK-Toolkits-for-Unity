@@ -5,7 +5,7 @@ using UnityEngine;
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime.Parts
 {
     [CustomEditor(typeof(WallParts))]
-    public class WallPartsEditor : Editor
+    public class WallPartsEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

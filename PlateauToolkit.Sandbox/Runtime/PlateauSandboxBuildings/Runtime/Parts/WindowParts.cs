@@ -8,7 +8,7 @@ using UnityEngine;
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime.Parts
 {
     [CustomEditor(typeof(WindowParts))]
-    public class WindowPartsEditor : Editor
+    public class WindowPartsEditor : UnityEditor.Editor
     {
         BaseParts.WindowType m_PartsTypeIndex = 0;
 

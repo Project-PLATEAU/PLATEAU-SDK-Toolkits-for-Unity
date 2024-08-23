@@ -22,15 +22,23 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 
         private static string GetAssetsFolderPath(string folderName)
         {
-            PlateauSandboxAssetUtility.GetSample(out Sample sample);
-            string assetsFolderPath = Path.Combine("Assets", sample.importPath.Split(@"\Assets\")[1], $"Buildings/{folderName}").Replace("\\", "/");
-            if (Directory.Exists(assetsFolderPath))
+            bool res = PlateauSandboxAssetUtility.GetSample(out Sample sample);
+            if (res == false)
             {
-                return assetsFolderPath;
+                Debug.LogError($"{folderName} assets folder directory is not exist.");
+                return Path.Combine("Assets/Samples/PLATEAU SDK-Toolkits for Unity/0.0.0/Sample Assets", folderName).Replace("\\", "/");
             }
 
-            Debug.LogError($"{folderName} assets folder directory is not exist.");
-            return "";
+#if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+            string assetsFolderPath = Path.Combine("Assets", sample.importPath.Split(@"/Assets/")[1], $"Buildings/{folderName}").Replace("\\", "/");
+#elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
+            string assetsFolderPath = Path.Combine("Assets", sample.importPath.Split(@"\Assets\")[1], $"Buildings/{folderName}").Replace("\\", "/");
+#endif
+            if (!Directory.Exists(assetsFolderPath))
+            {
+                Directory.CreateDirectory(assetsFolderPath);
+            }
+            return assetsFolderPath;
         }
 
         public static bool SaveMesh(List<MeshFilter> inLsMeshFilter, string inMeshNamePrefix)
@@ -44,7 +52,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             string meshAssetsFolderPath = GetMeshAssetsFolderPath();
             if (!Directory.Exists(meshAssetsFolderPath))
             {
-                return false;
+                Directory.CreateDirectory(meshAssetsFolderPath);
             }
 
             foreach (MeshFilter meshFilter in inLsMeshFilter)

@@ -37,13 +37,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             string meshAssetsFolderPath = BuildingMeshUtility.GetMeshAssetsFolderPath();
             if (!Directory.Exists(meshAssetsFolderPath))
             {
-                return;
+                Directory.CreateDirectory(meshAssetsFolderPath);
             }
 
             string prefabAssetsFolderPath = BuildingMeshUtility.GetPrefabAssetsFolderPath();
             if (!Directory.Exists(prefabAssetsFolderPath))
             {
-                return;
+                Directory.CreateDirectory(prefabAssetsFolderPath);
             }
 
             if (!instance.TryGetComponent(out Runtime.PlateauSandboxBuilding buildingGeneratorComponent))

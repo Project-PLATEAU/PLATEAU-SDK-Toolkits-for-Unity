@@ -8,7 +8,7 @@ using UnityEngine;
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime.Parts
 {
     [CustomEditor(typeof(SocleParts))]
-    public class SoclePartsEditor : Editor
+    public class SoclePartsEditor : UnityEditor.Editor
     {
         BaseParts.SocleType m_PartsTypeIndex = 0;
 

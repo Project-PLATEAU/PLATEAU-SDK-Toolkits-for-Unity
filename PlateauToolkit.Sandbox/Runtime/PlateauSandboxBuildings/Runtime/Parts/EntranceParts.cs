@@ -8,7 +8,7 @@ using UnityEngine;
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime.Parts
 {
     [CustomEditor(typeof(EntranceParts))]
-    public class EntrancePartsEditor : Editor
+    public class EntrancePartsEditor : UnityEditor.Editor
     {
         BaseParts.EntranceType m_PartsTypeIndex = 0;
 
