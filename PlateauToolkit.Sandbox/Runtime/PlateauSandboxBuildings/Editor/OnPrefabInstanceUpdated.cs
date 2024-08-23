@@ -34,6 +34,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 return;
             }
 
+            if (!instance.TryGetComponent(out Runtime.PlateauSandboxBuilding buildingGeneratorComponent))
+            {
+                return;
+            }
+
             string meshAssetsFolderPath = BuildingMeshUtility.GetMeshAssetsFolderPath();
             if (!Directory.Exists(meshAssetsFolderPath))
             {
@@ -44,11 +49,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             if (!Directory.Exists(prefabAssetsFolderPath))
             {
                 Directory.CreateDirectory(prefabAssetsFolderPath);
-            }
-
-            if (!instance.TryGetComponent(out Runtime.PlateauSandboxBuilding buildingGeneratorComponent))
-            {
-                return;
             }
 
             var lsFacadeMeshFilter = instance.transform.GetComponentsInChildren<MeshFilter>().ToList();
