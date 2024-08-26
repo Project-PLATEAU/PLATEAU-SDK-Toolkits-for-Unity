@@ -137,7 +137,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 20.4, y: 0.049999237, z: 20.4}
+  m_Size: {x: 20, y: 0.049999237, z: 20}
   m_Center: {x: 0, y: 25.025, z: 0}
 --- !u!1 &8069791713188243729
 GameObject:
@@ -310,16 +310,16 @@ MonoBehaviour:
     roof: {fileID: 0}
     roofSide: {fileID: 0}
   commercialFacilityVertexColorPalette:
-    wallColor: {r: 1, g: 1, b: 1, a: 1}
-    depressionWallColor: {r: 1, g: 1, b: 1, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
-    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
-    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    wallColor: {r: 0.9843137, g: 0.9843137, b: 0.9843137, a: 1}
+    depressionWallColor: {r: 0.07058824, g: 0.07058824, b: 0.07058824, a: 1}
+    windowPaneColor: {r: 0.23921569, g: 0.23921569, b: 0.23921569, a: 1}
+    windowPaneGlassColor: {r: 0.7529412, g: 0.9137255, b: 0.99215686, a: 1}
+    roofColor: {r: 0.9843137, g: 0.9843137, b: 0.9843137, a: 1}
+    roofSideColor: {r: 0.9843137, g: 0.9843137, b: 0.9843137, a: 1}
   commercialFacilityVertexColorMaterialPalette:
-    vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
-    vertexRoof: {fileID: 0}
+    vertexWall: {fileID: 2100000, guid: fad5fcf0393cae64ea9aa35469d9f999, type: 2}
+    vertexWindowPane: {fileID: 2100000, guid: 54af3a1d34044ea49bbb33a08fc8f9a9, type: 2}
+    vertexRoof: {fileID: 2100000, guid: 3805b0bbecea63744ad7eed913f69cbe, type: 2}
   commercialFacilityMaterialPalette:
     wall: {fileID: 2100000, guid: 7bccfd0a613a2ce43b8914178136dd09, type: 2}
     depressionWall: {fileID: 2100000, guid: 4c3980a4194c69b49b0f750e7ab3e2b0, type: 2}

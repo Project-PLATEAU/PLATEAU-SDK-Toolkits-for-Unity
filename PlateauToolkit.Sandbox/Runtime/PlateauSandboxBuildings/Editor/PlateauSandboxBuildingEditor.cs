@@ -404,7 +404,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             switch (m_BuildingType.enumValueIndex)
             {
                 case (int)BuildingType.k_SkyscraperCondominium:
-                    EditorGUILayout.LabelField("タワーマンション設定", EditorStyles.boldLabel);
+                    EditorGUILayout.LabelField("マンション設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_SkyscraperCondominiumParams);
                 case (int)BuildingType.k_OfficeBuilding:
                     EditorGUILayout.LabelField("オフィスビル設定", EditorStyles.boldLabel);

@@ -678,9 +678,9 @@ namespace ProceduralToolkit
                     var uv10 = new Vector2(uxX1, 0);
                     var uv01 = new Vector2(uvX0, 1);
                     var uv11 = new Vector2(uxX1, 1);
-                    Vector3 origin;
-                    Vector3 width;
-                    Vector3 height;
+                    // Vector3 origin;
+                    // Vector3 width;
+                    // Vector3 height;
                     // AddQuad(lower1, upper1, upper0, uvScale, true, true);
                     AddQuad(lower1, upper1, upper0, lower0, true, uv00, uv01, uv11, uv10);
                     // AddQuad(lower1, upper1, upper0, lower0, true, lower1, upper1, upper0, uvScale, true);

@@ -217,16 +217,16 @@ MonoBehaviour:
     hasBalconyFront: 1
     hasBalconyBack: 0
   skyscraperCondominiumVertexColorPalette:
-    socleColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
-    wallColor: {r: 1, g: 1, b: 1, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
-    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
-    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    socleColor: {r: 0.6784314, g: 0.64705884, b: 0.63529414, a: 1}
+    wallColor: {r: 0.3886792, g: 0.3886792, b: 0.38061228, a: 1}
+    windowPaneColor: {r: 0.4509804, g: 0.4509804, b: 0.4509804, a: 1}
+    windowPaneGlassColor: {r: 0.7529412, g: 0.9137255, b: 0.99215686, a: 1}
+    roofColor: {r: 0.7058824, g: 0.7019608, b: 0.6862745, a: 1}
+    roofSideColor: {r: 0.7058824, g: 0.7019608, b: 0.6862745, a: 1}
   skyscraperCondominiumVertexColorMaterialPalette:
-    vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
-    vertexRoof: {fileID: 0}
+    vertexWall: {fileID: 2100000, guid: 2474516e77645a84ea9f3f8d5b04bd87, type: 2}
+    vertexWindowPane: {fileID: 2100000, guid: 97990d29fd134e7428616e6781621808, type: 2}
+    vertexRoof: {fileID: 2100000, guid: 8654fc0f024120c43ad2617f122972b8, type: 2}
   skyscraperCondominiumMaterialPalette:
     wall: {fileID: 2100000, guid: b03331e09416dc64dbcd959ccd5d26f5, type: 2}
     windowPane: {fileID: 2100000, guid: e3e8f9e51aba0ba4c89da3b38d510ba2, type: 2}

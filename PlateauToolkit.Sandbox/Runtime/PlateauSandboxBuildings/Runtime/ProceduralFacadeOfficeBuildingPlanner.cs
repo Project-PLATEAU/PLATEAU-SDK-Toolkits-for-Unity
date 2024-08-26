@@ -73,8 +73,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
                 {
-                    m_WindowFrameRodWidth = 0.1f,
-                    m_WindowFrameRodHeight = 0.1f,
+                    m_WindowFrameRodWidth = 0.2f,
+                    m_WindowFrameRodHeight = 0.3f,
                     m_NumCenterRods = 1
                 }
             };

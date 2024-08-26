@@ -121,20 +121,20 @@ MonoBehaviour:
     roofType: 1
     roofThickness: 0.2
   residenceVertexColorPalette:
-    socleColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
-    socleTopColor: {r: 0, g: 0, b: 0, a: 1}
-    wallColor: {r: 1, g: 1, b: 1, a: 1}
-    entranceDoorColor: {r: 1, g: 1, b: 1, a: 1}
-    entranceDoorFrameColor: {r: 1, g: 1, b: 1, a: 1}
-    entranceDoorRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
-    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
-    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    socleColor: {r: 0.6666667, g: 0.6313726, b: 0.61960787, a: 1}
+    socleTopColor: {r: 0.47058824, g: 0.47058824, b: 0.47058824, a: 1}
+    wallColor: {r: 0.92156863, g: 0.8862745, b: 0.827451, a: 1}
+    entranceDoorColor: {r: 0.19607843, g: 0.14901961, b: 0.14509805, a: 1}
+    entranceDoorFrameColor: {r: 0.35686275, g: 0.35686275, b: 0.35686275, a: 1}
+    entranceDoorRoofColor: {r: 0.34901962, g: 0.34901962, b: 0.34901962, a: 1}
+    windowPaneColor: {r: 0.7529412, g: 0.9137255, b: 0.99215686, a: 1}
+    windowPaneGlassColor: {r: 0.85882354, g: 0.85882354, b: 0.85882354, a: 1}
+    roofColor: {r: 0.6117647, g: 0.34117648, b: 0.23921569, a: 1}
+    roofSideColor: {r: 0.6509804, g: 0.3764706, b: 0.27450982, a: 1}
   residenceVertexColorMaterialPalette:
-    vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
-    vertexRoof: {fileID: 0}
+    vertexWall: {fileID: 2100000, guid: c11f20c049623de41b1d5d4bb43105c3, type: 2}
+    vertexWindowPane: {fileID: 2100000, guid: 6409c1adcd878214d9f79831f91759bd, type: 2}
+    vertexRoof: {fileID: 2100000, guid: 83a3faa68c241c44ca215d6d8c854056, type: 2}
   residenceMaterialPalette:
     socle: {fileID: 2100000, guid: ffefbaa1277b33e44a1905dee93ad996, type: 2}
     socleTop: {fileID: 2100000, guid: 078df7c57ed1da5468cd81c0e6043635, type: 2}
@@ -461,4 +461,4 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 6.1000004, y: 5.25, z: 7.1}
-  m_Center: {x: -0.00000035762787, y: 2.625, z: 0}
+  m_Center: {x: -0.00000059604645, y: 2.625, z: 0}

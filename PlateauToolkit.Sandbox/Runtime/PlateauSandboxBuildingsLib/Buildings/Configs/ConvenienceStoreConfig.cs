@@ -23,6 +23,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             public Color socleColor = ColorE.silver;
             public Color wallColor = ColorE.white;
             public Color billboardColor = ColorE.white;
+            public Color billboardBottomColor = ColorE.white;
             public Color windowPaneColor = ColorE.gray;
             public Color windowPaneGlassColor = ColorE.white;
             public Color roofColor = (ColorE.gray/4).WithA(1);

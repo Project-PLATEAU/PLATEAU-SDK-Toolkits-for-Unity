@@ -810,6 +810,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                             {
                                 m_FrameDirections = frameDirections,
                                 m_BillboardColor = config.conveniVertexColorPalette.billboardColor,
+                                m_BillboardBottomColor = config.conveniVertexColorPalette.billboardBottomColor,
                                 m_VertexColorBillboardMat = config.conveniVertexColorMaterialPalette.vertexWall
                             };
                         }

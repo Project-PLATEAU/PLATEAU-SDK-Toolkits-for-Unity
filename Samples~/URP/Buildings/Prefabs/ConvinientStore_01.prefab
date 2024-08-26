@@ -366,17 +366,18 @@ MonoBehaviour:
     isSideWall: 1
     roofThickness: 0.2
   conveniVertexColorPalette:
-    socleColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
-    wallColor: {r: 1, g: 1, b: 1, a: 1}
-    billboardColor: {r: 1, g: 1, b: 1, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
-    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
-    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    socleColor: {r: 0.8392157, g: 0.8352941, b: 0.8117647, a: 1}
+    wallColor: {r: 0.8392157, g: 0.7921569, b: 0.70980394, a: 1}
+    billboardColor: {r: 0.8392157, g: 0.7921569, b: 0.70980394, a: 1}
+    billboardBottomColor: {r: 0.8392157, g: 0.7921569, b: 0.70980394, a: 1}
+    windowPaneColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
+    windowPaneGlassColor: {r: 0.7529412, g: 0.9137255, b: 0.99215686, a: 1}
+    roofColor: {r: 0.8392157, g: 0.8352941, b: 0.8117647, a: 1}
+    roofSideColor: {r: 0.8392157, g: 0.8352941, b: 0.8117647, a: 1}
   conveniVertexColorMaterialPalette:
-    vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
-    vertexRoof: {fileID: 0}
+    vertexWall: {fileID: 2100000, guid: d7e502262c0782749958864f3ad76e7f, type: 2}
+    vertexWindowPane: {fileID: 2100000, guid: 422e4225a12095043a15c0d7aae85408, type: 2}
+    vertexRoof: {fileID: 2100000, guid: 6ce7f224d5b65714682ae04ffbeade75, type: 2}
   conveniMaterialPalette:
     socle: {fileID: 2100000, guid: eea1e87798a91b44d88ad5072ea568e0, type: 2}
     wall: {fileID: 2100000, guid: efcb59de7eedb574895a225363affae2, type: 2}

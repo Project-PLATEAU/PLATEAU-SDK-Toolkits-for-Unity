@@ -131,6 +131,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private ILayout PlanNormalFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
         {
             List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainder);
+
+            m_CommonConstructors[PanelType.k_Wall] = m_Constructors[PanelType.k_Wall].GetRandom();
+
             VerticalLayout vertical = CreateNormalFacadeVertical(panelSizes, 0, panelSizes.Count, config);
             if (remainder > Geometry.Epsilon)
             {

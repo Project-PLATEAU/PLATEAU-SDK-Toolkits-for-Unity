@@ -10,6 +10,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         {
             public Directions m_FrameDirections;
             public Color m_BillboardColor;
+            public Color m_BillboardBottomColor;
             public Material m_VertexColorBillboardMat;
         }
 
@@ -36,11 +37,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .Paint(billboardColorData.m_BillboardColor, billboardColorData.m_VertexColorBillboardMat);
             billboardFrame.name = k_WallDraftName;
 
+            MeshDraft billboardDownFrame = MeshDraft.PartialBox(widthVector, -depthVector, heightVector, Directions.Down, generateUV: false)
+                .Move(origin + widthVector / 2 + heightVector / 2 + depthVector / 2)
+                .Paint(billboardColorData.m_BillboardBottomColor, billboardColorData.m_VertexColorBillboardMat);
+            billboardDownFrame.name = k_WallDraftName;
+
             MeshDraft billboard = new MeshDraft().AddQuad(origin + depthVector, widthVector, heightVector, calculateNormal: true)
                 .Paint(billboardColorData.m_BillboardColor, billboardColorData.m_VertexColorBillboardMat);
             billboard.name = k_WallDraftName;
 
-            return new CompoundMeshDraft().Add(billboardFrame).Add(billboard);
+            return new CompoundMeshDraft().Add(billboardFrame).Add(billboardDownFrame).Add(billboard);
         }
 
         protected static CompoundMeshDraft BillboardTextured(

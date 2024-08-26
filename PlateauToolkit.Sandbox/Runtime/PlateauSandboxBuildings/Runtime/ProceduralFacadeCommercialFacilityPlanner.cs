@@ -73,6 +73,15 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private void SetupConstructors(BuildingGenerator.Config config)
         {
+            m_Constructors[PanelType.k_Entrance] = new List<Func<ILayoutElement>>
+            {
+                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
+                {
+                    m_WindowFrameRodWidth = 0.1f,
+                    m_WindowFrameRodHeight = 0.2f,
+                    m_NumCenterRods = 1
+                }
+            };
             m_Constructors[PanelType.k_Wall] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
@@ -223,7 +232,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             var vertical = new VerticalLayout
             {
-                Construct(m_Constructors[PanelType.k_FullWindow], width, k_LongWindowHeight),
+                Construct(m_Constructors[PanelType.k_Entrance], width, k_LongWindowHeight),
                 Construct(m_Constructors[PanelType.k_WallWithFrame], width, k_SmallWallHeight),
                 Construct(() => new ProceduralFacadeCompoundElements.ProceduralDepressionWall(config, positionType), width, k_SmallWallHeight)
             };
@@ -350,16 +359,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private enum PanelSize : byte
         {
-            k_Narrow,
-            k_Wide,
+            k_Narrow
         }
 
         private enum PanelType : byte
         {
+            k_Entrance,
             k_Wall,
             k_WallWithFrame,
             k_SmallFullWindow,
-            k_FullWindow,
+            k_FullWindow
         }
     }
 }

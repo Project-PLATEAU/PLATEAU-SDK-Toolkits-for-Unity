@@ -14,6 +14,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return new ProceduralFlatRoof(foundationPolygon, config)
             {
                 m_Thickness = 0.05f,
+                m_Overhang = 0
             };
         }
     }

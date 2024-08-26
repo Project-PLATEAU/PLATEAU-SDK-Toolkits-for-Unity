@@ -126,9 +126,10 @@ namespace PlateauToolkit.Sandbox.Editor
                     }
 
                     // Simulate physics to perform collision.
-                    Physics.autoSimulation = false;
+                    SimulationMode prevSimulationMode = Physics.simulationMode;
+                    Physics.simulationMode = SimulationMode.Script;
                     Physics.Simulate(Time.fixedDeltaTime);
-                    Physics.autoSimulation = true;
+                    Physics.simulationMode = prevSimulationMode;
                 }
 
                 m_PreviewPlaceable.SetPosition(m_PlacePoint.Position);
