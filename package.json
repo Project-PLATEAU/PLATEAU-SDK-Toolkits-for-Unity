@@ -1,9 +1,12 @@
 {
-  "name": "com.unity.plateautoolkit",
+  "name": "com.synesthesias.plateautoolkit",
   "displayName": "PLATEAU SDK-Toolkits for Unity",
-  "version": "1.0.1",
-  "unity": "2021.3",
+  "version": "2.0.0-alpha",
+  "unity": "2022.3",
   "description": "PLATEAUの3D都市モデルを利用したUnity上でのアプリケーション開発を支援するツールキット群です。",
+  "author": {
+    "name": "Synesthesias Inc."
+  },
   "keywords": [
     "Toolbox",
     "Plateau"
@@ -24,7 +27,7 @@
     }
   ],
   "dependencies": {
-    "com.synesthesias.plateau-unity-sdk": "1.0.0",
+    "com.synesthesias.plateau-unity-sdk": "3.0.0",
     "com.unity.splines":"2.2.0",
     "com.unity.inputsystem":"1.5.1",
     "com.unity.cloud.gltfast":"5.0.4",

@@ -11,7 +11,7 @@ namespace PlateauToolkit.Sandbox.Editor
     /// </summary>
     public static class PlateauSandboxAssetUtility
     {
-        const string k_PlateauToolkitPackageName = "com.unity.plateautoolkit";
+        const string k_PlateauToolkitPackageName = "com.synesthesias.plateautoolkit";
 
         static readonly string[] k_SearchInFolder = { "Assets" };
         const string k_AssetSamplesFolderPath = "Assets/Samples";
