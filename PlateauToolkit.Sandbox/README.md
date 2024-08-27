@@ -82,7 +82,7 @@ Sandboxアセットは次の8種類に分類されます。
 
 `アセット配置`をクリックし、メニュー下部の`ビルトインアセットをインポート`ボタンをクリックします。
 
-<img width="700" alt="builtin_asset_import" src="../Documentation~/Sandbox Images/builtin_asset_import.png">
+<img width="500" alt="builtin_asset_import" src="../Documentation~/Sandbox Images/builtin_asset_import.png">
 
 「ビルトインアセットをインポートしますか？」と表示されたダイアログウィンドウが開きます。`インポート`を選択するとSandbox Toolkitが提供するビルトインアセットをプロジェクトにインポートできます。
 
