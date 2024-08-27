@@ -232,7 +232,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             var vertical = new VerticalLayout
             {
-                Construct(m_Constructors[PanelType.k_Entrance], width, k_LongWindowHeight),
+                Construct(m_Constructors[PanelType.k_Entrance], width, k_FloorHeight),
+                Construct(m_Constructors[PanelType.k_FullWindow], width, k_SmallWallHeight),
                 Construct(m_Constructors[PanelType.k_WallWithFrame], width, k_SmallWallHeight),
                 Construct(() => new ProceduralFacadeCompoundElements.ProceduralDepressionWall(config, positionType), width, k_SmallWallHeight)
             };
