@@ -231,7 +231,7 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 <img width="400" alt="world_track_placement" src="../Documentation~/Sandbox Images/world_track_placement.gif">
 
 > [!TIP]
-> v2.0.0-alphaのToolkitでは、複数のアセットをぴったり揃えて配置する機能は提供されていません。こうした場合には、Unityの頂点スナップ機能を利用することで、以下の動画のように効率的に配置することができます。詳細については、[公式ドキュメント](https://docs.unity3d.com/ja/2022.3/Manual/PositioningGameObjects.html#:~:text=%E3%83%89%E3%83%A9%E3%83%83%E3%82%B0%E3%81%97%E3%81%BE%E3%81%99%E3%80%82-,%E9%A0%82%E7%82%B9%E3%82%B9%E3%83%8A%E3%83%83%E3%83%97,-%E9%A0%82%E7%82%B9%E3%82%B9%E3%83%8A%E3%83%83%E3%83%97%20%E3%82%92)をご参照ください。
+> v2.0.0-alphaのToolkitでは、複数のアセットをぴったり揃えて配置する機能は提供されていません。こうした場合には、Unityの頂点スナップ機能を利用することで、以下の動画のように効率的に配置することができます。詳細については、[公式ドキュメント](https://docs.unity3d.com/ja/2022.3/Manual/PositioningGameObjects.html#:~:text=%E3%83%89%E3%83%A9%E3%83%83%E3%82%B0%E3%81%97%E3%81%BE%E3%81%99%E3%80%82-,%E9%A0%82%E7%82%B9%E3%82%B9%E3%83%8A%E3%83%83%E3%83%97,-%E9%A0%82%E7%82%B9%E3%82%B9%E3%83%8A%E3%83%83%E3%83%97%20%E3%82%92)をご参照ください。<br>
 > <img width="400" alt="asset_vertex_snap" src="../Documentation~/Sandbox Images/asset_vertex_snap.gif">
 
 # 6. アセット一括配置機能
