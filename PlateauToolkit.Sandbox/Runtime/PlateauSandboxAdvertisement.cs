@@ -10,7 +10,7 @@ namespace PlateauToolkit.Sandbox.Runtime
     /// The definition of a advertisement
     /// </summary>
     [SelectionBase]
-    public class PlateauSandboxAdvertisement : MonoBehaviour, IPlateauSandboxPlaceableObject
+    public class PlateauSandboxAdvertisement : PlateauSandboxPlaceableHandler
     {
         public enum AdvertisementType
         {
@@ -108,11 +108,6 @@ namespace PlateauToolkit.Sandbox.Runtime
                     childMeshRender.sharedMaterials = advertisementMaterial.materials.ToArray();
                 }
             }
-        }
-
-        public void SetPosition(in Vector3 position)
-        {
-            transform.position = position;
         }
     }
 }

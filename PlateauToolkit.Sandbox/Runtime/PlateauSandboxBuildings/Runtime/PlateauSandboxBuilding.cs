@@ -11,7 +11,7 @@ using UnityEngine;
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 {
     [SelectionBase]
-    public class PlateauSandboxBuilding : MonoBehaviour, IPlateauSandboxPlaceableObject
+    public class PlateauSandboxBuilding : PlateauSandboxPlaceableHandler
     {
         private const int k_DefaultBuildingWidth = 5;
         private const int k_DefaultBuildingDepth = 5;
@@ -63,11 +63,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         public FacadeConstructor facadeConstructor;
         public RoofPlanner roofPlanner;
         public RoofConstructor roofConstructor;
-
-        public void SetPosition(in Vector3 position)
-        {
-            transform.position = position;
-        }
 
         public void GenerateMesh(int inLodNum, float inBuildingWidth, float inBuildingDepth)
         {

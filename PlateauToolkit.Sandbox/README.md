@@ -369,7 +369,7 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 ## 7-2. トラック移動コンポーネント
 
-アバター ( `PlateauSandboxAvatar` ) と乗り物 ( `PlateauSandboxVehicle` ) はトラック移動コンポーネント ( `PlateauTrackMovement` ) をアタッチすることで、トラック上を移動させることができます。
+アバター ( `PlateauSandboxHuman` ) と乗り物 ( `PlateauSandboxVehicle` ) はトラック移動コンポーネント ( `PlateauTrackMovement` ) をアタッチすることで、トラック上を移動させることができます。
 
 ### トラック上の正規化位置
 
@@ -408,7 +408,7 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 衝突判定を行う距離は速度に応じて変化します。速度が遅い場合は `Min Collision Detect Distance` が衝突判定距離の最小値として使用されますが、速度が早い場合はその速度に応じて判定する距離を大きくします。これは速度によって制動距離が異なるためです。
 
 #### 移動アニメーション
-アバター ( `PlateauSandboxAvatar` ) と乗り物 ( `PlateauSandboxVehicle` )にはトラック移動中の演出が実装されています。
+アバター ( `PlateauSandboxHuman` ) と乗り物 ( `PlateauSandboxVehicle` )にはトラック移動中の演出が実装されています。
 
 - アバター
     - トラックの進行方向に向かってアバターを回転させます。
@@ -564,7 +564,7 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 <img width="300" alt="front" src="../Documentation~/Sandbox Images/front.png">
 <img width="300" alt="right" src="../Documentation~/Sandbox Images/right.png">
 
-なお、特定のエージェントに対しカメラインタラクション機能を設定したくない場合は、 `PlateauSandboxAvatar` の `Is Camera View Available` のチェックボックスを外します。<br>
+なお、特定のエージェントに対しカメラインタラクション機能を設定したくない場合は、 `PlateauSandboxHuman` の `Is Camera View Available` のチェックボックスを外します。<br>
 
 <img width="400" alt="sandbox_camerainteracation_cameraviewenable" src="../Documentation~/Sandbox Images/sandbox_camerainteracation_cameraviewenable.png">
 
@@ -617,7 +617,7 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 ## 9-2. カメラのデフォルト位置の変更
 
-アバターや乗り物のコンポーネント ( `PlateauSandboxAvatar` 、 `PlateauSandboxVehicle` ) の `CameraTargetSettings` を調整することでカメラのデフォルトの位置などカメラに関する設定を変更することができます。
+アバターや乗り物のコンポーネント ( `PlateauSandboxHuman` 、 `PlateauSandboxVehicle` ) の `CameraTargetSettings` を調整することでカメラのデフォルトの位置などカメラに関する設定を変更することができます。
 位置は対象のオブジェクトの原点からの相対座標で表現され、Xは横方向, Yは高さ, Zで前後方向の設定をすることができます。<br>
 
 <img width="700" alt="sandbox_camerainteraction_offset" src="../Documentation~/Sandbox Images/sandbox_camerainteraction_offset.png">

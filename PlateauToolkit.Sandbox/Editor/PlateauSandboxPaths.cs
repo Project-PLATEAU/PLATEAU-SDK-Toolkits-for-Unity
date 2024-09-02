@@ -11,7 +11,7 @@
         public static string BulkPlaceIcon { get; } = $"{k_SpritesFolder}/PlateauToolkitSandbox_BulkPlaceIcon.png";
 
         public static string AdvertisementIcon { get; } = $"{k_AssetIconsFolder}/PlateauToolkitSandbox_AdvertisementIcon.png";
-        public static string AvatarIcon { get; } = $"{k_AssetIconsFolder}/PlateauToolkitSandbox_AvatarIcon.png";
+        public static string HumanIcon { get; } = $"{k_AssetIconsFolder}/PlateauToolkitSandbox_HumanIcon.png";
         public static string BuildingIcon { get; } = $"{k_AssetIconsFolder}/PlateauToolkitSandbox_BuildingIcon.png";
         public static string MiscellaneousIcon { get; } = $"{k_AssetIconsFolder}/PlateauToolkitSandbox_MiscellaneousIcon.png";
         public static string PlantIcon { get; } = $"{k_AssetIconsFolder}/PlateauToolkitSandbox_PlantIcon.png";

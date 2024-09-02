@@ -13,7 +13,7 @@ namespace PlateauToolkit.Sandbox.Editor
     {
         enum Type
         {
-            Avatar,
+            Human,
             Vehicle,
             Building,
             Plant,
@@ -74,8 +74,8 @@ namespace PlateauToolkit.Sandbox.Editor
             variant.name = m_BaseObject.name;
             switch (m_Type)
             {
-                case Type.Avatar:
-                    variant.AddComponent<PlateauSandboxAvatar>();
+                case Type.Human:
+                    variant.AddComponent<PlateauSandboxHuman>();
                     break;
                 case Type.Vehicle:
                     variant.AddComponent<PlateauSandboxVehicle>();

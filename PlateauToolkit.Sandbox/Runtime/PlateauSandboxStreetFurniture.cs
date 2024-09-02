@@ -6,11 +6,7 @@ namespace PlateauToolkit.Sandbox
     /// The definition of a StreetFurniture
     /// </summary>
     [SelectionBase]
-    public class PlateauSandboxStreetFurniture : MonoBehaviour, IPlateauSandboxPlaceableObject
+    public class PlateauSandboxStreetFurniture : PlateauSandboxPlaceableHandler
     {
-        public void SetPosition(in Vector3 position)
-        {
-            transform.position = position;
-        }
     }
 }

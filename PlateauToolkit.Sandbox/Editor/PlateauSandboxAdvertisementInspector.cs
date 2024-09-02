@@ -148,6 +148,21 @@ namespace PlateauToolkit.Sandbox.Editor.PlateauToolkit.Sandbox.Editor
 
             DrawAspectGUI();
 
+            GUILayout.Space(5);
+
+            // ハンドル方向チェック
+            EditorGUI.BeginChangeCheck();
+
+            var placementDirection = (PlateauSandboxPlaceableHandler.GroundPlacementDirection)EditorGUILayout.EnumPopup(
+                "Ground Placement Direction",
+                m_Target.groundPlacementDirection);
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                m_Target.groundPlacementDirection = placementDirection;
+                changedValue = true;
+            }
+
             if (changedValue)
             {
                 EditorUtility.SetDirty(m_Target);

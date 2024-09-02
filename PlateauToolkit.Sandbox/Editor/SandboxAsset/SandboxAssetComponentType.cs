@@ -7,7 +7,7 @@ namespace PlateauToolkit.Sandbox.Editor
     [Flags]
     enum SandboxAssetComponentType
     {
-        k_Avatar = 1 << 0,
+        k_Human = 1 << 0,
         k_Vehicle = 1 << 1,
         k_Building = 1 << 2,
         k_Plant = 1 << 3,
@@ -23,8 +23,8 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             switch (type)
             {
-                case SandboxAssetComponentType.k_Avatar:
-                    return (Texture2D)AssetDatabase.LoadAssetAtPath(PlateauSandboxPaths.AvatarIcon, typeof(Texture2D));
+                case SandboxAssetComponentType.k_Human:
+                    return (Texture2D)AssetDatabase.LoadAssetAtPath(PlateauSandboxPaths.HumanIcon, typeof(Texture2D));
                 case SandboxAssetComponentType.k_Vehicle:
                     return (Texture2D)AssetDatabase.LoadAssetAtPath(PlateauSandboxPaths.VehicleIcon, typeof(Texture2D));
                 case SandboxAssetComponentType.k_Building:
@@ -48,8 +48,8 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             switch (type)
             {
-                case SandboxAssetComponentType.k_Avatar:
-                    return new PlateauSandboxAssetListViewAvatar();
+                case SandboxAssetComponentType.k_Human:
+                    return new PlateauSandboxAssetListViewHuman();
                 case SandboxAssetComponentType.k_Vehicle:
                     return new PlateauSandboxAssetListViewVehicle();
                 case SandboxAssetComponentType.k_Building:

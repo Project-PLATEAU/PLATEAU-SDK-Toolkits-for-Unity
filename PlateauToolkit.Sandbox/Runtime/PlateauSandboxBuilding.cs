@@ -6,11 +6,7 @@ namespace PlateauToolkit.Sandbox.Runtime
     /// The definition of a building
     /// </summary>
     [SelectionBase]
-    public class PlateauSandboxBuilding : MonoBehaviour, IPlateauSandboxPlaceableObject
+    public class PlateauSandboxBuilding : PlateauSandboxPlaceableHandler
     {
-        public void SetPosition(in Vector3 position)
-        {
-            transform.position = position;
-        }
     }
 }

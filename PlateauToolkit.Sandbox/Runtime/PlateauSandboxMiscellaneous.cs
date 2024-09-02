@@ -6,11 +6,7 @@ namespace PlateauToolkit.Sandbox
     /// The definition of a Miscellaneous
     /// </summary>
     [SelectionBase]
-    public class PlateauSandboxMiscellaneous : MonoBehaviour, IPlateauSandboxPlaceableObject
+    public class PlateauSandboxMiscellaneous : PlateauSandboxPlaceableHandler
     {
-        public void SetPosition(in Vector3 position)
-        {
-            transform.position = position;
-        }
     }
 }

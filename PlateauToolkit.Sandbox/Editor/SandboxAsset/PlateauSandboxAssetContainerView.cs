@@ -10,7 +10,7 @@ namespace PlateauToolkit.Sandbox.Editor
         readonly Dictionary<SandboxAssetComponentType, IPlateauSandboxAssetListView> m_AssetLists =
             new Dictionary<SandboxAssetComponentType, IPlateauSandboxAssetListView>();
 
-        SandboxAssetComponentType m_SelectedComponentType = SandboxAssetComponentType.k_Avatar;
+        SandboxAssetComponentType m_SelectedComponentType = SandboxAssetComponentType.k_Human;
         readonly PlateauSandboxAssetComponentTabsView m_ComponentTabView = new PlateauSandboxAssetComponentTabsView();
         IPlateauSandboxAssetListView m_CurrentAssetList;
         bool m_IsShowAssetCreate;
@@ -42,7 +42,7 @@ namespace PlateauToolkit.Sandbox.Editor
             m_ComponentTabView.OnSelectedTypeChanged.AddListener(SetComponentType);
 
             // Set Default
-            SetComponentType(SandboxAssetComponentType.k_Avatar);
+            SetComponentType(SandboxAssetComponentType.k_Human);
         }
 
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)

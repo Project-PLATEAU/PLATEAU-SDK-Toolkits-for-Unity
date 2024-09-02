@@ -3,8 +3,8 @@
 namespace PlateauToolkit.Sandbox
 {
     [SelectionBase]
-    public class PlateauSandboxAvatar :
-        MonoBehaviour,
+    public class PlateauSandboxHuman :
+        PlateauSandboxPlaceableHandler,
         IPlateauSandboxMovingObject,
         IPlateauSandboxCameraTarget
     {
@@ -28,11 +28,6 @@ namespace PlateauToolkit.Sandbox
         void Awake()
         {
             m_CameraTargetSettings.Transform = transform;
-        }
-
-        public void SetPosition(in Vector3 position)
-        {
-            transform.position = position;
         }
 
         public void OnMoveBegin()

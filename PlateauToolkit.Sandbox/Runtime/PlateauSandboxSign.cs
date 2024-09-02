@@ -6,11 +6,7 @@ namespace PlateauToolkit.Sandbox
     /// The definition of a Sign
     /// </summary>
     [SelectionBase]
-    public class PlateauSandboxSign : MonoBehaviour, IPlateauSandboxPlaceableObject
+    public class PlateauSandboxSign : PlateauSandboxPlaceableHandler
     {
-        public void SetPosition(in Vector3 position)
-        {
-            transform.position = position;
-        }
     }
 }

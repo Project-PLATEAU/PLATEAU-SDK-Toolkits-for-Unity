@@ -27,6 +27,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
             readonly PlateauSandboxContext m_Context;
 
+            bool m_IsHandleRotationChanged;
+
             public ClickPlacement(PlateauSandboxContext context)
             {
                 m_Context = context;
@@ -45,6 +47,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
                     m_PreviewInstantiation = null;
                 }
+
+                m_IsHandleRotationChanged = false;
             }
 
             Quaternion GetPlaceRotation()
@@ -53,9 +57,26 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     case PlacementUpVector.Normal:
                     {
-                        Quaternion toNormal = Quaternion.FromToRotation(Vector3.up, m_PlacePoint.Normal);
+                        var toDirection = m_PlacePoint.Normal;
+                        if (!m_PreviewPlaceable.IsGroundPlacementVertical())
+                        {
+                            Vector3 placePointNormalDirection = GetPlacePointNormalDirection();
+                            if (placePointNormalDirection == Vector3.up)
+                            {
+                                toDirection = Vector3.back;
+                            }
+                            else if (placePointNormalDirection == Vector3.down)
+                            {
+                                toDirection = Vector3.forward;
+                            }
+                            else
+                            {
+                                toDirection = Vector3.up;
+                            }
+                        }
+                        Quaternion toNormal = Quaternion.FromToRotation(Vector3.up, toDirection);
                         Vector3 rotatedDirection = toNormal * m_HandleDirectionVector;
-                        return Quaternion.LookRotation(rotatedDirection, m_PlacePoint.Normal);
+                        return Quaternion.LookRotation(rotatedDirection, toDirection);
                     }
                     case PlacementUpVector.World:
                     {
@@ -132,6 +153,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     Physics.simulationMode = prevSimulationMode;
                 }
 
+                SetGroundHandleDirection(m_PreviewPlaceable.IsGroundPlacementVertical());
                 m_PreviewPlaceable.SetPosition(m_PlacePoint.Position);
                 m_PreviewInstantiation.SceneObject.transform.rotation = GetPlaceRotation();
 
@@ -241,6 +263,8 @@ namespace PlateauToolkit.Sandbox.Editor
                     Vector3 direction = toUpRotation * (intersectionPoint - m_PlacePoint.Position);
                     direction.Normalize();
                     m_HandleDirectionVector = direction;
+
+                    m_IsHandleRotationChanged = true;
                 }
 
                 window.Repaint();
@@ -375,6 +399,55 @@ namespace PlateauToolkit.Sandbox.Editor
 
                 m_MouseDownPosition = null;
                 m_PlacePoint = null;
+            }
+
+            void SetGroundHandleDirection(in bool isGroundVertical)
+            {
+                if (isGroundVertical || // 地面に垂直
+                    m_IsHandleRotationChanged || // ハンドルの向きが変更された
+                    m_Context.PlacementSettings.UpVector == PlacementUpVector.World) // ワールド座標での設定の場合
+                {
+                    return;
+                }
+
+                Vector3 placePointNormalDirection = GetPlacePointNormalDirection();
+                if (placePointNormalDirection == Vector3.up || placePointNormalDirection == Vector3.down)
+                {
+                    m_HandleDirectionVector = k_DefaultDirectionVector;
+                }
+                else
+                {
+                    m_HandleDirectionVector = placePointNormalDirection;
+                }
+            }
+
+            Vector3 GetPlacePointNormalDirection()
+            {
+                if (Vector3.Dot(m_PlacePoint.Normal, Vector3.up) > 0.9f)
+                {
+                    return Vector3.up;
+                }
+                else if (Vector3.Dot(m_PlacePoint.Normal, Vector3.down) > 0.9f)
+                {
+                    return Vector3.down;
+                }
+                else if (Vector3.Dot(m_PlacePoint.Normal, Vector3.right) > 0.9f)
+                {
+                    return Vector3.right;
+                }
+                else if (Vector3.Dot(m_PlacePoint.Normal, Vector3.left) > 0.9f)
+                {
+                    return Vector3.left;
+                }
+                else if (Vector3.Dot(m_PlacePoint.Normal, Vector3.forward) > 0.9f)
+                {
+                    return Vector3.forward;
+                }
+                else if (Vector3.Dot(m_PlacePoint.Normal, Vector3.back) > 0.9f)
+                {
+                    return Vector3.back;
+                }
+                return m_PlacePoint.Normal;
             }
         }
     }

@@ -88,6 +88,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808971fab4bf0204e8c0aa8779225b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundPlacementDirection: 1
   textureAspectWidth: 2
   textureAspectHeight: 1
   targetMaterialNumber: 1
