@@ -10,7 +10,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         public class Params
         {
             public int numFloor = 2;
-            [CustomLabel("エントランスに屋根を追加")]
+            [CustomLabel("エントランスに庇を追加")]
             public bool hasEntranceRoof;
             [CustomLabel("屋根タイプ")]
             public RoofType roofType = RoofType.flat;

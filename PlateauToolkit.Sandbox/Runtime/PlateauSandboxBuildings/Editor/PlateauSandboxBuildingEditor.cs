@@ -387,7 +387,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     EditorGUILayout.LabelField("オフィスビル設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_OfficeBuildingParams, new Dictionary<string, Tuple<string, float, float>>
                     {
-                        {"spandrelHeight", new Tuple<string, float, float>("小さい窓の高さ", 0.25f, 2.5f)}
+                        {"spandrelHeight", new Tuple<string, float, float>("壁パネルの高さ", 0.25f, 2.5f)}
                     });
                 case (int)BuildingType.k_House:
                     EditorGUILayout.LabelField("住宅設定", EditorStyles.boldLabel);
