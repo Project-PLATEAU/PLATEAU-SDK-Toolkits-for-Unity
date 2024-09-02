@@ -78,6 +78,14 @@ Sandboxアセットは次の8種類に分類されます。
 - 車両アセットのリスト表示
 <img width="500" alt="sandbox_asset_vehicle" src="../Documentation~/Sandbox Images/sandbox_asset_vehicle.png">
 
+> [!WARNING]
+> 古いバージョンのUnity Editorバージョンを使用していると、配置オブジェクトのリスト表示に不具合が生じることがあります。<br>
+> Unity 2022.3.25以上を使用してください。
+
+> [!WARNING]
+> 既知の課題として、HDRPを利用している場合、アセットのサムネイル画像が正しく表示されない場合があります。
+> <img width="500" alt="hdrp_asset_thumbnail" src="../Documentation~/Sandbox Images/hdrp_asset_thumbnail.png">
+
 ## 4-2 ビルトインアセットのインポート
 
 `アセット配置`をクリックし、メニュー下部の`ビルトインアセットをインポート`ボタンをクリックします。
@@ -102,7 +110,7 @@ Sandboxアセットは次の8種類に分類されます。
 
 3. `Type`フィールドにて、作成するSandboxアセットの種類を選択します。
 
-- Avatar：人アセット
+- Human：人アセット
 - Vehicle：車両アセット
 - Building：建築物アセット
 - Plant：街路樹・植生アセット
@@ -136,8 +144,14 @@ Sandboxアセットは次の8種類に分類されます。
 配置するオブジェクトを選択してシーン上でマウスを操作すると、マウス上に画像のようにカーソルと配置するオブジェクトのプレビューが表示され、後述する配置オプションに応じた操作によって選択したオブジェクトを配置することができます。<br>
 <img width="300" alt="placement_example" src="../Documentation~/Sandbox Images/placement_example.png">
 
-カーソルがコライダーの設定されていない場所を指している場合や、指定した場所にオブジェクトを配置すると他のオブジェクトと重なってしまう場合、カーソルは赤色に変わり、オブジェクトを配置することができません。<br>
-<img width="300" alt="objects_overlapping" src="../Documentation~/Sandbox Images/objects_overlapping.png">
+> [!WARNING]
+> カーソルがコライダーの設定されていない場所を指している場合や、指定した場所にオブジェクトを配置すると他のオブジェクトと重なってしまう場合、カーソルは赤色に変わり、クリックしてもオブジェクトを配置することができません。<br>
+> <img width="300" alt="objects_overlapping" src="../Documentation~/Sandbox Images/objects_overlapping.png"><br>
+
+> [!WARNING]
+> v2.0.0-alphaのToolkitでは、建築物Sandboxアセットの表面に他のアセットを配置する機能は提供されていません。この場合、カーソルが赤色に変わり、クリックしてもオブジェクトを配置することができません。<br>
+> PLATEAUの都市モデルの表面にはアセットを配置可能です。<br>
+> <img width="300" alt="asset_cannot_be_placed_to_building" src="../Documentation~/Sandbox Images/asset_cannot_be_placed_to_building.png">
 
 ## 5-2. 配置オプション
 配置ツールを起動すると、シーンビューの右下に次のような配置ツール設定ウィンドウが表示されます。<br>
@@ -174,12 +188,11 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | 配置数 | 一回のブラシ配置で配置されるオブジェクトの数を設定します。 |
 | ブラシサイズ | ドラッグで連続配置を行う際の配置間隔を設定します。 |
 | シード値固定 | 配置ごとにシード値を振りなおすかどうかを設定します。固定されていない場合は、配置ごとに新しいシード値が設定されるため、ブラシの形状が自動的に変化します。 |
-| ブラシ乱数シード値 | ブラシの形状に現在使用されている乱数が設定されます。任意のシード値を設定することも可能です。 |
+| ブラシ乱数シード値 | ブラシの形状に現在使用されている乱数が設定されます。任意のシード値を設定することもできます。 |
 
 複数のオブジェクトを同時に配置することができます。クリックでカーソルが表示されている位置に同時に複数配置、もしくはドラッグで連続で複数配置することができます。<br>
 ブラシでオブジェクトを配置する際に設置面の判定を行っており、Toolkitで設定されている範囲内に設置面がない場合はオブジェクトは設置されません。例えば、ビルの屋上にブラシで配置する際、配置される位置が屋上に収まらないオブジェクトは配置されません。
 ブラシの形状は「ブラシサイズ」と乱数（シード値はブラシ乱数シード値」で設定される）で決まります。マウスの位置を中心にして、「ブラシサイズ」を最大距離としてランダムな距離とランダムな角度に「配置数」分だけ配置位置が選択されたものがブラシの形状になります。<br>
-
 
 #### オブジェクトの向き
 
@@ -198,9 +211,17 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 | トラックに沿って配置 | オブジェクトはトラックの法線方向に配置されます。トラックが配置されている面の法線は使用されません。 |
 
 <img width="200" alt="normal_orientation_surface_placement" src="../Documentation~/Sandbox Images/normal_orientation_surface_placement.png">
+
 ↑「表面に配置」を選択したときの例 <br>
 <img width="400" alt="normal_orientation_track_placement" src="../Documentation~/Sandbox Images/normal_orientation_track_placement.gif">
+
 ↑「トラックに沿って配置」を選択したときの例 <br>
+
+> [!NOTE]
+> 地面に配置するアセットと壁に配置するアセットでは配置時の法線の計算方法が異なります。<br>
+> 各アセットには`PlateauSandbox〇〇`というコンポーネント（`〇〇`はアセットの種類ごとに異なります）がアタッチされており、`Ground Placement Direction`フィールドに設定されている値により地面に配置するか壁に配置するかを判別しています。
+> 地面に配置するアセットには`Vertical`が、壁に配置するアセットには`Horizontal`が設定されています。
+> <img width="600" alt="asset_place_to_wall" src="../Documentation~/Sandbox Images/asset_place_to_wall.png">
 
 <br>
 
@@ -209,9 +230,9 @@ Unity のコライダーに沿ってオブジェクトを配置するモード�
 <img width="200" alt="world_surface_placement" src="../Documentation~/Sandbox Images/world_surface_placement.png">
 <img width="400" alt="world_track_placement" src="../Documentation~/Sandbox Images/world_track_placement.gif">
 
-> **Note**
-> 古いバージョンのUnity Editorバージョンを使用していると、配置オブジェクトのリスト表示に不具合が生じることがあります。<br>
-> Unity 2021.3.34以上を使用してください。
+> [!TIP]
+> v2.0.0-alphaのToolkitでは、複数のアセットをぴったり揃えて配置する機能は提供されていません。こうした場合には、Unityの頂点スナップ機能を利用することで、以下の動画のように効率的に配置することができます。詳細については、[公式ドキュメント](https://docs.unity3d.com/ja/2022.3/Manual/PositioningGameObjects.html#:~:text=%E3%83%89%E3%83%A9%E3%83%83%E3%82%B0%E3%81%97%E3%81%BE%E3%81%99%E3%80%82-,%E9%A0%82%E7%82%B9%E3%82%B9%E3%83%8A%E3%83%83%E3%83%97,-%E9%A0%82%E7%82%B9%E3%82%B9%E3%83%8A%E3%83%83%E3%83%97%20%E3%82%92)をご参照ください。
+> <img width="400" alt="asset_vertex_snap" src="../Documentation~/Sandbox Images/asset_vertex_snap.gif">
 
 # 6. アセット一括配置機能
 
@@ -282,7 +303,7 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 `アセットの配置高さ` の設定で `ファイルで指定した高さに配置` を選択していると、CSVファイルに記載されている高さ情報を使用してアセットを配置します。
 
-`地面に配置` を選択することで、高さ情報を無視して地面に配置することが可能です。ただし `地面に配置` の場合、指定した緯度、経度にコライダーが存在しない場合はアセットは配置されません。
+`地面に配置` を選択することで、高さ情報を無視して地面に配置することができます。ただし `地面に配置` の場合、指定した緯度、経度にコライダーが存在しない場合はアセットは配置されません。
 
 <img width="600" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_csv_asset_height.png">
 
@@ -310,7 +331,7 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 <img width="1200" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_asset_place.gif">
 
-> **Note**
+> [!NOTE]
 > 指定した緯度、経度にコライダーが無いために配置が実行できなかった場合、コンソールログにてwarningが表示されます。
 > <img width="600" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_collider_warning.png">
 
@@ -514,9 +535,20 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 <img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_ad_video_replaced.gif">
 
+### サイズ変更機能
+広告コンポーネントの`広告の大きさ`フィールドには広告物アセットの実スケールでの大きさがメートル単位で表示されます。この値を変更すると、シーンに配置された広告物アセットの大きさを調整できます。
+
+<img width="600" alt="advertisement_size_adjustment" src="../Documentation~/Sandbox Images/advertisement_size_adjustment.png">
+
 ## 8-2. 建築物カスタマイズ機能
 
 配置可能アセットの中には建物アセットを配置してパラメータ変更により見た目をカスタマイズするための建築物コンポーネント ( `PlateauSandboxBuilding` ) がアタッチされているものがあります。
+v2.0.0-alpha時点では以下の5種類の建築物アセットを提供しています。
+- マンション
+- 商業ビル
+- コンビニエンスストア
+- 一軒家
+- オフィスビル
 
 <img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_buildings_assets.png">
 <img width="600" alt="sandbox_ad_board" src="../Documentation~/Sandbox Images/sandbox_buildings_apartment.png">
@@ -529,13 +561,45 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 #### 建造物設定
 
-どの建物にも共通しているパラメータ「建造物タイプ」「建物の高さ」「建物の横幅」「建物の奥行き」が変更できます。
+どの建物にも共通しているパラメータ「建物の高さ」「建物の横幅」「建物の奥行き」を変更できます。
 
-:warning: 一部の建物タイプには変更ができない項目があります。
+> [!WARNING]
+> 一部の建物タイプには変更ができない項目があります。
 
 #### 建造物タイプの個別設定
 
-`建造物設定` の「建造物タイプ」を変更すると、建造物タイプに応じた個別のパラメータを変更できます。建物タイプによって表示されるパラメータは異なります。
+建造物タイプに応じた個別のパラメータを変更できます。建物タイプによって表示されるパラメータは異なります。
+
+##### マンション
+<img width="400" alt="building_settings_apartment" src="../Documentation~/Sandbox Images/building_settings_apartment.png">
+
+- 窓ガラスバルコニーに切り替え：バルコニーの見た目を壁から窓ガラスに切り替えることができます。
+- 左側にバルコニーを作成：建物の左側面にバルコニーを追加します。
+
+##### 商業ビル
+個別のパラメータはありません。
+
+##### コンビニエンスストア
+<img width="400" alt="building_settings_conviniencestore" src="../Documentation~/Sandbox Images/building_settings_conviniencestore.png">
+
+- 側面を壁に設定：側面を窓ガラスから壁に切り替えることができます。
+- 屋根の厚さ：屋根の厚さを指定できます。
+
+##### 一軒家
+<img width="400" alt="building_settings_house" src="../Documentation~/Sandbox Images/building_settings_house.png">
+
+- 階数：階数を1から3までの間で指定できます。
+- エントランスに庇を追加：一軒家の入り口に庇を追加できます。
+- 屋根タイプ：屋根の形状を以下から選択できます。
+  - Flat：平屋根
+  - Hipped：寄棟屋根
+- 屋根の厚さ：屋根の厚さを指定できます。
+
+##### オフィスビル
+<img width="400" alt="building_settings_officebuilding" src="../Documentation~/Sandbox Images/building_settings_officebuilding.png">
+
+- 1階を窓に変更：建物の1階部分を壁から窓に変更できます。
+- 壁パネルの高さ：上下の窓ガラスに挟まれた壁パネルの高さを指定できます。
 
 #### 色設定
 
@@ -545,7 +609,8 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 建物アセットのPrefab保存では [インスタンスのオーバーライド](https://docs.unity3d.com/ja/2019.4/Manual/PrefabInstanceOverrides.html) に加えて、「建造物を新規プレハブとして保存」ボタンにより、カスタマイズしたパラメータを名前が連番の別のPrefabとして保存できます。Prefabと同時に利用しているメッシュも併せてサンプルフォルダ内のBuildingsフォルダ内に保存されます。
 
-:warning: 現在のバージョンではヒエラルキーからのドラッグ＆ドロップによるPrefab保存はサポートされていません。
+> [!WARNING]
+> 現在のバージョンではヒエラルキーからのドラッグ＆ドロップによるPrefab保存はサポートされていません。
 
 # 9. カメラインタラクション機能
 
@@ -568,7 +633,7 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 <img width="400" alt="sandbox_camerainteracation_cameraviewenable" src="../Documentation~/Sandbox Images/sandbox_camerainteracation_cameraviewenable.png">
 
-尚、キーボード入力によるカメラ操作の有効/無効の設定は "PlateauSandboxCameraManager" の `Enable Keywboard Camera Switch` のチェックボックスによって切り替えることが可能です。<br>
+尚、キーボード入力によるカメラ操作の有効/無効の設定は "PlateauSandboxCameraManager" の `Enable Keywboard Camera Switch` のチェックボックスによって切り替えることができます。<br>
 <img width="500" alt="sandbox_cameramanager_enablekeyboard" src="../Documentation~/Sandbox Images/sandbox_cameramanager_enablekeyboard.png">
 
 ## 9-1. 操作方法
