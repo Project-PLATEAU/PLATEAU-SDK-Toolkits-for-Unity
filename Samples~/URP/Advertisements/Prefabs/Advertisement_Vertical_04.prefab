@@ -54,7 +54,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.16777124, y: 2.8218508, z: 0.8453358}
+  m_Size: {x: 0.1677712, y: 2.821851, z: 0.8453358}
   m_Center: {x: -0.0024235025, y: -0.0041263103, z: 0.41606656}
 --- !u!114 &-7710280722442001531
 MonoBehaviour:
@@ -69,11 +69,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPlacementDirection: 1
-  textureAspectWidth: 1
-  textureAspectHeight: 5
+  defaultAdSize: {x: 0.1677712, y: 2.821851, z: 0.8453358}
+  adSize: {x: 0.1677712, y: 2.821851, z: 0.8453358}
   targetMaterialNumber: 1
   targetTextureProperty: _BaseMap
-  frontAxis: 0
   advertisementType: 0
   advertisementMaterials:
   - gameObjectName: Advertisement_Vertical_04_LOD0

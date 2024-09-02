@@ -11,10 +11,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
     [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Planner/Office Building", order = 1)]
     public class ProceduralFacadeOfficeBuildingPlanner : FacadePlanner
     {
-        private const float k_MinBuildingHeight = 5f;
         private const float k_MaxBuildingHeight = 100f;
-        private const float k_FloorHeight = 2.5f;
+        private const float k_MinFloorHeight = 2.75f;
+        private const float k_MaxFloorHeight = 3.25f;
         private const float k_BufferWidth = 2;
+        private const float k_ShadowWallOffset = 0.1f;
+        private const float k_EntranceWindowTopOffset = 0.6f;
 
         private readonly Dictionary<PanelType, List<Func<ILayoutElement>>> m_Constructors = new();
         private readonly Dictionary<PanelSize, float> m_SizeValues = new()
@@ -43,24 +45,58 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 bool leftIsConvex = Geometry.GetAngle(b, a, aNext) <= 180;
                 bool rightIsConvex = Geometry.GetAngle(bPrevious, b, a) <= 180;
 
+                // 小数点が最も小さい（フロア数を求めた時に最も正確に割り切れるかを表す）フロア数から最大のフロア高を求める
+                float floorHeight = 0;
+                float floorHeightRemaining = 1f;
+                for (float tempFloorHeight = k_MinFloorHeight; tempFloorHeight < k_MaxFloorHeight;)
+                {
+                    float numFloor = config.buildingHeight / tempFloorHeight;
+                    if (numFloor - Mathf.Floor(numFloor) < floorHeightRemaining)
+                    {
+                        floorHeight = tempFloorHeight;
+                        floorHeightRemaining = numFloor - Mathf.Floor(numFloor);
+                    }
+                    tempFloorHeight += 0.05f;
+                }
+
                 switch (i)
                 {
                     case 0:
+                    {
                         config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Back;
-                        layouts.Add(PlanNormalFacade(width, config, leftIsConvex, rightIsConvex));
+                        var vertical = new VerticalLayout();
+                        vertical.AddElement(Construct(m_Constructors[PanelType.k_ShadowWall], width - k_ShadowWallOffset, config.buildingHeight - k_ShadowWallOffset));
+                        vertical.Add(PlanNormalFacade(width, floorHeight,　config, leftIsConvex, rightIsConvex));
+                        layouts.Add(vertical);
                         break;
+                    }
                     case 1:
+                    {
                         config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Right;
-                        layouts.Add(PlanNormalFacade(width, config, leftIsConvex, rightIsConvex));
+                        var vertical = new VerticalLayout();
+                        vertical.AddElement(Construct(m_Constructors[PanelType.k_ShadowWall], width - k_ShadowWallOffset, config.buildingHeight - k_ShadowWallOffset));
+                        vertical.Add(PlanNormalFacade(width, floorHeight, config, leftIsConvex, rightIsConvex));
+                        layouts.Add(vertical);
                         break;
+                    }
                     case 2:
+                    {
                         config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Front;
-                        layouts.Add(PlanEntranceFacade(width, config, leftIsConvex, rightIsConvex));
+                        var vertical = new VerticalLayout();
+                        vertical.AddElement(Construct(m_Constructors[PanelType.k_ShadowWall], width - k_ShadowWallOffset, config.buildingHeight - k_ShadowWallOffset));
+                        vertical.Add(PlanEntranceFacade(width, floorHeight, config, leftIsConvex, rightIsConvex));
+                        layouts.Add(vertical);
                         break;
+                    }
                     case 3:
+                    {
                         config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Left;
-                        layouts.Add(PlanNormalFacade(width, config, leftIsConvex, rightIsConvex));
+                        var vertical = new VerticalLayout();
+                        vertical.AddElement(Construct(m_Constructors[PanelType.k_ShadowWall], width - k_ShadowWallOffset, config.buildingHeight - k_ShadowWallOffset));
+                        vertical.Add(PlanNormalFacade(width, floorHeight, config, leftIsConvex, rightIsConvex));
+                        layouts.Add(vertical);
                         break;
+                    }
                 }
             }
 
@@ -82,12 +118,22 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
             };
+            m_Constructors[PanelType.k_ShadowWall] = new List<Func<ILayoutElement>>
+            {
+                () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
+                {
+                    m_IsShadowWall = true,
+                    m_MoveShadowWallDepth = 0.1f,
+                    m_ShadowWallWidthOffset = k_ShadowWallOffset,
+                    m_ShadowWallHeightOffset = 0
+                }
+            };
             m_Constructors[PanelType.k_SmallFullWindow] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
                     config,
                     "SmallFullWindowTextured",
-                    config.officeBuildingMaterialPalette.windowGlassB
+                    config.officeBuildingMaterialPalette.spandrel
                     )
                 {
                     m_WindowFrameRodWidth = 0.2f,
@@ -102,13 +148,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             };
         }
 
-        private ILayout PlanNormalFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
+        private ILayout PlanNormalFacade(float facadeWidth, float floorHeight, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
         {
             List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainderWidth);
-            return CreateNormalFacadeVertical(panelSizes, remainderWidth, 0, panelSizes.Count, config);
+            return CreateNormalFacadeVertical(panelSizes, remainderWidth, floorHeight, 0, panelSizes.Count, config);
         }
 
-        private ILayout PlanEntranceFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
+        private ILayout PlanEntranceFacade(float facadeWidth, float floorHeight, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
         {
             List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainderWidth);
 
@@ -119,19 +165,26 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             const int lastEntranceIndex = -1;
 
             float floorWidthOffset = remainderWidth / panelSizes.Count;
-            horizontal.Add(CreateEntranceNormalFacadeVertical(panelSizes, floorWidthOffset, lastEntranceIndex + 1, entranceIndexInterval, config));
-            horizontal.Add(CreateEntranceVertical(m_SizeValues[panelSizes[entranceIndexInterval]], floorWidthOffset, config));
-            horizontal.Add(CreateEntranceNormalFacadeVertical(panelSizes, floorWidthOffset, entranceIndexInterval + 1, panelSizes.Count, config));
+            horizontal.Add(CreateEntranceNormalFacadeVertical(panelSizes, floorWidthOffset, floorHeight, lastEntranceIndex + 1, entranceIndexInterval, config));
+            horizontal.Add(CreateEntranceVertical(m_SizeValues[panelSizes[entranceIndexInterval]], floorWidthOffset, floorHeight, config));
+            horizontal.Add(CreateEntranceNormalFacadeVertical(panelSizes, floorWidthOffset, floorHeight, entranceIndexInterval + 1, panelSizes.Count, config));
 
             return horizontal;
         }
 
-        private VerticalLayout CreateNormalFacadeVertical(List<PanelSize> panelSizes, float remainderWidth, int from, int to, BuildingGenerator.Config config)
+        private VerticalLayout CreateNormalFacadeVertical(List<PanelSize> panelSizes, float remainderWidth, float floorHeight, int from, int to, BuildingGenerator.Config config)
         {
+            int numFloorWithoutEntrance = (int)Mathf.Floor(config.buildingHeight / floorHeight) - 1;
+            float entranceHeight = config.buildingHeight - numFloorWithoutEntrance * floorHeight;
             float floorWidthOffset = remainderWidth / (to - from);
-            var vertical = new VerticalLayout { CreateHorizontal(panelSizes, from, to, k_FloorHeight * 2, floorWidthOffset, m_Constructors[PanelType.k_FullWindow]) };
+            var vertical = new VerticalLayout
+            {
+                config.officeBuildingParams.useWindow
+                    ? CreateHorizontal(panelSizes, from, to, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow])
+                    : CreateHorizontal(panelSizes, from, to, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_Wall])
+            };
 
-            float remainingHeight = config.buildingHeight - k_MinBuildingHeight;
+            float remainingHeight = config.buildingHeight - entranceHeight;
             if (0 < remainingHeight)
             {
                 int switchIndex = 0;
@@ -140,16 +193,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     switch (switchIndex++ % 2)
                     {
                         case 0:
-                            remainingHeight -= config.officeBuildingParams.smallWindowHeight;
+                            remainingHeight -= config.officeBuildingParams.spandrelHeight;
                             vertical.Add(remainingHeight < 0
-                                ? CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.smallWindowHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow])
-                                : CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.smallWindowHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow]));
+                                ? CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.spandrelHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow])
+                                : CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.spandrelHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow]));
                             break;
                         case 1:
-                            remainingHeight -= k_FloorHeight;
+                            remainingHeight -= floorHeight;
                             vertical.Add(remainingHeight < 0
-                                ? CreateHorizontal(panelSizes, from, to, k_FloorHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow])
-                                : CreateHorizontal(panelSizes, from, to, k_FloorHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow]));
+                                ? CreateHorizontal(panelSizes, from, to, floorHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow])
+                                : CreateHorizontal(panelSizes, from, to, floorHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow]));
                             break;
                     }
                 }
@@ -158,19 +211,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return vertical;
         }
 
-        private VerticalLayout CreateEntranceNormalFacadeVertical(List<PanelSize> panelSizes, float floorWidthOffset, int from, int to, BuildingGenerator.Config config)
+        private VerticalLayout CreateEntranceNormalFacadeVertical(List<PanelSize> panelSizes, float floorWidthOffset, float floorHeight, int from, int to, BuildingGenerator.Config config)
         {
-            var vertical = new VerticalLayout();
-            if (config.officeBuildingParams.entranceWindow)
+            int numFloorWithoutEntrance = (int)Mathf.Floor(config.buildingHeight / floorHeight) - 1;
+            float entranceHeight = config.buildingHeight - numFloorWithoutEntrance * floorHeight;
+            var vertical = new VerticalLayout
             {
-                vertical.Add(CreateHorizontal(panelSizes, from, to, k_FloorHeight * 2, floorWidthOffset, m_Constructors[PanelType.k_FullWindow]));
-            }
-            else
-            {
-                vertical.Add(CreateHorizontal(panelSizes, from, to, k_FloorHeight * 2, floorWidthOffset, m_Constructors[PanelType.k_Wall]));
-            }
+                config.officeBuildingParams.useWindow
+                    ? CreateHorizontal(panelSizes, from, to, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow])
+                    : CreateHorizontal(panelSizes, from, to, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_Wall])
+            };
 
-            float remainingHeight = config.buildingHeight - k_MinBuildingHeight;
+            float remainingHeight = config.buildingHeight - entranceHeight;
             if (0 < remainingHeight)
             {
                 int switchIndex = 0;
@@ -179,16 +231,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     switch (switchIndex++ % 2)
                     {
                         case 0:
-                            remainingHeight -= config.officeBuildingParams.smallWindowHeight;
+                            remainingHeight -= config.officeBuildingParams.spandrelHeight;
                             vertical.Add(remainingHeight < 0
-                                ? CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.smallWindowHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow])
-                                : CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.smallWindowHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow]));
+                                ? CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.spandrelHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow])
+                                : CreateHorizontal(panelSizes, from, to, config.officeBuildingParams.spandrelHeight, floorWidthOffset, m_Constructors[PanelType.k_SmallFullWindow]));
                             break;
                         case 1:
-                            remainingHeight -= k_FloorHeight;
+                            remainingHeight -= floorHeight;
                             vertical.Add(remainingHeight < 0
-                                ? CreateHorizontal(panelSizes, from, to, k_FloorHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow])
-                                : CreateHorizontal(panelSizes, from, to, k_FloorHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow]));
+                                ? CreateHorizontal(panelSizes, from, to, floorHeight + remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow])
+                                : CreateHorizontal(panelSizes, from, to, floorHeight, floorWidthOffset, m_Constructors[PanelType.k_FullWindow]));
                             break;
                     }
                 }
@@ -197,21 +249,23 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return vertical;
         }
 
-        private VerticalLayout CreateEntranceVertical(float width, float floorWidthOffset, BuildingGenerator.Config config)
+        private VerticalLayout CreateEntranceVertical(float width, float floorWidthOffset, float floorHeight, BuildingGenerator.Config config)
         {
+            int numFloorWithoutEntrance = (int)Mathf.Floor(config.buildingHeight / floorHeight) - 1;
+            float entranceHeight = config.buildingHeight - numFloorWithoutEntrance * floorHeight;
             var vertical = new VerticalLayout();
-            if (config.officeBuildingParams.entranceWindow)
+            if (config.officeBuildingParams.useWindow)
             {
-                vertical.Add(Construct(m_Constructors[PanelType.k_Entrance], width + floorWidthOffset, k_FloorHeight));
-                vertical.Add(Construct(m_Constructors[PanelType.k_FullWindow], width + floorWidthOffset, k_FloorHeight));
+                vertical.Add(Construct(m_Constructors[PanelType.k_Entrance], width + floorWidthOffset, entranceHeight - k_EntranceWindowTopOffset));
+                vertical.Add(Construct(m_Constructors[PanelType.k_FullWindow], width + floorWidthOffset, k_EntranceWindowTopOffset));
             }
             else
             {
-                vertical.Add(Construct(m_Constructors[PanelType.k_Entrance], width + floorWidthOffset, k_FloorHeight));
-                vertical.Add(Construct(m_Constructors[PanelType.k_Wall], width + floorWidthOffset, k_FloorHeight));
+                vertical.Add(Construct(m_Constructors[PanelType.k_Entrance], width + floorWidthOffset, entranceHeight - k_EntranceWindowTopOffset));
+                vertical.Add(Construct(m_Constructors[PanelType.k_Wall], width + floorWidthOffset, k_EntranceWindowTopOffset));
             }
 
-            float remainingHeight = config.buildingHeight - k_MinBuildingHeight;
+            float remainingHeight = config.buildingHeight - entranceHeight;
             if (0 < remainingHeight)
             {
                 int switchIndex = 0;
@@ -220,16 +274,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     switch (switchIndex++ % 2)
                     {
                         case 0:
-                            remainingHeight -= config.officeBuildingParams.smallWindowHeight;
+                            remainingHeight -= config.officeBuildingParams.spandrelHeight;
                             vertical.Add(remainingHeight < 0
-                                ? Construct(m_Constructors[PanelType.k_SmallFullWindow], width + floorWidthOffset, config.officeBuildingParams.smallWindowHeight + remainingHeight)
-                                : Construct(m_Constructors[PanelType.k_SmallFullWindow], width + floorWidthOffset, config.officeBuildingParams.smallWindowHeight));
+                                ? Construct(m_Constructors[PanelType.k_SmallFullWindow], width + floorWidthOffset, config.officeBuildingParams.spandrelHeight + remainingHeight)
+                                : Construct(m_Constructors[PanelType.k_SmallFullWindow], width + floorWidthOffset, config.officeBuildingParams.spandrelHeight));
                             break;
                         case 1:
-                            remainingHeight -= k_FloorHeight;
+                            remainingHeight -= floorHeight;
                             vertical.Add(remainingHeight < 0
-                                ? Construct(m_Constructors[PanelType.k_FullWindow], width + floorWidthOffset, k_FloorHeight + remainingHeight)
-                                : Construct(m_Constructors[PanelType.k_FullWindow], width + floorWidthOffset, k_FloorHeight));
+                                ? Construct(m_Constructors[PanelType.k_FullWindow], width + floorWidthOffset, floorHeight + remainingHeight)
+                                : Construct(m_Constructors[PanelType.k_FullWindow], width + floorWidthOffset, floorHeight));
                             break;
                     }
                 }
@@ -304,6 +358,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         {
             k_Entrance,
             k_Wall,
+            k_ShadowWall,
             k_SmallFullWindow,
             k_FullWindow,
         }

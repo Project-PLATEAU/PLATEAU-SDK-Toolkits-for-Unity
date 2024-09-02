@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Configs
 {
-    public abstract class SkyscraperCondominiumConfig
+    public abstract class ApartmentConfig
     {
         [Serializable]
         public class Params
@@ -26,8 +26,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         {
             public Color socleColor = ColorE.silver;
             public Color wallColor = ColorE.white;
-            public Color windowPaneColor = ColorE.gray;
-            public Color windowPaneGlassColor = ColorE.white;
+            public Color windowFrameColor = ColorE.gray;
+            public Color windowGlassColor = ColorE.white;
             public Color roofColor = (ColorE.gray/4).WithA(1);
             public Color roofSideColor = (ColorE.gray/4).WithA(1);
         }
@@ -36,34 +36,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         public class VertexColorMaterialPalette
         {
             public Material vertexWall;
-            public Material vertexWindowPane;
+            public Material vertexWindow;
             public Material vertexRoof;
-
-            public void LoadMaterial()
-            {
-                vertexWall = Resources.Load<Material>("SkyscraperCondominium/Wall");
-                vertexWindowPane = Resources.Load<Material>("SkyscraperCondominium/WindowPane");
-                vertexRoof = Resources.Load<Material>("SkyscraperCondominium/Roof");
-            }
         }
 
         [Serializable]
         public class MaterialPalette
         {
             public Material wall;
-            public Material windowPane;
+            public Material windowFrame;
             public Material windowGlass;
             public Material roof;
             public Material roofSide;
-
-            public void LoadMaterial()
-            {
-                wall = Resources.Load<Material>("SkyscraperCondominium/WallTextured");
-                windowPane = Resources.Load<Material>("SkyscraperCondominium/WindowPaneTextured");
-                windowGlass = Resources.Load<Material>("SkyscraperCondominium/WindowGlassTextured");
-                roof = Resources.Load<Material>("SkyscraperCondominium/RoofTextured");
-                roofSide = Resources.Load<Material>("SkyscraperCondominium/RoofSideTextured");
-            }
         }
     }
 }

@@ -54,8 +54,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.1677712, y: 2.821851, z: 0.8453358}
-  m_Center: {x: -0.002423503, y: -0.00412631, z: 0.4160666}
+  m_Size: {x: 0.1757529, y: 2.808066, z: 0.846284}
+  m_Center: {x: 0.001041323, y: 0.0014970303, z: 0.420121}
 --- !u!114 &-2047660603854305073
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -69,11 +69,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPlacementDirection: 1
-  textureAspectWidth: 1
-  textureAspectHeight: 5
+  defaultAdSize: {x: 0.1757529, y: 2.808066, z: 0.846284}
+  adSize: {x: 0.1757529, y: 2.808066, z: 0.846284}
   targetMaterialNumber: 1
   targetTextureProperty: _BaseColorMap
-  frontAxis: 0
   advertisementType: 0
   advertisementMaterials:
   - gameObjectName: Advertisenemt_Vertical_03_LOD0
@@ -144,13 +143,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6388650620105454411}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalRotation: {x: 0, y: 0.70710677, z: 0, w: 0.70710677}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3713582665740186216}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &5489102078662114087
 MeshFilter:
   m_ObjectHideFlags: 0

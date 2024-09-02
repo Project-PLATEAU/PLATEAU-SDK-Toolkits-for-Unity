@@ -9,12 +9,22 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
     {
         protected class WallColorData
         {
+            public bool m_IsShadowWall;
+            public float m_MoveShadowWallDepth;
+            public float m_ShadowWallWidthOffset;
+            public float m_ShadowWallHeightOffset;
+
             public Color m_WallColor;
             public Material m_VertexColorWallMat;
         }
 
         protected class WallTexturedData
         {
+            public bool m_IsShadowWall;
+            public float m_MoveShadowWallDepth;
+            public float m_ShadowWallWidthOffset;
+            public float m_ShadowWallHeightOffset;
+
             public string m_WallName = k_WallTexturedDraftName;
             public Vector2 m_UVScale;
             public Material m_WallMat;
@@ -32,30 +42,66 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected static MeshDraft Wall(Vector3 origin, float width, float height, WallColorData wallColorData)
         {
-            return new MeshDraft {name = k_WallDraftName}
+            MeshDraft meshDraft = new MeshDraft {name = k_WallDraftName}
                 .AddQuad(origin, Vector3.right*width, Vector3.up*height, calculateNormal:true)
                 .Paint(wallColorData.m_WallColor, wallColorData.m_VertexColorWallMat);
+
+            if (wallColorData.m_IsShadowWall)
+            {
+                meshDraft = meshDraft
+                    .FlipFaces()
+                    .Move(origin + 0.5f * wallColorData.m_ShadowWallWidthOffset * Vector3.right + 0.5f * wallColorData.m_ShadowWallHeightOffset * Vector3.up + Vector3.forward * wallColorData.m_MoveShadowWallDepth);
+            }
+
+            return meshDraft;
         }
 
         protected static MeshDraft Wall(Vector3 origin, Vector3 width, Vector3 height, WallColorData wallColorData)
         {
-            return new MeshDraft {name = k_WallDraftName}
+            MeshDraft meshDraft = new MeshDraft {name = k_WallDraftName}
                 .AddQuad(origin, width, height, calculateNormal:true)
                 .Paint(wallColorData.m_WallColor, wallColorData.m_VertexColorWallMat);
+
+            if (wallColorData.m_IsShadowWall)
+            {
+                meshDraft = meshDraft
+                    .FlipFaces()
+                    .Move(origin + 0.5f * wallColorData.m_ShadowWallWidthOffset * Vector3.right + 0.5f * wallColorData.m_ShadowWallHeightOffset * Vector3.up + Vector3.forward * wallColorData.m_MoveShadowWallDepth);
+            }
+
+            return meshDraft;
         }
 
         protected static MeshDraft WallTextured(Vector3 origin, float width, float height, WallTexturedData wallTexturedData)
         {
-            return new MeshDraft {name = wallTexturedData.m_WallName}
-                .AddQuad(origin, Vector3.right*width, Vector3.up*height, wallTexturedData.m_UVScale, calculateNormal:true, generateUV:true)
+            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_WallName}
+                .AddQuad(origin, Vector3.right * width, Vector3.up * height, wallTexturedData.m_UVScale, calculateNormal: true, generateUV: true)
                 .Paint(wallTexturedData.m_WallMat);
+
+            if (wallTexturedData.m_IsShadowWall)
+            {
+                meshDraft = meshDraft
+                    .FlipFaces()
+                    .Move(origin + 0.5f * wallTexturedData.m_ShadowWallWidthOffset * Vector3.right + 0.5f * wallTexturedData.m_ShadowWallHeightOffset * Vector3.up + Vector3.forward * wallTexturedData.m_MoveShadowWallDepth);
+            }
+
+            return meshDraft;
         }
 
         protected static MeshDraft WallTextured(Vector3 origin, Vector3 width, Vector3 height, WallTexturedData wallTexturedData)
         {
-            return new MeshDraft {name = wallTexturedData.m_WallName}
+            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_WallName}
                 .AddQuad(origin, width, height, wallTexturedData.m_UVScale, calculateNormal:true, generateUV:true)
                 .Paint(wallTexturedData.m_WallMat);
+
+            if (wallTexturedData.m_IsShadowWall)
+            {
+                meshDraft = meshDraft
+                    .FlipFaces()
+                    .Move(origin + 0.5f * wallTexturedData.m_ShadowWallWidthOffset * Vector3.right + 0.5f * wallTexturedData.m_ShadowWallHeightOffset * Vector3.up + Vector3.forward * wallTexturedData.m_MoveShadowWallDepth);
+            }
+
+            return meshDraft;
         }
 
         protected static MeshDraft DepressionWall(Vector3 origin, Vector3 width, Vector3 height, DepressionWallColorData wallColorData)
@@ -65,16 +111,20 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 depressionMoveWidth;
             switch (wallColorData.m_PositionType)
             {
-                case PositionType.k_Left:
+                case PositionType.k_NoLeftRight:
+                    depressionWidth = width - Vector3.right * 0.6f;
+                    depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * 0.3f;
+                    break;
+                case PositionType.k_NoLeft:
                     depressionWidth = width - Vector3.right * 0.3f;
                     depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * 0.3f;
                     break;
-                case PositionType.k_Middle:
-                    depressionWidth = width;
+                case PositionType.k_NoRight:
+                    depressionWidth = width - Vector3.right * 0.3f;
                     depressionMoveWidth = depressionWidth * 0.5f;
                     break;
-                case PositionType.k_Right:
-                    depressionWidth = width - Vector3.right * 0.3f;
+                case PositionType.k_Middle:
+                    depressionWidth = width;
                     depressionMoveWidth = depressionWidth * 0.5f;
                     break;
                 default:
@@ -104,16 +154,20 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 depressionMoveWidth;
             switch (wallTexturedData.m_PositionType)
             {
-                case PositionType.k_Left:
+                case PositionType.k_NoLeftRight:
+                    depressionWidth = width - Vector3.right * 0.6f;
+                    depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * 0.3f;
+                    break;
+                case PositionType.k_NoLeft:
                     depressionWidth = width - Vector3.right * 0.3f;
                     depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * 0.3f;
                     break;
-                case PositionType.k_Middle:
-                    depressionWidth = width;
+                case PositionType.k_NoRight:
+                    depressionWidth = width - Vector3.right * 0.3f;
                     depressionMoveWidth = depressionWidth * 0.5f;
                     break;
-                case PositionType.k_Right:
-                    depressionWidth = width - Vector3.right * 0.3f;
+                case PositionType.k_Middle:
+                    depressionWidth = width;
                     depressionMoveWidth = depressionWidth * 0.5f;
                     break;
                 default:

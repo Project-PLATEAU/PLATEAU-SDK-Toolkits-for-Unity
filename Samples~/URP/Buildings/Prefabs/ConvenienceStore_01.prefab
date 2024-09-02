@@ -41,7 +41,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240708359305117905}
-  m_Mesh: {fileID: 4300000, guid: a80a7339eaed64e43bb3291aa1cfe98a, type: 2}
+  m_Mesh: {fileID: 4300000, guid: 174e8be5e2b85c442bbb12b96eb37fb1, type: 2}
 --- !u!23 &2661177053707001568
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -50,7 +50,7 @@ MeshRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240708359305117905}
   m_Enabled: 1
-  m_CastShadows: 0
+  m_CastShadows: 2
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
   m_StaticShadowCaster: 0
@@ -67,7 +67,7 @@ MeshRenderer:
   - {fileID: 2100000, guid: eea1e87798a91b44d88ad5072ea568e0, type: 2}
   - {fileID: 2100000, guid: efcb59de7eedb574895a225363affae2, type: 2}
   - {fileID: 2100000, guid: 46d55868ac398fe49a7f2370771cf589, type: 2}
-  - {fileID: 2100000, guid: 06b2e99f548dc3f40a3e38b80e118da1, type: 2}
+  - {fileID: 2100000, guid: b13122ae64dbfad41b909e2044bc3839, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -282,6 +282,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f595d76393ef4794c9cb608a7e1b6720, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundPlacementDirection: 0
   buildingType: 3
   buildingHeight: 20
   buildingWidth: 10
@@ -296,43 +297,43 @@ MonoBehaviour:
   skyscraperCondominiumVertexColorPalette:
     socleColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
     wallColor: {r: 1, g: 1, b: 1, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
     roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
   skyscraperCondominiumVertexColorMaterialPalette:
     vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
+    vertexWindow: {fileID: 0}
     vertexRoof: {fileID: 0}
   skyscraperCondominiumMaterialPalette:
     wall: {fileID: 2100000, guid: 113aa1d99f5c2234884a7bb7d2054ff6, type: 2}
-    windowPane: {fileID: 2100000, guid: fa2501d9e97f74d43817f40f1015274d, type: 2}
+    windowFrame: {fileID: 0}
     windowGlass: {fileID: 2100000, guid: 46d55868ac398fe49a7f2370771cf589, type: 2}
     roof: {fileID: 2100000, guid: c51e5f1ae4b2b824bacb3e70e9ffecfe, type: 2}
     roofSide: {fileID: 2100000, guid: c7176ece436d5964c975c7764a9fbe08, type: 2}
   officeBuildingParams:
-    entranceWindow: 1
-    smallWindowHeight: 1.25
+    useWindow: 1
+    spandrelHeight: 1.25
   officeBuildingVertexColorPalette:
     wallColor: {r: 1, g: 1, b: 1, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassAColor: {r: 1, g: 1, b: 1, a: 1}
-    windowPaneGlassBColor: {r: 1, g: 1, b: 1, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    spandrelColor: {r: 1, g: 1, b: 1, a: 1}
     roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
   officeBuildingVertexColorMaterialPalette:
     vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
+    vertexWindow: {fileID: 0}
     vertexRoof: {fileID: 0}
   officeBuildingMaterialPalette:
     wall: {fileID: 2100000, guid: 798d954e9307d344ab16c81e52d2ed6e, type: 2}
-    windowPane: {fileID: 2100000, guid: 4f83536be1da3a24fa496b4dc95c99d4, type: 2}
-    windowGlassA: {fileID: 2100000, guid: 46d55868ac398fe49a7f2370771cf589, type: 2}
-    windowGlassB: {fileID: 2100000, guid: 55ca3864146e033489f99ab51430fb63, type: 2}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    spandrel: {fileID: 0}
     roof: {fileID: 2100000, guid: 5240035f7d4cbae48b60561c95e44973, type: 2}
     roofSide: {fileID: 2100000, guid: 3d56d1ae26e7820428d0f6dfce70aeed, type: 2}
   residenceParams:
-    twoStoryBuilding: 0
+    numFloor: 2
     hasEntranceRoof: 0
     roofType: 0
     roofThickness: 0.2
@@ -343,13 +344,13 @@ MonoBehaviour:
     entranceDoorColor: {r: 1, g: 1, b: 1, a: 1}
     entranceDoorFrameColor: {r: 1, g: 1, b: 1, a: 1}
     entranceDoorRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
     roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
   residenceVertexColorMaterialPalette:
     vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
+    vertexWindow: {fileID: 0}
     vertexRoof: {fileID: 0}
   residenceMaterialPalette:
     socle: {fileID: 0}
@@ -358,7 +359,7 @@ MonoBehaviour:
     entranceDoor: {fileID: 0}
     entranceDoorFrame: {fileID: 0}
     entranceDoorRoof: {fileID: 0}
-    windowPane: {fileID: 0}
+    windowFrame: {fileID: 0}
     windowGlass: {fileID: 0}
     roof: {fileID: 0}
     roofSide: {fileID: 0}
@@ -370,18 +371,18 @@ MonoBehaviour:
     wallColor: {r: 0.8392157, g: 0.7921569, b: 0.70980394, a: 1}
     billboardColor: {r: 0.8392157, g: 0.7921569, b: 0.70980394, a: 1}
     billboardBottomColor: {r: 0.8392157, g: 0.7921569, b: 0.70980394, a: 1}
-    windowPaneColor: {r: 0.3962264, g: 0.3962264, b: 0.3962264, a: 1}
-    windowPaneGlassColor: {r: 0.7529412, g: 0.9137255, b: 0.99215686, a: 1}
+    windowFrameColor: {r: 0.39607844, g: 0.39607844, b: 0.39607844, a: 1}
+    windowGlassColor: {r: 0.7529412, g: 0.9137255, b: 0.99215686, a: 1}
     roofColor: {r: 0.8392157, g: 0.8352941, b: 0.8117647, a: 1}
     roofSideColor: {r: 0.8392157, g: 0.8352941, b: 0.8117647, a: 1}
   conveniVertexColorMaterialPalette:
     vertexWall: {fileID: 2100000, guid: d7e502262c0782749958864f3ad76e7f, type: 2}
-    vertexWindowPane: {fileID: 2100000, guid: 422e4225a12095043a15c0d7aae85408, type: 2}
+    vertexWindow: {fileID: 2100000, guid: 62d2205704b744a41823e80a7af04ad4, type: 2}
     vertexRoof: {fileID: 2100000, guid: 6ce7f224d5b65714682ae04ffbeade75, type: 2}
   conveniMaterialPalette:
     socle: {fileID: 2100000, guid: eea1e87798a91b44d88ad5072ea568e0, type: 2}
     wall: {fileID: 2100000, guid: efcb59de7eedb574895a225363affae2, type: 2}
-    windowPane: {fileID: 2100000, guid: 06b2e99f548dc3f40a3e38b80e118da1, type: 2}
+    windowFrame: {fileID: 2100000, guid: b13122ae64dbfad41b909e2044bc3839, type: 2}
     windowGlass: {fileID: 2100000, guid: 46d55868ac398fe49a7f2370771cf589, type: 2}
     billboard: {fileID: 2100000, guid: 1d9e286ba6fb1f14687c000bd9543e2a, type: 2}
     billboardBottom: {fileID: 2100000, guid: 89a5098ae98277e49a48fa861174f940, type: 2}
@@ -390,18 +391,18 @@ MonoBehaviour:
   commercialFacilityVertexColorPalette:
     wallColor: {r: 1, g: 1, b: 1, a: 1}
     depressionWallColor: {r: 1, g: 1, b: 1, a: 1}
-    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
     roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
   commercialFacilityVertexColorMaterialPalette:
     vertexWall: {fileID: 0}
-    vertexWindowPane: {fileID: 0}
+    vertexWindow: {fileID: 0}
     vertexRoof: {fileID: 0}
   commercialFacilityMaterialPalette:
     wall: {fileID: 0}
     depressionWall: {fileID: 0}
-    windowPane: {fileID: 0}
+    windowFrame: {fileID: 0}
     windowGlass: {fileID: 0}
     roof: {fileID: 0}
     roofSide: {fileID: 0}

@@ -194,11 +194,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808971fab4bf0204e8c0aa8779225b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureAspectWidth: 3
-  textureAspectHeight: 4
+  defaultAdSize: {x: 0.496, y: 0.9510201, z: 0.4700001}
+  adSize: {x: 0.496, y: 0.9510201, z: 0.4700001}
   targetMaterialNumber: 1
   targetTextureProperty: _BaseColorMap
-  frontAxis: 1
   advertisementType: 0
   advertisementMaterials:
   - gameObjectName: Advertisement_SidewalkSign_01_Mesh_LOD2

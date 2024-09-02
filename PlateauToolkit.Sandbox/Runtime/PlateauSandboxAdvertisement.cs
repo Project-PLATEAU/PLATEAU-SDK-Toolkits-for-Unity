@@ -18,17 +18,10 @@ namespace PlateauToolkit.Sandbox.Runtime
             Video,
         }
 
-        public enum FrontAxis
-        {
-            X,
-            Z,
-        }
-
-        public float textureAspectWidth = 1;
-        public float textureAspectHeight = 3;
+        public Vector3 defaultAdSize;
+        public Vector3 adSize;
         public int targetMaterialNumber;
         public string targetTextureProperty = "_MainTex";
-        public FrontAxis frontAxis;
         public AdvertisementType advertisementType;
         public List<AdvertisementMaterials> advertisementMaterials;
         public Texture advertisementTexture;
@@ -47,6 +40,8 @@ namespace PlateauToolkit.Sandbox.Runtime
         /// </summary>
         private void Reset()
         {
+            adSize = defaultAdSize;
+
             advertisementMaterials = new List<AdvertisementMaterials>();
             MeshRenderer[] lsChildMeshRender = transform.GetComponentsInChildren<MeshRenderer>();
             foreach (MeshRenderer childMeshRender in lsChildMeshRender)

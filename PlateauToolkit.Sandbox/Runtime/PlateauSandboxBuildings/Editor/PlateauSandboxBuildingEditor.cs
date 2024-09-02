@@ -38,7 +38,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_ConveniVertexColorMaterialPalette;
         private SerializedProperty m_ConveniMaterialPalette;
 
-        private SerializedProperty m_CommercialFacilityParams;
         private SerializedProperty m_CommercialFacilityVertexColorPalette;
         private SerializedProperty m_CommercialFacilityVertexColorMaterialPalette;
         private SerializedProperty m_CommercialFacilityMaterialPalette;
@@ -49,8 +48,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_HotelMaterialPalette;
 
         private SerializedProperty m_BuildingName;
-        private SerializedProperty m_FacadePlanner;
-        private SerializedProperty m_RoofPlanner;
+
         private GUIStyle m_SaveMeshBtnTextColorStyle;
 
         private void OnEnable()
@@ -80,7 +78,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_ConveniVertexColorMaterialPalette = serializedObject.FindProperty("conveniVertexColorMaterialPalette");
             m_ConveniMaterialPalette = serializedObject.FindProperty("conveniMaterialPalette");
 
-            m_CommercialFacilityParams = serializedObject.FindProperty("commercialFacilityParams");
             m_CommercialFacilityVertexColorPalette = serializedObject.FindProperty("commercialFacilityVertexColorPalette");
             m_CommercialFacilityVertexColorMaterialPalette = serializedObject.FindProperty("commercialFacilityVertexColorMaterialPalette");
             m_CommercialFacilityMaterialPalette = serializedObject.FindProperty("commercialFacilityMaterialPalette");
@@ -90,8 +87,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_HotelVertexColorMaterialPalette = serializedObject.FindProperty("hotelVertexColorMaterialPalette");
             m_HotelMaterialPalette = serializedObject.FindProperty("hotelMaterialPalette");
 
-            m_FacadePlanner = serializedObject.FindProperty("facadePlanner");
-            m_RoofPlanner = serializedObject.FindProperty("roofPlanner");
             m_SaveMeshBtnTextColorStyle = null;
 
             Undo.undoRedoPerformed += OnUndo;
@@ -123,7 +118,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             }
         }
 
-        private bool DrawDynamicPropertyOnly(SerializedProperty inProperty, Dictionary<string, Tuple<string, float, float>> inMinMax = null)
+        private bool DrawDynamicPropertyOnly(SerializedProperty inProperty)
         {
             int depth = inProperty.depth;
             SerializedProperty iterator = inProperty.Copy();
@@ -136,12 +131,43 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 }
                 depth = iterator.depth;
 
-                if (inMinMax != null && inMinMax.TryGetValue(iterator.name, out Tuple<string, float, float> minMaxTuple))
+                EditorGUILayout.PropertyField(iterator, true);
+
+                if (serializedObject.hasModifiedProperties)
                 {
-                    if (iterator.type == "float")
+                    Undo.RecordObject(m_Generator, "Change property");
+                    serializedObject.ApplyModifiedProperties();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool DrawDynamicPropertyOnly<T>(SerializedProperty inProperty, Dictionary<string, Tuple<string, T, T>> inMinMax = null) where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
+        {
+            int depth = inProperty.depth;
+            SerializedProperty iterator = inProperty.Copy();
+            for (bool enterChildren = true; iterator.NextVisible(enterChildren); enterChildren = false)
+            {
+                // 次のプロパティが親の深さよりも浅い場合は終了
+                if (iterator.depth < depth)
+                {
+                    return false;
+                }
+                depth = iterator.depth;
+
+                if (inMinMax != null && inMinMax.TryGetValue(iterator.name, out Tuple<string, T, T> minMaxTuple))
+                {
+                    switch (iterator.type)
                     {
-                        iterator.floatValue = EditorGUILayout.Slider(minMaxTuple.Item1, iterator.floatValue, minMaxTuple.Item2, minMaxTuple.Item3);
-                        iterator.floatValue = Mathf.Floor(iterator.floatValue * 100.0f) / 100f;
+                        case "int":
+                            iterator.intValue = EditorGUILayout.IntSlider(minMaxTuple.Item1, iterator.intValue, (int)(dynamic)minMaxTuple.Item2, (int)(dynamic)minMaxTuple.Item3);
+                            break;
+                        case "float":
+                            iterator.floatValue = EditorGUILayout.Slider(minMaxTuple.Item1, iterator.floatValue, (float)(dynamic)minMaxTuple.Item2, (float)(dynamic)minMaxTuple.Item3);
+                            iterator.floatValue = Mathf.Floor(iterator.floatValue * 100.0f) / 100f;
+                            break;
                     }
                 }
                 else
@@ -185,7 +211,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             {
                 switch (m_BuildingType.enumValueIndex)
                 {
-                    case (int)BuildingType.k_SkyscraperCondominium:
+                    case (int)BuildingType.k_Apartment:
                         if (DrawDynamicPropertyOnly(m_SkyscraperCondominiumMaterialPalette))
                         {
                             changedValue = true;
@@ -197,7 +223,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             changedValue = true;
                         }
                         break;
-                    case (int)BuildingType.k_Residence:
+                    case (int)BuildingType.k_House:
                         if (DrawDynamicPropertyOnly(m_ResidenceMaterialPalette))
                         {
                             changedValue = true;
@@ -209,7 +235,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             changedValue = true;
                         }
                         break;
-                    case (int)BuildingType.k_CommercialFacility:
+                    case (int)BuildingType.k_CommercialBuilding:
                         if (DrawDynamicPropertyOnly(m_CommercialFacilityMaterialPalette))
                         {
                             changedValue = true;
@@ -227,7 +253,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             {
                 switch (m_BuildingType.enumValueIndex)
                 {
-                    case (int)BuildingType.k_SkyscraperCondominium:
+                    case (int)BuildingType.k_Apartment:
                         if (DrawDynamicPropertyOnly(m_SkyscraperCondominiumVertexColorPalette) || DrawDynamicPropertyOnly(m_SkyscraperCondominiumVertexColorMaterialPalette))
                         {
                             changedValue = true;
@@ -239,7 +265,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             changedValue = true;
                         }
                         break;
-                    case (int)BuildingType.k_Residence:
+                    case (int)BuildingType.k_House:
                         if (DrawDynamicPropertyOnly(m_ResidenceVertexColorPalette) || DrawDynamicPropertyOnly(m_ResidenceVertexColorMaterialPalette))
                         {
                             changedValue = true;
@@ -251,7 +277,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             changedValue = true;
                         }
                         break;
-                    case (int)BuildingType.k_CommercialFacility:
+                    case (int)BuildingType.k_CommercialBuilding:
                         if (DrawDynamicPropertyOnly(m_CommercialFacilityVertexColorPalette) || DrawDynamicPropertyOnly(m_CommercialFacilityVertexColorMaterialPalette))
                         {
                             changedValue = true;
@@ -310,74 +336,25 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private bool BuildingDynamicGUI()
         {
             EditorGUI.BeginChangeCheck();
-            int buildingTypeIndex = EditorGUILayout.Popup("建造物タイプ", m_BuildingType.enumValueIndex, new[]
-            {
-                "マンション", "オフィスビル", "住宅", "コンビニ", "商業ビル"//, "ホテル"
-            });
+
             float buildingHeight = m_Generator.buildingHeight;
-            switch (buildingTypeIndex)
+            switch (m_BuildingType.enumValueIndex)
             {
-                case (int)BuildingType.k_SkyscraperCondominium:
                 case (int)BuildingType.k_Hotel:
                     buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 8.0f, 100.0f);
                     break;
+                case (int)BuildingType.k_Apartment:
                 case (int)BuildingType.k_OfficeBuilding:
-                case (int)BuildingType.k_CommercialFacility:
+                case (int)BuildingType.k_CommercialBuilding:
                     buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 5.0f, 100.0f);
                     break;
             }
-            float buildingWidth = EditorGUILayout.Slider("横幅", m_Generator.buildingWidth, 5.0f, 20.0f);
-            float buildingDepth = EditorGUILayout.Slider("奥行き", m_Generator.buildingDepth, 5.0f, 20.0f);
+            float buildingWidth = EditorGUILayout.Slider("横幅", m_Generator.buildingWidth, 3.0f, 50.0f);
+            float buildingDepth = EditorGUILayout.Slider("奥行き", m_Generator.buildingDepth, 3.0f, 50.0f);
 
             if (EditorGUI.EndChangeCheck())
             {
-                if (buildingTypeIndex != m_BuildingType.enumValueIndex)
-                {
-                    Undo.RecordObject(m_Generator, "Change buildingType");
-                    m_Generator.buildingType = (BuildingType)buildingTypeIndex;
-                    m_BuildingType.enumValueIndex = buildingTypeIndex;
-
-                    switch (buildingTypeIndex)
-                    {
-                        case (int)BuildingType.k_SkyscraperCondominium:
-                            m_Generator.facadePlanner = Resources.Load<FacadePlanner>("ProceduralFacadeSkyscraperCondominiumPlanner");
-                            m_FacadePlanner.objectReferenceValue = m_Generator.facadePlanner;
-                            m_Generator.roofPlanner = Resources.Load<RoofPlanner>("ProceduralRoofSkyscraperCondominiumPlanner");
-                            m_RoofPlanner.objectReferenceValue = m_Generator.roofPlanner;
-                            break;
-                        case (int)BuildingType.k_OfficeBuilding:
-                            m_Generator.facadePlanner = Resources.Load<FacadePlanner>("ProceduralFacadeOfficeBuildingPlanner");
-                            m_FacadePlanner.objectReferenceValue = m_Generator.facadePlanner;
-                            m_Generator.roofPlanner = Resources.Load<RoofPlanner>("ProceduralRoofOfficeBuildingPlanner");
-                            m_RoofPlanner.objectReferenceValue = m_Generator.roofPlanner;
-                            break;
-                        case (int)BuildingType.k_Residence:
-                            m_Generator.facadePlanner = Resources.Load<FacadePlanner>("ProceduralFacadeResidencePlanner");
-                            m_FacadePlanner.objectReferenceValue = m_Generator.facadePlanner;
-                            m_Generator.roofPlanner = Resources.Load<RoofPlanner>("ProceduralRoofResidencePlanner");
-                            m_RoofPlanner.objectReferenceValue = m_Generator.roofPlanner;
-                            break;
-                        case (int)BuildingType.k_ConvenienceStore:
-                            m_Generator.facadePlanner = Resources.Load<FacadePlanner>("ProceduralFacadeConvenienceStorePlanner");
-                            m_FacadePlanner.objectReferenceValue = m_Generator.facadePlanner;
-                            m_Generator.roofPlanner = Resources.Load<RoofPlanner>("ProceduralRoofConvenienceStorePlanner");
-                            m_RoofPlanner.objectReferenceValue = m_Generator.roofPlanner;
-                            break;
-                        case (int)BuildingType.k_CommercialFacility:
-                            m_Generator.facadePlanner = Resources.Load<FacadePlanner>("ProceduralFacadeCommercialFacilityPlanner");
-                            m_FacadePlanner.objectReferenceValue = m_Generator.facadePlanner;
-                            m_Generator.roofPlanner = Resources.Load<RoofPlanner>("ProceduralRoofCommercialFacilityPlanner");
-                            m_RoofPlanner.objectReferenceValue = m_Generator.roofPlanner;
-                            break;
-                        case (int)BuildingType.k_Hotel:
-                            m_Generator.facadePlanner = Resources.Load<FacadePlanner>("ProceduralFacadeHotelPlanner");
-                            m_FacadePlanner.objectReferenceValue = m_Generator.facadePlanner;
-                            m_Generator.roofPlanner = Resources.Load<RoofPlanner>("ProceduralRoofHotelPlanner");
-                            m_RoofPlanner.objectReferenceValue = m_Generator.roofPlanner;
-                            break;
-                    }
-                }
-                else if (Math.Abs(buildingHeight - m_Generator.buildingHeight) > float.Epsilon)
+                if (Math.Abs(buildingHeight - m_Generator.buildingHeight) > float.Epsilon)
                 {
                     Undo.RecordObject(m_Generator, "Change height");
                     m_Generator.buildingHeight = Mathf.Floor(buildingHeight * 10.0f) / 10f;
@@ -403,22 +380,25 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         {
             switch (m_BuildingType.enumValueIndex)
             {
-                case (int)BuildingType.k_SkyscraperCondominium:
+                case (int)BuildingType.k_Apartment:
                     EditorGUILayout.LabelField("マンション設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_SkyscraperCondominiumParams);
                 case (int)BuildingType.k_OfficeBuilding:
                     EditorGUILayout.LabelField("オフィスビル設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_OfficeBuildingParams, new Dictionary<string, Tuple<string, float, float>>
                     {
-                        {"smallWindowHeight", new Tuple<string, float, float>("小さい窓の高さ", 0.25f, 2.5f)}
+                        {"spandrelHeight", new Tuple<string, float, float>("小さい窓の高さ", 0.25f, 2.5f)}
                     });
-                case (int)BuildingType.k_Residence:
+                case (int)BuildingType.k_House:
                     EditorGUILayout.LabelField("住宅設定", EditorStyles.boldLabel);
-                    return DrawDynamicPropertyOnly(m_ResidenceParams);
+                    return DrawDynamicPropertyOnly(m_ResidenceParams, new Dictionary<string, Tuple<string, int, int>>
+                    {
+                        {"numFloor", new Tuple<string, int, int>("階数", 1, 3)}
+                    });
                 case (int)BuildingType.k_ConvenienceStore:
                     EditorGUILayout.LabelField("コンビニ設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_ConveniParams);
-                case (int)BuildingType.k_CommercialFacility:
+                case (int)BuildingType.k_CommercialBuilding:
                     // EditorGUILayout.LabelField("商業ビル設定", EditorStyles.boldLabel);
                     // return DrawDynamicPropertyOnly(m_CommercialFacilityParams);
                     return false;

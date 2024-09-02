@@ -93,6 +93,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private ILayout PlanNormalFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
         {
             List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainder);
+
+            m_CommonConstructors[PanelType.k_Wall] = m_Constructors[PanelType.k_Wall].GetRandom();
+
             Directions directions = Directions.Left;
             if (remainder > Geometry.Epsilon)
             {
@@ -111,10 +114,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private ILayout PlanEntranceFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
         {
             List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainder);
-            Directions directions = Directions.None;
 
             m_CommonConstructors[PanelType.k_Wall] = m_Constructors[PanelType.k_Wall].GetRandom();
 
+            Directions directions = Directions.None;
             var horizontal = new HorizontalLayout();
             bool hasRemainder = remainder > Geometry.Epsilon;
             if (hasRemainder)
@@ -126,9 +129,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             const int entranceCount = 1;
             int entranceIndexInterval = (panelSizes.Count - entranceCount)/(entranceCount + 1);
-            const int lastEntranceIndex = -1;
-            horizontal.Add(CreateNormalFacadeVertical(directions, panelSizes, lastEntranceIndex + 1, entranceIndexInterval, config, hasRemainder));
-            horizontal.Add(CreateEntranceVertical(directions, m_SizeValues[panelSizes[entranceIndexInterval]], config, horizontal));
+            horizontal.Add(CreateNormalFacadeVertical(directions, panelSizes, 0, entranceIndexInterval, config, hasRemainder));
+            horizontal.Add(CreateEntranceVertical(directions, m_SizeValues[panelSizes[entranceIndexInterval]], config, 0 < entranceIndexInterval, 0 < panelSizes.Count - (entranceIndexInterval + 1)));
             horizontal.Add(CreateNormalFacadeVertical(directions, panelSizes, entranceIndexInterval + 1, panelSizes.Count, config, hasRemainder));
 
             if (hasRemainder)
@@ -142,6 +144,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private ILayout PlanBackFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
         {
             List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainder);
+
+            m_CommonConstructors[PanelType.k_Wall] = m_Constructors[PanelType.k_Wall].GetRandom();
+
             Directions directions = Directions.Left;
             if (remainder > Geometry.Epsilon)
             {
@@ -231,11 +236,15 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return vertical;
         }
 
-        private VerticalLayout CreateEntranceVertical(Directions directions, float width, BuildingGenerator.Config config, HorizontalLayout horizontalLayout)
+        private VerticalLayout CreateEntranceVertical(Directions directions, float width, BuildingGenerator.Config config, bool existLeftVertical, bool existRightVertical)
         {
-            if (!horizontalLayout.Any())
+            if (!existLeftVertical)
             {
                 directions |= Directions.Left;
+            }
+            if (!existRightVertical)
+            {
+                directions |= Directions.Right;
             }
 
             var vertical = new VerticalLayout

@@ -98,36 +98,36 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             }
 
             public FaceDirection faceDirection = FaceDirection.k_Front;
-            public BuildingType buildingType = BuildingType.k_SkyscraperCondominium;
+            public BuildingType buildingType = BuildingType.k_Apartment;
             public float entranceInterval = 12;
             public float buildingHeight = 5;
             public bool hasAttic = true;
             public bool useTexture = true;
 
-            public SkyscraperCondominiumConfig.Params skyscraperCondominiumParams = new();
-            public SkyscraperCondominiumConfig.VertexColorPalette skyscraperCondominiumVertexColorPalette = new();
-            public SkyscraperCondominiumConfig.VertexColorMaterialPalette skyscraperCondominiumVertexColorMaterialPalette = new();
-            public SkyscraperCondominiumConfig.MaterialPalette skyscraperCondominiumMaterialPalette = new();
+            public ApartmentConfig.Params skyscraperCondominiumParams = new();
+            public ApartmentConfig.VertexColorPalette skyscraperCondominiumVertexColorPalette = new();
+            public ApartmentConfig.VertexColorMaterialPalette skyscraperCondominiumVertexColorMaterialPalette = new();
+            public ApartmentConfig.MaterialPalette skyscraperCondominiumMaterialPalette = new();
 
             public OfficeBuildingConfig.Params officeBuildingParams = new();
             public OfficeBuildingConfig.VertexColorPalette officeBuildingVertexColorPalette = new();
             public OfficeBuildingConfig.VertexColorMaterialPalette officeBuildingVertexColorMaterialPalette = new();
             public OfficeBuildingConfig.MaterialPalette officeBuildingMaterialPalette = new();
 
-            public ResidenceConfig.Params residenceParams = new();
-            public ResidenceConfig.VertexColorPalette residenceVertexColorPalette = new();
-            public ResidenceConfig.VertexColorMaterialPalette residenceVertexColorMaterialPalette = new();
-            public ResidenceConfig.MaterialPalette residenceMaterialPalette = new();
+            public HouseConfig.Params residenceParams = new();
+            public HouseConfig.VertexColorPalette residenceVertexColorPalette = new();
+            public HouseConfig.VertexColorMaterialPalette residenceVertexColorMaterialPalette = new();
+            public HouseConfig.MaterialPalette residenceMaterialPalette = new();
 
             public ConvenienceStoreConfig.Params conveniParams = new();
             public ConvenienceStoreConfig.VertexColorPalette conveniVertexColorPalette = new();
             public ConvenienceStoreConfig.VertexColorMaterialPalette conveniVertexColorMaterialPalette = new();
             public ConvenienceStoreConfig.MaterialPalette conveniMaterialPalette = new();
 
-            public CommercialFacilityConfig.Params commercialFacilityParams = new();
-            public CommercialFacilityConfig.VertexColorPalette commercialFacilityVertexColorPalette = new();
-            public CommercialFacilityConfig.VertexColorMaterialPalette commercialFacilityVertexColorMaterialPalette = new();
-            public CommercialFacilityConfig.MaterialPalette commercialFacilityMaterialPalette = new();
+            public CommercialBuildingConfig.Params commercialFacilityParams = new();
+            public CommercialBuildingConfig.VertexColorPalette commercialFacilityVertexColorPalette = new();
+            public CommercialBuildingConfig.VertexColorMaterialPalette commercialFacilityVertexColorMaterialPalette = new();
+            public CommercialBuildingConfig.MaterialPalette commercialFacilityMaterialPalette = new();
 
             public HotelConfig.Params hotelParams = new();
             public HotelConfig.VertexColorPalette hotelVertexColorPalette = new();
@@ -148,11 +148,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
 
     public enum BuildingType
     {
-        k_SkyscraperCondominium,
+        k_Apartment,
         k_OfficeBuilding,
-        k_Residence,
+        k_House,
         k_ConvenienceStore,
-        k_CommercialFacility,
+        k_CommercialBuilding,
         k_Hotel
     }
 }

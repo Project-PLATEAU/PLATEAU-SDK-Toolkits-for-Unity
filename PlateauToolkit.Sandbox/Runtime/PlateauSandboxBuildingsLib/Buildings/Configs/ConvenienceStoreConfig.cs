@@ -24,8 +24,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             public Color wallColor = ColorE.white;
             public Color billboardColor = ColorE.white;
             public Color billboardBottomColor = ColorE.white;
-            public Color windowPaneColor = ColorE.gray;
-            public Color windowPaneGlassColor = ColorE.white;
+            public Color windowFrameColor = ColorE.gray;
+            public Color windowGlassColor = ColorE.white;
             public Color roofColor = (ColorE.gray/4).WithA(1);
             public Color roofSideColor = (ColorE.gray/4).WithA(1);
         }
@@ -35,15 +35,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         public class VertexColorMaterialPalette
         {
             public Material vertexWall;
-            public Material vertexWindowPane;
+            public Material vertexWindow;
             public Material vertexRoof;
-
-            public void LoadMaterial()
-            {
-                vertexWall = Resources.Load<Material>("ConvenienceStore/Wall");
-                vertexWindowPane = Resources.Load<Material>("ConvenienceStore/WindowPane");
-                vertexRoof = Resources.Load<Material>("Residence/Roof");
-            }
         }
 
         [Serializable]
@@ -51,24 +44,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         {
             public Material socle;
             public Material wall;
-            public Material windowPane;
+            public Material windowFrame;
             public Material windowGlass;
             public Material billboard;
             public Material billboardBottom;
             public Material roof;
             public Material roofSide;
-
-            public void LoadMaterial()
-            {
-                socle = Resources.Load<Material>("ConvenienceStore/SocleTextured");
-                wall = Resources.Load<Material>("ConvenienceStore/WallTextured");
-                windowPane = Resources.Load<Material>("ConvenienceStore/WindowPaneTextured");
-                windowGlass = Resources.Load<Material>("ConvenienceStore/WindowGlassTextured");
-                billboard = Resources.Load<Material>("ConvenienceStore/BillboardTextured");
-                billboardBottom = Resources.Load<Material>("ConvenienceStore/BillboardBottomTextured");
-                roof = Resources.Load<Material>("ConvenienceStore/RoofTextured");
-                roofSide = Resources.Load<Material>("Residence/RoofSideTextured");
-            }
         }
     }
 }

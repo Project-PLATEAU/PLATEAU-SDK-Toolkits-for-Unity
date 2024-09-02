@@ -350,11 +350,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808971fab4bf0204e8c0aa8779225b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureAspectWidth: 2
-  textureAspectHeight: 1
+  defaultAdSize: {x: 2, y: 2, z: 0.16}
+  adSize: {x: 2, y: 2, z: 0.16}
   targetMaterialNumber: 1
   targetTextureProperty: _BaseMap
-  frontAxis: 1
   advertisementType: 0
   advertisementMaterials:
   - gameObjectName: Advertisement_AdBoard_01_Mesh_LOD0

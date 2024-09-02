@@ -55,7 +55,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 20.266832, y: 10.241377, z: 0.42856783}
+  m_Size: {x: 20.26683, y: 10.24138, z: 0.4285678}
   m_Center: {x: 0, y: 0.00000023841858, z: 0.21428159}
 --- !u!205 &5458846791173005107
 LODGroup:
@@ -89,11 +89,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPlacementDirection: 1
-  textureAspectWidth: 2
-  textureAspectHeight: 1
+  defaultAdSize: {x: 20.26683, y: 10.24138, z: 0.4285678}
+  adSize: {x: 20.26683, y: 10.24138, z: 0.4285678}
   targetMaterialNumber: 1
   targetTextureProperty: _BaseMap
-  frontAxis: 1
   advertisementType: 0
   advertisementMaterials:
   - gameObjectName: Advertisement_WallAdPanel_01_Mesh_LOD2

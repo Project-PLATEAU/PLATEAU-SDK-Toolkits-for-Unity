@@ -88,18 +88,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 808971fab4bf0204e8c0aa8779225b83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textureAspectWidth: 9
-  textureAspectHeight: 16
+  defaultAdSize: {x: 0.8371308, y: 1.922299, z: 0.1300001}
+  adSize: {x: 0.8371308, y: 1.922299, z: 0.1300001}
   targetMaterialNumber: 1
   targetTextureProperty: _BaseColorMap
-  frontAxis: 1
   advertisementType: 0
   advertisementMaterials:
   - gameObjectName: Advertisement_DigitalSignage_01_Mesh_LOD
     materials:
     - {fileID: 2100000, guid: c4ad0f255850f90419d2e474a1082892, type: 2}
     - {fileID: 2100000, guid: 304044d0c511f7d4ebae22540288f028, type: 2}
-  advertisementTexture: {fileID: 0}
+  advertisementTexture: {fileID: 2800000, guid: 64f284ff3b64acf4590415ec9eb19840, type: 3}
   advertisementVideoClip: {fileID: 0}
 --- !u!328 &-5787707002140984796
 VideoPlayer:

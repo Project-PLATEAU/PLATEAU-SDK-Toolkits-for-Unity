@@ -13,5 +13,10 @@ namespace ProceduralToolkit.Buildings
             height += element.height;
             width = Mathf.Max(width, element.width);
         }
+
+        public void AddElement(ILayoutElement element)
+        {
+            base.Add(element);
+        }
     }
 }

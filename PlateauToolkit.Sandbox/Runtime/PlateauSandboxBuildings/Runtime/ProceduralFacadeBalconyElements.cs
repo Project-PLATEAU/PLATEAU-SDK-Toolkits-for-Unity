@@ -39,12 +39,14 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 windowWidth = Vector3.right*(width - k_WindowWidthOffset*2);
             Vector3 windowHeight = Vector3.up*(height - k_WindowBottomOffset - k_WindowTopOffset);
             Vector3 windowDepth = Vector3.forward*k_WindowDepth;
+            Vector3 balconyDepthOffset = Vector3.forward * k_BalconyDepth;
 
             int rodCount = Mathf.FloorToInt(windowWidth.magnitude/k_WindowSegmentMinWidth);
             Vector3 doorWidth = Vector3.right*windowWidth.magnitude/(rodCount + 1);
             Vector3 doorHeight = windowHeightOffset + windowHeight;
 
-            Vector3 outerFrameOrigin = origin + Vector3.right*k_WindowWidthOffset + innerHeightOffset;
+            // balconyDepthOffset分だけ後ろにずらして建物内部に埋め込む
+            Vector3 outerFrameOrigin = origin + Vector3.right*k_WindowWidthOffset + innerHeightOffset + balconyDepthOffset;
             var outerFrame = new List<Vector3>
             {
                 outerFrameOrigin,
@@ -57,8 +59,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             var compoundDraft = new CompoundMeshDraft
             {
-                BalconyAssembly(origin, width, height, balconyColorData, windowColorData),
-                BalconyWallPanel(origin, widthVector, heightVector, windowDepth, outerFrame, balconyColorData)
+                // balconyDepthOffset分だけ後ろにずらして建物内部に埋め込む
+                BalconyAssembly(origin + balconyDepthOffset, width, height, balconyColorData, windowColorData),
+                BalconyWallPanel(origin + balconyDepthOffset, widthVector, heightVector, windowDepth, outerFrame, balconyColorData)
             };
 
             Vector3 windowpaneMin1 = outerFrame[0] + windowDepth;
@@ -77,19 +80,21 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             ProceduralFacadeWindowElement.WindowTexturedData windowTexturedData
             )
         {
-            Vector3 widthVector = Vector3.right*width;
-            Vector3 heightVector = Vector3.up*height;
-            Vector3 innerHeightOffset = Vector3.up*k_BalconyThickness;
-            Vector3 windowHeightOffset = Vector3.up*k_WindowBottomOffset;
-            Vector3 windowWidth = Vector3.right*(width - k_WindowWidthOffset*2);
-            Vector3 windowHeight = Vector3.up*(height - k_WindowBottomOffset - k_WindowTopOffset);
-            Vector3 windowDepth = Vector3.forward*k_WindowDepth;
+            Vector3 widthVector = Vector3.right * width;
+            Vector3 heightVector = Vector3.up * height;
+            Vector3 innerHeightOffset = Vector3.up * k_BalconyThickness;
+            Vector3 windowHeightOffset = Vector3.up * k_WindowBottomOffset;
+            Vector3 windowWidth = Vector3.right * (width - k_WindowWidthOffset * 2);
+            Vector3 windowHeight = Vector3.up * (height - k_WindowBottomOffset - k_WindowTopOffset);
+            Vector3 windowDepth = Vector3.forward * k_WindowDepth;
+            Vector3 balconyDepthOffset = Vector3.forward * k_BalconyDepth;
 
             int rodCount = Mathf.FloorToInt(windowWidth.magnitude/k_WindowSegmentMinWidth);
             Vector3 doorWidth = Vector3.right*windowWidth.magnitude/(rodCount + 1);
             Vector3 doorHeight = windowHeightOffset + windowHeight;
 
-            Vector3 outerFrameOrigin = origin + Vector3.right*k_WindowWidthOffset + innerHeightOffset;
+            // balconyDepthOffset分だけ後ろにずらして建物内部に埋め込む
+            Vector3 outerFrameOrigin = origin + Vector3.right*k_WindowWidthOffset + innerHeightOffset + balconyDepthOffset;
             var outerFrame = new List<Vector3>
             {
                 outerFrameOrigin,
@@ -102,8 +107,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             var compoundDraft = new CompoundMeshDraft
             {
-                BalconyAssemblyTextured(origin, width, height, balconyTexturedData, windowTexturedData),
-                BalconyWallPanelTextured(origin, widthVector, heightVector, windowDepth, outerFrame, balconyTexturedData)
+                // balconyDepthOffset分だけ後ろにずらして建物内部に埋め込む
+                BalconyAssemblyTextured(origin + balconyDepthOffset, width, height, balconyTexturedData, windowTexturedData),
+                BalconyWallPanelTextured(origin + balconyDepthOffset, widthVector, heightVector, windowDepth, outerFrame, balconyTexturedData)
             };
 
             Vector3 windowpaneMin1 = outerFrame[0] + windowDepth;

@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Configs
 {
-    public abstract class ResidenceConfig
+    public abstract class HouseConfig
     {
         [Serializable]
         public class Params
         {
-            [CustomLabel("2階建てに変更")]
-            public bool twoStoryBuilding;
+            public int numFloor = 2;
             [CustomLabel("エントランスに屋根を追加")]
             public bool hasEntranceRoof;
             [CustomLabel("屋根タイプ")]
@@ -28,8 +27,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             public Color entranceDoorColor = ColorE.white;
             public Color entranceDoorFrameColor = ColorE.white;
             public Color entranceDoorRoofColor = (ColorE.gray/4).WithA(1);
-            public Color windowPaneColor = ColorE.gray;
-            public Color windowPaneGlassColor = ColorE.white;
+            public Color windowFrameColor = ColorE.gray;
+            public Color windowGlassColor = ColorE.white;
             public Color roofColor = (ColorE.gray/4).WithA(1);
             public Color roofSideColor = (ColorE.gray/4).WithA(1);
         }
@@ -39,15 +38,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         public class VertexColorMaterialPalette
         {
             public Material vertexWall;
-            public Material vertexWindowPane;
+            public Material vertexWindow;
             public Material vertexRoof;
-
-            public void LoadMaterial()
-            {
-                vertexWall = Resources.Load<Material>("Residence/Wall");
-                vertexWindowPane = Resources.Load<Material>("Residence/WindowPane");
-                vertexRoof = Resources.Load<Material>("Residence/Roof");
-            }
         }
 
         [Serializable]
@@ -59,24 +51,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             public Material entranceDoor;
             public Material entranceDoorFrame;
             public Material entranceDoorRoof;
-            public Material windowPane;
+            public Material windowFrame;
             public Material windowGlass;
             public Material roof;
             public Material roofSide;
-
-            public void LoadMaterial()
-            {
-                socle = Resources.Load<Material>("Residence/SocleTextured");
-                socleTop = Resources.Load<Material>("Residence/SocleTopTextured");
-                wall = Resources.Load<Material>("Residence/WallTextured");
-                entranceDoor = Resources.Load<Material>("Residence/EntranceDoorTextured");
-                entranceDoorFrame = Resources.Load<Material>("Residence/EntranceDoorFrameTextured");
-                entranceDoorRoof = Resources.Load<Material>("Residence/EntranceDoorRoofTextured");
-                windowPane = Resources.Load<Material>("Residence/WindowPaneTextured");
-                windowGlass = Resources.Load<Material>("Residence/WindowGlassTextured");
-                roof = Resources.Load<Material>("Residence/RoofTextured");
-                roofSide = Resources.Load<Material>("Residence/RoofSideTextured");
-            }
         }
     }
 }

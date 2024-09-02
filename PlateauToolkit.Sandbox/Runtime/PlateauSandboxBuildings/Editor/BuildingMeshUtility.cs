@@ -74,6 +74,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 Mesh newMeshAsset = AssetDatabase.LoadAssetAtPath<Mesh>(newMeshAssetPath);
                 string oldMeshAssetPath = Path.Combine(meshAssetsFolderPath, sharedMesh.name + ".asset").Replace("\\", "/");
                 Mesh oldMeshAsset = AssetDatabase.LoadAssetAtPath<Mesh>(oldMeshAssetPath);
+
                 if (oldMeshAsset == null && newMeshAsset == null)
                 {
                     AssetDatabase.CreateAsset(sharedMesh, newMeshAssetPath);
@@ -92,7 +93,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 {
                     AssetDatabase.CopyAsset(oldMeshAssetPath, newMeshAssetPath);
                     newMeshAsset = AssetDatabase.LoadAssetAtPath<Mesh>(newMeshAssetPath);
-                    newMeshAsset.Clear(false);
                     EditorUtility.CopySerialized(meshFilter.sharedMesh, newMeshAsset);
                     newMeshAsset.name = newMeshAssetName;
                     EditorUtility.SetDirty(newMeshAsset);

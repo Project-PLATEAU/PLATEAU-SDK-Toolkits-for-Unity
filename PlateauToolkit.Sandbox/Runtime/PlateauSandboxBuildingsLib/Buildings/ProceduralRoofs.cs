@@ -29,7 +29,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             {
                 switch (config.buildingType)
                 {
-                    case BuildingType.k_SkyscraperCondominium:
+                    case BuildingType.k_Apartment:
                         m_RoofMat = m_Config.skyscraperCondominiumMaterialPalette.roof;
                         m_RoofSideMat = m_Config.skyscraperCondominiumMaterialPalette.roofSide;
                         m_UVScale = new Vector2(0.1f, 0.1f);
@@ -39,7 +39,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                         m_RoofSideMat = m_Config.officeBuildingMaterialPalette.roofSide;
                         m_UVScale = new Vector2(0.1f, 0.1f);
                         break;
-                    case BuildingType.k_Residence:
+                    case BuildingType.k_House:
                         m_RoofMat = m_Config.residenceMaterialPalette.roof;
                         m_RoofSideMat = m_Config.residenceMaterialPalette.roofSide;
                         m_UVScale = new Vector2(0.1f, 0.1f);
@@ -49,7 +49,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                         m_RoofSideMat = m_Config.conveniMaterialPalette.roofSide;
                         m_UVScale = new Vector2(0.1f, 0.1f);
                         break;
-                    case BuildingType.k_CommercialFacility:
+                    case BuildingType.k_CommercialBuilding:
                         m_RoofMat = m_Config.commercialFacilityMaterialPalette.roof;
                         m_RoofSideMat = m_Config.commercialFacilityMaterialPalette.roofSide;
                         m_UVScale = new Vector2(0.1f, 0.1f);
@@ -67,7 +67,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             {
                 switch (config.buildingType)
                 {
-                    case BuildingType.k_SkyscraperCondominium:
+                    case BuildingType.k_Apartment:
                         m_RoofColor = m_Config.skyscraperCondominiumVertexColorPalette.roofColor;
                         m_RoofSideColor = m_Config.skyscraperCondominiumVertexColorPalette.roofSideColor;
                         m_VertexRoofMat = m_Config.skyscraperCondominiumVertexColorMaterialPalette.vertexRoof;
@@ -77,7 +77,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                         m_RoofSideColor = m_Config.officeBuildingVertexColorPalette.roofSideColor;
                         m_VertexRoofMat = m_Config.officeBuildingVertexColorMaterialPalette.vertexRoof;
                         break;
-                    case BuildingType.k_Residence:
+                    case BuildingType.k_House:
                         m_RoofColor = m_Config.residenceVertexColorPalette.roofColor;
                         m_RoofSideColor = m_Config.residenceVertexColorPalette.roofSideColor;
                         m_VertexRoofMat = m_Config.residenceVertexColorMaterialPalette.vertexRoof;
@@ -87,7 +87,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                         m_RoofSideColor = m_Config.conveniVertexColorPalette.roofSideColor;
                         m_VertexRoofMat = m_Config.conveniVertexColorMaterialPalette.vertexRoof;
                         break;
-                    case BuildingType.k_CommercialFacility:
+                    case BuildingType.k_CommercialBuilding:
                         m_RoofColor = m_Config.commercialFacilityVertexColorPalette.roofColor;
                         m_RoofSideColor = m_Config.commercialFacilityVertexColorPalette.roofSideColor;
                         m_VertexRoofMat = m_Config.commercialFacilityVertexColorMaterialPalette.vertexRoof;
