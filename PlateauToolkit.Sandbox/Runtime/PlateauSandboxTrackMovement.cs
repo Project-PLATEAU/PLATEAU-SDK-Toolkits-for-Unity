@@ -147,7 +147,7 @@ namespace PlateauToolkit.Sandbox
                     m_MaxVelocity = 20;
                     m_SerializedMovingObject = vehicle;
                     break;
-                case PlateauSandboxAvatar avatar:
+                case PlateauSandboxHuman avatar:
                     m_MaxVelocity = 1.5f;
                     m_SerializedMovingObject = avatar;
                     break;

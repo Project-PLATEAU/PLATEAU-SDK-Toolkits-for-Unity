@@ -32,15 +32,16 @@ namespace PlateauToolkit.Sandbox.Editor
 
     class PlateauSandboxWindow : EditorWindow
     {
-        const int k_TabButtonSize = 54;
+        const int k_TabButtonSizeWidth = 60;
+        const int k_TabButtonSizeHeight = 48;
+        const int k_TabButtonWidthPadding = 15;
 
         PlateauSandboxWindow m_Window;
         IPlateauSandboxWindowView m_CurrentView;
 
         PlateauSandboxWindowTrackView m_TrackView = new();
-        PlateauSandboxWindowAvatarView m_AvatarView = new();
-        PlateauSandboxWindowVehicleView m_VehicleView = new();
-        PlateauSandboxWindowPropsView m_PropsView = new();
+        PlateauSandboxWindowAssetPlaceView m_AssetPlaceView = new();
+        PlateauSandboxWindowBulkPlaceView m_BulkPlaceView = new();
 
         void OnEnable()
         {
@@ -83,28 +84,28 @@ namespace PlateauToolkit.Sandbox.Editor
 
             PlateauToolkitEditorGUILayout.HeaderLogo(m_Window.position.width);
 
-            PlateauToolkitEditorGUILayout.GridLayout(
-                m_Window.position.width,
-                k_TabButtonSize,
-                k_TabButtonSize,
-                new Action[]
-                {
-                    () => TabButton(PlateauSandboxPaths.TracksIcon, m_TrackView),
-                    () => TabButton(PlateauSandboxPaths.HumanIcon, m_AvatarView),
-                    () => TabButton(PlateauSandboxPaths.VehicleIcon, m_VehicleView),
-                    () => TabButton(PlateauSandboxPaths.PropsIcon, m_PropsView),
-                });
+            using (EditorGUILayout.HorizontalScope scope = PlateauToolkitEditorGUILayout.TabScope(m_Window.position.width))
+            {
+                PlateauSandboxGUI.DrawColorTexture(scope.rect, PlateauToolkitGUIStyles.k_TabBackgroundColor, 8);
 
-            PlateauToolkitEditorGUILayout.Header(m_CurrentView.Name);
+                TabButton(PlateauSandboxPaths.TracksIcon, m_TrackView, scope.rect, PlateauSandboxTab.Tracks);
+                TabButton(PlateauSandboxPaths.PlaceIcon, m_AssetPlaceView, scope.rect, PlateauSandboxTab.AssetPlace);
+                TabButton(PlateauSandboxPaths.BulkPlaceIcon, m_BulkPlaceView, scope.rect, PlateauSandboxTab.BulkPlace);
+            }
+
+            PlateauToolkitEditorGUILayout.Title(m_Window.position.width, m_CurrentView.Name);
 
             m_CurrentView.OnGUI(PlateauSandboxContext.GetCurrent(), m_Window);
 
             PlateauToolkitEditorGUILayout.Header("汎用機能");
 
-            if (GUILayout.Button("カメラマネージャーを作成"))
+            if (new PlateauToolkitImageButtonGUI(
+                    220,
+                    40,
+                    PlateauToolkitGUIStyles.k_ButtonNormalColor).Button("カメラマネージャーを作成"))
             {
                 GameObject cameraManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                    "Packages/com.unity.plateautoolkit/PlateauToolkit.Sandbox/Runtime/Prefabs/PlateauSandboxCameraManager.prefab");
+                    "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Sandbox/Runtime/Prefabs/PlateauSandboxCameraManager.prefab");
                 GameObject cameraManager = Instantiate(cameraManagerPrefab);
                 cameraManager.name = nameof(PlateauSandboxCameraManager);
                 cameraManager.GetComponent<PlateauSandboxCameraManager>().EnableKeyboardCameraSwitch = true;
@@ -116,12 +117,30 @@ namespace PlateauToolkit.Sandbox.Editor
             EditorGUILayout.Space(8);
         }
 
-        void TabButton(string iconPath, IPlateauSandboxWindowView tabView)
+        void TabButton(string iconPath, IPlateauSandboxWindowView tabView, Rect backGroundRect, PlateauSandboxTab tab)
         {
-            Color? buttonColor = tabView == m_CurrentView ? Color.cyan : null;
-            var imageButtonGUILayout = new PlateauToolkitImageButtonGUI(k_TabButtonSize, k_TabButtonSize);
-            if (imageButtonGUILayout.Button(iconPath, buttonColor))
+            float centerY = (backGroundRect.height - k_TabButtonSizeHeight) / 2;
+            float centerX = (backGroundRect.width - k_TabButtonSizeWidth) / 2;
+            var buttonRect = new Rect(backGroundRect.x + centerX, backGroundRect.y + centerY, k_TabButtonSizeWidth, k_TabButtonSizeHeight);
+
+            switch (tab)
             {
+                case PlateauSandboxTab.Tracks:
+                    buttonRect.x -= k_TabButtonSizeWidth + k_TabButtonWidthPadding;
+                    break;
+                case PlateauSandboxTab.BulkPlace:
+                    buttonRect.x += k_TabButtonSizeWidth + k_TabButtonWidthPadding;
+                    break;
+            }
+
+            var imageButtonGUILayout = new PlateauToolkitImageButtonGUI(k_TabButtonSizeWidth, k_TabButtonSizeHeight, PlateauToolkitGUIStyles.k_TabActiveColor);
+            if (imageButtonGUILayout.TabButton(iconPath, buttonRect, tabView == m_CurrentView))
+            {
+                if (tabView == m_CurrentView)
+                {
+                    return;
+                }
+
                 m_CurrentView?.OnEnd(PlateauSandboxContext.GetCurrent());
                 m_CurrentView = tabView;
                 m_CurrentView.OnBegin(PlateauSandboxContext.GetCurrent(), m_Window);

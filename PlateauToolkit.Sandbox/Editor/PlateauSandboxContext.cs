@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace PlateauToolkit.Sandbox.Editor
@@ -13,6 +14,7 @@ namespace PlateauToolkit.Sandbox.Editor
         readonly List<PlateauSandboxTrack> m_Tracks = new();
         readonly PlacementSettings m_PlacementSettings = new();
         GameObject m_SelectedObject;
+        public UnityEvent<GameObject> OnSelectedObjectChanged { get; } = new UnityEvent<GameObject>();
 
         public IReadOnlyList<PlateauSandboxTrack> Tracks
         {
@@ -61,6 +63,7 @@ namespace PlateauToolkit.Sandbox.Editor
         public void SelectPlaceableObject(GameObject placeableObject)
         {
             m_SelectedObject = placeableObject;
+            OnSelectedObjectChanged.Invoke(placeableObject);
         }
 
         public bool IsSelectedObject(GameObject other)
