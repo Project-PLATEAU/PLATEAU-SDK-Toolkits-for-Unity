@@ -105,7 +105,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     PlateauToolkitGUIStyles.k_ButtonNormalColor).Button("カメラマネージャーを作成"))
             {
                 GameObject cameraManagerPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(
-                    "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Sandbox/Runtime/Prefabs/PlateauSandboxCameraManager.prefab");
+                    "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Sandbox/Runtime/Prefabs/PlateauSandboxCameraManager.prefab");
                 GameObject cameraManager = Instantiate(cameraManagerPrefab);
                 cameraManager.name = nameof(PlateauSandboxCameraManager);
                 cameraManager.GetComponent<PlateauSandboxCameraManager>().EnableKeyboardCameraSwitch = true;

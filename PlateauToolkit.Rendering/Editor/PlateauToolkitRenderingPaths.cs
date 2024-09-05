@@ -3,13 +3,13 @@
 
     public class PlateauToolkitRenderingPaths
     {
-        const string k_EditorRootFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Rendering/Editor";
-        const string k_RuntimeRootFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Rendering/Runtime";
-        const string k_SpritesFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Rendering/Editor/Sprites";
-        const string k_PrefabsFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Rendering/Editor/Prefabs";
-        const string k_CommonSpritesFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Foundation/Editor/Sprites";
-        const string k_DayNightCycleFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Rendering/Runtime/DayNightCycle";
-        const string k_MaterialFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Rendering/Runtime";
+        const string k_EditorRootFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Rendering/Editor";
+        const string k_RuntimeRootFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Rendering/Runtime";
+        const string k_SpritesFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Rendering/Editor/Sprites";
+        const string k_PrefabsFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Rendering/Editor/Prefabs";
+        const string k_CommonSpritesFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Foundation/Editor/Sprites";
+        const string k_DayNightCycleFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Rendering/Runtime/DayNightCycle";
+        const string k_MaterialFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Rendering/Runtime";
 
         public static readonly string k_PlateauLogo = $"{k_CommonSpritesFolder}/PlateauToolkit_Logo.png";
         public static readonly string k_EnvIcon = $"{k_SpritesFolder}/PlateauToolkitRendering_Env.png";

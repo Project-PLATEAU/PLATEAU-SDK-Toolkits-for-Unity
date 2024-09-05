@@ -2,9 +2,9 @@
 {
     static class PlateauSandboxPaths
     {
-        const string k_SpritesFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Sandbox/Editor/Sprites";
-        const string k_UIFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Sandbox/Editor/UI";
-        const string k_AssetIconsFolder = "Packages/com.synesthesias.plateautoolkit/PlateauToolkit.Sandbox/Editor/Sprites/AssetIcons";
+        const string k_SpritesFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Sandbox/Editor/Sprites";
+        const string k_UIFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Sandbox/Editor/UI";
+        const string k_AssetIconsFolder = "Packages/com.synesthesias.plateau-unity-toolkit/PlateauToolkit.Sandbox/Editor/Sprites/AssetIcons";
 
         public static string TracksIcon { get; } = $"{k_SpritesFolder}/PlateauToolkitSandbox_TrackIcon.png";
         public static string PlaceIcon { get; } = $"{k_SpritesFolder}/PlateauToolkitSandbox_PlaceIcon.png";
