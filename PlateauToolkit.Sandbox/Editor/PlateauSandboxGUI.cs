@@ -52,20 +52,27 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             if (ToolManager.activeToolType != typeof(PlateauSandboxPlacementTool))
             {
-                if (GUILayout.Button("配置ツールを起動") && !Application.isPlaying)
+                if (new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button("配置ツールを起動"))
                 {
                     ToolManager.SetActiveTool<PlateauSandboxPlacementTool>();
                 }
+
+                GUILayout.Space(5);
             }
             else
             {
-                using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.red))
+                if (new PlateauToolkitImageButtonGUI(
+                        220,
+                        40,
+                        PlateauToolkitGUIStyles.k_ButtonCancelColor).Button("配置ツールを終了"))
                 {
-                    if (GUILayout.Button("配置ツールを終了"))
-                    {
-                        ToolManager.RestorePreviousPersistentTool();
-                    }
+                    ToolManager.RestorePreviousPersistentTool();
                 }
+
+                GUILayout.Space(5);
 
                 if (context.IsSelectedObject(null))
                 {

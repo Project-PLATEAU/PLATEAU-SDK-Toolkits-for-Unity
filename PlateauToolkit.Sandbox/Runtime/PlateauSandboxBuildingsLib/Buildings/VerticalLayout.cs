@@ -1,0 +1,22 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings;
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Interfaces;
+using UnityEngine;
+
+namespace ProceduralToolkit.Buildings
+{
+    public class VerticalLayout : Layout
+    {
+        public override void Add(ILayoutElement element)
+        {
+            base.Add(element);
+            element.origin = Vector2.up*height;
+            height += element.height;
+            width = Mathf.Max(width, element.width);
+        }
+
+        public void AddElement(ILayoutElement element)
+        {
+            base.Add(element);
+        }
+    }
+}

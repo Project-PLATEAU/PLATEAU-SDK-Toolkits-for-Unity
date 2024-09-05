@@ -8,7 +8,7 @@ namespace PlateauToolkit.Sandbox
     /// </summary>
     [SelectionBase]
     public class PlateauSandboxVehicle :
-        MonoBehaviour,
+        PlateauSandboxPlaceableHandler,
         IPlateauSandboxMovingObject,
         IPlateauSandboxCameraTarget
     {
@@ -51,7 +51,7 @@ namespace PlateauToolkit.Sandbox
             m_AllWheels = allWheels.ToArray();
         }
 
-        public void SetPosition(in Vector3 position)
+        public override void SetPosition(in Vector3 position)
         {
             transform.position = position - (m_BackWheelAxisTransform.position - transform.position);
         }

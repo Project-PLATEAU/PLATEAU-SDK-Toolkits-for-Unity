@@ -23,12 +23,15 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)
         {
-            EditorGUILayout.LabelField("ツール", EditorStyles.boldLabel);
-            using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
+            PlateauToolkitEditorGUILayout.Header("ツール");
+            using (new EditorGUILayout.VerticalScope())
             {
                 if (ToolManager.activeToolType.Name != "KnotPlacementTool")
                 {
-                    if (GUILayout.Button("新しいトラックを作成"))
+                    if (new PlateauToolkitImageButtonGUI(
+                            220,
+                            40,
+                            PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button("新しいトラックを作成"))
                     {
                         string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null, "Track");
                         GameObject trackGameObject = ObjectFactory.CreateGameObject(gameObjectName, typeof(PlateauSandboxTrack));
@@ -49,36 +52,41 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     using (new EditorGUI.DisabledScope(true))
                     {
-                        using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.green))
+                        if (new PlateauToolkitImageButtonGUI(
+                                310,
+                                40,
+                                PlateauToolkitGUIStyles.k_ButtonCancelColor).Button("ESCキーまたはエンターキーでトラック作成を終了"))
                         {
-                            if (GUILayout.Button("ESCキーまたはエンターキーでトラック作成を終了"))
-                            {
-                            }
                         }
                     }
                 }
+                EditorGUILayout.Space(10);
 
                 using (new EditorGUI.DisabledGroupScope(context.Tracks.Count == 0))
                 {
                     if (ToolManager.activeToolType == typeof(PlateauSandboxSpeedLimitTool))
                     {
-                        using (PlateauToolkitEditorGUILayout.BackgroundColorScope(Color.red))
+                        if (new PlateauToolkitImageButtonGUI(
+                                220,
+                                40,
+                                PlateauToolkitGUIStyles.k_ButtonCancelColor).Button("制限速度設定ツールを終了"))
                         {
-                            if (GUILayout.Button("制限速度設定ツールを終了"))
-                            {
-                                ToolManager.RestorePreviousPersistentTool();
-                            }
+                            ToolManager.RestorePreviousPersistentTool();
                         }
                     }
                     else
                     {
-                        if (GUILayout.Button("制限速度設定ツールを起動"))
+                        if (new PlateauToolkitImageButtonGUI(
+                                220,
+                                40,
+                                PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button("制限速度設定ツールを起動"))
                         {
                             ToolManager.SetActiveTool<PlateauSandboxSpeedLimitTool>();
                         }
                     }
                 }
             }
+            EditorGUILayout.Space(15);
 
             m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 200));
         }

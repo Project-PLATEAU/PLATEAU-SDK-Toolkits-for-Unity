@@ -14,5 +14,10 @@ namespace PlateauToolkit.Sandbox
         /// Set position of the object.
         /// </summary>
         void SetPosition(in Vector3 position);
+
+        /// <summary>
+        /// Whether installed vertically when placed on the ground
+        /// </summary>
+        bool IsGroundPlacementVertical();
     }
 }
