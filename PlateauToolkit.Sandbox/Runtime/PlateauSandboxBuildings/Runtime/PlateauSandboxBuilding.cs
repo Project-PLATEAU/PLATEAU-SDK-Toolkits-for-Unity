@@ -193,5 +193,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 Debug.LogException(e);
             }
         }
+
+        public override bool CanPlaceOnOtherSandboxObject()
+        {
+            // 建物であれば他のオブジェクトを配置することができる
+            return true;
+        }
     }
 }
