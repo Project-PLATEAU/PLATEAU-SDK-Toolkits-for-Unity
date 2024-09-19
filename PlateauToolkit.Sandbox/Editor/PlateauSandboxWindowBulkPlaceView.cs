@@ -499,6 +499,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         m_AssetType = placeData.AssetType,
                         m_ObjectId = placeData.ID.ToString(),
                         m_IsIgnoreHeight = isIgnoreHeight,
+                        m_IsPlaced = false,
                     };
                     m_PrefabPlacement.AddContext(context);
                 }

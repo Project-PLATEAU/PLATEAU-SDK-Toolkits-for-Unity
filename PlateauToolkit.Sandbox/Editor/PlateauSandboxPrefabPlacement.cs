@@ -1,6 +1,7 @@
 using PLATEAU.CityInfo;
 using PLATEAU.Native;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -10,6 +11,13 @@ namespace PlateauToolkit.Sandbox.Editor
 {
     public class PlateauSandboxPrefabPlacement
     {
+        enum PlaceResult
+        {
+            AllPlaceSuccess,
+            PlaceFailed,
+            AllPlaceFailed,
+        }
+
         public struct PlacementContext
         {
             public float m_Longitude;
@@ -19,6 +27,7 @@ namespace PlateauToolkit.Sandbox.Editor
             public string m_AssetType;
             public string m_ObjectId;
             public bool m_IsIgnoreHeight;
+            public bool m_IsPlaced;
         }
 
         PLATEAUInstancedCityModel m_CityModel;
@@ -54,16 +63,23 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     break;
                 }
-                TryPlace(m_PlacementContexts[PlacingCount - 1]);
+                PlacementContext context = m_PlacementContexts[PlacingCount - 1];
+                bool isPlaced = TryPlace(context);
+
+                // 配置できたかどうかのフラグを更新
+                context.m_IsPlaced = isPlaced;
+                m_PlacementContexts[PlacingCount - 1] = context;
 
                 await Task.Yield();
                 PlacingCount--;
             }
 
+            ShowResultDialog();
+
             Debug.Log("アセットの一括配置が終了しました");
         }
 
-        void TryPlace(PlacementContext context)
+        bool TryPlace(PlacementContext context)
         {
             // Set the position of the asset
             var geoCoordinate = new GeoCoordinate(context.m_Latitude, context.m_Longitude, context.m_Height);
@@ -77,7 +93,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 if (!isColliderFound)
                 {
                     Debug.LogWarning($"{context.m_ObjectId} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
-                    return;
+                    return false;
                 }
 
                 unityPosition.y = colliderHeight;
@@ -103,6 +119,8 @@ namespace PlateauToolkit.Sandbox.Editor
             asset.transform.position = unityPosition;
 
             Debug.Log($"アセットを配置。{gameObjectName} at {asset.transform.position.ToString()}");
+
+            return true;
         }
 
         public void StopPlace()
@@ -111,7 +129,7 @@ namespace PlateauToolkit.Sandbox.Editor
             m_PlacementContexts.Clear();
         }
 
-        private bool TryGetColliderHeight(Vector3 position, out float colliderHeight)
+        bool TryGetColliderHeight(Vector3 position, out float colliderHeight)
         {
             var rayStartPosition = new Vector3(position.x, k_GroundCheckLength, position.z);
             float rayDistance = k_GroundCheckLength * 2;
@@ -132,6 +150,25 @@ namespace PlateauToolkit.Sandbox.Editor
         public bool IsValidCityModel()
         {
             return m_CityModel != null;
+        }
+
+        void ShowResultDialog()
+        {
+            bool isAllPlaceSuccess = m_PlacementContexts.All(context => context.m_IsPlaced);
+            bool isAllPlaceFailed = m_PlacementContexts.All(context => !context.m_IsPlaced);
+
+            if (isAllPlaceSuccess)
+            {
+                EditorUtility.DisplayDialog("アセット一括配置", "全てのアセットの配置に成功しました。", "OK");
+            }
+            else if (isAllPlaceFailed)
+            {
+                EditorUtility.DisplayDialog("アセット一括配置", "全てのアセットの配置に失敗しました。\n詳細はコンソールログのワーニングを確認してください。", "OK");
+            }
+            else
+            {
+                EditorUtility.DisplayDialog("アセット一括配置", "一部のアセットの配置に失敗しました。\n詳細はコンソールログのワーニングを確認してください。", "OK");
+            }
         }
     }
 }
