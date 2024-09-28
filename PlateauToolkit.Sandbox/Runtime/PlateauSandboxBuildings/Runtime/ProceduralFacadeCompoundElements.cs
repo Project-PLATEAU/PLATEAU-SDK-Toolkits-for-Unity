@@ -520,6 +520,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyTexturedData = new BalconyTexturedData
                             {
+                                m_ConvexBalcony = config.skyscraperCondominiumParams.convexBalcony,
                                 m_HasGlassWall = config.skyscraperCondominiumParams.hasBalconyGlass,
                                 m_UVScale = config.textureScale,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
@@ -539,6 +540,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyColorData = new BalconyColorData
                             {
+                                m_ConvexBalcony = config.skyscraperCondominiumParams.convexBalcony,
                                 m_HasGlassWall = config.skyscraperCondominiumParams.hasBalconyGlass,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
                                 m_WallColor = config.skyscraperCondominiumVertexColorPalette.wallColor,
@@ -560,6 +562,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyTexturedData = new BalconyTexturedData
                             {
+                                m_ConvexBalcony = false,
                                 m_HasGlassWall = false,
                                 m_UVScale = config.textureScale,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
@@ -579,6 +582,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyColorData = new BalconyColorData
                             {
+                                m_ConvexBalcony = false,
                                 m_HasGlassWall = false,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
                                 m_WallColor = config.hotelVertexColorPalette.wallColor,
