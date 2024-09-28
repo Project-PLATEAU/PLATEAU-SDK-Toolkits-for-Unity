@@ -99,7 +99,7 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 double x = m_ShpReader.ReadDouble();
                 double y = m_ShpReader.ReadDouble();
-                shape.Points.Add(new Vector3((float)x, 0f, (float)y));
+                shape.Points.Add((x, 0, y));
             }
 
 
@@ -113,7 +113,7 @@ namespace PlateauToolkit.Sandbox.Editor
             double y = m_ShpReader.ReadDouble();
 
             // Create and return the PointShape.
-            return new PointShape(new Vector3((float)x, 0f, (float)y));
+            return new PointShape((x, 0, y));
         }
 
 
@@ -138,7 +138,7 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 double x = m_ShpReader.ReadDouble();
                 double y = m_ShpReader.ReadDouble();
-                shape.Points.Add(new Vector3((float)x, 0, (float)y));
+                shape.Points.Add((x, 0, y));
             }
             return shape;
         }
@@ -157,7 +157,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
     public interface IShape
     {
-        List<Vector3> Points { get; }
+        List<(double x, double y, double z)> Points { get; }
         List<int> Parts { get; }
         public string ToDataString()
         {
@@ -167,13 +167,13 @@ namespace PlateauToolkit.Sandbox.Editor
     }
     class PolylineShape : IShape
     {
-        public List<Vector3> Points { get; } = new List<Vector3>();
+        public List<(double x, double y, double z)> Points { get; } = new List<(double x, double y, double z)>();
         public List<int> Parts { get; set; } = new List<int>();
     }
 
     class PolygonShape : IShape
     {
-        public List<Vector3> Points { get; } = new List<Vector3>();
+        public List<(double x, double y, double z)> Points { get; } = new List<(double x, double y, double z)>();
         public List<int> Parts { get; set; } = new List<int>();
     }
 
@@ -181,10 +181,10 @@ namespace PlateauToolkit.Sandbox.Editor
     {
         // For a PointShape, we'll only ever have one point, but we're
         // implementing the IShape interface which requires a list.
-        public List<Vector3> Points { get; } = new List<Vector3>();
+        public List<(double x, double y, double z)> Points { get; } = new List<(double x, double y, double z)>();
         public List<int> Parts { get; } = new List<int>(); // Points do not have parts But we include this for interface compliance.
 
-        public PointShape(Vector3 point)
+        public PointShape((double, double, double) point)
         {
             Points.Add(point);
         }

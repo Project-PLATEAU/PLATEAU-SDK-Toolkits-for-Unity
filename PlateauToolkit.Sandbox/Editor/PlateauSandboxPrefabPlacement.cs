@@ -1,3 +1,4 @@
+using PLATEAU.CityGML;
 using PLATEAU.CityInfo;
 using PLATEAU.Native;
 using System.Collections.Generic;
@@ -20,8 +21,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public struct PlacementContext
         {
-            public float m_Longitude;
-            public float m_Latitude;
+            public double m_Longitude;
+            public double m_Latitude;
             public float m_Height;
             public GameObject m_Prefab;
             public string m_AssetType;
@@ -40,7 +41,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public PlateauSandboxPrefabPlacement()
         {
-            m_CityModel = Object.FindObjectOfType<PLATEAUInstancedCityModel>();
+            m_CityModel = UnityEngine.Object.FindObjectOfType<PLATEAUInstancedCityModel>();
             if (m_CityModel == null)
             {
                 Debug.LogError("CityModel is not found.");
@@ -136,9 +137,28 @@ namespace PlateauToolkit.Sandbox.Editor
 
             // Send a ray downward to get the height of the collider.
             var ray = new Ray(rayStartPosition, Vector3.down);
-            if (Physics.Raycast(ray, out RaycastHit hit, rayDistance))
+
+            var hitPointHeights = new List<float>();
+            RaycastHit[] results = Physics.RaycastAll(ray, rayDistance);
+            foreach (RaycastHit rayCastHit in results)
             {
-                colliderHeight = hit.point.y;
+                if (rayCastHit.transform.TryGetComponent(out PLATEAUCityObjectGroup cityObjectGroup))
+                {
+                    if (cityObjectGroup.CityObjects.rootCityObjects.Any(o => o.CityObjectType == CityObjectType.COT_Building))
+                    {
+                        // 建物であればスキップ
+                        continue;
+                    }
+
+                    // その他のオブジェクトは配置可能
+                    hitPointHeights.Add(rayCastHit.point.y);
+                }
+            }
+
+            if (hitPointHeights.Count > 0)
+            {
+                // 一番上にヒットしたコライダーの高さを取得
+                colliderHeight = hitPointHeights.Max();
                 return true;
             }
 

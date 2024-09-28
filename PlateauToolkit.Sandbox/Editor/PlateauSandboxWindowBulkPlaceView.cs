@@ -492,8 +492,8 @@ namespace PlateauToolkit.Sandbox.Editor
                     bool isIgnoreHeight = placeData.IsIgnoreHeight | m_IsIgnoreHeight;
                     var context = new PlateauSandboxPrefabPlacement.PlacementContext()
                     {
-                        m_Latitude = float.Parse(placeData.Latitude),
-                        m_Longitude = float.Parse(placeData.Longitude),
+                        m_Latitude = double.Parse(placeData.Latitude),
+                        m_Longitude = double.Parse(placeData.Longitude),
                         m_Height = isIgnoreHeight ? 0 : float.Parse(placeData.Height),
                         m_Prefab = prefab,
                         m_AssetType = placeData.AssetType,
