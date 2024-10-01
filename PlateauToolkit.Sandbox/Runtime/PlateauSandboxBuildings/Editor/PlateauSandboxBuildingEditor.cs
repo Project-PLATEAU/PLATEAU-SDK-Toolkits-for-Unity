@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 {
@@ -42,6 +43,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_CommercialFacilityMaterialPalette;
 
         private SerializedProperty m_HotelParams;
+        private SerializedProperty m_HotelShaderParams;
         private SerializedProperty m_HotelVertexColorPalette;
         private SerializedProperty m_HotelVertexColorMaterialPalette;
         private SerializedProperty m_HotelMaterialPalette;
@@ -80,6 +82,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_CommercialFacilityMaterialPalette = serializedObject.FindProperty("commercialFacilityMaterialPalette");
 
             m_HotelParams = serializedObject.FindProperty("hotelParams");
+            m_HotelShaderParams = serializedObject.FindProperty("hotelShaderParams");
             m_HotelVertexColorPalette = serializedObject.FindProperty("hotelVertexColorPalette");
             m_HotelVertexColorMaterialPalette = serializedObject.FindProperty("hotelVertexColorMaterialPalette");
             m_HotelMaterialPalette = serializedObject.FindProperty("hotelMaterialPalette");
@@ -243,6 +246,38 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                         {
                             changedValue = true;
                         }
+                        EditorGUILayout.Space(10);
+                        EditorGUILayout.LabelField("テキスト設定", EditorStyles.boldLabel);
+                        if (DrawDynamicPropertyOnly(m_HotelShaderParams, new Dictionary<string, Tuple<string, float, float>>
+                            {
+                                {"uScale", new Tuple<string, float, float>("横幅のスケール値", 0f, 10f)},
+                                {"vScale", new Tuple<string, float, float>("縦幅のスケール値", 0f, 10f)},
+                                {"uOffset", new Tuple<string, float, float>("横幅のオフセット値", 0f, 10f)},
+                                {"vOffset", new Tuple<string, float, float>("縦幅のオフセット値", 0f, 10f)},
+                                {"blend", new Tuple<string, float, float>("ブレンド", 0f, 1f)},
+                                {"blendStartU", new Tuple<string, float, float>("ブレンド開始X位置", 0f, 1f)}
+                            }))
+                        {
+                            SerializedProperty  roofSideFrontSerializedProperty = m_HotelMaterialPalette.FindPropertyRelative("roofSideFront");
+                            if (roofSideFrontSerializedProperty != null)
+                            {
+                                Object roofSideFrontObjRef = roofSideFrontSerializedProperty.objectReferenceValue;
+                                if (roofSideFrontObjRef != null)
+                                {
+                                    var material = (Material)roofSideFrontObjRef;
+                                    if (material.shader.name.Contains("FixedTexture"))
+                                    {
+                                        Undo.RecordObject(material, "Change Shader Params");
+                                        material.SetFloat("_UScale", m_HotelShaderParams.FindPropertyRelative("uScale").floatValue);
+                                        material.SetFloat("_VScale", m_HotelShaderParams.FindPropertyRelative("vScale").floatValue);
+                                        material.SetFloat("_UOffset", m_HotelShaderParams.FindPropertyRelative("uOffset").floatValue);
+                                        material.SetFloat("_VOffset", m_HotelShaderParams.FindPropertyRelative("vOffset").floatValue);
+                                        material.SetFloat("_Blend", m_HotelShaderParams.FindPropertyRelative("blend").floatValue);
+                                        material.SetFloat("_BlendStartU", m_HotelShaderParams.FindPropertyRelative("blendStartU").floatValue);
+                                    }
+                                }
+                            }
+                        }
                         break;
                 }
             }
@@ -336,12 +371,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             float buildingHeight = m_Generator.buildingHeight;
             switch (m_BuildingType.enumValueIndex)
             {
-                case (int)BuildingType.k_Hotel:
-                    buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 8.0f, 100.0f);
-                    break;
                 case (int)BuildingType.k_Apartment:
                 case (int)BuildingType.k_OfficeBuilding:
                 case (int)BuildingType.k_CommercialBuilding:
+                case (int)BuildingType.k_Hotel:
                     buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 5.0f, 100.0f);
                     break;
             }
@@ -400,7 +433,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     return false;
                 case (int)BuildingType.k_Hotel:
                     EditorGUILayout.LabelField("ホテル設定", EditorStyles.boldLabel);
-                    return DrawDynamicPropertyOnly(m_HotelParams);
+                    return DrawDynamicPropertyOnly(m_HotelParams, new Dictionary<string, Tuple<string, float, float>>
+                    {
+                        {"roofThickness", new Tuple<string, float, float>("屋根の暑さ", 0f, 5f)}
+                    });
             }
             return false;
         }

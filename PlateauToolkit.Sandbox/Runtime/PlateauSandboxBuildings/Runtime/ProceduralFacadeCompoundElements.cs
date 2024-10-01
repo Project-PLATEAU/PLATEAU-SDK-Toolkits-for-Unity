@@ -265,7 +265,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public int m_NumCenterRods;
             public WindowFrameRodType m_WindowFrameRodType;
             public bool m_HasWindowsill;
-            public bool m_RectangleWindow;
+            public bool m_IsRectangleWindow;
+            public bool m_IsChangeBothSidesWallColor;
 
             public ProceduralWindow(BuildingGenerator.Config config)
             {
@@ -280,7 +281,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 m_NumCenterRods = -1;
                 m_WindowFrameRodType = WindowFrameRodType.k_Vertical;
                 m_HasWindowsill = true;
-                m_RectangleWindow = false;
+                m_IsRectangleWindow = false;
+                m_IsChangeBothSidesWallColor = false;
 
                 switch (config.buildingType)
                 {
@@ -412,6 +414,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                 m_WindowpaneGlassName = k_WindowGlassTexturedDraftName,
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.hotelMaterialPalette.wall,
+                                m_WindowTopAndBottomWallMat = config.hotelMaterialPalette.windowTopAndBottomWall,
                                 m_WindowPaneMat = config.hotelMaterialPalette.windowPane,
                                 m_WindowGlassMat = config.hotelMaterialPalette.windowGlass,
                             };
@@ -421,6 +424,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                             m_WindowColorData = new WindowColorData
                             {
                                 m_WallColor = config.hotelVertexColorPalette.wallColor,
+                                m_WindowTopAndBottomWallColor = config.hotelVertexColorPalette.windowTopAndBottomWallColor,
                                 m_VertexWallMat = config.hotelVertexColorMaterialPalette.vertexWall,
                                 m_WindowPaneColor = config.hotelVertexColorPalette.windowPaneColor,
                                 m_WindowPaneGlassColor = config.hotelVertexColorPalette.windowPaneGlassColor,
@@ -435,9 +439,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             public override CompoundMeshDraft Construct(Vector2 parentLayoutOrigin)
             {
-                return UseTexture
-                    ? WindowTextured(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowTexturedData, m_HasWindowsill, m_RectangleWindow)
-                    : Window(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowColorData, m_HasWindowsill, m_RectangleWindow);
+                if (UseTexture)
+                {
+                    m_WindowTexturedData.m_HasWindowsill = m_HasWindowsill;
+                    m_WindowTexturedData.m_IsRectangleWindow = m_IsRectangleWindow;
+                    m_WindowTexturedData.m_IsChangeBothSidesWallColor = m_IsChangeBothSidesWallColor;
+                    return WindowTextured(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowTexturedData);
+                }
+
+                m_WindowColorData.m_HasWindowsill = m_HasWindowsill;
+                m_WindowColorData.m_IsRectangleWindow = m_IsRectangleWindow;
+                m_WindowColorData.m_IsChangeBothSidesWallColor = m_IsChangeBothSidesWallColor;
+                return Window(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowColorData);
             }
         }
 
