@@ -23,10 +23,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private const float k_MinWallWidthOffset = 1.25f;
         private const float k_ShadowWallWidthOffset = 0.3f; // 影壁の幅(窓ガラスを突き抜ける分を抑制)
         private const float k_ShadowWallHeightOffset = 0f;
-        private const float k_EntranceWindowTopOffset = 0.6f;
         private const float k_BalconyConcaveDepth = 0.6f;
         private const float k_BalconyConvexDepth = 1f;
         private const float k_BalconyWindowDepth = -0.15f;
+        private const float k_EntranceWindowHeight = 2.5f;
 
         private readonly Dictionary<PanelType, List<Func<ILayoutElement>>> m_Constructors = new();
         private readonly Dictionary<PanelSize, float> m_SizeValues = new()
@@ -95,8 +95,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         shadowWallDepth += config.skyscraperCondominiumParams.hasBalconyLeft ? 0 : -k_BalconyConcaveDepth;
                         break;
                     default:
-                        config.faceDirection = config.faceDirection;
-                        break;
+                        return layouts;
                 }
 
                 var vertical = new VerticalLayout();
@@ -107,7 +106,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     m_ShadowWallWidthOffset = shadowWallWidthOffset,
                     m_ShadowWallHeightOffset = 0
                 }, shadowWidth, config.buildingHeight - k_ShadowWallHeightOffset));
-                vertical.Add(PlanNormalFacade(panelSizes, floorHeight, remainderWidth, config));
+                vertical.Add(config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Front
+                    ? PlanEntranceFacade(panelSizes, floorHeight, remainderWidth, config)
+                    : PlanNormalFacade(panelSizes, floorHeight, remainderWidth, config));
                 layouts.Add(vertical);
             }
 
@@ -116,19 +117,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private void SetupConstructors(BuildingGenerator.Config config)
         {
-            m_Constructors[PanelType.k_Entrance] = new List<Func<ILayoutElement>>
-            {
-                () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
-                {
-                    m_WindowBottomOffset = 0,
-                    m_WindowWidthOffset = 0.3f,
-                    m_WindowDepthOffset = 0,
-                    m_WindowTopOffset = k_EntranceWindowTopOffset,
-                    m_WindowFrameRodHeight = k_WindowFrameRodHeight,
-                    m_NumCenterRods = 1,
-                    m_HasWindowsill = false
-                }
-            };
             m_Constructors[PanelType.k_Wall] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
@@ -259,8 +247,19 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 Construct(m_Constructors[PanelType.k_Wall], wallWidthOffset * 0.5f, entranceHeight),
                 CreateHorizontal(panelSizes, 0, entranceIndexInterval, entranceHeight, floorWidthOffset - wallAveWidthOffset, m_Constructors[PanelType.k_Wall]),
-                Construct(m_Constructors[PanelType.k_Entrance], m_SizeValues[panelSizes[entranceIndexInterval]] + floorWidthOffset - wallAveWidthOffset, entranceHeight),
-                CreateHorizontal(panelSizes, entranceIndexInterval + 1, panelSizes.Count, entranceHeight, floorWidthOffset - wallAveWidthOffset, m_Constructors[PanelType.k_Wall]),
+                Construct(new List<Func<ILayoutElement>>
+                {
+                    () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
+                    {
+                        m_WindowBottomOffset = 0,
+                        m_WindowWidthOffset = 0.3f,
+                        m_WindowDepthOffset = 0,
+                        m_WindowTopOffset = 0 < entranceHeight - k_EntranceWindowHeight ? entranceHeight - k_EntranceWindowHeight : Math.Abs(entranceHeight - k_EntranceWindowHeight),
+                        m_WindowFrameRodHeight = k_WindowFrameRodHeight,
+                        m_NumCenterRods = 1,
+                        m_HasWindowsill = false
+                    }
+                }, m_SizeValues[panelSizes[entranceIndexInterval]] + floorWidthOffset - wallAveWidthOffset, entranceHeight),                CreateHorizontal(panelSizes, entranceIndexInterval + 1, panelSizes.Count, entranceHeight, floorWidthOffset - wallAveWidthOffset, m_Constructors[PanelType.k_Wall]),
                 Construct(m_Constructors[PanelType.k_Wall], wallWidthOffset * 0.5f, entranceHeight)
             };
             vertical.Add(horizontal);
@@ -362,7 +361,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private enum PanelType : byte
         {
-            k_Entrance,
             k_FullWindow,
             k_Wall,
             k_ShadowWall,
