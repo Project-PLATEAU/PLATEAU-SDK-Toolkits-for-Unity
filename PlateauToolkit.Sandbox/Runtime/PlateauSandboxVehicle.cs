@@ -10,6 +10,7 @@ namespace PlateauToolkit.Sandbox
     public class PlateauSandboxVehicle :
         PlateauSandboxPlaceableHandler,
         IPlateauSandboxMovingObject,
+        IPlateauSandboxTrafficObject,
         IPlateauSandboxCameraTarget
     {
         [SerializeField] Transform[] m_BackWheels;
