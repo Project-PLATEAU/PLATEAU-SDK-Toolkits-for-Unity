@@ -68,7 +68,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             Debug.Log($"<color=yellow>Selected : {obj.name}</color>");
                         }
 
-                        PlateauSandboxGenerateRoadNetwork roadNetwork = new PlateauSandboxGenerateRoadNetwork();
+                        PlateauSandboxRoadNetwork roadNetwork = new PlateauSandboxRoadNetwork();
                         roadNetwork.Initialize();
                         roadNetwork.PlaceVehicles(context.SelectedObjectsMultiple);
 

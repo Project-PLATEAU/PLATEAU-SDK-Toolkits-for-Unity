@@ -106,6 +106,33 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
+        public void OnMove(in MovementInfo movementInfo)
+        {
+            foreach (Transform wheelTransform in m_AllWheels)
+            {
+                wheelTransform.localRotation = Quaternion.identity;
+            }
+
+            if (movementInfo.m_SecondAxisForward != Vector3.zero)
+            {
+                foreach (Transform frontWheel in m_FrontWheels)
+                {
+                    frontWheel.forward = movementInfo.m_SecondAxisForward;
+                }
+            }
+
+            if (m_WheelRadius > 0)
+            {
+                m_CurrentWheelRotation += 360 * movementInfo.m_MoveDelta / (2 * Mathf.PI * m_WheelRadius);
+                m_CurrentWheelRotation %= 360;
+
+                foreach (Transform wheelTransform in m_AllWheels)
+                {
+                    wheelTransform.Rotate(new Vector3(m_CurrentWheelRotation, 0, 0));
+                }
+            }
+        }
+
         float m_CurrentWheelRotation = 0;
 
         static readonly float k_GizmoSize = 0.15f;
