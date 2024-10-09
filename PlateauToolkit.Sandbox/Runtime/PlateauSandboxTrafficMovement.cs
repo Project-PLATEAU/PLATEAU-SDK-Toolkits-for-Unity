@@ -162,8 +162,8 @@ namespace PlateauToolkit.Sandbox
                 {
                     var points = m_RoadParam.m_LineString.GetChildPointsVector(RoadNetworkGetter);
 
-                    if (way.IsReversed)
-                        points.Reverse();
+                    //if (way.IsReversed)
+                    //    points.Reverse();
 
                     Vector3 pos = SplineTool.GetPointOnSpline(points, m_DistanceCalc.GetPercent());
                     //Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
