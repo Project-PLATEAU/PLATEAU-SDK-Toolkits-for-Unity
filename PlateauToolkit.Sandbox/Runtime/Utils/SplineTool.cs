@@ -1,6 +1,7 @@
 ﻿
 using log4net.Util;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
@@ -32,6 +33,8 @@ namespace PlateauToolkit.Sandbox
         // 指定したパーセンテージで曲線上の点を取得
         public static Vector3 GetPointOnSpline(List<Vector3> controlPoints, float t)
         {
+            //Debug.Log($"GetPointOnSpline controlPoints:{controlPoints.Count}");
+
             // t を 0～1 の範囲に制限
             t = Mathf.Clamp01(t);
 
@@ -68,8 +71,10 @@ namespace PlateauToolkit.Sandbox
             {
                 if (controlPoints.Count < 2)
                 {
-                    Debug.LogError("At least 2 control points are required.");
-                    return Vector3.zero;
+                    if (controlPoints.Count <= 0)
+                        return Vector3.zero;
+
+                    return controlPoints.First();
                 }
 
                 return Vector3.Lerp(controlPoints[0], controlPoints[1], t);
@@ -100,5 +105,46 @@ namespace PlateauToolkit.Sandbox
             return spline.EvaluatePosition(t);
         }
 
+        //リニア
+        public static Vector3 GetPointOnLine(List<Vector3> points, float percentage)
+        {
+            if (points == null || points.Count < 2)
+                throw new System.ArgumentException("At least two points are required.");
+
+            if (percentage < 0f || percentage > 1f)
+                throw new System.ArgumentOutOfRangeException("Percentage must be between 0 and 1.");
+
+            // 総距離を計算
+            float totalDistance = 0f;
+            List<float> segmentDistances = new List<float>();
+
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                float distance = Vector3.Distance(points[i], points[i + 1]);
+                segmentDistances.Add(distance);
+                totalDistance += distance;
+            }
+
+            // 目標の距離（前線分のパーセント）を計算
+            float targetDistance = totalDistance * percentage;
+
+            // 線をたどりながら、目標の距離に達するまで進む
+            float accumulatedDistance = 0f;
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                float segmentDistance = segmentDistances[i];
+                if (accumulatedDistance + segmentDistance >= targetDistance)
+                {
+                    // この区間で目標の距離に達した場合、補間で位置を求める
+                    float remainingDistance = targetDistance - accumulatedDistance;
+                    float t = remainingDistance / segmentDistance; // 0から1までの補間係数
+                    return Vector3.Lerp(points[i], points[i + 1], t);
+                }
+                accumulatedDistance += segmentDistance;
+            }
+
+            // 万が一、計算が範囲外の場合、最後の点を返す（通常は起こらない）
+            return points[points.Count - 1];
+        }
     }
 }
