@@ -21,18 +21,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         [Serializable]
         public class ShaderParams
         {
-            [CustomLabel("横幅のスケール値")]
-            public float uScale = 1;
-            [CustomLabel("横幅のオフセット値")]
-            public float uOffset;
-            [CustomLabel("縦幅のスケール値")]
-            public float vScale = 1;
-            [CustomLabel("縦幅のオフセット値")]
-            public float vOffset;
-            [CustomLabel("ブレンド")]
-            public float blend = 0.5f;
-            [CustomLabel("ブレンド開始X位置")]
-            public float blendStartU;
+            [CustomLabel("横のオフセット")]
+            public float textureOffsetX;
+            [CustomLabel("縦のオフセット")]
+            public float textureOffsetY;
         }
 
         [Serializable]
