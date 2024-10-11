@@ -4,7 +4,7 @@ using System.Globalization;
 using System.Linq;
 using UnityEngine;
 
-namespace PlateauToolkit.Sandbox.Editor
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public enum PlateauSandboxBulkPlaceFileType
     {

@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Debug = UnityEngine.Debug;
 
-namespace PlateauToolkit.Sandbox.Editor
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public enum PlateauSandboxFileParserValidationType
     {

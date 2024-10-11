@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace PlateauToolkit.Sandbox.Editor
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public class PlateauSandboxBulkPlaceDataContext
     {
@@ -79,7 +79,7 @@ namespace PlateauToolkit.Sandbox.Editor
             FileValidationType = parser.IsValidate(filePath);
             if (FileValidationType == PlateauSandboxFileParserValidationType.k_Valid)
             {
-                List<PlateauSandboxBulkPlaceDataBase> parsedData = parser.Load(filePath);
+                var parsedData = parser.Load(filePath);
                 if (parsedData.Count > 0)
                 {
                     Data = parsedData;
