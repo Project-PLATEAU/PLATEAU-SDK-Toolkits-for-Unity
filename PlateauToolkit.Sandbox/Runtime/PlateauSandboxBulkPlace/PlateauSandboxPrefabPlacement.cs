@@ -5,10 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
-namespace PlateauToolkit.Sandbox.Editor
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public class PlateauSandboxPrefabPlacement
     {
@@ -75,8 +78,9 @@ namespace PlateauToolkit.Sandbox.Editor
                 PlacingCount--;
             }
 
+#if UNITY_EDITOR
             ShowResultDialog();
-
+#endif
             Debug.Log("アセットの一括配置が終了しました");
         }
 
@@ -101,8 +105,12 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             // Name for the GameObject
-            string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null,
-                $"{context.m_ObjectId}_{context.m_AssetType}_{context.m_Prefab.name}");
+            string gameObjectName = $"{context.m_ObjectId}_{context.m_AssetType}_{context.m_Prefab.name}";
+            var foundObject = GameObject.Find(gameObjectName);
+            if (foundObject != null)
+            {
+                gameObjectName = gameObjectName + "_" + System.Guid.NewGuid().ToString();
+            }
 
             // Check if a parent GameObject already exists
             string parentName = $"アセット一括配置";
@@ -111,15 +119,15 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 // Create a new Parent GameObject if it doesn't exist
                 parentObject = new GameObject(parentName);
+                parentObject.AddComponent<PlateauSandboxPrefabCreator>();
             }
 
-            // Create a new Asset GameObject
-            var asset = (GameObject)PrefabUtility.InstantiatePrefab(context.m_Prefab);
-            asset.name = gameObjectName;
-            asset.transform.SetParent(parentObject.transform);
-            asset.transform.position = unityPosition;
+            // プレハブを配置
+            parentObject
+                .GetComponent<PlateauSandboxPrefabCreator>()
+                .CreatePrefab(gameObjectName, context.m_Prefab, unityPosition, parentObject);
 
-            Debug.Log($"アセットを配置。{gameObjectName} at {asset.transform.position.ToString()}");
+            Debug.Log($"アセットを配置。{gameObjectName} at {unityPosition.ToString()}");
 
             return true;
         }
@@ -172,6 +180,7 @@ namespace PlateauToolkit.Sandbox.Editor
             return m_CityModel != null;
         }
 
+#if UNITY_EDITOR
         void ShowResultDialog()
         {
             bool isAllPlaceSuccess = m_PlacementContexts.All(context => context.m_IsPlaced);
@@ -190,5 +199,6 @@ namespace PlateauToolkit.Sandbox.Editor
                 EditorUtility.DisplayDialog("アセット一括配置", "一部のアセットの配置に失敗しました。\n詳細はコンソールログのワーニングを確認してください。", "OK");
             }
         }
+#endif
     }
 }
