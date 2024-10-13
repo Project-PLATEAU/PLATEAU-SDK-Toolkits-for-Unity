@@ -6,7 +6,8 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI.Buildings
     public class LitShader : BaseShaderGUI
     {
         private static readonly string[] s_workflowModeNames = Enum.GetNames(typeof(LitGUI.WorkflowMode));
-        protected override uint materialFilter => (uint)Expandable.SurfaceOptions | (uint)Expandable.SurfaceInputs;
+        protected override uint materialFilter => (uint)Expandable.SurfaceOptions | (uint)Expandable.SurfaceInputs | (uint)Expandable.Details;
+        private static readonly GUIContent s_surfaceTextMapLabel = EditorGUIUtility.TrTextContent("Surface TextMap Inputs");
         private static readonly GUIContent s_textMap = EditorGUIUtility.TrTextContent("Text Map", "Specifies the text Material and/or Color of the surface. If you’ve selected Transparent or Alpha Clipping under Surface Options, your Material uses the Texture’s alpha channel or color.");
         private static readonly GUIContent s_textOffsetXText = EditorGUIUtility.TrTextContent("Text OffsetX", "Controls the x position of TextMap.");
         private static readonly GUIContent s_textOffsetYText = EditorGUIUtility.TrTextContent("Text OffsetY", "Controls the y position of TextMap.");
@@ -58,12 +59,21 @@ namespace UnityEditor.Rendering.Universal.ShaderGUI.Buildings
         public override void DrawSurfaceInputs(Material material)
         {
             base.DrawSurfaceInputs(material);
-            DoTextMap(materialEditor, TextMapProp, TextColorProp, TextOffsetXProp, TextOffsetYProp, TextureAspectProp);
             LitGUI.Inputs(litProperties, materialEditor, material);
             DrawEmissionProperties(material, true);
             DrawTileOffset(materialEditor, baseMapProp);
         }
 
+        public override void FillAdditionalFoldouts(MaterialHeaderScopeList materialScopesList)
+        {
+            materialScopesList.RegisterHeaderScope(s_surfaceTextMapLabel, (uint)Expandable.Details, DrawAdvancedOptions);
+        }
+
+        public override void DrawAdvancedOptions(Material material)
+        {
+            DoTextMap(materialEditor, TextMapProp, TextColorProp, TextOffsetXProp, TextOffsetYProp, TextureAspectProp);
+        }
+        
         public override void AssignNewShaderToMaterial(Material material, Shader oldShader, Shader newShader)
         {
             if (material == null)
