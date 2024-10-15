@@ -1,4 +1,5 @@
 ﻿using PLATEAU.RoadNetwork.Data;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -24,8 +25,34 @@ namespace PlateauToolkit.Sandbox
             Debug.LogError($"index {index} is larger than list count {list.Count}");
             return default(TValue);
         }
+        public static TValue TryGet<TValue>([DisallowNull] this IReadOnlyList<TValue> list, RnID<TValue> id) where TValue : IPrimitiveData
+        {
+            if(!id.IsValid)
+            {
+                Debug.LogError($"id is not Valid ");
+                return default(TValue);
+            }
+            int index = id.ID;
+            return list.TryGet(index);
+        }
+
+        public static int IndexOf<TValue>([DisallowNull] this IReadOnlyList<TValue> list, TValue val)
+        {
+            var newlist = (List<TValue>)list;
+            if (newlist != null)
+                return newlist.IndexOf(val);
+            return -1;
+        }
+
+        //RoadBase
+        public static int GetId([DisallowNull] this RnDataRoadBase roadbase, RoadNetworkDataGetter getter)
+        {
+            List<RnDataRoadBase> roads = getter.GetRoadBases() as List<RnDataRoadBase>;
+            return roads.FindIndex(x => x == roadbase);
+        }
 
         //Point
+        #region Point
         public static int GetId([DisallowNull] this RnDataPoint point, RoadNetworkDataGetter getter)
         {
             List<RnDataPoint> points = getter.GetPoints() as List<RnDataPoint>;
@@ -50,8 +77,10 @@ namespace PlateauToolkit.Sandbox
             }
             return outRoads;
         }
+        #endregion Point
 
         //LineString
+        #region LineString
         public static int GetId([DisallowNull] this RnDataLineString linestring, RoadNetworkDataGetter getter)
         {
             List<RnDataLineString> lines = getter.GetLineStrings() as List<RnDataLineString>;
@@ -117,13 +146,15 @@ namespace PlateauToolkit.Sandbox
                 if (!pid.IsValid)
                     continue;
 
-                points.Add(getter.GetPoints().TryGet(pid.ID).Vertex);
+                points.Add(getter.GetPoints().TryGet(pid).Vertex);
             }
 
             return points;
         }
+        #endregion LineString
 
         //Way
+        #region Way
         public static int GetId([DisallowNull] this RnDataWay way, RoadNetworkDataGetter getter )
         {
             List<RnDataWay> ways = getter.GetWays() as List<RnDataWay>;
@@ -138,12 +169,14 @@ namespace PlateauToolkit.Sandbox
 
         public static RnDataLineString GetChildLineString([DisallowNull] this RnDataWay way, RoadNetworkDataGetter getter)
         {
-            if (way.LineString.IsValid)
+            if (way?.LineString.IsValid == true)
                 return getter.GetLineStrings()[way.LineString.ID];
             return null;
         }
+        #endregion Way
 
         //Lane
+        #region Lane
         public static int GetId([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter)
         {
             List<RnDataLane> ways = getter.GetLanes() as List<RnDataLane>;
@@ -182,24 +215,19 @@ namespace PlateauToolkit.Sandbox
             return null;
         }
 
-
-        public static RnDataLineString GetChildLineString([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter, LanePosition position)
+        public static RnDataLineString GetChildLineString([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter, LanePosition position = LanePosition.Center)
         {
             RnDataWay way = lane.GetChildWay(getter, position);
             if (way?.LineString.IsValid == true)
-                return getter.GetLineStrings().TryGet(way.LineString.ID);
+                return getter.GetLineStrings().TryGet(way.LineString);
 
             return null;
         }
 
-        //RoadBase
-        public static int GetId([DisallowNull] this RnDataRoadBase roadbase, RoadNetworkDataGetter getter)
-        {
-            List<RnDataRoadBase> roads = getter.GetRoadBases() as List<RnDataRoadBase>;
-            return roads.FindIndex(x => x == roadbase);
-        }
+        #endregion Lane
 
         //Road
+        #region Road
         public static int GetId([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             List<RnDataRoadBase> roads = getter.GetRoadBases() as List<RnDataRoadBase>;
@@ -218,33 +246,55 @@ namespace PlateauToolkit.Sandbox
                 foreach (RnID<RnDataLane> id in laneIds)
                 {
                     if (id.IsValid)
-                        lanes.Add(getter.GetLanes().TryGet(id.ID));
+                        lanes.Add(getter.GetLanes().TryGet(id));
                 }
             }
             return lanes;
         }
 
-        public static RnDataLane GetMedianLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
+        public static RnDataLane GetMedianLane([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             List<RnDataLane> lanes = new();
             if (road.MedianLane.IsValid)
-                return getter.GetLanes().TryGet(road.MedianLane.ID);
+                return getter.GetLanes().TryGet(road.MedianLane);
             return null;
         }
 
-        public static RnDataWay GetChildWay([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, bool isMainLane, int laneIndex, LanePosition laneposition)
+        public static RnDataLane GetChildLane([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex = -1, bool isMainLane = true)
         {
             if (isMainLane)
             {
                 List<RnDataLane> mainlanes = road.GetMainLanes(getter);
                 if (mainlanes.Count > laneIndex)
                 {
-                    return road.GetMainLanes(getter)[laneIndex].GetChildWay(getter, laneposition);
+                    return road.GetMainLanes(getter).TryGet(laneIndex);
                 }
             }
             else
             {
-                RnDataLane lane = road.GetMedianLanes(getter);
+                RnDataLane lane = road.GetMedianLane(getter);
+                if (lane != null)
+                {
+                    return lane;
+                }
+            }
+
+            return null;
+        }
+
+        public static RnDataWay GetChildWay([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex , bool isMainLane = true, LanePosition laneposition = LanePosition.Center)
+        {
+            if (isMainLane)
+            {
+                List<RnDataLane> mainlanes = road.GetMainLanes(getter);
+                if (mainlanes.Count > laneIndex)
+                {
+                    return road.GetMainLanes(getter).TryGet(laneIndex).GetChildWay(getter, laneposition);
+                }
+            }
+            else
+            {
+                RnDataLane lane = road.GetMedianLane(getter);
                 if (lane != null)
                 {
                     return lane.GetChildWay(getter, laneposition);
@@ -252,6 +302,12 @@ namespace PlateauToolkit.Sandbox
             }
 
             return null;
+        }
+
+        public static RnDataLineString GetChildLineString([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneId, bool isMainLane = true, LanePosition laneposition = LanePosition.Center)
+        {
+            RnDataWay way = road.GetChildWay(getter, laneId, isMainLane, laneposition);
+            return way.GetChildLineString(getter);
         }
 
         public static (bool, int, LanePosition) GetWayPosition([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay way)
@@ -294,63 +350,125 @@ namespace PlateauToolkit.Sandbox
             return (isMainLane, laneIndex, lanePosition);
         }
 
-
         public static RnDataRoadBase GetNextRoad([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             if (road.Next.IsValid)
-                return getter.GetRoadBases().TryGet(road.Next.ID);
+                return getter.GetRoadBases().TryGet(road.Next);
             return null;
         }
 
         public static RnDataRoadBase GetPrevRoad([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             if (road.Prev.IsValid)
-                return getter.GetRoadBases().TryGet(road.Prev.ID);
+                return getter.GetRoadBases().TryGet(road.Prev);
             return null;
         }
 
+        public static List<RnDataWay> GetAllNextBorders([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
+        {
+            var borders = road.GetMainLanes(getter).Select(x => x.NextBorder).ToList();
+            return borders.Select(x => getter.GetWays().TryGet(x)).ToList();
+        }
+        public static List<RnDataWay> GetAllPrevBorders([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
+        {
+            var borders = road.GetMainLanes(getter).Select(x => x.PrevBorder).ToList();
+            return borders.Select(x => getter.GetWays().TryGet(x)).ToList();
+        }
+        public static List<int> GetAllNextBorderIds([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
+        {
+            return road.GetMainLanes(getter).Select(x => x.NextBorder.ID).ToList();
+        }
+        public static List<int> GetAllPrevBorderIds([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
+        {
+            return road.GetMainLanes(getter).Select(x => x.PrevBorder.ID).ToList();
+        }
+
+        public static List<RnDataLane> GetLanesFromPrevBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
+        {
+            if (road.GetMedianLane(getter)?.PrevBorder.ID == border.GetId(getter))
+                return new List<RnDataLane>() { road.GetMedianLane(getter) };
+
+            List<RnDataLane> mainLanes = road.GetMainLanes(getter);
+            return mainLanes.FindAll(x => x.PrevBorder.ID == border.GetId(getter));
+        }
+
+        public static List<RnDataLane> GetLanesFromNextBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
+        {
+            if (road.GetMedianLane(getter)?.NextBorder.ID == border.GetId(getter))
+                return new List<RnDataLane>() { road.GetMedianLane(getter) };
+
+            List<RnDataLane> mainLanes = road.GetMainLanes(getter);
+            return mainLanes.FindAll(x => x.NextBorder.ID == border.GetId(getter));
+        }
+
+        public static List<RnDataLane> GetLanesFromPrevTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            var toBorder = track.GetToBorder(getter);
+            return road.GetLanesFromPrevBorder(getter, toBorder);
+        }
+
+        public static List<RnDataLane> GetLanesFromNextTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            var fromBorder = track.GetFromBorder(getter);
+            return road.GetLanesFromNextBorder(getter, fromBorder);
+        }
+
+        #endregion road
+
         //Intersection
+        #region Intersection
         public static int GetId([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
         {
             List<RnDataRoadBase> roads = getter.GetRoadBases() as List<RnDataRoadBase>;
             return roads.FindIndex(x => x == intersection);
         }
 
-        public static List<RnDataTrack> GetFromTracksFromWay([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay from)
+        public static List<RnDataTrack> GetFromTracksFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLane from)
         {
-            return intersection.Tracks.FindAll(x => x.GetFromBorder(getter) == from).ToList();
+            return intersection.Tracks.FindAll(x => x.GetFromBorder(getter).GetId(getter) == from.NextBorder.ID).ToList();
         }
 
-        public static List<RnDataTrack> GetToTracksFromWay([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay to)
+        public static List<RnDataTrack> GetToTracksFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLane to)
         {
-            return intersection.Tracks.FindAll(x => x.GetToBorder(getter) == to).ToList();
+            return intersection.Tracks.FindAll(x => x.GetToBorder(getter).GetId(getter) == to.PrevBorder.ID).ToList();
         }
 
-        public static List<RnDataTrack> GetToTracksFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
-        {
-            var edges = intersection.GetEdgesFromRoad(getter, road);
-            var ways = edges.Select(x => x.GetBorder(getter));
-            List<RnDataTrack> outList = new();
-            foreach (var way in ways)
-            {
-                outList.AddRange(intersection.GetToTracksFromWay(getter, way));
-            }
-            return outList;
-        }
 
-        public static List<RnDataTrack> GetFromTracksFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
-        {
-            var edges = intersection.GetEdgesFromRoad(getter, road);
-            var ways = edges.Select(x => x.GetBorder(getter));
-            List<RnDataTrack> outList = new();
-            foreach (var way in ways)
-            {
-                outList.AddRange(intersection.GetFromTracksFromWay(getter, way));
-            }
-            return outList;
-        }
+        //public static List<RnDataTrack> GetFromTracksFromWay([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay from)
+        //{
+        //    return intersection.Tracks.FindAll(x => x.GetFromBorder(getter) == from).ToList();
+        //}
 
-        public static List<RnDataNeighbor> GetEdgesFromWay([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
+        //public static List<RnDataTrack> GetToTracksFromWay([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay to)
+        //{
+        //    return intersection.Tracks.FindAll(x => x.GetToBorder(getter) == to).ToList();
+        //}
+
+        //public static List<RnDataTrack> GetToTracksFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
+        //{
+        //    var edges = intersection.GetEdgesFromRoad(getter, road);
+        //    var ways = edges.Select(x => x.GetBorder(getter));
+        //    List<RnDataTrack> outList = new();
+        //    foreach (var way in ways)
+        //    {
+        //        outList.AddRange(intersection.GetToTracksFromWay(getter, way));
+        //    }
+        //    return outList;
+        //}
+
+        //public static List<RnDataTrack> GetFromTracksFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
+        //{
+        //    var edges = intersection.GetEdgesFromRoad(getter, road);
+        //    var ways = edges.Select(x => x.GetBorder(getter));
+        //    List<RnDataTrack> outList = new();
+        //    foreach (var way in ways)
+        //    {
+        //        outList.AddRange(intersection.GetFromTracksFromWay(getter, way));
+        //    }
+        //    return outList;
+        //}
+
+        public static List<RnDataNeighbor> GetEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
         {
             return intersection.Edges.FindAll(x => x.Border.ID == way.GetId(getter));
         }
@@ -364,16 +482,18 @@ namespace PlateauToolkit.Sandbox
         {
             return intersection.Edges.Select(x => x.GetRoad(getter)).ToList();
         }
+        #endregion Intersection
 
         //Track
+        #region Track
         public static RnDataWay GetFromBorder([DisallowNull] this RnDataTrack track, RoadNetworkDataGetter getter)
         {
-            return getter.GetWays().TryGet(track.FromBorder.ID);
+            return getter.GetWays().TryGet(track.FromBorder);
         }
 
         public static RnDataWay GetToBorder([DisallowNull] this RnDataTrack track, RoadNetworkDataGetter getter)
         {
-            return getter.GetWays().TryGet(track.ToBorder.ID);
+            return getter.GetWays().TryGet(track.ToBorder);
         }
 
         public static RnDataLineString GetFromLineString([DisallowNull] this RnDataTrack track, RoadNetworkDataGetter getter)
@@ -386,20 +506,23 @@ namespace PlateauToolkit.Sandbox
             var way = track.GetToBorder(getter);
             return way.GetChildLineString(getter);
         }
+        #endregion Track
 
         //Edge / Neighbor
+        #region Edge
         public static RnDataRoadBase GetRoad([DisallowNull] this RnDataNeighbor neighbor, RoadNetworkDataGetter getter)
         {
             if (neighbor.Road.IsValid)
-                return getter.GetRoadBases().TryGet(neighbor.Road.ID);
+                return getter.GetRoadBases().TryGet(neighbor.Road);
             return null;
         }
 
         public static RnDataWay GetBorder([DisallowNull] this RnDataNeighbor neighbor, RoadNetworkDataGetter getter)
         {
             if (neighbor.Border.IsValid)
-                return getter.GetWays().TryGet(neighbor.Border.ID);
+                return getter.GetWays().TryGet(neighbor.Border);
             return null;
         }
+        #endregion Edge
     }
 }

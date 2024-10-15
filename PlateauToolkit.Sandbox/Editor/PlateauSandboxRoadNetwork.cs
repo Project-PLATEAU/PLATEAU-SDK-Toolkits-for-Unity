@@ -59,11 +59,10 @@ namespace PlateauToolkit.Sandbox.Editor
 
                     // TODO: Lane情報　（暫定）
                     var info = new RaodInfo();
-                    info.m_RoadBase = road;
-                    info.m_IsMainLane = true;
+                    //info.m_RoadBase = road;
+                    info.m_RoadId = road.GetId(m_RoadNetworkGetter);
                     info.m_LaneIndex = 0;
-                    var lane = road.GetMainLanes(m_RoadNetworkGetter)[info.m_LaneIndex];
-                    info.m_LanePosition = lane.IsReverse ? LanePosition.Right : LanePosition.Left;
+                    //var lane = road.GetMainLanes(m_RoadNetworkGetter)[info.m_LaneIndex];
 
                     trafficMovement.RoadInfo = info;
                 }

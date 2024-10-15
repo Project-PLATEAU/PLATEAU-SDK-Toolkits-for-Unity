@@ -21,7 +21,7 @@ namespace PlateauToolkit.Sandbox.Utils
 
         [SerializeField] List<RoadNetworkTrafficController> m_RoadParams;
 
-        RoadNetworkDataGetter RoadNetworkGetter
+        RoadNetworkDataGetter RnGetter
         {
             get
             {
@@ -41,14 +41,17 @@ namespace PlateauToolkit.Sandbox.Utils
 
         void Awake()
         {
-            var RoadNetworkTrafficControllers = RoadNetworkGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
+            var roads = RnGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
 
             //初回
             RaodInfo info = new RaodInfo();
-            info.m_LanePosition = RoadnetworkExtensions.LanePosition.Left;
-            info.m_IsMainLane = true;
             info.m_LaneIndex = 0;
-            info.m_RoadBase = RoadNetworkTrafficControllers.First();
+            info.m_RoadId = roads.First().GetId(RnGetter); //最初のRnDataRoad
+            //info.m_RoadBase = RoadNetworkTrafficControllers.First();
+
+            //info.m_RoadBase = RoadNetworkTrafficControllers[2];
+            //random
+            //info.m_RoadBase = RoadNetworkTrafficControllers[ UnityEngine.Random.Range(0, RoadNetworkTrafficControllers.Count)];
 
             m_RoadParams = new();
 
@@ -78,16 +81,18 @@ namespace PlateauToolkit.Sandbox.Utils
         //Debug Gizmo
         void OnDrawGizmos()
         {
-            if (RoadNetworkGetter == null)
+            if (RnGetter == null)
                 return;
 
             for(int z= 0; z< m_RoadParams.Count; z++)
             {
                 var m_RoadParam = m_RoadParams[z];
+                if (m_RoadParam == null)
+                    return;
 
                 if (m_RoadParam.IsRoad)
                 {
-                    var points = m_RoadParam.m_LineString.GetChildPointsVector(RoadNetworkGetter);
+                    var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
 
                     Gizmos.color = Color.blue;
                     for (int j = 0; j < points.Count - 1; j++)
@@ -110,7 +115,7 @@ namespace PlateauToolkit.Sandbox.Utils
                     }
                 }
 
-                if (m_RoadParam.IsIntersection)
+                else if (m_RoadParam.IsIntersection)
                 {
                     //intersection
                     Gizmos.color = Color.yellow;
@@ -119,7 +124,7 @@ namespace PlateauToolkit.Sandbox.Utils
                     {
                         var percent = i * 0.01f;
                         //var track = m_RoadParam.m_Intersection.Tracks[m_RoadParam.m_TrackPosition];
-                        var track = m_RoadParam.m_Track;
+                        var track = m_RoadParam.GetTrack();
                         Vector3 pos = SplineTool.GetPointOnSpline(track.Spline, percent);
 
                         //var points = track.GetToLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);

@@ -30,6 +30,16 @@ namespace PlateauToolkit.Sandbox
             return u * u * p0 + 2 * u * t * p1 + t * t * p2;
         }
 
+        // 先頭と終了のアイテムをリストに追加（Control用Points)
+        public static List<Vector3> AddStartEndControlPoints(List<Vector3> controlPoints)
+        {
+            List<Vector3> outControlPoints = new List<Vector3>();
+            outControlPoints.Add(controlPoints.First());
+            outControlPoints.AddRange(controlPoints);
+            outControlPoints.Add(controlPoints.Last());
+            return outControlPoints;
+        }
+
         // 指定したパーセンテージで曲線上の点を取得
         public static Vector3 GetPointOnSpline(List<Vector3> controlPoints, float t)
         {
@@ -43,6 +53,8 @@ namespace PlateauToolkit.Sandbox
             {
                 return GetPointOnBezier(controlPoints, t);
             }
+
+            controlPoints = AddStartEndControlPoints(controlPoints);
 
             // セグメント数
             int segmentCount = controlPoints.Count - 3;
@@ -109,10 +121,18 @@ namespace PlateauToolkit.Sandbox
         public static Vector3 GetPointOnLine(List<Vector3> points, float percentage)
         {
             if (points == null || points.Count < 2)
-                throw new System.ArgumentException("At least two points are required.");
+            {
+                //throw new System.ArgumentException("At least two points are required.");
+                return Vector3.zero;
+            }
+
 
             if (percentage < 0f || percentage > 1f)
-                throw new System.ArgumentOutOfRangeException("Percentage must be between 0 and 1.");
+            {
+                //throw new System.ArgumentOutOfRangeException("Percentage must be between 0 and 1.");
+                return points.Last();
+            }
+
 
             // 総距離を計算
             float totalDistance = 0f;
@@ -144,7 +164,7 @@ namespace PlateauToolkit.Sandbox
             }
 
             // 万が一、計算が範囲外の場合、最後の点を返す（通常は起こらない）
-            return points[points.Count - 1];
+            return points.Last();
         }
     }
 }

@@ -5,7 +5,6 @@ using System;
 using System.Collections;
 using System.Linq;
 using UnityEngine;
-using static PlateauToolkit.Sandbox.RoadnetworkExtensions;
 
 namespace PlateauToolkit.Sandbox
 {
@@ -69,18 +68,21 @@ namespace PlateauToolkit.Sandbox
             var param = new RoadNetworkTrafficController(info);
             if(param.IsRoad)
             {
-                var lineString = param.m_LineString;
-
-                Debug.Log($"lineString count {lineString.Points.Count}");
+                var lineString = param.GetLineString();
+                Debug.Log($"lineString count {lineString?.Points?.Count}");
 
                 //初回配置
                 var points = lineString.GetChildPointsVector(RoadNetworkGetter);
                 var pos = points.FirstOrDefault();
-                var nextPos = points.Count > 0 ? points[1] : pos;
+                var nextPos = points.Count > 1 ? points[1] : pos;
 
                 Vector3 vec = (nextPos - pos).normalized;
                 gameObject.transform.position = pos;
                 gameObject.transform.forward = vec;
+            }
+            else
+            {
+                Debug.LogError($"Roadじゃないよ！");
             }
             return param;
         }
@@ -153,20 +155,20 @@ namespace PlateauToolkit.Sandbox
         {
             if (m_RoadParam?.IsRoad == true)
             {
-                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_RoadParam.m_LineString.GetTotalDistance(RoadNetworkGetter));
+                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_RoadParam.GetLineString().GetTotalDistance(RoadNetworkGetter));
                 m_DistanceCalc.Start();
 
                 var way = m_RoadParam.GetWay();
 
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    var points = m_RoadParam.m_LineString.GetChildPointsVector(RoadNetworkGetter);
+                    var points = m_RoadParam.GetLineString().GetChildPointsVector(RoadNetworkGetter);
 
-                    //if (way.IsReversed)
-                    //    points.Reverse();
+                    if (way.IsReversed)
+                        points.Reverse();
 
-                    Vector3 pos = SplineTool.GetPointOnSpline(points, m_DistanceCalc.GetPercent());
-                    //Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
+                    //Vector3 pos = SplineTool.GetPointOnSpline(points, m_DistanceCalc.GetPercent());
+                    Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
 
                     Vector3 lastpos = gameObject.transform.position;
                     Vector3 vec = (pos - lastpos).normalized;
@@ -177,17 +179,25 @@ namespace PlateauToolkit.Sandbox
                     MovementInfo movementInfo = CreateMovementInfo(pos, vec);
                     m_TrafficObject.OnMove(movementInfo);
 
-                    //percent += speed;
-
                     yield return null;
                 }
             }
             else if (m_RoadParam?.IsIntersection == true)
             {
-                //var track = m_RoadParam.m_Intersection.Tracks[m_RoadParam.m_TrackPosition];
-                var track = m_RoadParam.m_Track;
+                RnDataTrack track = m_RoadParam.GetTrack();
+
+                if (track == null)
+                {
+                    Stop();
+                    yield break;
+                }
 
                 UnityEngine.Splines.Spline spline = track.Spline;
+
+                if (m_RoadParam.m_IsReverse)
+                {
+                    spline.Knots = spline.Knots.Reverse();
+                }
 
                 m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength());
                 m_DistanceCalc.Start();
@@ -195,10 +205,6 @@ namespace PlateauToolkit.Sandbox
                 //intersection
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    //var track = m_RoadParam.m_Intersection.Tracks[m_RoadParam.m_RoadInfo.m_TrackPosition];
-                    //UnityEngine.Splines.Spline spline = track.Spline;
-
-                    //var pos = SplineTool.GetPointOnSpline(spline, percent);
                     var pos = SplineTool.GetPointOnSpline(spline, m_DistanceCalc.GetPercent());
 
                     Vector3 lastpos = gameObject.transform.position;
@@ -210,8 +216,6 @@ namespace PlateauToolkit.Sandbox
                     MovementInfo movementInfo = CreateMovementInfo(pos, vec);
                     m_TrafficObject.OnMove(movementInfo);
 
-                    //percent += speed;
-
                     yield return null;
                 }
             }
@@ -220,7 +224,6 @@ namespace PlateauToolkit.Sandbox
                 Stop();
             }
 
-
             m_RoadParam = m_RoadParam.GetNextRoad();
             if (m_RoadParam == null)
             {
@@ -228,7 +231,7 @@ namespace PlateauToolkit.Sandbox
             }
             else
             {
-                //percent = 0;
+                //次回移動開始
                 StartMovement();
             }
         }
@@ -238,9 +241,9 @@ namespace PlateauToolkit.Sandbox
         {
             if (m_RoadParam == null || RoadNetworkGetter == null)
                 return;
-            if(m_RoadParam.IsRoad && m_RoadParam.m_LineString != null)
+            if(m_RoadParam.IsRoad)
             {
-                var points = m_RoadParam.m_LineString.GetChildPointsVector(RoadNetworkGetter);
+                var points = m_RoadParam.GetLineString().GetChildPointsVector(RoadNetworkGetter);
 
                 Gizmos.color = Color.blue;
                 for (int j = 0; j < points.Count - 1; j++)
@@ -253,8 +256,8 @@ namespace PlateauToolkit.Sandbox
                 for (int i = 0; i < 100; i++)
                 {
                     var percent = i * 0.01f;
-                    Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
-                    //Vector3 pos = SplineTool.GetPointOnLine(points, percent);
+                    //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
+                    Vector3 pos = SplineTool.GetPointOnLine(points, percent);
                     if (lastpos == Vector3.zero)
                         lastpos = pos;
 
@@ -262,7 +265,7 @@ namespace PlateauToolkit.Sandbox
                     lastpos = pos;
                 }
             }
-            else if(m_RoadParam.IsIntersection && m_RoadParam.m_Track != null)
+            else if(m_RoadParam.IsIntersection)
             {
                 //intersection
                 Gizmos.color = Color.yellow;
@@ -271,7 +274,7 @@ namespace PlateauToolkit.Sandbox
                 {
                     var percent = i * 0.01f;
                     //var track = m_RoadParam.m_Intersection.Tracks[m_RoadParam.m_TrackPosition];
-                    var track = m_RoadParam.m_Track;
+                    var track = m_RoadParam.GetTrack();
                     Vector3 pos = SplineTool.GetPointOnSpline(track.Spline, percent);
 
                     //var points = track.GetToLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
