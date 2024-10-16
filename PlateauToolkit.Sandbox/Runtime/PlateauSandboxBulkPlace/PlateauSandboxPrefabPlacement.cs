@@ -5,10 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using UnityEditor;
 using UnityEngine;
 
-namespace PlateauToolkit.Sandbox.Editor
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public class PlateauSandboxPrefabPlacement
     {
@@ -25,19 +28,21 @@ namespace PlateauToolkit.Sandbox.Editor
             public double m_Latitude;
             public float m_Height;
             public GameObject m_Prefab;
-            public string m_AssetType;
-            public string m_ObjectId;
             public bool m_IsIgnoreHeight;
             public bool m_IsPlaced;
+            public string m_ObjectName;
         }
 
         PLATEAUInstancedCityModel m_CityModel;
         List<PlacementContext> m_PlacementContexts = new List<PlacementContext>();
+        public List<PlacementContext> PlacementContexts => m_PlacementContexts;
 
         public int PlacingCount { get; private set; }
 
         // Check the length to the collider.
         const float k_GroundCheckLength = 10000.0f;
+
+        private string m_PlaceParentObjectName = "アセット一括配置";
 
         public PlateauSandboxPrefabPlacement()
         {
@@ -48,13 +53,18 @@ namespace PlateauToolkit.Sandbox.Editor
             }
         }
 
+        public void SetParentObjectName(string parentObjectName)
+        {
+            m_PlaceParentObjectName = parentObjectName;
+        }
+
         public void AddContext(PlacementContext context)
         {
             m_PlacementContexts.Add(context);
             PlacingCount++;
         }
 
-        public async void PlaceAllAsync(CancellationToken cancellationToken)
+        public async Task PlaceAllAsync(CancellationToken cancellationToken)
         {
             // For the batch processing
             while (PlacingCount > 0)
@@ -75,7 +85,18 @@ namespace PlateauToolkit.Sandbox.Editor
                 PlacingCount--;
             }
 
+#if UNITY_EDITOR
             ShowResultDialog();
+#endif
+            var prefabCreator = GameObject.Find("PrefabCreator");
+            if (prefabCreator != null)
+            {
+#if UNITY_EDITOR
+                GameObject.DestroyImmediate(prefabCreator);
+#else
+                GameObject.Destroy(prefabCreator);
+#endif
+            }
 
             Debug.Log("アセットの一括配置が終了しました");
         }
@@ -93,33 +114,35 @@ namespace PlateauToolkit.Sandbox.Editor
                 bool isColliderFound = TryGetColliderHeight(unityPosition, out float colliderHeight);
                 if (!isColliderFound)
                 {
-                    Debug.LogWarning($"{context.m_ObjectId} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
+                    Debug.LogWarning($"{context.m_ObjectName} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
                     return false;
                 }
 
                 unityPosition.y = colliderHeight;
             }
 
-            // Name for the GameObject
-            string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null,
-                $"{context.m_ObjectId}_{context.m_AssetType}_{context.m_Prefab.name}");
-
             // Check if a parent GameObject already exists
-            string parentName = $"アセット一括配置";
-            var parentObject = GameObject.Find(parentName);
+            var parentObject = GameObject.Find(m_PlaceParentObjectName);
             if (parentObject == null)
             {
                 // Create a new Parent GameObject if it doesn't exist
-                parentObject = new GameObject(parentName);
+                parentObject = new GameObject(m_PlaceParentObjectName);
             }
 
-            // Create a new Asset GameObject
-            var asset = (GameObject)PrefabUtility.InstantiatePrefab(context.m_Prefab);
-            asset.name = gameObjectName;
-            asset.transform.SetParent(parentObject.transform);
-            asset.transform.position = unityPosition;
+            var prefabCreator = GameObject.Find("PrefabCreator");
+            if (prefabCreator == null)
+            {
+                // コンポーネント追加
+                prefabCreator = new GameObject("PrefabCreator");
+                prefabCreator.AddComponent<PlateauSandboxPrefabCreator>();
+            }
 
-            Debug.Log($"アセットを配置。{gameObjectName} at {asset.transform.position.ToString()}");
+            // プレハブを配置
+            prefabCreator
+                .GetComponent<PlateauSandboxPrefabCreator>()
+                .CreatePrefab(context.m_ObjectName, context.m_Prefab, unityPosition, parentObject);
+
+            Debug.Log($"アセットを配置。{context.m_ObjectName} at {unityPosition.ToString()}");
 
             return true;
         }
@@ -172,6 +195,7 @@ namespace PlateauToolkit.Sandbox.Editor
             return m_CityModel != null;
         }
 
+#if UNITY_EDITOR
         void ShowResultDialog()
         {
             bool isAllPlaceSuccess = m_PlacementContexts.All(context => context.m_IsPlaced);
@@ -190,5 +214,6 @@ namespace PlateauToolkit.Sandbox.Editor
                 EditorUtility.DisplayDialog("アセット一括配置", "一部のアセットの配置に失敗しました。\n詳細はコンソールログのワーニングを確認してください。", "OK");
             }
         }
+#endif
     }
 }

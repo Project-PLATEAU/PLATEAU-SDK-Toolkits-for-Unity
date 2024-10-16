@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 
-namespace PlateauToolkit.Sandbox.Editor
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public class PlateauSandboxShapefileReader : IDisposable
     {

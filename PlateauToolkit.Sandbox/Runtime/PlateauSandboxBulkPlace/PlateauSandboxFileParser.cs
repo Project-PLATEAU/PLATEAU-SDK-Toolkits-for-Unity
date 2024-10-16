@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using Debug = UnityEngine.Debug;
 
-namespace PlateauToolkit.Sandbox.Editor
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public enum PlateauSandboxFileParserValidationType
     {
@@ -31,11 +31,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 // for AccessControl.
                 try
                 {
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        File.GetAccessControl(filePath);
-                    }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                     {
                         var process = new Process
                         {
@@ -94,6 +90,9 @@ namespace PlateauToolkit.Sandbox.Editor
 
             try
             {
+                // NOTE: パッケージでShift-JISを使用するための設定
+                System.Text.Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
                 using (var reader = new StreamReader(filePath, Encoding.GetEncoding("Shift-JIS")))
                 {
                     while (!reader.EndOfStream)
