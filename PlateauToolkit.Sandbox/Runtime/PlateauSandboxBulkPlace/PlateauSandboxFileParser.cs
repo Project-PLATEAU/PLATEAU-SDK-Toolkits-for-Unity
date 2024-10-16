@@ -90,6 +90,9 @@ namespace PlateauToolkit.Sandbox.Runtime
 
             try
             {
+                // NOTE: パッケージでShift-JISを使用するための設定
+                System.Text.Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+
                 using (var reader = new StreamReader(filePath, Encoding.GetEncoding("Shift-JIS")))
                 {
                     while (!reader.EndOfStream)
