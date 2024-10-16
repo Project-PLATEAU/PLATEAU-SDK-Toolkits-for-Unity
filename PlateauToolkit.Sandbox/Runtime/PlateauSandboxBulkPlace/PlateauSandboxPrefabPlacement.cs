@@ -91,7 +91,11 @@ namespace PlateauToolkit.Sandbox.Runtime
             var prefabCreator = GameObject.Find("PrefabCreator");
             if (prefabCreator != null)
             {
+#if UNITY_EDITOR
+                GameObject.DestroyImmediate(prefabCreator);
+#else
                 GameObject.Destroy(prefabCreator);
+#endif
             }
 
             Debug.Log("アセットの一括配置が終了しました");
