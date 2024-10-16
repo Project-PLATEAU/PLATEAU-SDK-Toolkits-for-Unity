@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
+using static PlasticPipe.Server.MonitorStats;
 
-namespace PlateauToolkit.Sandbox
+namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public static class RoadnetworkExtensions
     {
@@ -224,6 +225,16 @@ namespace PlateauToolkit.Sandbox
             return null;
         }
 
+        public static RnDataWay GetNextBorder([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter)
+        {
+            return getter.GetWays().TryGet(lane.NextBorder);
+        }
+
+        public static RnDataWay GetPrevBorder([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter)
+        {
+            return getter.GetWays().TryGet(lane.PrevBorder);
+        }
+
         #endregion Lane
 
         //Road
@@ -385,20 +396,28 @@ namespace PlateauToolkit.Sandbox
 
         public static List<RnDataLane> GetLanesFromPrevBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
         {
-            if (road.GetMedianLane(getter)?.PrevBorder.ID == border.GetId(getter))
-                return new List<RnDataLane>() { road.GetMedianLane(getter) };
+            //if (road.GetMedianLane(getter)?.PrevBorder.ID == border.GetId(getter))
+            //    return new List<RnDataLane>() { road.GetMedianLane(getter) };
 
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
-            return mainLanes.FindAll(x => x.PrevBorder.ID == border.GetId(getter));
+            //var lanes = mainLanes.FindAll(x => x.PrevBorder.ID == border.GetId(getter));
+            //if (lanes.Count > 0)
+            //    return lanes;
+
+            return mainLanes.FindAll(x => x.GetPrevBorder(getter)?.IsSameLine(border) == true);
         }
 
         public static List<RnDataLane> GetLanesFromNextBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
         {
-            if (road.GetMedianLane(getter)?.NextBorder.ID == border.GetId(getter))
-                return new List<RnDataLane>() { road.GetMedianLane(getter) };
+            //if (road.GetMedianLane(getter)?.NextBorder.ID == border.GetId(getter))
+            //    return new List<RnDataLane>() { road.GetMedianLane(getter) };
 
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
-            return mainLanes.FindAll(x => x.NextBorder.ID == border.GetId(getter));
+            //var lanes = mainLanes.FindAll(x => x.NextBorder.ID == border.GetId(getter));
+            //if (lanes.Count > 0)
+            //    return lanes;
+
+            return mainLanes.FindAll(x => x.GetNextBorder(getter)?.IsSameLine(border) == true);
         }
 
         public static List<RnDataLane> GetLanesFromPrevTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track)
@@ -413,6 +432,18 @@ namespace PlateauToolkit.Sandbox
             return road.GetLanesFromNextBorder(getter, fromBorder);
         }
 
+        public static List<RnDataLane> GetLanesFromPrevBorderLineString([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataLineString linestring)
+        {
+            List<RnDataLane> mainLanes = road.GetMainLanes(getter);
+            return mainLanes.FindAll(x => x.GetPrevBorder(getter).LineString.ID == linestring.GetId(getter));
+        }
+
+        public static List<RnDataLane> GetLanesFromNextBorderLineString([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataLineString linestring)
+        {
+            List<RnDataLane> mainLanes = road.GetMainLanes(getter);
+            return mainLanes.FindAll(x => x.GetNextBorder(getter).LineString.ID == linestring.GetId(getter));
+        }
+
         #endregion road
 
         //Intersection
@@ -425,12 +456,43 @@ namespace PlateauToolkit.Sandbox
 
         public static List<RnDataTrack> GetFromTracksFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLane from)
         {
-            return intersection.Tracks.FindAll(x => x.GetFromBorder(getter).GetId(getter) == from.NextBorder.ID).ToList();
+            //var tracks = intersection.Tracks.FindAll(x => x.GetFromBorder(getter).GetId(getter) == from.NextBorder.ID).ToList();
+            //if (tracks.Count > 0)
+            //    return tracks;
+            return intersection.Tracks.FindAll(x => x.GetFromBorder(getter)?.IsSameLine(from.GetNextBorder(getter)) == true).ToList();
         }
 
         public static List<RnDataTrack> GetToTracksFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLane to)
         {
-            return intersection.Tracks.FindAll(x => x.GetToBorder(getter).GetId(getter) == to.PrevBorder.ID).ToList();
+            //var tracks = intersection.Tracks.FindAll(x => x.GetToBorder(getter).GetId(getter) == to.PrevBorder.ID).ToList();
+            //if (tracks.Count > 0)
+            //    return tracks;
+            return intersection.Tracks.FindAll(x => x.GetToBorder(getter)?.IsSameLine(to.GetPrevBorder(getter)) == true).ToList();
+        }
+
+        public static RnDataTrack GetToTrackFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay border)
+        {
+            var track = intersection.Tracks.Find(x => x.GetToBorder(getter) == border);
+            if (track != null)
+                return track;
+            return intersection.Tracks.Find(x => x.GetToBorder(getter)?.IsSameLine(border) == true);
+        }
+        public static RnDataTrack GetFromTrackFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay border)
+        {
+            var track = intersection.Tracks.Find(x => x.GetFromBorder(getter) == border);
+            if (track != null)
+                return track;
+            return intersection.Tracks.Find(x => x.GetToBorder(getter)?.IsSameLine(border) == true);
+        }
+
+        public static List<RnDataTrack> GetToTracksFromBorderLineString([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLineString linestring)
+        {
+            return intersection.Tracks.FindAll(x => x.GetToBorder(getter).LineString.ID == linestring.GetId(getter));
+        }
+
+        public static List<RnDataTrack> GetFromTracksFromBorderLineString([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLineString linestring)
+        {
+            return intersection.Tracks.FindAll(x => x.GetFromBorder(getter).LineString.ID == linestring.GetId(getter));
         }
 
 
@@ -506,6 +568,7 @@ namespace PlateauToolkit.Sandbox
             var way = track.GetToBorder(getter);
             return way.GetChildLineString(getter);
         }
+
         #endregion Track
 
         //Edge / Neighbor

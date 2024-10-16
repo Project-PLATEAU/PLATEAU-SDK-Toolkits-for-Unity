@@ -6,7 +6,7 @@ using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Splines;
 
-namespace PlateauToolkit.Sandbox
+namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class SplineTool
     {

@@ -4,7 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using static PlateauToolkit.Sandbox.RoadnetworkExtensions;
+using PlateauToolkit.Sandbox.RoadNetwork;
+using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 
 namespace PlateauToolkit.Sandbox.Editor
 {

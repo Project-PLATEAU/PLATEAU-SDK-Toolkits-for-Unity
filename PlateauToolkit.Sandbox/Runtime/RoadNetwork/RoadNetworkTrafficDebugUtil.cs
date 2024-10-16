@@ -9,11 +9,13 @@ using UnityEditor.SceneManagement;
 using UnityEngine.Splines;
 using static PlasticPipe.Server.MonitorStats;
 
-namespace PlateauToolkit.Sandbox.Utils
+namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     [ExecuteAlways]
     public class RoadNetworkTrafficDebugUtil : MonoBehaviour
     {
+
+
 
         [HideInInspector][SerializeField] RoadNetworkDataGetter m_RoadNetworkGetter;
 
@@ -64,17 +66,24 @@ namespace PlateauToolkit.Sandbox.Utils
             //SplineContainer splineCont = gameObject.AddComponent<SplineContainer>();
             //splineCont.AddSpline(next.m_Track.Spline);
 
-            var next2 = next.GetNextRoad();
-            m_RoadParams.Add(next2);
+            //var next2 = next.GetNextRoad();
+            //m_RoadParams.Add(next2);
 
-            var next3 = next2.GetNextRoad();
-            m_RoadParams.Add(next3);
+            //var next3 = next2.GetNextRoad();
+            //m_RoadParams.Add(next3);
 
-            var next4 = next3.GetNextRoad();
-            m_RoadParams.Add(next4);
+            //var next4 = next3.GetNextRoad();
+            //m_RoadParams.Add(next4);
 
-            var next5 = next4.GetNextRoad();
-            m_RoadParams.Add(next5);
+            //var next5 = next4.GetNextRoad();
+            //m_RoadParams.Add(next5);
+
+            for (int i = 0; i < 5; i++)
+            {
+                next = next.GetNextRoad();
+                m_RoadParams.Add(next);
+            }
+
         }
 
 

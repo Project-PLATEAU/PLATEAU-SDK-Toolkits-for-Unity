@@ -4,7 +4,9 @@ using PLATEAU.RoadNetwork.Structure;
 using System;
 using System.Collections;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
+using PlateauToolkit.Sandbox.RoadNetwork;
 
 namespace PlateauToolkit.Sandbox
 {
@@ -158,13 +160,11 @@ namespace PlateauToolkit.Sandbox
                 m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_RoadParam.GetLineString().GetTotalDistance(RoadNetworkGetter));
                 m_DistanceCalc.Start();
 
-                var way = m_RoadParam.GetWay();
-
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
                     var points = m_RoadParam.GetLineString().GetChildPointsVector(RoadNetworkGetter);
 
-                    if (way.IsReversed)
+                    if (m_RoadParam.IsReversed)
                         points.Reverse();
 
                     //Vector3 pos = SplineTool.GetPointOnSpline(points, m_DistanceCalc.GetPercent());
@@ -194,7 +194,7 @@ namespace PlateauToolkit.Sandbox
 
                 UnityEngine.Splines.Spline spline = track.Spline;
 
-                if (m_RoadParam.m_IsReverse)
+                if (m_RoadParam.IsReversed)
                 {
                     spline.Knots = spline.Knots.Reverse();
                 }
@@ -287,6 +287,67 @@ namespace PlateauToolkit.Sandbox
                     lastpos = pos;
                 }
             }
+
+            //From/To Border
+            if(m_RoadParam.m_FromBorder != null)
+            {
+                Gizmos.color = Color.blue;
+                var vec = m_RoadParam.m_FromBorder.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                if(vec.Count > 0)
+                {
+                    Handles.Label(vec.First(), $"from :{m_RoadParam.m_FromBorder.LineString.ID}");
+                    for (int k = 0; k < vec.Count - 1; k++)
+                    {
+                        Gizmos.DrawLine(vec[k], vec[k + 1]);
+                    }
+                }
+            }
+
+            if (m_RoadParam.m_ToBorder != null)
+            {
+                Gizmos.color = Color.cyan;
+                var vec = m_RoadParam.m_ToBorder.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                if(vec.Count > 0)
+                {
+                    Handles.Label(vec.First(), $"to :{m_RoadParam.m_ToBorder.LineString.ID}");
+                    for (int k = 0; k < vec.Count - 1; k++)
+                    {
+                        Gizmos.DrawLine(vec[k], vec[k + 1]);
+                    }
+                }
+            }
+
+
+            //Debug
+            if (m_RoadParam.expectedBorders?.Count > 0)
+            {
+                Gizmos.color = Color.green;
+                Handles.color = Color.green;
+                foreach (var border in m_RoadParam.expectedBorders)
+                {
+                    var vec = border.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                    Handles.Label(vec.First(), $"id:{border.LineString.ID}");
+                    for (int k = 0; k < vec.Count - 1; k++)
+                    {
+                        Gizmos.DrawLine(vec[k], vec[k + 1]);
+                    }
+                }
+            }
+
+            if(m_RoadParam.actualBorders?.Count > 0)
+            {
+                Gizmos.color = Color.red;
+                Handles.color = Color.red;
+                foreach (var border in m_RoadParam.actualBorders)
+                {
+                    var vec = border.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                    Handles.Label(vec.Last(), $"id:{border.LineString.ID}");
+                    for (int k = 0; k < vec.Count - 1; k++)
+                    {
+                        Gizmos.DrawLine(vec[k], vec[k + 1]);
+                    }
+                }
+            }
         }
 
         MovementInfo CreateMovementInfo(Vector3 pos, Vector3 vec)
@@ -301,45 +362,45 @@ namespace PlateauToolkit.Sandbox
     }
 
     //Start後の経過時間から移動パーセント(0-1f)を計測
-    public class DistanceCalculator
-    {
-        float m_SpeedKmPerHour = 0f;
-        float m_SpeedMetersPerSecond = 0f;
-        float m_TotalDistanceMeters = 0f;
-        float m_StartTime = 0f;
+    //public class DistanceCalculator
+    //{
+    //    float m_SpeedKmPerHour = 0f;
+    //    float m_SpeedMetersPerSecond = 0f;
+    //    float m_TotalDistanceMeters = 0f;
+    //    float m_StartTime = 0f;
 
-        public DistanceCalculator(float speed, float distance)
-        {
-            m_SpeedKmPerHour = speed;
-            m_SpeedMetersPerSecond = (m_SpeedKmPerHour * 1000f) / 3600f;
-            m_TotalDistanceMeters = distance;
-            Start();
-        }
+    //    public DistanceCalculator(float speed, float distance)
+    //    {
+    //        m_SpeedKmPerHour = speed;
+    //        m_SpeedMetersPerSecond = (m_SpeedKmPerHour * 1000f) / 3600f;
+    //        m_TotalDistanceMeters = distance;
+    //        Start();
+    //    }
 
-        public void Start()
-        {
-            m_StartTime = Time.time;
-        }
+    //    public void Start()
+    //    {
+    //        m_StartTime = Time.time;
+    //    }
 
-        public float GetPercent()
-        {
-            float elapsedTimeSeconds = Time.time - m_StartTime;
-            float progressPercentage = 1f;
+    //    public float GetPercent()
+    //    {
+    //        float elapsedTimeSeconds = Time.time - m_StartTime;
+    //        float progressPercentage = 1f;
 
-            if (elapsedTimeSeconds * m_SpeedMetersPerSecond < m_TotalDistanceMeters)
-            {
-                // 経過時間に基づく移動距離
-                float currentDistance = elapsedTimeSeconds * m_SpeedMetersPerSecond;
+    //        if (elapsedTimeSeconds * m_SpeedMetersPerSecond < m_TotalDistanceMeters)
+    //        {
+    //            // 経過時間に基づく移動距離
+    //            float currentDistance = elapsedTimeSeconds * m_SpeedMetersPerSecond;
 
-                // 距離の進捗パーセンテージ
-                progressPercentage = (currentDistance / m_TotalDistanceMeters);
+    //            // 距離の進捗パーセンテージ
+    //            progressPercentage = (currentDistance / m_TotalDistanceMeters);
 
-                // 経過時間と進行状況を出力
-                //Debug.Log($"経過時間: {elapsedTimeSeconds} 秒, 移動距離: {currentDistance} m, 進行状況: {progressPercentage}%");
-            }
-            return progressPercentage;
-        }
-    }
+    //            // 経過時間と進行状況を出力
+    //            //Debug.Log($"経過時間: {elapsedTimeSeconds} 秒, 移動距離: {currentDistance} m, 進行状況: {progressPercentage}%");
+    //        }
+    //        return progressPercentage;
+    //    }
+    //}
 
     /// <summary>
     /// Iterates a position to move along a track.
