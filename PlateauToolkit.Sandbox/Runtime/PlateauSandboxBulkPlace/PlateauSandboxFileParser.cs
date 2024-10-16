@@ -31,11 +31,7 @@ namespace PlateauToolkit.Sandbox.Runtime
                 // for AccessControl.
                 try
                 {
-                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-                    {
-                        File.GetAccessControl(filePath);
-                    }
-                    else if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.OSX))
                     {
                         var process = new Process
                         {
