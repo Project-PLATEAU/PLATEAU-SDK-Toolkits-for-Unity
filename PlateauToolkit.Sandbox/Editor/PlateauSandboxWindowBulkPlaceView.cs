@@ -466,10 +466,9 @@ namespace PlateauToolkit.Sandbox.Editor
                         m_Longitude = double.Parse(placeData.Longitude),
                         m_Height = isIgnoreHeight ? 0 : float.Parse(placeData.Height),
                         m_Prefab = prefab,
-                        m_AssetType = placeData.AssetType,
-                        m_ObjectId = placeData.ID.ToString(),
                         m_IsIgnoreHeight = isIgnoreHeight,
                         m_IsPlaced = false,
+                        m_ObjectName = $"{placeData.ID.ToString()}_{placeData.AssetType}_{prefab.name}"
                     };
                     m_PrefabPlacement.AddContext(context);
                 }

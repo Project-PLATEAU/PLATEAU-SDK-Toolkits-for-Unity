@@ -28,10 +28,9 @@ namespace PlateauToolkit.Sandbox.Runtime
             public double m_Latitude;
             public float m_Height;
             public GameObject m_Prefab;
-            public string m_AssetType;
-            public string m_ObjectId;
             public bool m_IsIgnoreHeight;
             public bool m_IsPlaced;
+            public string m_ObjectName;
         }
 
         PLATEAUInstancedCityModel m_CityModel;
@@ -43,6 +42,8 @@ namespace PlateauToolkit.Sandbox.Runtime
         // Check the length to the collider.
         const float k_GroundCheckLength = 10000.0f;
 
+        private string m_PlaceParentObjectName = "アセット一括配置";
+
         public PlateauSandboxPrefabPlacement()
         {
             m_CityModel = UnityEngine.Object.FindObjectOfType<PLATEAUInstancedCityModel>();
@@ -50,6 +51,11 @@ namespace PlateauToolkit.Sandbox.Runtime
             {
                 Debug.LogError("CityModel is not found.");
             }
+        }
+
+        public void SetParentObjectName(string parentObjectName)
+        {
+            m_PlaceParentObjectName = parentObjectName;
         }
 
         public void AddContext(PlacementContext context)
@@ -82,6 +88,12 @@ namespace PlateauToolkit.Sandbox.Runtime
 #if UNITY_EDITOR
             ShowResultDialog();
 #endif
+            var prefabCreator = GameObject.Find("PrefabCreator");
+            if (prefabCreator != null)
+            {
+                GameObject.Destroy(prefabCreator);
+            }
+
             Debug.Log("アセットの一括配置が終了しました");
         }
 
@@ -98,37 +110,35 @@ namespace PlateauToolkit.Sandbox.Runtime
                 bool isColliderFound = TryGetColliderHeight(unityPosition, out float colliderHeight);
                 if (!isColliderFound)
                 {
-                    Debug.LogWarning($"{context.m_ObjectId} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
+                    Debug.LogWarning($"{context.m_ObjectName} : オブジェクトを配置できるコライダーが見つかりませんでした。{unityPosition.ToString()}");
                     return false;
                 }
 
                 unityPosition.y = colliderHeight;
             }
 
-            // Name for the GameObject
-            string gameObjectName = $"{context.m_ObjectId}_{context.m_AssetType}_{context.m_Prefab.name}";
-            var foundObject = GameObject.Find(gameObjectName);
-            if (foundObject != null)
-            {
-                gameObjectName = gameObjectName + "_" + System.Guid.NewGuid().ToString();
-            }
-
             // Check if a parent GameObject already exists
-            string parentName = $"アセット一括配置";
-            var parentObject = GameObject.Find(parentName);
+            var parentObject = GameObject.Find(m_PlaceParentObjectName);
             if (parentObject == null)
             {
                 // Create a new Parent GameObject if it doesn't exist
-                parentObject = new GameObject(parentName);
-                parentObject.AddComponent<PlateauSandboxPrefabCreator>();
+                parentObject = new GameObject(m_PlaceParentObjectName);
+            }
+
+            var prefabCreator = GameObject.Find("PrefabCreator");
+            if (prefabCreator == null)
+            {
+                // コンポーネント追加
+                prefabCreator = new GameObject("PrefabCreator");
+                prefabCreator.AddComponent<PlateauSandboxPrefabCreator>();
             }
 
             // プレハブを配置
-            parentObject
+            prefabCreator
                 .GetComponent<PlateauSandboxPrefabCreator>()
-                .CreatePrefab(gameObjectName, context.m_Prefab, unityPosition, parentObject);
+                .CreatePrefab(context.m_ObjectName, context.m_Prefab, unityPosition, parentObject);
 
-            Debug.Log($"アセットを配置。{gameObjectName} at {unityPosition.ToString()}");
+            Debug.Log($"アセットを配置。{context.m_ObjectName} at {unityPosition.ToString()}");
 
             return true;
         }
