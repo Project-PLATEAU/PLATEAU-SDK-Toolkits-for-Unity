@@ -36,6 +36,7 @@ namespace PlateauToolkit.Sandbox.Runtime
 
         PLATEAUInstancedCityModel m_CityModel;
         List<PlacementContext> m_PlacementContexts = new List<PlacementContext>();
+        public List<PlacementContext> PlacementContexts => m_PlacementContexts;
 
         public int PlacingCount { get; private set; }
 
@@ -57,7 +58,7 @@ namespace PlateauToolkit.Sandbox.Runtime
             PlacingCount++;
         }
 
-        public async void PlaceAllAsync(CancellationToken cancellationToken)
+        public async Task PlaceAllAsync(CancellationToken cancellationToken)
         {
             // For the batch processing
             while (PlacingCount > 0)
