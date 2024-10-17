@@ -181,6 +181,8 @@ namespace PlateauToolkit.Sandbox
 
                     yield return null;
                 }
+
+                //Debug.Break();
             }
             else if (m_RoadParam?.IsIntersection == true)
             {
@@ -218,6 +220,8 @@ namespace PlateauToolkit.Sandbox
 
                     yield return null;
                 }
+
+                //Debug.Break();
             }
             else
             {

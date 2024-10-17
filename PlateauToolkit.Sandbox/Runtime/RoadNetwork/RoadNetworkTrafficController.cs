@@ -3,6 +3,7 @@ using PLATEAU.RoadNetwork.Structure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using UnityEngine;
 using static Codice.CM.Common.CmCallContext;
 using static Codice.CM.WorkspaceServer.DataStore.WkTree.WriteWorkspaceTree;
@@ -38,6 +39,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         [SerializeField] public int m_LastRoadId;
 
+        [SerializeField] public RnDataLane m_Lane;
+        [SerializeField] public RnDataTrack m_Track;
+
         //Debug用
         public List<RnDataWay> expectedBorders = new List<RnDataWay>();
         public List<RnDataWay> actualBorders = new List<RnDataWay>();
@@ -56,8 +60,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     bool bLaneIsReverse = GetLane().IsReverse;
                     bool bInfoIsReverse = m_RoadInfo?.m_IsReverse ?? false;
-                    if (bLaneIsReverse && bInfoIsReverse)
-                        return false;
+                    //if (bLaneIsReverse && bInfoIsReverse)
+                    //    return false;
                     return bLaneIsReverse || bInfoIsReverse;
                 }
                 return false;
@@ -190,12 +194,19 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 //元の道を除外
                 //edges.FindAll( x=> x.GetRoad(RoadNetworkGetter) == )
 
-                if (fromWay == toWay) //From / To Borders が同じ場合は異なる道を選ぶ
-                {
-                    Debug.LogError($"From / To Borders are the same!!!!!");
+                //if (fromWay == toWay) //From / To Borders が同じ場合は異なる道を選ぶ
 
+                if (fromWay == toWay && !intersection.IsEmptyIntersection)
+                {
+                    Debug.LogError($"<color=red>From / To Borders are the same!!!!! (not EmptyIntersection)</color>");
+                }
+
+                if (intersection.IsEmptyIntersection)
+                {
+                    //Debug.LogError($"From / To Borders are the same!!!!!");
                     edges = intersection.Edges;
                     edges.RemoveAll(e => e.Road.ID == m_LastRoadId);
+                    Debug.Log($"<color=green>IsEmptyIntersection edges found {edges.Count}</color>");
                 }
 
                 //絶対取得
@@ -238,7 +249,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             bool success = false;
 
             RaodInfo nextRoadInfo = new();
-            if (current.IsIntersection && next is RnDataRoad )
+            if (current.IsIntersection && next is RnDataRoad)
             {
                 // Intersection -> Road 
                 Debug.Log($"<color=cyan>Intersection {current.GetIntersection().GetId(RnGetter)}-> Road {next.GetId(RnGetter)} </color>");
@@ -246,32 +257,56 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 var nextRoad = next as RnDataRoad;
                 List<RnDataLane> lanes = new();
 
+                //var nextBorder = current.IsReversed ? current.m_FromBorder : current.m_ToBorder;
+                var nextBorder = current.m_ToBorder;
+
                 //Linestringから取得
-                var fromLineString = current.m_ToBorder.GetChildLineString(RnGetter);
-                Debug.Log($"<color=green>Lanes From LineString Count {nextRoad.GetLanesFromNextBorderLineString(RnGetter, fromLineString).Count}</color>");
-                lanes.AddRange(nextRoad.GetLanesFromNextBorderLineString(RnGetter, fromLineString));
+                //var fromLineString = nextBorder.GetChildLineString(RnGetter);
+                //lanes.AddRange(nextRoad.GetLanesFromNextBorderLineString(RnGetter, fromLineString));
+                lanes.AddRange(nextRoad.GetLanesFromNextBorder(RnGetter, nextBorder));
+                //lanes.AddRange(nextRoad.GetLanesFromPrevBorder(RnGetter, nextBorder));
+                Debug.Log($"<color=green>Lanes From LineString {nextBorder.LineString.ID} Count {lanes.Count}</color>");
+
                 if (lanes.Count <= 0)
                 {
-                    lanes.AddRange(nextRoad.GetLanesFromPrevBorderLineString(RnGetter, fromLineString));
+                    //この処理で道路が反転してしまう
+                    //lanes.AddRange(nextRoad.GetLanesFromPrevBorderLineString(RnGetter, fromLineString));
+                    lanes.AddRange(nextRoad.GetLanesFromPrevBorder(RnGetter, nextBorder));
+
+                    //var oppositeLanes = nextRoad.GetLanesFromPrevBorder(RnGetter, nextBorder);
+                    //lanes = nextRoad.GetMainLanes(RnGetter);
+                    //lanes.RemoveAll(x => oppositeLanes.Contains(x)); //反対車線以外全て
+
                     if (lanes.Count > 0)
                     {
-                        nextRoadInfo.m_IsReverse = true;
+                        expectedBorders = new() { nextBorder };
+                        //actualBorders = nextRoad.GetAllNextBorders(RnGetter);
+                        Debug.LogError($"<color=green>Lanes From LineString Reverse {nextBorder.LineString.ID} Count {lanes.Count}</color>");
+                        //nextRoadInfo.m_IsReverse = true;
                     }
                 }
 
                 if (lanes.Count <= 0)
                 {
-                    Debug.LogError($"<color=red>Failed to get Lanes from Last To Border {current.m_ToBorder}</color>");
+                    Debug.LogError($"<color=red>Failed to get Lanes from Last To Border {nextBorder.GetId(RnGetter)}</color>");
 
-                    var toBorder = current.m_RoadInfo.m_IsReverse ? current.GetTrack().GetFromBorder(RnGetter) : current.GetTrack().GetToBorder(RnGetter);
-                    lanes.AddRange(nextRoad.GetLanesFromNextBorder(RnGetter, toBorder));
-                    lanes.AddRange(nextRoad.GetLanesFromPrevBorder(RnGetter, toBorder));
+                    //var toBorder = current.m_RoadInfo.m_IsReverse ? current.GetTrack().GetFromBorder(RnGetter) : current.GetTrack().GetToBorder(RnGetter);
+                    //lanes.AddRange(nextRoad.GetLanesFromNextBorder(RnGetter, toBorder));
+                    //lanes.AddRange(nextRoad.GetLanesFromPrevBorder(RnGetter, toBorder));
                 }
 
                 if (lanes.Count > 0)
                 {
                     var laneIndex = UnityEngine.Random.Range(0, lanes.Count); //抽選 レーン
                     nextRoadInfo.m_LaneIndex = laneIndex;
+
+                    var lane = lanes.TryGet(laneIndex);
+                    Debug.Log($"<color=green>Lane Next Border {lane.GetNextBorder(RnGetter).LineString.ID} Prev Border {lane.GetPrevBorder(RnGetter).LineString.ID}</color>");
+                    if (lane.GetNextBorder(RnGetter).IsSameLine(nextBorder))
+                    {
+                        nextRoadInfo.m_IsReverse = true;
+                    }
+
                     Debug.Log($"<color=blue>lanes found {lanes.Count}</color>");
                     success = true;
                 }
@@ -302,7 +337,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 //Linestringから取得
                 var fromLineString = current.m_ToBorder.GetChildLineString(RnGetter);
-                Debug.Log($"<color=green>Tracks From LineString Count {intersection.GetFromTracksFromBorderLineString(RnGetter, fromLineString).Count}</color>");
+                Debug.Log($"<color=green>Tracks From LineString {fromLineString.GetId(RnGetter)} Count {intersection.GetFromTracksFromBorderLineString(RnGetter, fromLineString).Count}</color>");
                 List<RnDataTrack> tracks = intersection.GetFromTracksFromBorderLineString(RnGetter, fromLineString);
                 if (tracks.Count <= 0)
                 {
@@ -315,18 +350,18 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 if (tracks.Count <= 0)
                 {
-                    Debug.LogError($"<color=red>Failed to get Tracks from Last To Border {current.m_ToBorder}</color>");
+                    Debug.LogError($"<color=red>Failed to get Tracks from Last To Border {current.m_ToBorder.GetId(RnGetter)}</color>");
 
-                    var currentLane = current.GetLane();
-                    var fromTracks = intersection.GetFromTracksFromLane(RnGetter, currentLane);
-                    var toTracks = intersection.GetToTracksFromLane(RnGetter, currentLane);
-                    var reverse = currentLane.IsReverse;
+                    //var currentLane = current.GetLane();
+                    //var fromTracks = intersection.GetFromTracksFromLane(RnGetter, currentLane);
+                    //var toTracks = intersection.GetToTracksFromLane(RnGetter, currentLane);
+                    //var reverse = currentLane.IsReverse;
 
-                    bool useFromTrack = current.GetRoad().GetNextRoad(RnGetter) == intersection && !reverse;
+                    //bool useFromTrack = current.GetRoad().GetNextRoad(RnGetter) == intersection && !reverse;
 
-                    tracks = useFromTrack ? fromTracks : toTracks;
-                    if (tracks.Count <= 0)
-                        tracks = useFromTrack ? tracks : fromTracks;
+                    //tracks = useFromTrack ? fromTracks : toTracks;
+                    //if (tracks.Count <= 0)
+                    //    tracks = useFromTrack ? tracks : fromTracks;
                 }
 
                 //Track 抽選
@@ -390,6 +425,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 m_RoadInfo = nextRoadInfo;
                 m_RoadInfo.m_RoadId = next.GetId(RnGetter);
 
+                //expectedBorders = new() { current.m_ToBorder };
+
                 success = SetRoadBase();
             }
             if (!success)
@@ -412,6 +449,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 m_Road = roadBase as RnDataRoad;
                 m_RoadInfo.m_IsReverse = GetLane()?.IsReverse ?? false;
 
+                m_Lane = GetLane();
 
                 var prevBorder = GetLane().GetPrevBorder(RnGetter);
                 var nextBorder = GetLane().GetNextBorder(RnGetter);
@@ -431,6 +469,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 m_Intersection = roadBase as RnDataIntersection;
                 m_RoadInfo.m_IsReverse = GetLane()?.IsReverse ?? false;
 
+                m_Track = GetTrack();
 
                 var fromBorder = GetTrack().GetFromBorder(RnGetter);
                 var toBorder = GetTrack().GetToBorder(RnGetter);
