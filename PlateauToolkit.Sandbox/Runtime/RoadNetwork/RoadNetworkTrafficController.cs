@@ -60,8 +60,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     bool bLaneIsReverse = GetLane().IsReverse;
                     bool bInfoIsReverse = m_RoadInfo?.m_IsReverse ?? false;
-                    //if (bLaneIsReverse && bInfoIsReverse)
-                    //    return false;
+                    if (bLaneIsReverse && bInfoIsReverse)
+                        return false;
                     return bLaneIsReverse || bInfoIsReverse;
                 }
                 return false;
@@ -272,17 +272,26 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     //この処理で道路が反転してしまう
                     //lanes.AddRange(nextRoad.GetLanesFromPrevBorderLineString(RnGetter, fromLineString));
                     lanes.AddRange(nextRoad.GetLanesFromPrevBorder(RnGetter, nextBorder));
+                    //lanes.AddRange(nextRoad.GetLanesFromNextBorder(RnGetter, nextBorder));
 
                     //var oppositeLanes = nextRoad.GetLanesFromPrevBorder(RnGetter, nextBorder);
                     //lanes = nextRoad.GetMainLanes(RnGetter);
                     //lanes.RemoveAll(x => oppositeLanes.Contains(x)); //反対車線以外全て
+
+                    //Debug Log All Borders
+                    var allLanes = nextRoad.GetMainLanes(RnGetter);
+                    var allNextBorders = String.Join(",", allLanes.Select(x => x.GetNextBorder(RnGetter).LineString.ID));
+                    var allPrevBorders = String.Join(",", allLanes.Select(x => x.GetPrevBorder(RnGetter).LineString.ID));
+
+                    Debug.LogError($"<color=green>All Next Borders {allNextBorders}</color>");
+                    Debug.LogError($"<color=green>All Prev Borders {allPrevBorders}</color>");
 
                     if (lanes.Count > 0)
                     {
                         expectedBorders = new() { nextBorder };
                         //actualBorders = nextRoad.GetAllNextBorders(RnGetter);
                         Debug.LogError($"<color=green>Lanes From LineString Reverse {nextBorder.LineString.ID} Count {lanes.Count}</color>");
-                        //nextRoadInfo.m_IsReverse = true;
+                        nextRoadInfo.m_IsReverse = true;
                     }
                 }
 
@@ -298,9 +307,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 if (lanes.Count > 0)
                 {
                     var laneIndex = UnityEngine.Random.Range(0, lanes.Count); //抽選 レーン
-                    nextRoadInfo.m_LaneIndex = laneIndex;
-
                     var lane = lanes.TryGet(laneIndex);
+                    nextRoadInfo.m_LaneIndex = nextRoad.GetMainLanes(RnGetter).IndexOf(lane);
+
                     Debug.Log($"<color=green>Lane Next Border {lane.GetNextBorder(RnGetter).LineString.ID} Prev Border {lane.GetPrevBorder(RnGetter).LineString.ID}</color>");
                     if (lane.GetNextBorder(RnGetter).IsSameLine(nextBorder))
                     {
