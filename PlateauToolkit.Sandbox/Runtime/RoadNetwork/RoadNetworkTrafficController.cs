@@ -53,25 +53,34 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public bool IsValid => IsRoad || IsIntersection;
 
+        //こっちはprev/nextの切替用
         public bool IsReversed
         {
-            get{
-
+            get {
                 return m_RoadInfo?.m_IsReverse ?? false;
-                /*
-                if (IsIntersection)
-                    return m_RoadInfo?.m_IsReverse ?? false;
-                else if (IsRoad)
-                {
-                    return m_RoadInfo?.m_IsReverse ?? false;
-                    //bool bLaneIsReverse = GetLane().IsReverse;
-                    //bool bInfoIsReverse = m_RoadInfo?.m_IsReverse ?? false;
-                    //if (bLaneIsReverse && bInfoIsReverse)
-                    //    return false;
-                    //return bLaneIsReverse || bInfoIsReverse;
-                }
-                return false;
-                */
+                //if (IsIntersection)
+                //    return m_RoadInfo?.m_IsReverse ?? false;
+                //else if (IsRoad)
+                //{
+                //    bool laneIsReverse = GetLane().IsReverse;
+                //    bool infoIsReverse = m_RoadInfo?.m_IsReverse ?? false;
+                //    if (laneIsReverse && infoIsReverse)
+                //    {
+                //        return false;
+                //    }
+                //    return infoIsReverse;
+                //}
+                //return false;
+            }
+        }
+
+        //↑のフラグと分けないとLineStringの向きか、Prev/Nextがバグる（なぜ？）
+        //ロジカルな根拠が見つからないから気持ち悪い
+        public bool IsLineStringReversed
+        {
+            get
+            {
+                return IsReversed && !(GetLane()?.IsReverse ?? false);
             }
         }
 
@@ -418,11 +427,21 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 if (reverse)
                     m_RoadInfo.m_IsReverse = !m_RoadInfo.m_IsReverse;
 
+                //if (reverse && m_RoadInfo.m_IsReverse)
+                //    m_RoadInfo.m_IsReverse = false;
+
                 //必要？？
                 var prevBorder = m_Lane.GetPrevBorder(RnGetter);
                 var nextBorder = m_Lane.GetNextBorder(RnGetter);
-                m_FromBorder = reverse ? nextBorder : prevBorder;
-                m_ToBorder = reverse ? prevBorder : nextBorder;
+                //m_FromBorder = reverse ? nextBorder : prevBorder;
+                //m_ToBorder = reverse ? prevBorder : nextBorder;
+
+                //var prevBorder = m_Lane.GetPrevBorder(RnGetter);
+                //var nextBorder = m_Lane.GetNextBorder(RnGetter);
+                //m_FromBorder = m_RoadInfo.m_IsReverse ? nextBorder : prevBorder;
+                //m_ToBorder = m_RoadInfo.m_IsReverse ? prevBorder : nextBorder;
+                m_FromBorder = prevBorder;
+                m_ToBorder = nextBorder;
 
                 Debug.Log($"<color=yellow>SetRoadBase : Road lane {m_RoadInfo.m_LaneIndex}</color>");
             }
@@ -445,6 +464,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 var toBorder = GetTrack().GetToBorder(RnGetter);
                 m_FromBorder = reverse ? toBorder : fromBorder;
                 m_ToBorder = reverse ? fromBorder : toBorder;
+                //m_FromBorder = toBorder;
+                //m_ToBorder = fromBorder;
 
                 Debug.Log($"<color=yellow>SetRoadBase : Intersection track {m_RoadInfo.m_TrackIndex}</color>");
             }
