@@ -52,6 +52,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return roads.FindIndex(x => x == roadbase);
         }
 
+        public static bool IsValid([DisallowNull] this RnDataRoadBase roadbase, RoadNetworkDataGetter getter)
+        {
+            return roadbase.GetId(getter) >= 0;
+        }
+
+
         //Point
         #region Point
         public static int GetId([DisallowNull] this RnDataPoint point, RoadNetworkDataGetter getter)

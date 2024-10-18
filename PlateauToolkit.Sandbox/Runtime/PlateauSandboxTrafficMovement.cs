@@ -229,7 +229,7 @@ namespace PlateauToolkit.Sandbox
             }
 
             m_RoadParam = m_RoadParam.GetNextRoad();
-            if (m_RoadParam == null)
+            if (m_RoadParam == null || !m_RoadParam.IsValid)
             {
                 Stop();
             }
