@@ -405,6 +405,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //    return lanes;
 
             return mainLanes.FindAll(x => x.GetPrevBorder(getter)?.IsSameLine(border) == true);
+
+            //var prev =  mainLanes.FindAll(x => x.GetPrevBorder(getter)?.IsReversed == false && x.GetPrevBorder(getter)?.IsSameLine(border) == true);
+            //var next = mainLanes.FindAll(x => x.GetNextBorder(getter)?.IsReversed == true && x.GetNextBorder(getter)?.IsSameLine(border) == true);
+            //prev.AddRange(next);
+            //return prev;
         }
 
         public static List<RnDataLane> GetLanesFromNextBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
@@ -418,6 +423,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //    return lanes;
 
             return mainLanes.FindAll(x => x.GetNextBorder(getter)?.IsSameLine(border) == true);
+
+            //var next = mainLanes.FindAll(x => x.GetNextBorder(getter)?.IsReversed == false && x.GetNextBorder(getter)?.IsSameLine(border) == true);
+            //var prev = mainLanes.FindAll(x => x.GetPrevBorder(getter)?.IsReversed == true && x.GetPrevBorder(getter)?.IsSameLine(border) == true);
+            //next.AddRange(prev);
+            //return next;
         }
 
         public static List<RnDataLane> GetLanesFromPrevTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track)

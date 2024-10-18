@@ -184,7 +184,7 @@ namespace PlateauToolkit.Sandbox
 
                 //Debug.Break();
             }
-            else if (m_RoadParam?.IsIntersection == true)
+            else if (m_RoadParam?.IsIntersection == true && m_RoadParam?.m_Intersection?.IsEmptyIntersection == false)
             {
                 RnDataTrack track = m_RoadParam.GetTrack();
 
