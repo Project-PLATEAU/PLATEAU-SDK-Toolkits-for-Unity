@@ -34,6 +34,9 @@ namespace PlateauToolkit.Sandbox
 
         [SerializeField] public float m_SpeedKm = 40f;
 
+        [SerializeField] RaodInfo m_RespawnPosition;
+
+
         IPlateauSandboxTrafficObject m_TrafficObject;
 
         DistanceCalculator m_DistanceCalc;
@@ -81,12 +84,23 @@ namespace PlateauToolkit.Sandbox
                 Vector3 vec = (nextPos - pos).normalized;
                 gameObject.transform.position = pos;
                 gameObject.transform.forward = vec;
+
+                m_RespawnPosition = info;
             }
             else
             {
-                Debug.LogError($"Roadじゃないよ！");
+                Debug.LogError($"初回Road生成時にIntersectionが設定された");
             }
             return param;
+        }
+
+        public RoadNetworkTrafficController Respawn()
+        {
+            if(m_RespawnPosition == null)
+                return null;
+
+            Debug.Log($"Respawn {this.name}");
+            return new RoadNetworkTrafficController(m_RespawnPosition);
         }
 
 
@@ -164,29 +178,19 @@ namespace PlateauToolkit.Sandbox
                 {
                     var points = m_RoadParam.GetLineString().GetChildPointsVector(RoadNetworkGetter);
 
-                    //if (m_RoadParam.IsReversed && !m_RoadParam.GetLane().IsReverse)
-                    //if (m_RoadParam.IsReversed)
                     if(m_RoadParam.IsLineStringReversed)
                         points.Reverse();
 
+                    Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, m_DistanceCalc.GetPercent());
                     //Vector3 pos = SplineTool.GetPointOnSpline(points, m_DistanceCalc.GetPercent());
-                    Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
-
-                    Vector3 lastpos = gameObject.transform.position;
-                    Vector3 vec = (pos - lastpos).normalized;
-
-                    gameObject.transform.position = pos;
-                    gameObject.transform.forward = vec;
-
-                    MovementInfo movementInfo = CreateMovementInfo(pos, vec);
-                    m_TrafficObject.OnMove(movementInfo);
-
+                    //Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
+                    SetTransfrorm(pos);
                     yield return null;
                 }
 
                 //Debug.Break();
             }
-            else if (m_RoadParam?.IsIntersection == true && m_RoadParam?.m_Intersection?.IsEmptyIntersection == false)
+            else if (m_RoadParam?.IsIntersection == true && m_RoadParam?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
             {
                 RnDataTrack track = m_RoadParam.GetTrack();
 
@@ -210,16 +214,7 @@ namespace PlateauToolkit.Sandbox
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
                     var pos = SplineTool.GetPointOnSpline(spline, m_DistanceCalc.GetPercent());
-
-                    Vector3 lastpos = gameObject.transform.position;
-                    Vector3 vec = (pos - lastpos).normalized;
-
-                    gameObject.transform.position = pos;
-                    gameObject.transform.forward = vec;
-
-                    MovementInfo movementInfo = CreateMovementInfo(pos, vec);
-                    m_TrafficObject.OnMove(movementInfo);
-
+                    SetTransfrorm(pos);
                     yield return null;
                 }
 
@@ -231,7 +226,13 @@ namespace PlateauToolkit.Sandbox
             }
 
             m_RoadParam = m_RoadParam.GetNextRoad();
-            if (m_RoadParam == null || !m_RoadParam.IsValid)
+            if (m_RoadParam == null)
+            {
+                //次が見つからない場合は、初回位置に戻る
+                m_RoadParam = Respawn();
+            }
+
+            if (m_RoadParam == null)
             {
                 Stop();
             }
@@ -279,13 +280,8 @@ namespace PlateauToolkit.Sandbox
                 for (int i = 0; i < 100; i++)
                 {
                     var percent = i * 0.01f;
-                    //var track = m_RoadParam.m_Intersection.Tracks[m_RoadParam.m_TrackPosition];
                     var track = m_RoadParam.GetTrack();
                     Vector3 pos = SplineTool.GetPointOnSpline(track.Spline, percent);
-
-                    //var points = track.GetToLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
-                    //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
-
                     if (lastpos == Vector3.zero)
                         lastpos = pos;
 
@@ -315,14 +311,13 @@ namespace PlateauToolkit.Sandbox
                 var vec = m_RoadParam.m_ToBorder.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
                 if(vec.Count > 0)
                 {
-                    Handles.Label(vec.First(), $"to :{m_RoadParam.m_ToBorder.LineString.ID} : reversed {m_RoadParam.m_RoadInfo.m_IsReverse} / {m_RoadParam.GetLane()?.IsReverse::false}");
+                    Handles.Label(vec.First(), $"to :{m_RoadParam.m_ToBorder.LineString.ID} rev {m_RoadParam.m_RoadInfo.m_IsReverse}/{m_RoadParam.GetLane()?.IsReverse::false}");
                     for (int k = 0; k < vec.Count - 1; k++)
                     {
                         Gizmos.DrawLine(vec[k], vec[k + 1]);
                     }
                 }
             }
-
 
             //Debug
             if (m_RoadParam.expectedBorders?.Count > 0)
@@ -356,13 +351,28 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
+        public void SetTransfrorm(Vector3 pos)
+        {
+            Vector3 lastpos = gameObject.transform.position;
+            Vector3 vec = (pos - lastpos).normalized;
+
+            if(vec ==  Vector3.zero)
+            {
+                vec = Vector3.forward;
+            }
+
+            gameObject.transform.position = pos;
+            gameObject.transform.forward = vec;
+
+            MovementInfo movementInfo = CreateMovementInfo(pos, vec);
+            m_TrafficObject.OnMove(movementInfo);
+        }
+
         MovementInfo CreateMovementInfo(Vector3 pos, Vector3 vec)
         {
             MovementInfo movementInfo = new MovementInfo();
             movementInfo.m_SecondAxisForward = vec;
-            //movementInfo.m_MoveDelta = speed * 100f;
             movementInfo.m_MoveDelta = m_SpeedKm;
-
             return movementInfo;
         }
     }

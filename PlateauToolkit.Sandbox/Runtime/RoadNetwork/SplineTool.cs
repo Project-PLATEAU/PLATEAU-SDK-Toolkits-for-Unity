@@ -1,6 +1,4 @@
-﻿
-using log4net.Util;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -10,6 +8,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class SplineTool
     {
+        public static readonly int DISTANCE_CALCULATION_SAMPLES = 20; //距離計測のサンプリング数
+
         // 4つの制御点を使ってCatmull-Romスプラインの点を計算する
         public static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
         {
@@ -28,6 +28,78 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             // ベジェ曲線の式を使って計算
             float u = 1 - t;
             return u * u * p0 + 2 * u * t * p1 + t * t * p2;
+        }
+
+        // 指定したパーセンテージで曲線上の点を取得(距離ベース）
+        public static Vector3 GetPointOnSplineDistanceBased(List<Vector3> controlPoints, float t)
+        {
+            t = Mathf.Clamp01(t);
+            if (controlPoints.Count < 4)
+            {
+                return GetPointOnBezier(controlPoints, t);
+            }
+
+            controlPoints = AddStartEndControlPoints(controlPoints);
+
+            float totalLength = CalculateSplineLength(controlPoints, DISTANCE_CALCULATION_SAMPLES);
+            float targetDistance = totalLength * t;
+            return GetPointOnSplineByDistance(controlPoints, targetDistance, DISTANCE_CALCULATION_SAMPLES);
+        }
+
+        // スプラインの長さを計算するためにセグメントごとに細かくサンプリングする
+        public static float CalculateSplineLength(List<Vector3> points, int numSamples)
+        {
+            float totalLength = 0;
+            Vector3? previousPoint = null;
+
+            for (int i = 0; i < points.Count - 3; i++)
+            {
+                for (int j = 0; j <= numSamples; j++)
+                {
+                    float t = j / (float)numSamples;
+                    Vector3 currentPoint = CatmullRom(points[i], points[i + 1], points[i + 2], points[i + 3], t);
+
+                    if (previousPoint.HasValue)
+                    {
+                        totalLength += Vector3.Distance(previousPoint.Value, currentPoint);
+                    }
+
+                    previousPoint = currentPoint;
+                }
+            }
+
+            return totalLength;
+        }
+
+        // 距離に基づいたスプライン上の位置を取得
+        public static Vector3 GetPointOnSplineByDistance(List<Vector3> points, float distance, int numSamples)
+        {
+            float accumulatedLength = 0;
+            Vector3? previousPoint = null;
+
+            for (int i = 0; i < points.Count - 3; i++)
+            {
+                for (int j = 0; j <= numSamples; j++)
+                {
+                    float t = j / (float)numSamples;
+                    Vector3 currentPoint = CatmullRom(points[i], points[i + 1], points[i + 2], points[i + 3], t);
+
+                    if (previousPoint.HasValue)
+                    {
+                        float segmentLength = Vector3.Distance(previousPoint.Value, currentPoint);
+                        accumulatedLength += segmentLength;
+
+                        if (accumulatedLength >= distance)
+                        {
+                            return currentPoint; // 指定した距離に達した点を返す
+                        }
+                    }
+
+                    previousPoint = currentPoint;
+                }
+            }
+
+            return points[points.Count - 1]; // もし距離を超えた場合は、最後の点を返す
         }
 
         // 先頭と終了のアイテムをリストに追加（Control用Points)
