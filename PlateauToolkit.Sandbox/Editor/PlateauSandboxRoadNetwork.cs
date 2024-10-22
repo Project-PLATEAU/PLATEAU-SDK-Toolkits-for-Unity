@@ -12,6 +12,7 @@ namespace PlateauToolkit.Sandbox.Editor
     public class PlateauSandboxRoadNetwork
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
+        TrafficManager m_TrafficManager;
 
         internal PlateauSandboxInstantiation InstantiateSelectedObject(GameObject obj, Vector3 position, Quaternion rotation, HideFlags? hideFlags = null)
         {
@@ -44,9 +45,7 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 Debug.Log($"place vehicle {vehicle.value.name}");
 
-                //(Vector3, Vector3, RnDataRoad, RnDataLineString) pos = GetPositionAndVector(vehicle.index);
-                //(Vector3 pos, Vector3 vec, RnDataRoad road, RnDataLineString linestring) = GetPositionAndVector(vehicle.index);
-                (Vector3 pos, RnDataRoad road, RnDataLineString linestring) = GetRandomRoad(vehicle.index);
+                (Vector3 pos, RnDataRoad road, RnDataLane lane) = GetRandomRoad(vehicle.index);
                 PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehicle.value, pos, Quaternion.identity);
 
                 //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
@@ -55,98 +54,40 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
 
-                    //trafficMovement.Road = road;
-                    //trafficMovement.LineString = linestring;
-
-                    // TODO: Lane情報　（暫定）
                     var info = new RaodInfo();
-                    //info.m_RoadBase = road;
                     info.m_RoadId = road.GetId(m_RoadNetworkGetter);
-                    info.m_LaneIndex = 0;
-                    //var lane = road.GetMainLanes(m_RoadNetworkGetter)[info.m_LaneIndex];
-
+                    info.m_LaneIndex = road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane);
                     trafficMovement.RoadInfo = info;
+                    trafficMovement.VehecleID = vehicle.index;
                 }
             }
         }
 
-        public (Vector3, RnDataRoad, RnDataLineString) GetRandomRoad(int index)
+        //暫定　ランダムにロードを抽出
+        public (Vector3, RnDataRoad, RnDataLane) GetRandomRoad(int index)
         {
             var roadNetworkRoads = m_RoadNetworkGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
             int randValue = Random.Range(0, roadNetworkRoads.Count());
 
             RnDataRoad outRoad = roadNetworkRoads[randValue];
-            RnDataLane lane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
-            RnDataLineString outLinestring = lane.GetChildLineString(m_RoadNetworkGetter, lane.IsReverse ? LanePosition.Left : LanePosition.Right);
+            RnDataLane outlane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
+            RnDataLineString outLinestring = outlane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
             Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
-            return (position, outRoad, outLinestring);
+            return (position, outRoad, outlane);
         }
 
-        //public (Vector3, Vector3, RnDataRoad, RnDataLineString) GetPositionAndVector(int index)
-        //{
-        //    var roadNetworkRoads = m_RoadNetworkGetter.GetRoadBases();
-
-        //    Vector3 position = Vector3.zero;
-
-        //    RnDataRoad outRoad = null;
-        //    RnDataLineString outLinestring = null;
-
-        //    foreach (RnDataRoadBase roadbase in roadNetworkRoads)
-        //    {
-        //        if (roadbase is RnDataRoad)
-        //        {
-        //            RnDataRoad road = (RnDataRoad)roadbase;
-
-        //            RnDataLane lane = road.GetMainLanes(m_RoadNetworkGetter).First();
-        //            RnDataLineString linestring = lane.GetChildLineString(m_RoadNetworkGetter, lane.IsReverse ? LanePosition.Left : LanePosition.Right);
-        //            if (linestring.Points.Count > index)
-        //            {
-        //                var points = linestring.GetChildPoints(m_RoadNetworkGetter);
-        //                position = points[index].Vertex;
-
-        //                outRoad = road;
-        //                outLinestring = linestring;
-
-        //                //Debug
-        //                var roads = points[index].GetRoad(m_RoadNetworkGetter);
-        //                foreach (var foundRoad in roads)
-        //                {
-        //                    Debug.Log($"point {index} road {foundRoad.TargetTran?.name}");
-        //                }
-        //                break;
-        //            }
-        //            else
-        //            {
-        //                index -= linestring.Points.Count;
-        //            }
-        //        }
-        //    }
-
-        //    return (position, Vector3.forward, outRoad, outLinestring);
-        //}
-
+        // 交通シミュレータ配置　実行時に呼ばれる
         public void Initialize()
         {
             PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
             m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
 
-            //var roadNetworkWays = roadNetworkGetter.GetWays();
-            //var roadNetworkLanes = roadNetworkGetter.GetLanes();
-            //var roadNetworkPoints = roadNetworkGetter.GetPoints();
-            //var roadNetworkBlocks = roadNetworkGetter.GetBlocks();
-            //var roadNetworkRoads = roadNetworkGetter.GetRoadBases();
-            //var roadNetworkLineStrings = m_RoadNetworkGetter.GetLineStrings();
-            //var roadNetworkNodes = roadNetworkRoads.OfType<RnDataIntersection>().ToList();
-            //var roadNetworkLinks = roadNetworkRoads.OfType<RnDataRoad>().ToList();
-
-            //Debug.Log($"roadNetworkNodes {roadNetworkNodes.Count}");
-            //Debug.Log($"roadNetworkLinks {roadNetworkLinks.Count}");
-            //Debug.Log($"roadNetworkWays {roadNetworkWays.Count}");
-            //Debug.Log($"roadNetworkLanes {roadNetworkLanes.Count}");
-            //Debug.Log($"roadNetworkPoints {roadNetworkPoints.Count}");
-            //Debug.Log($"roadNetworkBlocks {roadNetworkBlocks.Count}");
-            //Debug.Log($"roadNetworkLineStrings {roadNetworkLineStrings.Count}");
-
+            //Component attach
+            m_TrafficManager = roadNetwork.gameObject.GetComponent<TrafficManager>();
+            if (m_TrafficManager == null)
+            {
+                m_TrafficManager = roadNetwork.gameObject.AddComponent<TrafficManager>();
+            }
         }
 
     }

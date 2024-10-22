@@ -8,7 +8,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class SplineTool
     {
-        public static readonly int DISTANCE_CALCULATION_SAMPLES = 20; //距離計測のサンプリング数
+        public static readonly int DISTANCE_CALCULATION_SAMPLES = 100; //距離計測のサンプリング数
 
         // 4つの制御点を使ってCatmull-Romスプラインの点を計算する
         public static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
@@ -31,6 +31,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         // 指定したパーセンテージで曲線上の点を取得(距離ベース）
+        // 車が横に移動してしまう問題あり
         public static Vector3 GetPointOnSplineDistanceBased(List<Vector3> controlPoints, float t)
         {
             t = Mathf.Clamp01(t);

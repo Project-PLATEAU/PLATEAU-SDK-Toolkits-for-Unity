@@ -27,8 +27,6 @@ namespace PlateauToolkit.Sandbox
     {
         [HideInInspector][SerializeField] RoadNetworkDataGetter m_RoadNetworkGetter;
 
-        Coroutine m_MovementCoroutine;
-
         //[HideInInspector]
         [SerializeField] RoadNetworkTrafficController m_RoadParam;
 
@@ -36,6 +34,9 @@ namespace PlateauToolkit.Sandbox
 
         [SerializeField] RaodInfo m_RespawnPosition;
 
+        [SerializeField] int m_VehecleID;
+
+        Coroutine m_MovementCoroutine;
 
         IPlateauSandboxTrafficObject m_TrafficObject;
 
@@ -67,6 +68,14 @@ namespace PlateauToolkit.Sandbox
                 m_RoadParam = CreateRoadParam(value);
             }
         }
+        public int VehecleID
+        {
+            set
+            {
+                m_VehecleID = value;
+            }
+        }
+
 
         RoadNetworkTrafficController CreateRoadParam(RaodInfo info)
         {
@@ -181,9 +190,9 @@ namespace PlateauToolkit.Sandbox
                     if(m_RoadParam.IsLineStringReversed)
                         points.Reverse();
 
-                    Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, m_DistanceCalc.GetPercent());
+                    //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, m_DistanceCalc.GetPercent());
                     //Vector3 pos = SplineTool.GetPointOnSpline(points, m_DistanceCalc.GetPercent());
-                    //Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
+                    Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
                     SetTransfrorm(pos);
                     yield return null;
                 }

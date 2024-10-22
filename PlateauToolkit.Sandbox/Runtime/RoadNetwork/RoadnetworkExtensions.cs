@@ -275,6 +275,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        public static int GetLaneIndexOfMainLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataLane lane)
+        {
+            return road.GetMainLanes(getter).IndexOf(lane);
+        }
+
         public static RnDataLane GetChildLane([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex = -1, bool isMainLane = true)
         {
             if (isMainLane)
