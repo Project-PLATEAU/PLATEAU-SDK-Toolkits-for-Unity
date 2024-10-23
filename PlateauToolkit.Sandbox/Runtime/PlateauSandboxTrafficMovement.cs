@@ -355,14 +355,11 @@ namespace PlateauToolkit.Sandbox
         {
             Vector3 lastpos = gameObject.transform.position;
             Vector3 vec = (pos - lastpos).normalized;
-
-            if(vec ==  Vector3.zero)
-            {
-                vec = Vector3.forward;
-            }
-
             gameObject.transform.position = pos;
-            gameObject.transform.forward = vec;
+            if(vec != Vector3.zero)
+            {
+                gameObject.transform.forward = vec;
+            }
 
             MovementInfo movementInfo = CreateMovementInfo(pos, vec);
             m_TrafficObject.OnMove(movementInfo);

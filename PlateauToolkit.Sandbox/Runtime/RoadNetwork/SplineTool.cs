@@ -8,7 +8,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class SplineTool
     {
-        public static readonly int DISTANCE_CALCULATION_SAMPLES = 20; //距離計測のサンプリング数
+        public static readonly int DISTANCE_CALCULATION_SAMPLES = 100; //距離計測のサンプリング数
 
         // 4つの制御点を使ってCatmull-Romスプラインの点を計算する
         public static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
@@ -28,6 +28,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             // ベジェ曲線の式を使って計算
             float u = 1 - t;
             return u * u * p0 + 2 * u * t * p1 + t * t * p2;
+        }
+
+        // 先頭と終了のアイテムをリストに追加（Control用Points)
+        public static List<Vector3> AddStartEndControlPoints(List<Vector3> controlPoints)
+        {
+            List<Vector3> outControlPoints = new List<Vector3>();
+            outControlPoints.Add(controlPoints.First());
+            outControlPoints.AddRange(controlPoints);
+            outControlPoints.Add(controlPoints.Last());
+            return outControlPoints;
         }
 
         // 指定したパーセンテージで曲線上の点を取得(距離ベース）
@@ -102,21 +112,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return points[points.Count - 1]; // もし距離を超えた場合は、最後の点を返す
         }
 
-        // 先頭と終了のアイテムをリストに追加（Control用Points)
-        public static List<Vector3> AddStartEndControlPoints(List<Vector3> controlPoints)
-        {
-            List<Vector3> outControlPoints = new List<Vector3>();
-            outControlPoints.Add(controlPoints.First());
-            outControlPoints.AddRange(controlPoints);
-            outControlPoints.Add(controlPoints.Last());
-            return outControlPoints;
-        }
-
         // 指定したパーセンテージで曲線上の点を取得
+        // ポイント単位のパーセントなので、アニメーションさせるとスピードがまちまちになる
         public static Vector3 GetPointOnSpline(List<Vector3> controlPoints, float t)
         {
-            //Debug.Log($"GetPointOnSpline controlPoints:{controlPoints.Count}");
-
             // t を 0～1 の範囲に制限
             t = Mathf.Clamp01(t);
 
@@ -189,19 +188,17 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return spline.EvaluatePosition(t);
         }
 
-        //リニア
+        //　リニア（直線）
         public static Vector3 GetPointOnLine(List<Vector3> points, float percentage)
         {
             if (points == null || points.Count < 2)
             {
-                //throw new System.ArgumentException("At least two points are required.");
                 return Vector3.zero;
             }
 
 
             if (percentage < 0f || percentage > 1f)
             {
-                //throw new System.ArgumentOutOfRangeException("Percentage must be between 0 and 1.");
                 return points.Last();
             }
 
