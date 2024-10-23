@@ -42,7 +42,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             var roads = RnGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
 
             //初回
-            RaodInfo info = new RaodInfo();
+            RoadInfo info = new RoadInfo();
             info.m_LaneIndex = 0;
             info.m_RoadId = roads.First().GetId(RnGetter); //最初のRnDataRoad
             //info.m_RoadBase = RoadNetworkTrafficControllers.First();

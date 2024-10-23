@@ -8,31 +8,52 @@ using UnityEngine;
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     [Serializable]
-    public class RaodInfo
+    public class RoadInfo
     {
-        [SerializeField] public int m_RoadId;
-        [SerializeField] public int m_LaneIndex;
-        [SerializeField] public int m_TrackIndex;
-        [SerializeField] public bool m_IsReverse;
+        [SerializeField]
+        public int m_RoadId;
+        [SerializeField]
+        public int m_LaneIndex;
+        [SerializeField]
+        public int m_TrackIndex;
+        [SerializeField]
+        public bool m_IsReverse;
+
+        public RoadInfo Clone()
+        {
+            RoadInfo info = new RoadInfo();
+            info.m_RoadId = m_RoadId;
+            info.m_LaneIndex = m_LaneIndex;
+            info.m_TrackIndex = m_TrackIndex;
+            info.m_IsReverse = m_IsReverse;
+            return info;
+        }
     }
 
     [Serializable]
-    public class RoadNetworkTrafficController
+    public class RoadNetworkTrafficController : IDisposable
     {
-        [HideInInspector][SerializeField] RoadNetworkDataGetter m_RoadNetworkGetter;
+        //[HideInInspector][SerializeField]
+        RoadNetworkDataGetter m_RoadNetworkGetter;
 
-        [SerializeField] public RaodInfo m_RoadInfo;
+        [SerializeField]
+        public RoadInfo m_RoadInfo;
 
         //Road (Roadの場合自動的にセット）
-        [SerializeField] public RnDataRoad m_Road;
+        [SerializeField]
+        public RnDataRoad m_Road;
 
         //Intersection (Intersectionの場合自動的にセット）
-        [SerializeField] public RnDataIntersection m_Intersection;
+        [SerializeField]
+        public RnDataIntersection m_Intersection;
 
-        [SerializeField] public RnDataWay m_FromBorder;
-        [SerializeField] public RnDataWay m_ToBorder;
+        [SerializeField]
+        public RnDataWay m_FromBorder;
+        [SerializeField]
+        public RnDataWay m_ToBorder;
 
-        [SerializeField] public int m_LastRoadId;
+        [SerializeField]
+        public int m_LastRoadId;
 
         //Debug用
         public List<RnDataWay> expectedBorders = new List<RnDataWay>();
@@ -230,7 +251,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         //初回
-        public RoadNetworkTrafficController(RaodInfo roadInfo)
+        public RoadNetworkTrafficController(RoadInfo roadInfo)
         {
             m_RoadInfo = roadInfo;
             SetRoadBase();
@@ -247,7 +268,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return;
             }
 
-            RaodInfo nextRoadInfo = new();
+            RoadInfo nextRoadInfo = new();
             if (current.IsIntersection && next is RnDataRoad)
             {
                 // Intersection -> Road 
@@ -447,6 +468,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return false;
             }
             return true;
+        }
+
+        public void Dispose()
+        {
+            m_RoadNetworkGetter = null;
+            m_RoadInfo = null;
+            m_Road = null;
+            m_Intersection = null;
+            m_FromBorder = null;
+            m_ToBorder = null;
+
+            //Debug用
+            expectedBorders?.Clear();
+            actualBorders?.Clear();
         }
     }
 }

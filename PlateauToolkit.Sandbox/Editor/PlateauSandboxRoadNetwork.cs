@@ -54,7 +54,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 {
                     PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
 
-                    var info = new RaodInfo();
+                    var info = new RoadInfo();
                     info.m_RoadId = road.GetId(m_RoadNetworkGetter);
                     info.m_LaneIndex = road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane);
                     trafficMovement.RoadInfo = info;

@@ -25,16 +25,21 @@ namespace PlateauToolkit.Sandbox
     [ExecuteAlways]
     public class PlateauSandboxTrafficMovement : PlateauSandboxMovementBase
     {
-        [HideInInspector][SerializeField] RoadNetworkDataGetter m_RoadNetworkGetter;
+        //[HideInInspector][SerializeField]
+        RoadNetworkDataGetter m_RoadNetworkGetter;
 
         //[HideInInspector]
-        [SerializeField] RoadNetworkTrafficController m_RoadParam;
+        [SerializeField]
+        RoadNetworkTrafficController m_RoadParam;
 
-        [SerializeField] public float m_SpeedKm = 40f;
+        [SerializeField]
+        public float m_SpeedKm = 40f;
 
-        [SerializeField] RaodInfo m_RespawnPosition;
+        [SerializeField]
+        RoadInfo m_RespawnPosition;
 
-        [SerializeField] int m_VehecleID;
+        [SerializeField]
+        int m_VehecleID;
 
         Coroutine m_MovementCoroutine;
 
@@ -61,7 +66,7 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
-        public RaodInfo RoadInfo
+        public RoadInfo RoadInfo
         {
             set
             {
@@ -77,7 +82,7 @@ namespace PlateauToolkit.Sandbox
         }
 
 
-        RoadNetworkTrafficController CreateRoadParam(RaodInfo info)
+        RoadNetworkTrafficController CreateRoadParam(RoadInfo info)
         {
             var param = new RoadNetworkTrafficController(info);
             if(param.IsRoad)
@@ -103,13 +108,26 @@ namespace PlateauToolkit.Sandbox
             return param;
         }
 
+        // TODO: TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations　がなぜ表示されてしまうのか？
         public RoadNetworkTrafficController Respawn()
         {
-            if(m_RespawnPosition == null)
+            if (m_RespawnPosition == null)
                 return null;
 
+            //TLS Error の原因
             Debug.Log($"Respawn {this.name}");
-            return new RoadNetworkTrafficController(m_RespawnPosition);
+
+            //return new RoadNetworkTrafficController(m_RespawnPosition);
+            //return null;
+            //return new RoadNetworkTrafficController(m_RespawnPosition.Clone());
+
+            var info = new RoadInfo();
+            //info.m_RoadId = m_RespawnPosition.m_RoadId;
+            //info.m_LaneIndex = m_RespawnPosition.m_LaneIndex;
+            //info.m_TrackIndex = m_RespawnPosition.m_TrackIndex;
+            //info.m_IsReverse = m_RespawnPosition.m_IsReverse;
+            return new RoadNetworkTrafficController(info);
+            //return null;
         }
 
 
@@ -237,6 +255,8 @@ namespace PlateauToolkit.Sandbox
             m_RoadParam = m_RoadParam.GetNextRoad();
             if (m_RoadParam == null)
             {
+                //TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations の原因
+
                 //次が見つからない場合は、初回位置に戻る
                 m_RoadParam = Respawn();
             }
@@ -386,16 +406,16 @@ namespace PlateauToolkit.Sandbox
     /// <summary>
     /// Iterates a position to move along a track.
     /// </summary>
-    public struct LineStringIterator
-    {
-        bool MoveNextPath()
-        {
-            return true;
-        }
-        public bool MovePoint(float delta, out float t)
-        {
-            t = 0f;
-            return true;
-        }
-    }
+    //public struct LineStringIterator
+    //{
+    //    bool MoveNextPath()
+    //    {
+    //        return true;
+    //    }
+    //    public bool MovePoint(float delta, out float t)
+    //    {
+    //        t = 0f;
+    //        return true;
+    //    }
+    //}
 }
