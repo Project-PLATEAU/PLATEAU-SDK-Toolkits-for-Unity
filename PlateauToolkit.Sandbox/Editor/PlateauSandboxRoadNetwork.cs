@@ -57,8 +57,8 @@ namespace PlateauToolkit.Sandbox.Editor
                     var info = new RoadInfo();
                     info.m_RoadId = road.GetId(m_RoadNetworkGetter);
                     info.m_LaneIndex = road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane);
+                    info.m_VehecleID = vehicle.index;
                     trafficMovement.RoadInfo = info;
-                    trafficMovement.VehecleID = vehicle.index;
                 }
             }
         }

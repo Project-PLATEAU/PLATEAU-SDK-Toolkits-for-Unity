@@ -28,6 +28,8 @@ namespace PlateauToolkit.Sandbox
         //[HideInInspector][SerializeField]
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
+        TrafficManager m_TrafficManager;
+
         //[HideInInspector]
         [SerializeField]
         RoadNetworkTrafficController m_RoadParam;
@@ -38,16 +40,13 @@ namespace PlateauToolkit.Sandbox
         [SerializeField]
         RoadInfo m_RespawnPosition;
 
-        [SerializeField]
-        int m_VehecleID;
-
         Coroutine m_MovementCoroutine;
 
         IPlateauSandboxTrafficObject m_TrafficObject;
 
         DistanceCalculator m_DistanceCalc;
 
-        RoadNetworkDataGetter RoadNetworkGetter
+        RoadNetworkDataGetter RnGetter
         {
             get
             {
@@ -66,6 +65,22 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
+        TrafficManager TrafficManager
+        {
+            get
+            {
+                if (m_TrafficManager == null)
+                {
+                    m_TrafficManager = GameObject.FindObjectOfType<TrafficManager>();
+                    if (m_TrafficManager == null)
+                    {
+                        Debug.LogError($"TrafficManager is null");
+                    }
+                }
+                return m_TrafficManager;
+            }
+        }
+
         public RoadInfo RoadInfo
         {
             set
@@ -73,14 +88,6 @@ namespace PlateauToolkit.Sandbox
                 m_RoadParam = CreateRoadParam(value);
             }
         }
-        public int VehecleID
-        {
-            set
-            {
-                m_VehecleID = value;
-            }
-        }
-
 
         RoadNetworkTrafficController CreateRoadParam(RoadInfo info)
         {
@@ -91,7 +98,7 @@ namespace PlateauToolkit.Sandbox
                 Debug.Log($"lineString count {lineString?.Points?.Count}");
 
                 //初回配置
-                var points = lineString.GetChildPointsVector(RoadNetworkGetter);
+                var points = lineString.GetChildPointsVector(RnGetter);
                 var pos = points.FirstOrDefault();
                 var nextPos = points.Count > 1 ? points[1] : pos;
 
@@ -198,12 +205,12 @@ namespace PlateauToolkit.Sandbox
         {
             if (m_RoadParam?.IsRoad == true)
             {
-                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_RoadParam.GetLineString().GetTotalDistance(RoadNetworkGetter));
+                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_RoadParam.GetLineString().GetTotalDistance(RnGetter));
                 m_DistanceCalc.Start();
 
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    var points = m_RoadParam.GetLineString().GetChildPointsVector(RoadNetworkGetter);
+                    var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
 
                     if(m_RoadParam.IsLineStringReversed)
                         points.Reverse();
@@ -275,11 +282,11 @@ namespace PlateauToolkit.Sandbox
         //Debug Gizmo
         void OnDrawGizmos()
         {
-            if (m_RoadParam == null || RoadNetworkGetter == null)
+            if (m_RoadParam == null || RnGetter == null)
                 return;
             if(m_RoadParam.IsRoad)
             {
-                var points = m_RoadParam.GetLineString().GetChildPointsVector(RoadNetworkGetter);
+                var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
 
                 Gizmos.color = Color.blue;
                 for (int j = 0; j < points.Count - 1; j++)
@@ -323,7 +330,7 @@ namespace PlateauToolkit.Sandbox
             if(m_RoadParam.m_FromBorder != null)
             {
                 Gizmos.color = Color.blue;
-                var vec = m_RoadParam.m_FromBorder.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                var vec = m_RoadParam.m_FromBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
                 if(vec.Count > 0)
                 {
                     Handles.Label(vec.First(), $"from :{m_RoadParam.m_FromBorder.LineString.ID}");
@@ -337,7 +344,7 @@ namespace PlateauToolkit.Sandbox
             if (m_RoadParam.m_ToBorder != null)
             {
                 Gizmos.color = Color.cyan;
-                var vec = m_RoadParam.m_ToBorder.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                var vec = m_RoadParam.m_ToBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
                 if(vec.Count > 0)
                 {
                     Handles.Label(vec.First(), $"to :{m_RoadParam.m_ToBorder.LineString.ID} rev {m_RoadParam.m_RoadInfo.m_IsReverse}/{m_RoadParam.GetLane()?.IsReverse::false}");
@@ -355,7 +362,7 @@ namespace PlateauToolkit.Sandbox
                 Handles.color = Color.green;
                 foreach (var border in m_RoadParam.expectedBorders)
                 {
-                    var vec = border.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                    var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
                     Handles.Label(vec.First(), $"id:{border.LineString.ID}");
                     for (int k = 0; k < vec.Count - 1; k++)
                     {
@@ -370,7 +377,7 @@ namespace PlateauToolkit.Sandbox
                 Handles.color = Color.red;
                 foreach (var border in m_RoadParam.actualBorders)
                 {
-                    var vec = border.GetChildLineString(RoadNetworkGetter).GetChildPointsVector(RoadNetworkGetter);
+                    var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
                     Handles.Label(vec.Last(), $"id:{border.LineString.ID}");
                     for (int k = 0; k < vec.Count - 1; k++)
                     {

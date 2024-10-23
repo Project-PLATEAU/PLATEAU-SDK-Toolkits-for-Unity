@@ -19,6 +19,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField]
         public bool m_IsReverse;
 
+        [SerializeField]
+        public int m_VehecleID;
+
         public RoadInfo Clone()
         {
             RoadInfo info = new RoadInfo();
@@ -26,6 +29,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             info.m_LaneIndex = m_LaneIndex;
             info.m_TrackIndex = m_TrackIndex;
             info.m_IsReverse = m_IsReverse;
+            info.m_VehecleID = m_VehecleID;
             return info;
         }
     }
@@ -35,6 +39,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
         //[HideInInspector][SerializeField]
         RoadNetworkDataGetter m_RoadNetworkGetter;
+
+        TrafficManager m_TrafficManager;
 
         [SerializeField]
         public RoadInfo m_RoadInfo;
@@ -69,19 +75,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             get {
                 return m_RoadInfo?.m_IsReverse ?? false;
-                //if (IsIntersection)
-                //    return m_RoadInfo?.m_IsReverse ?? false;
-                //else if (IsRoad)
-                //{
-                //    bool laneIsReverse = GetLane().IsReverse;
-                //    bool infoIsReverse = m_RoadInfo?.m_IsReverse ?? false;
-                //    if (laneIsReverse && infoIsReverse)
-                //    {
-                //        return false;
-                //    }
-                //    return infoIsReverse;
-                //}
-                //return false;
             }
         }
 
@@ -132,6 +125,22 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 }
 
                 return m_RoadNetworkGetter;
+            }
+        }
+
+        TrafficManager TrafficManager
+        {
+            get
+            {
+                if (m_TrafficManager == null)
+                {
+                    m_TrafficManager = GameObject.FindObjectOfType<TrafficManager>();
+                    if (m_TrafficManager == null)
+                    {
+                        Debug.LogError($"TrafficManager is null");
+                    }
+                }
+                return m_TrafficManager;
             }
         }
 
@@ -408,8 +417,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 m_LastRoadId = current.m_RoadInfo.m_RoadId;
                 m_RoadInfo = nextRoadInfo;
                 m_RoadInfo.m_RoadId = next.GetId(RnGetter);
+                m_RoadInfo.m_VehecleID = current.m_RoadInfo.m_VehecleID;
                 //expectedBorders = new() { current.m_ToBorder };
                 success = SetRoadBase();
+
+                TrafficManager.SetRoadInfo(m_RoadInfo);
             }
             if (!success)
             {
