@@ -41,6 +41,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         // 指定したパーセンテージで曲線上の点を取得(距離ベース）
+        // 車が横に移動してしまう問題あり
         public static Vector3 GetPointOnSplineDistanceBased(List<Vector3> controlPoints, float t)
         {
             t = Mathf.Clamp01(t);
