@@ -25,7 +25,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         Dictionary<int,RoadStatus> RoadStatuses = new Dictionary<int,RoadStatus>();
 
-        RoadNetworkDataGetter RnGetter
+        public RoadNetworkDataGetter RnGetter
         {
             get
             {

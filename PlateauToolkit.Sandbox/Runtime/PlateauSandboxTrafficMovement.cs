@@ -25,21 +25,13 @@ namespace PlateauToolkit.Sandbox
     [ExecuteAlways]
     public class PlateauSandboxTrafficMovement : PlateauSandboxMovementBase
     {
-        //[HideInInspector][SerializeField]
-        RoadNetworkDataGetter m_RoadNetworkGetter;
-
-        TrafficManager m_TrafficManager;
-
-        //[HideInInspector]
         [SerializeField]
         RoadNetworkTrafficController m_RoadParam;
 
         [SerializeField]
         public float m_SpeedKm = 40f;
 
-        [SerializeField]
-        RoadInfo m_RespawnPosition;
-
+        TrafficManager m_TrafficManager;
         Coroutine m_MovementCoroutine;
 
         IPlateauSandboxTrafficObject m_TrafficObject;
@@ -50,18 +42,7 @@ namespace PlateauToolkit.Sandbox
         {
             get
             {
-                if (m_RoadNetworkGetter == null)
-                {
-                    PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
-                    m_RoadNetworkGetter = roadNetwork?.GetRoadNetworkDataGetter();
-
-                    if (m_RoadNetworkGetter == null)
-                    {
-                        Debug.LogError($"RoadNetworkDataGetter is null");
-                    }
-                }
-
-                return m_RoadNetworkGetter;
+                return TrafficManager?.RnGetter;
             }
         }
 
@@ -106,7 +87,7 @@ namespace PlateauToolkit.Sandbox
                 gameObject.transform.position = pos;
                 gameObject.transform.forward = vec;
 
-                m_RespawnPosition = info;
+                //m_RespawnPosition = info;
             }
             else
             {
@@ -114,29 +95,6 @@ namespace PlateauToolkit.Sandbox
             }
             return param;
         }
-
-        // TODO: TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations　がなぜ表示されてしまうのか？
-        public RoadNetworkTrafficController Respawn()
-        {
-            if (m_RespawnPosition == null)
-                return null;
-
-            //TLS Error の原因
-            Debug.Log($"Respawn {this.name}");
-
-            //return new RoadNetworkTrafficController(m_RespawnPosition);
-            //return null;
-            //return new RoadNetworkTrafficController(m_RespawnPosition.Clone());
-
-            var info = new RoadInfo();
-            //info.m_RoadId = m_RespawnPosition.m_RoadId;
-            //info.m_LaneIndex = m_RespawnPosition.m_LaneIndex;
-            //info.m_TrackIndex = m_RespawnPosition.m_TrackIndex;
-            //info.m_IsReverse = m_RespawnPosition.m_IsReverse;
-            return new RoadNetworkTrafficController(info);
-            //return null;
-        }
-
 
 #if UNITY_EDITOR
         void OnValidate()
@@ -148,6 +106,7 @@ namespace PlateauToolkit.Sandbox
         {
             TryGetComponent(out IPlateauSandboxTrafficObject trafficObject);
             m_TrafficObject = trafficObject;
+            m_RoadParam?.Initialize();
         }
 
         void Start()
@@ -161,6 +120,10 @@ namespace PlateauToolkit.Sandbox
             {
                 StartMovement();
             }
+        }
+
+        void OnDestroy()
+        {
         }
 
         [ContextMenu("Start Movement")]
@@ -260,13 +223,6 @@ namespace PlateauToolkit.Sandbox
             }
 
             m_RoadParam = m_RoadParam.GetNextRoad();
-            if (m_RoadParam == null)
-            {
-                //TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations の原因
-
-                //次が見つからない場合は、初回位置に戻る
-                m_RoadParam = Respawn();
-            }
 
             if (m_RoadParam == null)
             {
@@ -409,20 +365,4 @@ namespace PlateauToolkit.Sandbox
             return movementInfo;
         }
     }
-
-    /// <summary>
-    /// Iterates a position to move along a track.
-    /// </summary>
-    //public struct LineStringIterator
-    //{
-    //    bool MoveNextPath()
-    //    {
-    //        return true;
-    //    }
-    //    public bool MovePoint(float delta, out float t)
-    //    {
-    //        t = 0f;
-    //        return true;
-    //    }
-    //}
 }
