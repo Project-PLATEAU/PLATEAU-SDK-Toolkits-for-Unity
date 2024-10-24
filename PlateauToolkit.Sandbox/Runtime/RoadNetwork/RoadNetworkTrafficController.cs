@@ -169,7 +169,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public RoadNetworkTrafficController Respawn()
         {
             Debug.Log($"<color=blue>Respawn {m_RoadInfo?.m_VehecleID}</color>");
-            return new(m_RespawnPosition);
+            if(m_RoadInfo != m_RespawnPosition)
+                return new(m_RespawnPosition);
+            return null;
         }
 
         //次のRoadBaseを取得
@@ -255,6 +257,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             //return null;
             //次が見つからない場合は、初回位置に戻る
+
+            //TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations
             return Respawn();
         }
 
