@@ -45,7 +45,7 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 Debug.Log($"place vehicle {vehicle.value.name}");
 
-                (Vector3 pos, RnDataRoad road, RnDataLane lane) = GetRandomRoad(vehicle.index);
+                (Vector3 pos, RnDataRoad road, RnDataLane lane) = m_TrafficManager.GetRandomRoad();
                 PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehicle.value, pos, Quaternion.identity);
 
                 //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
@@ -53,27 +53,12 @@ namespace PlateauToolkit.Sandbox.Editor
                     !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
                 {
                     PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
-
-                    var info = new RoadInfo();
-                    info.m_RoadId = road.GetId(m_RoadNetworkGetter);
-                    info.m_LaneIndex = road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane);
-                    info.m_VehecleID = vehicle.index;
-                    trafficMovement.RoadInfo = info;
+                    trafficMovement.RoadInfo = new RoadInfo(
+                        road.GetId(m_RoadNetworkGetter),
+                        road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane),
+                        vehicle.index);
                 }
             }
-        }
-
-        //暫定　ランダムにロードを抽出
-        public (Vector3, RnDataRoad, RnDataLane) GetRandomRoad(int index)
-        {
-            var roadNetworkRoads = m_RoadNetworkGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
-            int randValue = Random.Range(0, roadNetworkRoads.Count());
-
-            RnDataRoad outRoad = roadNetworkRoads[randValue];
-            RnDataLane outlane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
-            RnDataLineString outLinestring = outlane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
-            Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
-            return (position, outRoad, outlane);
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる

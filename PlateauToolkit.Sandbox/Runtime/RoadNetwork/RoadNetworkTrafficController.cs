@@ -21,6 +21,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField]
         public int m_VehecleID;
 
+        public RoadInfo() { }
+        public RoadInfo(int road, int lane, int vehecle)
+        {
+            m_RoadId = road;
+            m_LaneIndex = lane;
+            m_VehecleID = vehecle;
+        }
     }
 
     [Serializable]
@@ -45,7 +52,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField]
         public int m_LastRoadId;
 
-        // Serializeすると[ TLS Allocator ALLOC_TEMP_TLS, underlying allocator ALLOC_TEMP_MAIN has unfreed allocations　]が表示されてしまう
+        [SerializeField]
         RoadInfo m_RespawnPosition;
 
         //Debug用
@@ -161,17 +168,19 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             Debug.Log($"<color=yellow>roadInfo {roadInfo.m_RoadId} {roadInfo.m_LaneIndex}</color>");
         }
 
-        public void Initialize()
-        {
-            m_RespawnPosition = m_RoadInfo;
-        }
-
         public RoadNetworkTrafficController Respawn()
         {
             Debug.Log($"<color=blue>Respawn {m_RoadInfo?.m_VehecleID}</color>");
             if(m_RoadInfo != m_RespawnPosition)
                 return new(m_RespawnPosition);
-            return null;
+
+            var (pos, road, lane) = m_TrafficManager.GetRandomRoad();
+            var info = new RoadInfo(
+                        road.GetId(RnGetter),
+                        road.GetLaneIndexOfMainLanes(RnGetter, lane),
+                        m_RoadInfo.m_VehecleID);
+
+            return new(info);
         }
 
         //次のRoadBaseを取得
@@ -475,6 +484,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return true;
         }
 
+        //不要
         public void Dispose()
         {
             //m_RoadNetworkGetter = null;

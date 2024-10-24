@@ -106,7 +106,6 @@ namespace PlateauToolkit.Sandbox
         {
             TryGetComponent(out IPlateauSandboxTrafficObject trafficObject);
             m_TrafficObject = trafficObject;
-            m_RoadParam?.Initialize();
         }
 
         void Start()

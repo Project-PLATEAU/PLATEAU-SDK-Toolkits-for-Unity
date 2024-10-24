@@ -4,7 +4,9 @@ using PlateauToolkit.Sandbox;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -13,7 +15,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
         public List<int> m_Vehecles = new List<int>();
     }
-
 
     //交通状況管理
     public class TrafficManager : MonoBehaviour
@@ -50,6 +51,19 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_Vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
         }
 
+        //暫定　ランダムにロードを抽出
+        public (Vector3, RnDataRoad, RnDataLane) GetRandomRoad()
+        {
+            var roadNetworkRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
+            int randValue = Random.Range(0, roadNetworkRoads.Count());
+
+            RnDataRoad outRoad = roadNetworkRoads[randValue];
+            RnDataLane outlane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
+            RnDataLineString outLinestring = outlane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
+            Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
+            return (position, outRoad, outlane);
+        }
+
         public void SetRoadInfo(RoadInfo info)
         {
             if(RoadStatuses.TryGetValue(info.m_RoadId, out var value))
@@ -58,7 +72,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     value.m_Vehecles.Add(info.m_VehecleID);
                 }
-            } 
+            }
             else
             {
                 RoadStatus stat = new RoadStatus();
