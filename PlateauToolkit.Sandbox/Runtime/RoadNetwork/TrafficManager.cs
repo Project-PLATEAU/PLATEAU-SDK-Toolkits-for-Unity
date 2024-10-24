@@ -19,12 +19,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     //交通状況管理
     public class TrafficManager : MonoBehaviour
     {
-        [SerializeField] List<RnDataRoadBase> m_RoadBases;
-        [SerializeField] List<PlateauSandboxTrafficMovement> m_Vehicles;
-
+        //[SerializeField] List<RnDataRoadBase> m_RoadBases;
+        //[SerializeField] List<PlateauSandboxTrafficMovement> m_Vehicles;
+        
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
-        Dictionary<int,RoadStatus> RoadStatuses = new Dictionary<int,RoadStatus>();
+        //[SerializeField]
+        Dictionary<int, PlateauSandboxTrafficMovement> m_Vehicles;
+        //[SerializeField]
+        Dictionary<int,RoadStatus> m_TrafficCircumstances = new Dictionary<int,RoadStatus>();
 
         public RoadNetworkDataGetter RnGetter
         {
@@ -47,8 +50,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         void Start()
         {
-            m_RoadBases = RnGetter.GetRoadBases() as List<RnDataRoadBase>;
-            m_Vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
+            //m_RoadBases = RnGetter.GetRoadBases() as List<RnDataRoadBase>;
+            var vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
+
+            m_Vehicles = new();
+            foreach (var vehicle in vehicles)
+            {
+                m_Vehicles.Add(vehicle.m_RoadParam.m_RoadInfo.m_VehecleID, vehicle);
+            }
         }
 
         //暫定　ランダムにロードを抽出
@@ -64,21 +73,59 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return (position, outRoad, outlane);
         }
 
-        public void SetRoadInfo(RoadInfo info)
+        public void SetRoadInfo(int fromId, int toId, int vehecleID)
         {
-            if(RoadStatuses.TryGetValue(info.m_RoadId, out var value))
+            if(m_TrafficCircumstances.TryGetValue(fromId, out var fromStat))
             {
-                if (!value.m_Vehecles.Contains(info.m_VehecleID))
+                fromStat.m_Vehecles.Remove(vehecleID);
+            }
+
+            if (m_TrafficCircumstances.TryGetValue(toId, out var stat))
+            {
+                if (!stat.m_Vehecles.Contains(vehecleID))
                 {
-                    value.m_Vehecles.Add(info.m_VehecleID);
+                    stat.m_Vehecles.Add(vehecleID);
                 }
             }
             else
             {
-                RoadStatus stat = new RoadStatus();
-                RoadStatuses.Add(info.m_RoadId, stat);
+                stat = new RoadStatus();
+                stat.m_Vehecles.Add(vehecleID);
+                m_TrafficCircumstances.Add(toId, stat);
             }
         }
 
+        public class LaneStatus
+        {
+
+        }
+
+        public LaneStatus GetLaneInfo(int roadId, int laneIndex)
+        {
+            LaneStatus stat = new LaneStatus();
+
+            if(m_TrafficCircumstances.TryGetValue(roadId, out var roadStat))
+            {
+                Debug.Log($"<color=cyan>GetLaneInfo vehecles : {roadStat.m_Vehecles.Count}</color>");
+            }
+            //else
+            //    Debug.Log($"<color=cyan>GetLaneInfo vehecles not found. traffic count {m_TrafficCircumstances.Count} </color>");
+
+
+            return stat;
+        }
+
+        public LaneStatus GetTrackInfo(RnDataIntersection intersection, int trackIndex)
+        {
+            LaneStatus stat = new LaneStatus();
+
+
+
+
+            Debug.Log($"<color=cyan>GetTrackInfo </color>");
+
+
+            return stat;
+        }
     }
 }

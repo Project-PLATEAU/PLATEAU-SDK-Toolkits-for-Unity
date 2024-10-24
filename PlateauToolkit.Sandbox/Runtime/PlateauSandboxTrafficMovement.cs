@@ -1,6 +1,5 @@
 ﻿
 using PLATEAU.RoadNetwork.Data;
-using PLATEAU.RoadNetwork.Structure;
 using System;
 using System.Collections;
 using System.Linq;
@@ -26,7 +25,7 @@ namespace PlateauToolkit.Sandbox
     public class PlateauSandboxTrafficMovement : PlateauSandboxMovementBase
     {
         [SerializeField]
-        RoadNetworkTrafficController m_RoadParam;
+        public RoadNetworkTrafficController m_RoadParam;
 
         [SerializeField]
         public float m_SpeedKm = 40f;
@@ -254,8 +253,8 @@ namespace PlateauToolkit.Sandbox
                 for (int i = 0; i < 100; i++)
                 {
                     var percent = i * 0.01f;
-                    //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
-                    Vector3 pos = SplineTool.GetPointOnLine(points, percent);
+                    Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
+                    //Vector3 pos = SplineTool.GetPointOnLine(points, percent);
                     if (lastpos == Vector3.zero)
                         lastpos = pos;
 

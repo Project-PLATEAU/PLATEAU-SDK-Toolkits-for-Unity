@@ -280,6 +280,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return road.GetMainLanes(getter).IndexOf(lane);
         }
 
+        //lane は IDではなくMainLaneのindex
         public static RnDataLane GetChildLane([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex = -1, bool isMainLane = true)
         {
             if (isMainLane)
@@ -324,9 +325,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
-        public static RnDataLineString GetChildLineString([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneId, bool isMainLane = true, LanePosition laneposition = LanePosition.Center)
+        public static RnDataLineString GetChildLineString([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex, bool isMainLane = true, LanePosition laneposition = LanePosition.Center)
         {
-            RnDataWay way = road.GetChildWay(getter, laneId, isMainLane, laneposition);
+            RnDataWay way = road.GetChildWay(getter, laneIndex, isMainLane, laneposition);
             return way.GetChildLineString(getter);
         }
 

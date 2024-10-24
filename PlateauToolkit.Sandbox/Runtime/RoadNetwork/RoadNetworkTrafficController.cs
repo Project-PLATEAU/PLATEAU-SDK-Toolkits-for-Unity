@@ -171,8 +171,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public RoadNetworkTrafficController Respawn()
         {
             Debug.Log($"<color=blue>Respawn {m_RoadInfo?.m_VehecleID}</color>");
-            if(m_RoadInfo != m_RespawnPosition)
-                return new(m_RespawnPosition);
+            //if(m_RoadInfo != m_RespawnPosition)
+            //    return new(m_RespawnPosition);
 
             var (pos, road, lane) = m_TrafficManager.GetRandomRoad();
             var info = new RoadInfo(
@@ -318,6 +318,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     var lane = lanes.TryGet(laneIndex);
                     nextRoadInfo.m_LaneIndex = nextRoad.GetMainLanes(RnGetter).IndexOf(lane);
 
+                    TrafficManager.GetLaneInfo(nextRoadInfo.m_RoadId, laneIndex); // Debug Lane info
+
                     //Debug.Log($"<color=green>Lane Next Border {lane.GetNextBorder(RnGetter).LineString.ID} Prev Border {lane.GetPrevBorder(RnGetter).LineString.ID}</color>");
                     success = true;
                 }
@@ -423,7 +425,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 //expectedBorders = new() { current.m_ToBorder };
                 success = SetRoadBase();
 
-                TrafficManager.SetRoadInfo(m_RoadInfo);
+                TrafficManager.SetRoadInfo(m_LastRoadId, m_RoadInfo.m_RoadId, m_RoadInfo.m_VehecleID);
             }
             if (!success)
             {
