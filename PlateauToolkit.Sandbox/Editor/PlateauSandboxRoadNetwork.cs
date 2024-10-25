@@ -57,8 +57,16 @@ namespace PlateauToolkit.Sandbox.Editor
                         road.GetId(m_RoadNetworkGetter),
                         road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane),
                         vehicle.index);
+
+                    var result = m_TrafficManager.GetLaneInfo(trafficMovement.RoadInfo, true);
+                    if (result.m_NumCars > 0)
+                    {
+                        trafficMovement.m_StartOffset = result.m_NumCars * 0.15f; // TODO: 距離で
+                    }
                 }
             }
+
+            m_TrafficManager.InitializeVehicles();
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる

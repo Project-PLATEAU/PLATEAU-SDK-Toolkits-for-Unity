@@ -15,15 +15,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         float m_AdditionalPercentage = 0f;
 
-        public DistanceCalculator(float speed, float distance)
+        public DistanceCalculator(float speed, float distance, float offset)
         {
             m_SpeedKmPerHour = speed;
             m_SpeedMetersPerSecond = (m_SpeedKmPerHour * 1000f) / 3600f;
             m_TotalDistanceMeters = distance;
+            m_AdditionalPercentage = offset;
             Start();
         }
 
-        // TODO: 動作未確認
+        //走行中に速度変更
         public void ChangeSpeed(float speed)
         {
             m_AdditionalPercentage = GetPercent();

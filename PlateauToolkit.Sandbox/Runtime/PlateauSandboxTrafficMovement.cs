@@ -7,6 +7,8 @@ using UnityEditor;
 using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using static PlasticPipe.Server.MonitorStats;
+using System.Collections.Generic;
+using UnityEngine.Splines;
 
 namespace PlateauToolkit.Sandbox
 {
@@ -26,10 +28,13 @@ namespace PlateauToolkit.Sandbox
     public class PlateauSandboxTrafficMovement : PlateauSandboxMovementBase
     {
         [SerializeField]
-        public RoadNetworkTrafficController m_RoadParam;
+        public RoadNetworkTrafficController m_TrafficController;
 
         [SerializeField]
         public float m_SpeedKm = 40f;
+
+        [SerializeField]
+        public float m_StartOffset = 0f;
 
         TrafficManager m_TrafficManager;
         Coroutine m_MovementCoroutine;
@@ -66,11 +71,15 @@ namespace PlateauToolkit.Sandbox
         {
             set
             {
-                m_RoadParam = CreateRoadParam(value);
+                m_TrafficController = CreateTrafficController(value);
+            }
+            get
+            {
+                return m_TrafficController?.m_RoadInfo;
             }
         }
 
-        RoadNetworkTrafficController CreateRoadParam(RoadInfo info)
+        RoadNetworkTrafficController CreateTrafficController(RoadInfo info)
         {
             var param = new RoadNetworkTrafficController(info);
             if(param.IsRoad)
@@ -165,42 +174,43 @@ namespace PlateauToolkit.Sandbox
         //移動処理コルーチン
         IEnumerator MovementEnumerator()
         {
-            if (m_RoadParam?.IsRoad == true)
+            if (m_TrafficController?.IsRoad == true)
             {
-                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_RoadParam.GetLineString().GetTotalDistance(RnGetter));
-                m_DistanceCalc.Start();
-
-                var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
-                if (m_RoadParam.IsLineStringReversed)
+                List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
+                if (m_TrafficController.IsLineStringReversed)
+                {
                     points.Reverse();
+                }
 
-                var spline = SplineTool.CreateSplineFromPoints(points);
+                Spline spline = SplineTool.CreateSplineFromPoints(points);
+
+                m_TrafficController.SetDistance(spline.GetLength());
+                //m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_TrafficController.GetLineString().GetTotalDistance(RnGetter));
+                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength(), m_StartOffset);
+                m_DistanceCalc.Start();
 
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    //var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
-
-                    //if(m_RoadParam.IsLineStringReversed)
-                    //    points.Reverse();
-
-                    var percent = m_DistanceCalc.GetPercent();
-                    m_RoadParam.m_CurrentProgress = percent;
+                    float percent = m_DistanceCalc.GetPercent();
 
                     //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, percent);
                     //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
                     //Vector3 pos = SplineTool.GetPointOnLine(points, percent);
-
-                    var pos = SplineTool.GetPointOnSpline(spline, percent);
+                    Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
 
                     SetTransfrorm(pos);
+
+                    ProgressResult stat = m_TrafficController.SetProgress(percent);
+                    SetSpeed(stat);
+
                     yield return null;
                 }
 
                 //Debug.Break();
             }
-            else if (m_RoadParam?.IsIntersection == true && m_RoadParam?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
+            else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
             {
-                RnDataTrack track = m_RoadParam.GetTrack();
+                RnDataTrack track = m_TrafficController.GetTrack();
 
                 if (track == null)
                 {
@@ -208,24 +218,27 @@ namespace PlateauToolkit.Sandbox
                     yield break;
                 }
 
-                UnityEngine.Splines.Spline spline = track.Spline;
+                Spline spline = track.Spline;
 
-                if (m_RoadParam.IsReversed)
+                if (m_TrafficController.IsReversed)
                 {
                     spline.Knots = spline.Knots.Reverse();
                 }
 
-                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength());
+                m_TrafficController.SetDistance(spline.GetLength());
+                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength(), m_StartOffset);
                 m_DistanceCalc.Start();
 
                 //intersection
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    var percent = m_DistanceCalc.GetPercent();
-                    m_RoadParam.m_CurrentProgress = percent;
-
-                    var pos = SplineTool.GetPointOnSpline(spline, percent);
+                    float percent = m_DistanceCalc.GetPercent();
+                    Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
                     SetTransfrorm(pos);
+
+                    ProgressResult stat = m_TrafficController.SetProgress(percent);
+                    SetSpeed(stat);
+
                     yield return null;
                 }
 
@@ -236,9 +249,9 @@ namespace PlateauToolkit.Sandbox
                 Stop();
             }
 
-            m_RoadParam = m_RoadParam.GetNextRoad();
+            m_TrafficController = m_TrafficController.GetNextRoad();
 
-            if (m_RoadParam == null)
+            if (m_TrafficController == null)
             {
                 Stop();
             }
@@ -252,11 +265,11 @@ namespace PlateauToolkit.Sandbox
         //Debug Gizmo
         void OnDrawGizmos()
         {
-            if (m_RoadParam == null || RnGetter == null)
+            if (m_TrafficController == null || RnGetter == null)
                 return;
-            if(m_RoadParam.IsRoad)
+            if(m_TrafficController.IsRoad)
             {
-                var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
+                var points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
 
                 Gizmos.color = Color.blue;
                 for (int j = 0; j < points.Count - 1; j++)
@@ -267,6 +280,7 @@ namespace PlateauToolkit.Sandbox
                 Gizmos.color = Color.magenta;
                 Vector3 lastpos = Vector3.zero;
                 var spline = SplineTool.CreateSplineFromPoints(points);
+
                 for (int i = 0; i < 100; i++)
                 {
                     var percent = i * 0.01f;
@@ -280,7 +294,7 @@ namespace PlateauToolkit.Sandbox
                     lastpos = pos;
                 }
             }
-            else if(m_RoadParam.IsIntersection)
+            else if(m_TrafficController.IsIntersection)
             {
                 //intersection
                 Gizmos.color = Color.yellow;
@@ -288,7 +302,7 @@ namespace PlateauToolkit.Sandbox
                 for (int i = 0; i < 100; i++)
                 {
                     var percent = i * 0.01f;
-                    var track = m_RoadParam.GetTrack();
+                    var track = m_TrafficController.GetTrack();
                     Vector3 pos = SplineTool.GetPointOnSpline(track.Spline, percent);
                     if (lastpos == Vector3.zero)
                         lastpos = pos;
@@ -299,13 +313,13 @@ namespace PlateauToolkit.Sandbox
             }
 
             //From/To Border
-            if(m_RoadParam.m_FromBorder != null)
+            if(m_TrafficController.m_FromBorder != null)
             {
                 Gizmos.color = Color.blue;
-                var vec = m_RoadParam.m_FromBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
+                var vec = m_TrafficController.m_FromBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
                 if(vec.Count > 0)
                 {
-                    Handles.Label(vec.First(), $"from :{m_RoadParam.m_FromBorder.LineString.ID}");
+                    Handles.Label(vec.First(), $"from :{m_TrafficController.m_FromBorder.LineString.ID}");
                     for (int k = 0; k < vec.Count - 1; k++)
                     {
                         Gizmos.DrawLine(vec[k], vec[k + 1]);
@@ -313,13 +327,13 @@ namespace PlateauToolkit.Sandbox
                 }
             }
 
-            if (m_RoadParam.m_ToBorder != null)
+            if (m_TrafficController.m_ToBorder != null)
             {
                 Gizmos.color = Color.cyan;
-                var vec = m_RoadParam.m_ToBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
+                var vec = m_TrafficController.m_ToBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
                 if(vec.Count > 0)
                 {
-                    Handles.Label(vec.First(), $"to :{m_RoadParam.m_ToBorder.LineString.ID} rev {m_RoadParam.m_RoadInfo.m_IsReverse}/{m_RoadParam.GetLane()?.IsReverse::false}");
+                    Handles.Label(vec.First(), $"to :{m_TrafficController.m_ToBorder.LineString.ID} rev {m_TrafficController.m_RoadInfo.m_IsReverse}/{m_TrafficController.GetLane()?.IsReverse::false}");
                     for (int k = 0; k < vec.Count - 1; k++)
                     {
                         Gizmos.DrawLine(vec[k], vec[k + 1]);
@@ -328,34 +342,43 @@ namespace PlateauToolkit.Sandbox
             }
 
             //Debug
-            if (m_RoadParam.expectedBorders?.Count > 0)
-            {
-                Gizmos.color = Color.green;
-                Handles.color = Color.green;
-                foreach (var border in m_RoadParam.expectedBorders)
-                {
-                    var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-                    Handles.Label(vec.First(), $"id:{border.LineString.ID}");
-                    for (int k = 0; k < vec.Count - 1; k++)
-                    {
-                        Gizmos.DrawLine(vec[k], vec[k + 1]);
-                    }
-                }
-            }
+            //if (m_RoadParam.expectedBorders?.Count > 0)
+            //{
+            //    Gizmos.color = Color.green;
+            //    Handles.color = Color.green;
+            //    foreach (var border in m_RoadParam.expectedBorders)
+            //    {
+            //        var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
+            //        Handles.Label(vec.First(), $"id:{border.LineString.ID}");
+            //        for (int k = 0; k < vec.Count - 1; k++)
+            //        {
+            //            Gizmos.DrawLine(vec[k], vec[k + 1]);
+            //        }
+            //    }
+            //}
 
-            if(m_RoadParam.actualBorders?.Count > 0)
+            //if(m_RoadParam.actualBorders?.Count > 0)
+            //{
+            //    Gizmos.color = Color.red;
+            //    Handles.color = Color.red;
+            //    foreach (var border in m_RoadParam.actualBorders)
+            //    {
+            //        var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
+            //        Handles.Label(vec.Last(), $"id:{border.LineString.ID}");
+            //        for (int k = 0; k < vec.Count - 1; k++)
+            //        {
+            //            Gizmos.DrawLine(vec[k], vec[k + 1]);
+            //        }
+            //    }
+            //}
+        }
+
+        public void SetSpeed(ProgressResult result)
+        {
+            if (result.m_Speed != m_SpeedKm)
             {
-                Gizmos.color = Color.red;
-                Handles.color = Color.red;
-                foreach (var border in m_RoadParam.actualBorders)
-                {
-                    var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-                    Handles.Label(vec.Last(), $"id:{border.LineString.ID}");
-                    for (int k = 0; k < vec.Count - 1; k++)
-                    {
-                        Gizmos.DrawLine(vec[k], vec[k + 1]);
-                    }
-                }
+                m_SpeedKm = result.m_Speed;
+                m_DistanceCalc.ChangeSpeed(m_SpeedKm);
             }
         }
 

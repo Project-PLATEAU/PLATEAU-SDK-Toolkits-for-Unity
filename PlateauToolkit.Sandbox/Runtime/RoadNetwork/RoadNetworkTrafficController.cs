@@ -1,5 +1,4 @@
 ﻿using PLATEAU.RoadNetwork.Data;
-using PLATEAU.RoadNetwork.Structure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,15 +18,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField]
         public bool m_IsReverse;
         [SerializeField]
-        public int m_VehecleID;
+        public int m_VehicleID;
 
         public RoadInfo() { }
         public RoadInfo(int road, int lane, int vehecle)
         {
             m_RoadId = road;
             m_LaneIndex = lane;
-            m_VehecleID = vehecle;
+            m_VehicleID = vehecle;
         }
+    }
+
+    public struct ProgressResult
+    {
+        public float m_Speed;
     }
 
     [Serializable]
@@ -54,14 +58,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public float m_CurrentProgress;
 
         [SerializeField]
-        public int m_LastRoadId;
+        public float m_Distance;
 
         [SerializeField]
-        RoadInfo m_RespawnPosition;
+        public int m_LastRoadId;
 
         //Debug用
-        public List<RnDataWay> expectedBorders = new List<RnDataWay>();
-        public List<RnDataWay> actualBorders = new List<RnDataWay>();
+        //public List<RnDataWay> expectedBorders = new List<RnDataWay>();
+        //public List<RnDataWay> actualBorders = new List<RnDataWay>();
 
         TrafficManager m_TrafficManager;
 
@@ -73,7 +77,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         //prev/nextの切替用
         public bool IsReversed
         {
-            get {
+            get
+            {
                 return m_RoadInfo?.m_IsReverse ?? false;
             }
         }
@@ -92,7 +97,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (IsRoad)
             {
                 if (m_Road.GetId(RnGetter) == -1)
+                {
                     m_Road = RnGetter.GetRoadBases().TryGet(m_RoadInfo.m_RoadId) as RnDataRoad;
+                }
                 return m_Road;
             }
             return null;
@@ -136,67 +143,106 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public RnDataLineString GetLineString()
         {
             if (!IsRoad)
+            {
                 return null;
+            }
             return GetRoad().GetChildLineString(RnGetter, m_RoadInfo.m_LaneIndex);
         }
+
         public RnDataWay GetWay()
         {
             if (!IsRoad)
+            {
                 return null;
+            }
             return GetRoad().GetChildWay(RnGetter, m_RoadInfo.m_LaneIndex);
         }
 
         public RnDataLane GetLane()
         {
             if (!IsRoad)
+            {
                 return null;
+            }
             return GetRoad().GetChildLane(RnGetter, m_RoadInfo.m_LaneIndex);
         }
 
         public RnDataTrack GetTrack()
         {
             if (!IsIntersection)
+            {
                 return null;
-
+            }
             if (GetIntersection().Tracks.Count < m_RoadInfo.m_TrackIndex)
+            {
                 return null;
-
+            }
             return GetIntersection().Tracks[m_RoadInfo.m_TrackIndex];
         }
 
         //初回
         public RoadNetworkTrafficController(RoadInfo roadInfo)
         {
-            m_RoadInfo = m_RespawnPosition = roadInfo;
+            m_RoadInfo = roadInfo;
             SetRoadBase();
             Debug.Log($"<color=yellow>roadInfo {roadInfo.m_RoadId} {roadInfo.m_LaneIndex}</color>");
         }
 
         public RoadNetworkTrafficController Respawn()
         {
-            Debug.Log($"<color=blue>Respawn {m_RoadInfo?.m_VehecleID}</color>");
-            //if(m_RoadInfo != m_RespawnPosition)
-            //    return new(m_RespawnPosition);
+            Debug.Log($"<color=blue>Respawn {m_RoadInfo?.m_VehicleID}</color>");
 
             var (pos, road, lane) = m_TrafficManager.GetRandomRoad();
             var info = new RoadInfo(
                         road.GetId(RnGetter),
                         road.GetLaneIndexOfMainLanes(RnGetter, lane),
-                        m_RoadInfo.m_VehecleID);
+                        m_RoadInfo.m_VehicleID);
 
             return new(info);
+        }
+
+        public void SetDistance(float distance)
+        {
+            m_Distance = distance;
+        }
+
+        public ProgressResult SetProgress(float progress)
+        {
+            m_CurrentProgress = progress;
+
+            ProgressResult result = new();
+
+            var info = TrafficManager.GetLaneInfo(m_RoadInfo, IsRoad); // Debug Lane info
+
+            if(info.m_NumCars > 0)
+            {
+                if (Mathf.Abs(progress - info.m_LastCarProgress) * m_Distance < 5f) //適当な差 (5m?)
+                {
+                    result.m_Speed = 5f; //適当なスピード
+                }
+                else
+                {
+                    result.m_Speed = 30f; //適当なスピード
+                }
+            }
+            else
+            {
+                result.m_Speed = 40f; //適当なスピード
+            }
+
+            return result;
         }
 
         //次のRoadBaseを取得
         public RoadNetworkTrafficController GetNextRoad()
         {
-            if (IsRoad == true)
+            if (IsRoad)
             {
                 RnDataRoad road = GetRoad();
                 RnDataLane lane = GetLane();
                 RnDataRoadBase nextRoad = IsReversed ? road.GetPrevRoad(RnGetter) : road.GetNextRoad(RnGetter);
 
-                if(nextRoad.IsValid(RnGetter))
+                if (nextRoad.IsValid(RnGetter))
                 {
                     RoadNetworkTrafficController nextParam = new(this, nextRoad);
 
@@ -212,14 +258,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     Debug.Log($"<color=red>Next Road is not Valid Prev{road.Prev.ID} Next{road.Next.ID}</color>");
                 }
             }
-            else if (IsIntersection == true)
+            else if (IsIntersection)
             {
-                var intersection = GetIntersection();
-                var track = GetTrack();
-                var toWay = track.GetToBorder(RnGetter);
-                var fromWay = track.GetFromBorder(RnGetter);
-                var way = IsReversed ? fromWay : toWay;
-                var edges = intersection.GetEdgesFromBorder(RnGetter, way);
+                RnDataIntersection intersection = GetIntersection();
+                RnDataTrack track = GetTrack();
+                RnDataWay toWay = track.GetToBorder(RnGetter);
+                RnDataWay fromWay = track.GetFromBorder(RnGetter);
+                RnDataWay way = IsReversed ? fromWay : toWay;
+                List<RnDataNeighbor> edges = intersection.GetEdgesFromBorder(RnGetter, way);
 
                 if (edges.Count <= 0)
                 {
@@ -262,7 +308,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     Debug.Log($"<color=red>Intersection Track ToBorders {toborders} FromBorders {fromborders}</color>");
                     Debug.Log($"<color=red>Intersection Edge Roads {connectedRoadId} count {intersection.GetAllConnectedRoads(RnGetter).Count}</color>");
                     Debug.Log($"<color=red>Intersection All Edge Borders {edgeBorders} count {intersection.Edges.Count} </color>");
-                    actualBorders = intersection.Edges.Select(x => x.GetBorder(RnGetter)).ToList();
+                    //actualBorders = intersection.Edges.Select(x => x.GetBorder(RnGetter)).ToList();
                 }
             }
 
@@ -305,7 +351,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     lanes.AddRange(nextRoad.GetLanesFromNextBorder(RnGetter, nextBorder));
                     if (lanes.Count > 0)
                     {
-                        expectedBorders = new() { nextBorder };
+                        //expectedBorders = new() { nextBorder };
                         //Debug.Log($"<color=green>Lanes From LineString Reverse {nextBorder.LineString.ID} Count {lanes.Count}</color>");
                         nextRoadInfo.m_IsReverse = true;
                     }
@@ -322,16 +368,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     var lane = lanes.TryGet(laneIndex);
                     nextRoadInfo.m_LaneIndex = nextRoad.GetMainLanes(RnGetter).IndexOf(lane);
 
-                    TrafficManager.GetLaneInfo(nextRoadInfo.m_RoadId, laneIndex); // Debug Lane info
-
                     //Debug.Log($"<color=green>Lane Next Border {lane.GetNextBorder(RnGetter).LineString.ID} Prev Border {lane.GetPrevBorder(RnGetter).LineString.ID}</color>");
                     success = true;
                 }
                 else
                 {
                     //取得失敗
-                    expectedBorders = new() { current.GetTrack().GetToBorder(RnGetter) };
-                    actualBorders = nextRoad.GetAllNextBorders(RnGetter);
+                    //expectedBorders = new() { current.GetTrack().GetToBorder(RnGetter) };
+                    var actualBorders = nextRoad.GetAllNextBorders(RnGetter);
                     actualBorders.AddRange(nextRoad.GetAllPrevBorders(RnGetter));
                     var actual = String.Join(",", actualBorders.Select(x => x.GetId(RnGetter)));
                     Debug.LogError($"<color=magenta>lane not found from border exptected : {current.GetTrack().ToBorder.ID} actual {actual}</color>");
@@ -395,10 +439,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     //Debug
                     var toborders = String.Join(",", intersection.Tracks.Select(x => x.ToBorder.ID));
                     var fromborders = String.Join(",", intersection.Tracks.Select(x => x.FromBorder.ID));
-                    expectedBorders = new() { RnGetter.GetWays().TryGet(current.GetLane().PrevBorder), RnGetter.GetWays().TryGet(current.GetLane().NextBorder) };
                     var connectedRoadId = String.Join(",", intersection.GetAllConnectedRoads(RnGetter).Select(x => x.GetId(RnGetter)));
                     var edgeBorders = String.Join(",", intersection.Edges.Select(x => x.GetBorder(RnGetter).GetId(RnGetter)));
-                    actualBorders = intersection.Edges.Select(x => x.GetBorder(RnGetter)).ToList();
+                    //expectedBorders = new() { RnGetter.GetWays().TryGet(current.GetLane().PrevBorder), RnGetter.GetWays().TryGet(current.GetLane().NextBorder) };
+                    //actualBorders = intersection.Edges.Select(x => x.GetBorder(RnGetter)).ToList();
 
                     Debug.LogError($"<color=red>Intersection Track ToBorders {toborders} FromBorders {fromborders} expected Lane PrevBorder{current.GetLane().PrevBorder.ID} NextBorder{current.GetLane().NextBorder.ID}</color>");
                     Debug.LogError($"<color=red>Intersection Edge Roads {connectedRoadId} expected Road {current.GetRoad().GetId(RnGetter)} </color>");
@@ -424,12 +468,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 m_LastRoadId = current.m_RoadInfo.m_RoadId;
                 m_RoadInfo = nextRoadInfo;
                 m_RoadInfo.m_RoadId = next.GetId(RnGetter);
-                m_RoadInfo.m_VehecleID = current.m_RoadInfo.m_VehecleID;
-                m_RespawnPosition = current.m_RespawnPosition;
+                m_RoadInfo.m_VehicleID = current.m_RoadInfo.m_VehicleID;
                 //expectedBorders = new() { current.m_ToBorder };
                 success = SetRoadBase();
 
-                TrafficManager.SetRoadInfo(m_LastRoadId, m_RoadInfo.m_RoadId, m_RoadInfo.m_VehecleID);
+                TrafficManager.SetRoadInfo(m_LastRoadId, m_RoadInfo);
             }
             if (!success)
             {
@@ -502,8 +545,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_ToBorder = null;
 
             //Debug用
-            expectedBorders?.Clear();
-            actualBorders?.Clear();
+            //expectedBorders?.Clear();
+            //actualBorders?.Clear();
         }
     }
 }
