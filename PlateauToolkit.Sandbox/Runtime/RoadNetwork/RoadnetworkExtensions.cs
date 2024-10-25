@@ -24,9 +24,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             Debug.LogError($"index {index} is larger than list count {list.Count}");
             return default(TValue);
         }
+
         public static TValue TryGet<TValue>([DisallowNull] this IReadOnlyList<TValue> list, RnID<TValue> id) where TValue : IPrimitiveData
         {
-            if(!id.IsValid)
+            if (!id.IsValid)
             {
                 Debug.LogError($"id is not Valid ");
                 return default(TValue);
@@ -552,7 +553,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public static List<RnDataNeighbor> GetEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
         {
-            return intersection.Edges.FindAll(x => x.Border.ID == way.GetId(getter));
+            return intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
         }
 
         public static List<RnDataNeighbor> GetEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
