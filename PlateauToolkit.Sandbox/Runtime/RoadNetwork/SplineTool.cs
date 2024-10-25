@@ -176,6 +176,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return QuadraticBezier(p0, p1, p2, t);
         }
 
+        // Unity Spline 動的生成
+        public static Spline CreateSplineFromPoints(List<Vector3> points)
+        {
+            Spline spline = new Spline();
+
+            foreach (Vector3 point in points)
+            {
+                var knot = new BezierKnot(point);
+                spline.Add(knot, TangentMode.AutoSmooth);
+            }
+
+            return spline;
+        }
+
         // Unity Spline 上のPoint
         public static Vector3 GetPointOnSpline(Spline spline, float percent)
         {

@@ -49,6 +49,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField]
         public RnDataWay m_ToBorder;
 
+        // Linestring位置パーセント( 0f - 1f )
+        [SerializeField]
+        public float m_CurrentProgress;
+
         [SerializeField]
         public int m_LastRoadId;
 

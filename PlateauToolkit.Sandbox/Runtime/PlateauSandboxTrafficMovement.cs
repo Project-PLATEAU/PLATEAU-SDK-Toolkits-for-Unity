@@ -6,6 +6,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
+using static PlasticPipe.Server.MonitorStats;
 
 namespace PlateauToolkit.Sandbox
 {
@@ -169,16 +170,28 @@ namespace PlateauToolkit.Sandbox
                 m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_RoadParam.GetLineString().GetTotalDistance(RnGetter));
                 m_DistanceCalc.Start();
 
+                var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
+                if (m_RoadParam.IsLineStringReversed)
+                    points.Reverse();
+
+                var spline = SplineTool.CreateSplineFromPoints(points);
+
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
+                    //var points = m_RoadParam.GetLineString().GetChildPointsVector(RnGetter);
 
-                    if(m_RoadParam.IsLineStringReversed)
-                        points.Reverse();
+                    //if(m_RoadParam.IsLineStringReversed)
+                    //    points.Reverse();
 
-                    //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, m_DistanceCalc.GetPercent());
-                    //Vector3 pos = SplineTool.GetPointOnSpline(points, m_DistanceCalc.GetPercent());
-                    Vector3 pos = SplineTool.GetPointOnLine(points, m_DistanceCalc.GetPercent());
+                    var percent = m_DistanceCalc.GetPercent();
+                    m_RoadParam.m_CurrentProgress = percent;
+
+                    //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, percent);
+                    //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
+                    //Vector3 pos = SplineTool.GetPointOnLine(points, percent);
+
+                    var pos = SplineTool.GetPointOnSpline(spline, percent);
+
                     SetTransfrorm(pos);
                     yield return null;
                 }
@@ -208,7 +221,10 @@ namespace PlateauToolkit.Sandbox
                 //intersection
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    var pos = SplineTool.GetPointOnSpline(spline, m_DistanceCalc.GetPercent());
+                    var percent = m_DistanceCalc.GetPercent();
+                    m_RoadParam.m_CurrentProgress = percent;
+
+                    var pos = SplineTool.GetPointOnSpline(spline, percent);
                     SetTransfrorm(pos);
                     yield return null;
                 }
@@ -250,11 +266,13 @@ namespace PlateauToolkit.Sandbox
 
                 Gizmos.color = Color.magenta;
                 Vector3 lastpos = Vector3.zero;
+                var spline = SplineTool.CreateSplineFromPoints(points);
                 for (int i = 0; i < 100; i++)
                 {
                     var percent = i * 0.01f;
-                    Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
+                    //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
                     //Vector3 pos = SplineTool.GetPointOnLine(points, percent);
+                    Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
                     if (lastpos == Vector3.zero)
                         lastpos = pos;
 

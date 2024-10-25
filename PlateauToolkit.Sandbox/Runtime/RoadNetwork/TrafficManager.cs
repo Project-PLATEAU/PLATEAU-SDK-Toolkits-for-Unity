@@ -19,15 +19,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     //交通状況管理
     public class TrafficManager : MonoBehaviour
     {
-        //[SerializeField] List<RnDataRoadBase> m_RoadBases;
-        //[SerializeField] List<PlateauSandboxTrafficMovement> m_Vehicles;
-        
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
-        //[SerializeField]
         Dictionary<int, PlateauSandboxTrafficMovement> m_Vehicles;
-        //[SerializeField]
-        Dictionary<int,RoadStatus> m_TrafficCircumstances = new Dictionary<int,RoadStatus>();
+        Dictionary<int,RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
 
         public RoadNetworkDataGetter RnGetter
         {
@@ -75,12 +70,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public void SetRoadInfo(int fromId, int toId, int vehecleID)
         {
-            if(m_TrafficCircumstances.TryGetValue(fromId, out var fromStat))
+            if(m_RoadSituation.TryGetValue(fromId, out var fromStat))
             {
                 fromStat.m_Vehecles.Remove(vehecleID);
             }
 
-            if (m_TrafficCircumstances.TryGetValue(toId, out var stat))
+            if (m_RoadSituation.TryGetValue(toId, out var stat))
             {
                 if (!stat.m_Vehecles.Contains(vehecleID))
                 {
@@ -91,7 +86,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             {
                 stat = new RoadStatus();
                 stat.m_Vehecles.Add(vehecleID);
-                m_TrafficCircumstances.Add(toId, stat);
+                m_RoadSituation.Add(toId, stat);
             }
         }
 
@@ -104,7 +99,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             LaneStatus stat = new LaneStatus();
 
-            if(m_TrafficCircumstances.TryGetValue(roadId, out var roadStat))
+            if (m_RoadSituation.TryGetValue(roadId, out var roadStat))
             {
                 Debug.Log($"<color=cyan>GetLaneInfo vehecles : {roadStat.m_Vehecles.Count}</color>");
             }
