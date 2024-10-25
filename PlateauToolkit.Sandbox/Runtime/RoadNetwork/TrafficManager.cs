@@ -95,7 +95,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public struct LaneStatus
         {
-            public int m_NumCars;
+            public int m_NumVehicles;
+            public int m_NumVehiclesForward;
             public float m_LastCarProgress;
         }
 
@@ -113,10 +114,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     roadStat.m_Vehecles.Select(x => m_Vehicles[x]).Where(x => x.RoadInfo.m_LaneIndex == roadInfo.m_LaneIndex && x.RoadInfo.m_VehicleID != roadInfo.m_VehicleID).ToList() :
                     roadStat.m_Vehecles.Select(x => m_Vehicles[x]).Where(x => x.RoadInfo.m_TrackIndex == roadInfo.m_TrackIndex && x.RoadInfo.m_VehicleID != roadInfo.m_VehicleID).ToList();
 
-                stat.m_NumCars = veheclesOnTheLane.Count;
+                stat.m_NumVehicles = veheclesOnTheLane.Count;
 
                 PlateauSandboxTrafficMovement targetVehecle = m_Vehicles[roadInfo.m_VehicleID];
-                List<PlateauSandboxTrafficMovement> veheclesForward = veheclesOnTheLane.FindAll(x => x.m_TrafficController.m_CurrentProgress < targetVehecle.m_TrafficController.m_CurrentProgress);
+                List<PlateauSandboxTrafficMovement> veheclesForward = veheclesOnTheLane.FindAll(x => x.m_TrafficController.m_CurrentProgress > targetVehecle.m_TrafficController.m_CurrentProgress);
+
+                stat.m_NumVehiclesForward = veheclesForward.Count;
 
                 if (veheclesForward.TryFindMax(x => x.m_TrafficController.m_CurrentProgress, out PlateauSandboxTrafficMovement lastCar))
                 {
@@ -125,7 +128,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
             else
             {
-                stat.m_NumCars = 0;
+                stat.m_NumVehicles = 0;
             }
 
             return stat;

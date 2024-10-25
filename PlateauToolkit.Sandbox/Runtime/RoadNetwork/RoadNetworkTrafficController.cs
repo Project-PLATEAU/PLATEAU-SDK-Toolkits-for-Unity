@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Codice.Client.BaseCommands.ProgressStatus;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -214,21 +215,29 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             var info = TrafficManager.GetLaneInfo(m_RoadInfo, IsRoad); // Debug Lane info
 
-            if(info.m_NumCars > 0)
+            if(info.m_NumVehicles > 0)
             {
-                if (Mathf.Abs(progress - info.m_LastCarProgress) * m_Distance < 5f) //適当な差 (5m?)
+                if(info.m_NumVehiclesForward > 0)
                 {
-                    result.m_Speed = 5f; //適当なスピード
+                    if ((progress - info.m_LastCarProgress) * m_Distance < 5f) //適当な差 
+                    {
+                        result.m_Speed = IsRoad ? 10f : 5f; //適当なスピード
+                    }
+                    else
+                    {
+                        result.m_Speed = IsRoad ? 20f : 10f; //適当なスピード
+                    }
                 }
                 else
                 {
-                    result.m_Speed = 30f; //適当なスピード
+                    result.m_Speed = IsRoad ? 35f : 25f; //適当なスピード
                 }
             }
             else
             {
-                result.m_Speed = 40f; //適当なスピード
+                result.m_Speed = IsRoad ? 40f : 30f; //適当なスピード
             }
+
 
             return result;
         }
@@ -450,17 +459,23 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     Debug.LogError($"No tracks found.");
                 }
             }
-            else if(next is RnDataRoad && current.IsRoad) //Road->Road(あり得ない？）
+            else if (next is RnDataRoad && current.IsRoad) //Road->Road(あり得ない？）
             {
-                Debug.LogError($"Road -> Road");
+                Debug.LogError($"Road {current.m_Road.GetId(RnGetter)} -> Road {next.GetId(RnGetter)}");
                 //そのまま
                 nextRoadInfo = current.m_RoadInfo;
+                nextRoadInfo.m_RoadId = next.GetId(RnGetter);
+
+                Debug.Break();
             }
             else if (next is RnDataIntersection && current.IsIntersection) //Intersection -> Intersection (あり得ない？）
             {
-                Debug.LogError($"Intersection -> Intersection");
+                Debug.LogError($"Intersection {current.m_Intersection.GetId(RnGetter)} -> Intersection {next.GetId(RnGetter)}");
                 //そのまま
                 nextRoadInfo = current.m_RoadInfo;
+                nextRoadInfo.m_RoadId = next.GetId(RnGetter);
+
+                Debug.Break();
             }
 
             if (success)
