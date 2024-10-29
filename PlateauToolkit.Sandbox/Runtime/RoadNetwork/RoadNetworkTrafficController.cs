@@ -243,7 +243,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 //intersection
                 //T字路 (行くまで待機）
-                if (m_Intersection?.GetFromTracksFromBorder(RnGetter, m_FromBorder).Count == 2)
+                if (m_Intersection?.GetAllConnectedRoads(RnGetter).Count == 3)
                 {
                     //Debug.LogWarning($"T字路 {info.m_NumVehiclesCrossing}");
                     //if (info.m_NumVehiclesOncominglane > 0 || info.m_NumVehiclesCrossing > 0)

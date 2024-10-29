@@ -62,14 +62,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 GizmoUtil.DrawSpline(cont.GetTrack().Spline, Color.yellow);
 
                 //debug
-                //var onComing = cont.m_Intersection.GetOncomingTracks(getter, cont.GetTrack());
-                ////if(onComing.Count > 0)
-                ////    Debug.LogWarning($"onComing {onComing.Count}");
-
-                //foreach (var track in onComing)
-                //{
-                //    GizmoUtil.DrawSpline(track.Spline, Color.red);
-                //}
+                var onComing = cont.m_Intersection.GetOncomingTracks(getter, cont.GetTrack());
+                foreach (var track in onComing)
+                {
+                    GizmoUtil.DrawSpline(track.Spline, Color.green);
+                }
 
                 var crossingTracks = cont.m_Intersection.GetCrossingTracks(getter, cont.GetTrack());
                 foreach (var track in crossingTracks)
@@ -83,7 +80,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 //    GizmoUtil.DrawLine(e.GetBorder(getter).GetChildLineString(getter).GetChildPointsVector(getter), Color.red);
                 //}
 
-                GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"TurnType:{cont.GetTrack().TurnType.ToString()}", Color.red);
+                //GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"TurnType:{cont.GetTrack().TurnType.ToString()}", Color.red);
+
+                var numRoads = cont.m_Intersection.GetAllConnectedRoads(getter).Count();
+                var roadIDs = string.Join("," ,cont.m_Intersection.GetAllConnectedRoads(getter).Select(x => x.GetId(getter)).ToList());
+                GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"Roads:{numRoads} : {roadIDs}", Color.red);
             }
 
             //From / To Border

@@ -153,21 +153,18 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     {
                         var intersection = RnGetter.GetRoadBases().TryGet(roadInfo.m_RoadId) as RnDataIntersection;
 
-                        var targetTrack = intersection.Tracks.TryGet(roadInfo.m_TrackIndex);
+                        var targetTrack = intersection.Tracks.TryGet(roadInfo.m_TrackIndex); // TODO : RnTurnType.Straight をターゲットにする
                         var veheclesOnTheRoad = roadStat.m_VehiclesOnRoad.Select(x => m_Vehicles[x]).ToList();
                         if (targetTrack.TurnType != RnTurnType.Straight)
                         {
                             //if (targetTrack.TurnType == RnTurnType.RightTurn) //とりあえず右折時のみ 
                             {
-                                //対向車 (fromとtoが逆）
-                                var fromBorder = currentVehicle.m_TrafficController.m_FromBorder;
-                                List<PlateauSandboxTrafficMovement> veheclesOncomingLane = veheclesOnTheRoad.FindAll(x => x.m_TrafficController.m_ToBorder.IsSameLine(fromBorder));
+                                //対向車
+                                var onComingTracks = intersection.GetOncomingTracks(RnGetter, targetTrack);
+                                List<PlateauSandboxTrafficMovement> veheclesOncomingLane = veheclesOnTheRoad.FindAll(x => onComingTracks.Contains(x.m_TrafficController.GetTrack()));
                                 stat.m_NumVehiclesOncominglane = veheclesOncomingLane.Count;
 
-                                //横断( from / to が一致しない )
-                                //List<PlateauSandboxTrafficMovement> veheclesCrossing = veheclesOnTheRoad.FindAll(x => !x.m_TrafficController.m_ToBorder.IsSameLine(fromBorder) && !x.m_TrafficController.m_FromBorder.IsSameLine(fromBorder));
-                                //stat.m_NumVehiclesCrossing = veheclesCrossing.Count;
-
+                                //横断
                                 var crossingTracks = intersection.GetCrossingTracks(RnGetter, targetTrack);
                                 List<PlateauSandboxTrafficMovement> veheclesCrossing = veheclesOnTheRoad.FindAll(x => crossingTracks.Contains(x.m_TrafficController.GetTrack()));
                                 stat.m_NumVehiclesCrossing = veheclesCrossing.Count;
