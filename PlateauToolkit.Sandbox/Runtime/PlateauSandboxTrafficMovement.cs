@@ -3,10 +3,8 @@ using PLATEAU.RoadNetwork.Data;
 using System;
 using System.Collections;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
-using static PlasticPipe.Server.MonitorStats;
 using System.Collections.Generic;
 using UnityEngine.Splines;
 
@@ -43,13 +41,9 @@ namespace PlateauToolkit.Sandbox
 
         DistanceCalculator m_DistanceCalc;
 
-        RoadNetworkDataGetter RnGetter
-        {
-            get
-            {
-                return TrafficManager?.RnGetter;
-            }
-        }
+        public float CollisionDetectRadius { get => m_CollisionDetectRadius; }
+
+        RoadNetworkDataGetter RnGetter { get => TrafficManager?.RnGetter; }
 
         TrafficManager TrafficManager
         {
@@ -85,7 +79,7 @@ namespace PlateauToolkit.Sandbox
             if(param.IsRoad)
             {
                 var lineString = param.GetLineString();
-                Debug.Log($"lineString count {lineString?.Points?.Count}");
+                //Debug.Log($"lineString count {lineString?.Points?.Count}");
 
                 //初回配置
                 var points = lineString.GetChildPointsVector(RnGetter);
@@ -185,24 +179,12 @@ namespace PlateauToolkit.Sandbox
                 Spline spline = SplineTool.CreateSplineFromPoints(points);
 
                 m_TrafficController.SetDistance(spline.GetLength());
-                //m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_TrafficController.GetLineString().GetTotalDistance(RnGetter));
                 m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength(), m_StartOffset);
                 m_DistanceCalc.Start();
 
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    float percent = m_DistanceCalc.GetPercent();
-
-                    //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, percent);
-                    //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
-                    //Vector3 pos = SplineTool.GetPointOnLine(points, percent);
-                    Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
-
-                    SetTransfrorm(pos);
-
-                    ProgressResult stat = m_TrafficController.SetProgress(percent);
-                    SetSpeed(stat);
-
+                    AnimateOnSpline(spline);
                     yield return null;
                 }
 
@@ -232,13 +214,7 @@ namespace PlateauToolkit.Sandbox
                 //intersection
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    float percent = m_DistanceCalc.GetPercent();
-                    Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
-                    SetTransfrorm(pos);
-
-                    ProgressResult stat = m_TrafficController.SetProgress(percent);
-                    SetSpeed(stat);
-
+                    AnimateOnSpline(spline);
                     yield return null;
                 }
 
@@ -262,118 +238,30 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
-        //Debug Gizmo
-        void OnDrawGizmos()
+        void AnimateOnSpline(Spline spline)
         {
-            if (m_TrafficController == null || RnGetter == null)
-                return;
-            if(m_TrafficController.IsRoad)
-            {
-                var points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
+            float percent = m_DistanceCalc.GetPercent();
+            ProgressResult stat = m_TrafficController.SetProgress(percent);
+            SetSpeed(stat);
 
-                Gizmos.color = Color.blue;
-                for (int j = 0; j < points.Count - 1; j++)
-                {
-                    Gizmos.DrawLine(points[j], points[j + 1]);
-                }
-
-                Gizmos.color = Color.magenta;
-                Vector3 lastpos = Vector3.zero;
-                var spline = SplineTool.CreateSplineFromPoints(points);
-
-                for (int i = 0; i < 100; i++)
-                {
-                    var percent = i * 0.01f;
-                    //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
-                    //Vector3 pos = SplineTool.GetPointOnLine(points, percent);
-                    Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
-                    if (lastpos == Vector3.zero)
-                        lastpos = pos;
-
-                    Gizmos.DrawLine(pos, lastpos);
-                    lastpos = pos;
-                }
-            }
-            else if(m_TrafficController.IsIntersection)
-            {
-                //intersection
-                Gizmos.color = Color.yellow;
-                Vector3 lastpos = Vector3.zero;
-                for (int i = 0; i < 100; i++)
-                {
-                    var percent = i * 0.01f;
-                    var track = m_TrafficController.GetTrack();
-                    Vector3 pos = SplineTool.GetPointOnSpline(track.Spline, percent);
-                    if (lastpos == Vector3.zero)
-                        lastpos = pos;
-
-                    Gizmos.DrawLine(pos, lastpos);
-                    lastpos = pos;
-                }
-            }
-
-            //From/To Border
-            if(m_TrafficController.m_FromBorder != null)
-            {
-                Gizmos.color = Color.blue;
-                var vec = m_TrafficController.m_FromBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-                if(vec.Count > 0)
-                {
-                    Handles.Label(vec.First(), $"from :{m_TrafficController.m_FromBorder.LineString.ID}");
-                    for (int k = 0; k < vec.Count - 1; k++)
-                    {
-                        Gizmos.DrawLine(vec[k], vec[k + 1]);
-                    }
-                }
-            }
-
-            if (m_TrafficController.m_ToBorder != null)
-            {
-                Gizmos.color = Color.cyan;
-                var vec = m_TrafficController.m_ToBorder.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-                if(vec.Count > 0)
-                {
-                    Handles.Label(vec.First(), $"to :{m_TrafficController.m_ToBorder.LineString.ID} rev {m_TrafficController.m_RoadInfo.m_IsReverse}/{m_TrafficController.GetLane()?.IsReverse::false}");
-                    for (int k = 0; k < vec.Count - 1; k++)
-                    {
-                        Gizmos.DrawLine(vec[k], vec[k + 1]);
-                    }
-                }
-            }
-
-            //Debug
-            //if (m_RoadParam.expectedBorders?.Count > 0)
-            //{
-            //    Gizmos.color = Color.green;
-            //    Handles.color = Color.green;
-            //    foreach (var border in m_RoadParam.expectedBorders)
-            //    {
-            //        var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-            //        Handles.Label(vec.First(), $"id:{border.LineString.ID}");
-            //        for (int k = 0; k < vec.Count - 1; k++)
-            //        {
-            //            Gizmos.DrawLine(vec[k], vec[k + 1]);
-            //        }
-            //    }
-            //}
-
-            //if(m_RoadParam.actualBorders?.Count > 0)
-            //{
-            //    Gizmos.color = Color.red;
-            //    Handles.color = Color.red;
-            //    foreach (var border in m_RoadParam.actualBorders)
-            //    {
-            //        var vec = border.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-            //        Handles.Label(vec.Last(), $"id:{border.LineString.ID}");
-            //        for (int k = 0; k < vec.Count - 1; k++)
-            //        {
-            //            Gizmos.DrawLine(vec[k], vec[k + 1]);
-            //        }
-            //    }
-            //}
+            Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
+            SetTransfrorm(pos);
         }
 
-        public void SetSpeed(ProgressResult result)
+        void AnimateBetweenPoints(List<Vector3> points)
+        {
+            float percent = m_DistanceCalc.GetPercent();
+
+            ProgressResult stat = m_TrafficController.SetProgress(percent);
+            SetSpeed(stat);
+
+            //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, percent);
+            //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
+            Vector3 pos = SplineTool.GetPointOnLine(points, percent);
+            SetTransfrorm(pos);
+        }
+
+        void SetSpeed(ProgressResult result)
         {
             if (result.m_Speed != m_SpeedKm)
             {
@@ -382,12 +270,12 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
-        public void SetTransfrorm(Vector3 pos)
+        void SetTransfrorm(Vector3 pos)
         {
             Vector3 lastpos = gameObject.transform.position;
             Vector3 vec = (pos - lastpos).normalized;
             gameObject.transform.position = pos;
-            if(vec != Vector3.zero)
+            if (vec != Vector3.zero)
             {
                 gameObject.transform.forward = vec;
             }
@@ -402,6 +290,17 @@ namespace PlateauToolkit.Sandbox
             movementInfo.m_SecondAxisForward = vec;
             movementInfo.m_MoveDelta = m_SpeedKm;
             return movementInfo;
+        }
+
+        //Debug Gizmo
+        void OnDrawGizmos()
+        {
+            if (m_TrafficController == null || RnGetter == null)
+            {
+                return;
+            }
+
+            GizmoUtil.DebugRoadNetwork(m_TrafficController, RnGetter);
         }
     }
 }

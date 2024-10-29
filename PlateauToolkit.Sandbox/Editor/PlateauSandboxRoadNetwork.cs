@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
+using System;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -39,25 +40,73 @@ namespace PlateauToolkit.Sandbox.Editor
             return new PlateauSandboxInstantiation(gameObject, obj);
         }
 
-        public void PlaceVehicles(List<GameObject> vehicles)
+        public void PlaceVehicles(List<GameObject> vehiclePrefabs)
         {
-            foreach (var vehicle in vehicles.Select((value, index) => new { value, index }))
+            var vehicles = new List<GameObject>();
+
+            //Prefab 単位
+            //foreach (var vehiclePrefab in vehiclePrefabs.Select((value, index) => new { value, index }))
+            //{
+            //    Debug.Log($"place vehicle {vehiclePrefab.value.name}");
+
+            //    (Vector3 pos, RnDataRoad road, RnDataLane lane) = m_TrafficManager.GetRandomRoad();
+            //    PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehiclePrefab.value, pos, Quaternion.identity);
+
+            //    //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
+            //    if (obj.SceneObject.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
+            //        !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
+            //    {
+            //        PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
+            //        trafficMovement.RoadInfo = new RoadInfo(
+            //            road.GetId(m_RoadNetworkGetter),
+            //            road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
+
+            //        vehicles.Add(obj.SceneObject);
+            //    }
+            //}
+
+            //各道路にPrefabを置く
+            int numVehelcesPerRoad = 2;
+            int prefabIndex = 0;
+            var roadNetworkRoads = m_RoadNetworkGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
+
+            foreach (var road in roadNetworkRoads)
             {
-                Debug.Log($"place vehicle {vehicle.value.name}");
-
-                (Vector3 pos, RnDataRoad road, RnDataLane lane) = m_TrafficManager.GetRandomRoad();
-                PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehicle.value, pos, Quaternion.identity);
-
-                //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
-                if (obj.SceneObject.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
-                    !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
+                for (int i = 0; i < numVehelcesPerRoad; i++)
                 {
-                    PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
-                    trafficMovement.RoadInfo = new RoadInfo(
-                        road.GetId(m_RoadNetworkGetter),
-                        road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane),
-                        vehicle.index);
+                    var vehiclePrefab = vehiclePrefabs[prefabIndex];
+                    prefabIndex++;
+                    if(prefabIndex >= vehiclePrefabs.Count)
+                    {
+                        prefabIndex = 0;
+                    }
 
+                    RnDataLane lane = road.GetMainLanes(m_RoadNetworkGetter).First();
+                    RnDataLineString linestring = lane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
+                    Vector3 position = linestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
+
+                    PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehiclePrefab, position, Quaternion.identity);
+                    //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
+                    if (obj.SceneObject.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
+                        !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
+                    {
+                        PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
+                        trafficMovement.RoadInfo = new RoadInfo(
+                            road.GetId(m_RoadNetworkGetter),
+                            road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
+
+                        vehicles.Add(obj.SceneObject);
+                    }
+                }
+            }
+
+            m_TrafficManager.InitializeVehicles();
+
+            //重なった自動車判定
+            foreach (var vehicle in vehicles)
+            {
+                if(vehicle.TryGetComponent<PlateauSandboxTrafficMovement>(out var trafficMovement))
+                {
                     var result = m_TrafficManager.GetLaneInfo(trafficMovement.RoadInfo, true);
                     if (result.m_NumVehicles > 0)
                     {
@@ -66,7 +115,6 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            m_TrafficManager.InitializeVehicles();
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる

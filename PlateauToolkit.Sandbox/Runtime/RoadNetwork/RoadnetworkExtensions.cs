@@ -1,6 +1,7 @@
 ﻿using PLATEAU.RoadNetwork.Data;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using PLATEAU.RoadNetwork.Structure;
 using System.Linq;
 using UnityEngine;
 
@@ -179,6 +180,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return getter.GetLineStrings()[way.LineString.ID];
             return null;
         }
+
+        public static bool ContainsSameLine([DisallowNull] this RnDataWay way, RoadNetworkDataGetter getter, List<RnDataWay> ways)
+        {
+            return ways.Any(x => x.IsSameLine(way));
+        }
+
         #endregion Way
 
         //Lane
@@ -498,12 +505,28 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return track;
             return intersection.Tracks.Find(x => x.GetToBorder(getter)?.IsSameLine(border) == true);
         }
+
+        public static List<RnDataTrack> GetToTracksFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay border)
+        {
+            var tracks = intersection.Tracks.FindAll(x => x.GetToBorder(getter) == border);
+            if (tracks != null)
+                return tracks;
+            return intersection.Tracks.FindAll(x => x.GetToBorder(getter)?.IsSameLine(border) == true);
+        }
+
         public static RnDataTrack GetFromTrackFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay border)
         {
             var track = intersection.Tracks.Find(x => x.GetFromBorder(getter) == border);
             if (track != null)
                 return track;
             return intersection.Tracks.Find(x => x.GetToBorder(getter)?.IsSameLine(border) == true);
+        }
+        public static List<RnDataTrack> GetFromTracksFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay border)
+        {
+            var tracks = intersection.Tracks.FindAll(x => x.GetFromBorder(getter) == border);
+            if (tracks != null)
+                return tracks;
+            return intersection.Tracks.FindAll(x => x.GetToBorder(getter)?.IsSameLine(border) == true);
         }
 
         public static List<RnDataTrack> GetToTracksFromBorderLineString([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLineString linestring)
@@ -556,6 +579,19 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
         }
 
+        //同一線状のEdge
+        public static List<RnDataNeighbor> GetStraightLineEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
+        {
+            var edges = intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
+            var roads = edges.Select(x => x.GetRoad(getter)).OfType<RnDataRoad>().ToList();
+            List<RnDataNeighbor> outEdges = new List<RnDataNeighbor>();
+            foreach (var road in roads)
+            {
+                outEdges.AddRange(intersection.GetEdgesFromRoad(getter, road));
+            }
+            return outEdges;
+        }
+
         public static List<RnDataNeighbor> GetEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
         {
             return intersection.Edges.FindAll(x => x.Road.ID == road.GetId(getter));
@@ -563,8 +599,41 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public static List<RnDataRoadBase> GetAllConnectedRoads([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
         {
-            return intersection.Edges.Select(x => x.GetRoad(getter)).ToList();
+            return intersection.Edges?.Select(x => x.GetRoad(getter)).Distinct()?.ToList();
         }
+
+        //TODO　未実装
+        public static bool IsTjunction([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
+        {
+            return false;
+        }
+
+        //TurnType : Straightのtrackを渡す必要あり　（ただそこがバグってるぽい？）
+        public static List<RnDataTrack> GetCrossingTracks([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            var fromBorders = intersection.GetStraightLineEdgesFromBorder(getter, track.GetFromBorder(getter)).Select(x => x.GetBorder(getter)).ToList();
+            var toBorders = intersection.GetStraightLineEdgesFromBorder(getter, track.GetToBorder(getter)).Select(x => x.GetBorder(getter)).ToList();
+            fromBorders.AddRange(toBorders); //両方
+            List<RnDataTrack> outTracks = new List<RnDataTrack>();
+            foreach (RnDataTrack tr in intersection.Tracks)
+            {
+                if (!tr.GetToBorder(getter).ContainsSameLine(getter, fromBorders) && !tr.GetFromBorder(getter).ContainsSameLine(getter, fromBorders))
+                {
+                    outTracks.Add(tr);
+                }
+            }
+            return outTracks;
+        }
+
+        public static List<RnDataTrack> GetOncomingTracks([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            //return intersection.Tracks.FindAll(x => x.GetToBorder(getter).IsSameLine(track.GetFromBorder(getter)));
+            //return intersection.Tracks.FindAll(x => x.TurnType == RnTurnType.Straight && !x.GetFromBorder(getter).IsSameLine(track.GetFromBorder(getter)));
+            //return intersection.Tracks.FindAll(x => x.TurnType == RnTurnType.Straight);
+            //return intersection.Tracks;
+            return null;
+        }
+
         #endregion Intersection
 
         //Track
@@ -607,6 +676,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return getter.GetWays().TryGet(neighbor.Border);
             return null;
         }
+
         #endregion Edge
     }
 }
