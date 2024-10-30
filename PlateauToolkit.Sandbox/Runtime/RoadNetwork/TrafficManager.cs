@@ -14,7 +14,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public List<int> m_VehiclesOnRoad = new List<int>();
     }
 
-    //交通状況管理
+    //交通状況管理 (各道路の自動車）
     public class TrafficManager : MonoBehaviour
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
@@ -78,6 +78,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public RnDataTrack GetTrackByLottery(RnDataIntersection intersection, List<RnDataTrack> tracks)
         {
+            var turnTypes = string.Join(",", tracks.Select(x => x.TurnType).ToList());
+            Debug.Log($"<color=yellow>turnTypes {turnTypes}</color>");
+
             return tracks.TryGet(UnityEngine.Random.Range(0, tracks.Count)); // Random抽選
         }
 
@@ -139,10 +142,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     stat.m_LastCarProgress = lastCar.m_TrafficController.m_CurrentProgress;
 
-                    //bounds Colliderがない
-                    //var bounds = lastCar.GetComponent<Collider>().bounds;
+                    //bounds Collider
+                    //var bounds = lastCar.GetComponentInChildren<MeshCollider>().bounds;
                     //var boundsAddition = lastCar.m_TrafficController.m_Distance / Mathf.Abs(Vector3.Distance(bounds.max, bounds.center));
-                    //Debug.Log($"boundsAddition {boundsAddition}");
+                    ////Debug.Log($"boundsAddition {boundsAddition}");
                     //stat.m_LastCarProgress += boundsAddition;
                 }
 
@@ -154,6 +157,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         var intersection = RnGetter.GetRoadBases().TryGet(roadInfo.m_RoadId) as RnDataIntersection;
 
                         var targetTrack = intersection.Tracks.TryGet(roadInfo.m_TrackIndex); // TODO : RnTurnType.Straight をターゲットにする
+                        //targetTrack = intersection.GetTraksOfSameOriginByType(RnGetter, targetTrack, RnTurnType.Straight).First(); 
+
                         var veheclesOnTheRoad = roadStat.m_VehiclesOnRoad.Select(x => m_Vehicles[x]).ToList();
                         if (targetTrack.TurnType != RnTurnType.Straight)
                         {

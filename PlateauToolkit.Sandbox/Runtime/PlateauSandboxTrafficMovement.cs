@@ -91,6 +91,7 @@ namespace PlateauToolkit.Sandbox
                 gameObject.transform.forward = vec;
 
                 //m_RespawnPosition = info;
+                param.SetBounds(GetComponentInChildren<MeshCollider>().bounds);
             }
             else
             {
@@ -301,6 +302,8 @@ namespace PlateauToolkit.Sandbox
             }
 
             GizmoUtil.DebugRoadNetwork(m_TrafficController, RnGetter);
+
+            GizmoUtil.DebugVehicle(this);
         }
     }
 }

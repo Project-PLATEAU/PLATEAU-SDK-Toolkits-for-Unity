@@ -3,6 +3,11 @@ using UnityEngine;
 using UnityEngine.Splines;
 using PLATEAU.RoadNetwork.Data;
 using System.Linq;
+using PLATEAU.RoadNetwork.Structure;
+using UnityEngine.InputSystem.XR;
+using static Codice.Client.Common.Servers.RecentlyUsedServers;
+
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -48,13 +53,18 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 #endif
         }
 
+        public static void DebugVehicle(PlateauSandboxTrafficMovement vehicle)
+        {
+
+        }
+
         public static void DebugRoadNetwork(RoadNetworkTrafficController cont, RoadNetworkDataGetter getter)
         {
             if (cont.IsRoad)
             {
-                var points = cont.GetLineString().GetChildPointsVector(getter);
-                GizmoUtil.DrawLine(points, Color.blue);
-                GizmoUtil.DrawSpline(SplineTool.CreateSplineFromPoints(points), Color.magenta);
+                //var points = cont.GetLineString().GetChildPointsVector(getter);
+                //GizmoUtil.DrawLine(points, Color.blue);
+                //GizmoUtil.DrawSpline(SplineTool.CreateSplineFromPoints(points), Color.magenta);
             }
             else if (cont.IsIntersection)
             {
@@ -62,6 +72,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 GizmoUtil.DrawSpline(cont.GetTrack().Spline, Color.yellow);
 
                 //debug
+                //var straightTrack = cont.m_Intersection.GetTraksOfSameOriginByType(getter, cont.GetTrack(), RnTurnType.Straight);
+
                 var onComing = cont.m_Intersection.GetOncomingTracks(getter, cont.GetTrack());
                 foreach (var track in onComing)
                 {
@@ -74,7 +86,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     GizmoUtil.DrawSpline(track.Spline, Color.magenta);
                 }
 
-                //var edges = cont.m_Intersection.GetStraightLneEdgesFromBorder(getter, cont.m_FromBorder);
+                //var edges = cont.m_Intersection.GetStraightLineEdgesFromBorder(getter, cont.m_FromBorder);
                 //foreach (var e in edges)
                 //{
                 //    GizmoUtil.DrawLine(e.GetBorder(getter).GetChildLineString(getter).GetChildPointsVector(getter), Color.red);
@@ -83,8 +95,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 //GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"TurnType:{cont.GetTrack().TurnType.ToString()}", Color.red);
 
                 var numRoads = cont.m_Intersection.GetAllConnectedRoads(getter).Count();
-                var roadIDs = string.Join("," ,cont.m_Intersection.GetAllConnectedRoads(getter).Select(x => x.GetId(getter)).ToList());
-                GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"Roads:{numRoads} : {roadIDs}", Color.red);
+                GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"Roads:{numRoads}", Color.red);
+                //var roadIDs = string.Join("," ,cont.m_Intersection.GetAllConnectedRoads(getter).Select(x => x.GetId(getter)).ToList());
+                //GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"Roads:{numRoads} : {roadIDs}", Color.red);
             }
 
             //From / To Border
@@ -130,6 +143,21 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //    }
             //}
 
+
+            //Vehicle
+            //if (cont != null && cont.IsRoad)
+            //{
+            //    var boundsOffset = cont.m_Distance / Mathf.Abs(Vector3.Distance(cont.m_Bounds.max, cont.m_Bounds.center));
+
+
+            //    Debug.Log($"bounds {cont.m_Bounds.max} boundsOffset {boundsOffset}");
+            //    var currentProgress = cont.m_CurrentProgress - boundsOffset;
+
+            //    var points = cont.GetLineString().GetChildPointsVector(getter);
+            //    var spline = SplineTool.CreateSplineFromPoints(points);
+
+            //    DrawLine(new List<Vector3>() { SplineTool.GetPointOnSpline(spline, cont.m_CurrentProgress), SplineTool.GetPointOnSpline(spline, currentProgress) }, Color.red);
+            //}
 
         }
     }

@@ -45,60 +45,60 @@ namespace PlateauToolkit.Sandbox.Editor
             var vehicles = new List<GameObject>();
 
             //Prefab 単位
-            //foreach (var vehiclePrefab in vehiclePrefabs.Select((value, index) => new { value, index }))
-            //{
-            //    Debug.Log($"place vehicle {vehiclePrefab.value.name}");
-
-            //    (Vector3 pos, RnDataRoad road, RnDataLane lane) = m_TrafficManager.GetRandomRoad();
-            //    PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehiclePrefab.value, pos, Quaternion.identity);
-
-            //    //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
-            //    if (obj.SceneObject.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
-            //        !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
-            //    {
-            //        PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
-            //        trafficMovement.RoadInfo = new RoadInfo(
-            //            road.GetId(m_RoadNetworkGetter),
-            //            road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
-
-            //        vehicles.Add(obj.SceneObject);
-            //    }
-            //}
-
-            //各道路にPrefabを置く
-            int numVehelcesPerRoad = 2;
-            int prefabIndex = 0;
-            var roadNetworkRoads = m_RoadNetworkGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
-
-            foreach (var road in roadNetworkRoads)
+            foreach (var vehiclePrefab in vehiclePrefabs.Select((value, index) => new { value, index }))
             {
-                for (int i = 0; i < numVehelcesPerRoad; i++)
+                Debug.Log($"place vehicle {vehiclePrefab.value.name}");
+
+                (Vector3 pos, RnDataRoad road, RnDataLane lane) = m_TrafficManager.GetRandomRoad();
+                PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehiclePrefab.value, pos, Quaternion.identity);
+
+                //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
+                if (obj.SceneObject.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
+                    !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
                 {
-                    var vehiclePrefab = vehiclePrefabs[prefabIndex];
-                    prefabIndex++;
-                    if(prefabIndex >= vehiclePrefabs.Count)
-                    {
-                        prefabIndex = 0;
-                    }
+                    PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
+                    trafficMovement.RoadInfo = new RoadInfo(
+                        road.GetId(m_RoadNetworkGetter),
+                        road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
 
-                    RnDataLane lane = road.GetMainLanes(m_RoadNetworkGetter).First();
-                    RnDataLineString linestring = lane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
-                    Vector3 position = linestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
-
-                    PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehiclePrefab, position, Quaternion.identity);
-                    //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
-                    if (obj.SceneObject.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
-                        !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
-                    {
-                        PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
-                        trafficMovement.RoadInfo = new RoadInfo(
-                            road.GetId(m_RoadNetworkGetter),
-                            road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
-
-                        vehicles.Add(obj.SceneObject);
-                    }
+                    vehicles.Add(obj.SceneObject);
                 }
             }
+
+            //各道路にPrefabを置く
+            //int numVehelcesPerRoad = 2;
+            //int prefabIndex = 0;
+            //var roadNetworkRoads = m_RoadNetworkGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
+
+            //foreach (var road in roadNetworkRoads)
+            //{
+            //    for (int i = 0; i < numVehelcesPerRoad; i++)
+            //    {
+            //        var vehiclePrefab = vehiclePrefabs[prefabIndex];
+            //        prefabIndex++;
+            //        if(prefabIndex >= vehiclePrefabs.Count)
+            //        {
+            //            prefabIndex = 0;
+            //        }
+
+            //        RnDataLane lane = road.GetMainLanes(m_RoadNetworkGetter).First();
+            //        RnDataLineString linestring = lane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
+            //        Vector3 position = linestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
+
+            //        PlateauSandboxInstantiation obj = InstantiateSelectedObject(vehiclePrefab, position, Quaternion.identity);
+            //        //IPlateauSandboxTrafficObject継承、PlateauSandboxTrafficMovementがアタッチされていない
+            //        if (obj.SceneObject.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
+            //            !obj.SceneObject.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
+            //        {
+            //            PlateauSandboxTrafficMovement trafficMovement = obj.SceneObject.AddComponent<PlateauSandboxTrafficMovement>();
+            //            trafficMovement.RoadInfo = new RoadInfo(
+            //                road.GetId(m_RoadNetworkGetter),
+            //                road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
+
+            //            vehicles.Add(obj.SceneObject);
+            //        }
+            //    }
+            //}
 
             m_TrafficManager.InitializeVehicles();
 

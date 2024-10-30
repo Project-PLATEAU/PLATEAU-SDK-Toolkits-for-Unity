@@ -29,10 +29,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
     }
 
-    public struct ProgressResult
-    {
-        public float m_Speed;
-    }
+    //public struct ProgressResult
+    //{
+    //    public float m_Speed;
+    //}
 
     [Serializable]
     public class RoadNetworkTrafficController : IDisposable
@@ -61,6 +61,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public float m_Distance;
 
         [SerializeField]
+        public Bounds m_Bounds;
+
+        [SerializeField]
         public int m_LastRoadId;
 
         //Debug用
@@ -81,11 +84,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             get
             {
-                //逆走あり
                 return m_RoadInfo?.m_IsReverse ?? false;
-
-                //逆走禁止
-                //return false;
             }
         }
 
@@ -211,54 +210,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_Distance = distance;
         }
 
+        public void SetBounds(Bounds bounds)
+        {
+            m_Bounds = bounds;
+        }
+
         public ProgressResult SetProgress(float progress)
         {
             m_CurrentProgress = progress;
-
-            ProgressResult result = new();
-
             TrafficManager.LaneStatus info = TrafficManager.GetLaneInfo(m_RoadInfo, IsRoad); // Debug Lane info
-
-            if (info.m_NumVehicles > 0)
-            {
-                if (info.m_NumVehiclesForward > 0)
-                {
-                    if ((info.m_LastCarProgress - progress) * m_Distance < 4f)
-                    {
-                        result.m_Speed = 0f;
-                    }
-                    else if ((info.m_LastCarProgress - progress) * m_Distance < 10f) //適当な差 
-                    {
-                        result.m_Speed = IsRoad ? 20f : 10f; //適当なスピード
-                    }
-                    else
-                    {
-                        result.m_Speed = IsRoad ? 30f : 20f; //適当なスピード
-                    }
-                }
-                else
-                {
-                    result.m_Speed = IsRoad ? 35f : 30f; //適当なスピード
-                }
-
-                //intersection
-                //T字路 (行くまで待機）
-                if (m_Intersection?.GetAllConnectedRoads(RnGetter).Count == 3)
-                {
-                    //Debug.LogWarning($"T字路 {info.m_NumVehiclesCrossing}");
-                    //if (info.m_NumVehiclesOncominglane > 0 || info.m_NumVehiclesCrossing > 0)
-                    if (GetTrack().TurnType != RnTurnType.Straight && info.m_NumVehiclesCrossing > 0)
-                    {
-                        //result.m_Speed = 0f;
-                    }
-                }
-            }
-            else
-            {
-                result.m_Speed = IsRoad ? 40f : 30f; //適当なスピード
-            }
-
-            return result;
+            return new ProgressResult(this, info, RnGetter);
         }
 
         //次のRoadBaseを取得
@@ -392,7 +353,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 if (lanes.Count > 0)
                 {
-                    var lane = TrafficManager.GetLaneByLottery(nextRoad, lanes); //抽選 レーン
+                    RnDataLane lane = TrafficManager.GetLaneByLottery(nextRoad, lanes); //抽選 レーン
                     nextRoadInfo.m_LaneIndex = nextRoad.GetMainLanes(RnGetter).IndexOf(lane);
 
                     //Debug.Log($"<color=green>Lane Next Border {lane.GetNextBorder(RnGetter).LineString.ID} Prev Border {lane.GetPrevBorder(RnGetter).LineString.ID}</color>");
@@ -417,15 +378,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 //Road way
                 var intersection = next as RnDataIntersection;
 
-                //Linestringから取得
-                RnDataLineString fromLineString = IsReversed ? current.m_FromBorder.GetChildLineString(RnGetter) : current.m_ToBorder.GetChildLineString(RnGetter);
+                //Borderから取得
+                RnDataWay fromBorder = IsReversed ? current.m_FromBorder : current.m_ToBorder;
+                List<RnDataTrack> tracks = intersection.GetFromTracksFromBorder(RnGetter, fromBorder);
 
-                //Debug.Log($"<color=green>Tracks From LineString {fromLineString.GetId(RnGetter)} Count {intersection.GetFromTracksFromBorderLineString(RnGetter, fromLineString).Count}</color>");
-                List<RnDataTrack> tracks = intersection.GetFromTracksFromBorderLineString(RnGetter, fromLineString);
                 if (tracks.Count <= 0 && m_EnableRunningBackwards) //逆走
                 {
-                    tracks = intersection.GetToTracksFromBorderLineString(RnGetter, fromLineString);
-                    if(tracks.Count > 0)
+                    tracks = intersection.GetToTracksFromBorder(RnGetter, fromBorder);
+                    if (tracks.Count > 0)
                     {
                         nextRoadInfo.m_IsReverse = true;
                     }
@@ -435,13 +395,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     Debug.Log($"<color=red>Failed to get Tracks from Last To Border {current.m_ToBorder.GetId(RnGetter)}</color>");
                     //逆Border から取得できるかTry？？？
-                    fromLineString = IsReversed ? current.m_ToBorder.GetChildLineString(RnGetter) : current.m_FromBorder.GetChildLineString(RnGetter);
-                    tracks = intersection.GetFromTracksFromBorderLineString(RnGetter, fromLineString);
+                    fromBorder = IsReversed ? current.m_ToBorder : current.m_FromBorder;
+                    tracks = intersection.GetFromTracksFromBorder(RnGetter, fromBorder);
+
                     if (tracks.Count > 0)
                         Debug.Log($"<color=magenta>Failed to get from ToBorder but found from FromBorder : tracks.Count {tracks.Count}</color>");
                     else
                     {
-                        tracks = intersection.GetToTracksFromBorderLineString(RnGetter, fromLineString);
+                        tracks = intersection.GetToTracksFromBorder(RnGetter, fromBorder);
                         if (tracks.Count > 0)
                             Debug.Log($"<color=magenta>Failed to get from ToBorder but found from FromBorder : tracks.Count {tracks.Count}</color>");
                     }
@@ -479,7 +440,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
             else if (next is RnDataRoad && current.IsRoad) //Road->Road(あり得ない？）
             {
-                Debug.LogError($"Road {current.m_Road.GetId(RnGetter)} -> Road {next.GetId(RnGetter)}");
+                Debug.LogError($"Road {current.m_Road.GetId(RnGetter)} -> Road {next.GetId(RnGetter)} : {current.m_RoadInfo.m_VehicleID}");
                 //そのまま
                 //nextRoadInfo = current.m_RoadInfo;
                 //nextRoadInfo.m_RoadId = next.GetId(RnGetter);
@@ -489,7 +450,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
             else if (next is RnDataIntersection && current.IsIntersection) //Intersection -> Intersection (あり得ない？）
             {
-                Debug.LogError($"Intersection {current.m_Intersection.GetId(RnGetter)} -> Intersection {next.GetId(RnGetter)}");
+                Debug.LogError($"Intersection {current.m_Intersection.GetId(RnGetter)} -> Intersection {next.GetId(RnGetter)} : {current.m_RoadInfo.m_VehicleID}");
                 //そのまま
                 //nextRoadInfo = current.m_RoadInfo;
                 //nextRoadInfo.m_RoadId = next.GetId(RnGetter);
