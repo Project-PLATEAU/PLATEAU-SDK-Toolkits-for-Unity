@@ -29,7 +29,7 @@ namespace PlateauToolkit.Sandbox
         public RoadNetworkTrafficController m_TrafficController;
 
         [SerializeField]
-        public float m_SpeedKm = 40f;
+        public float m_SpeedKm = 30f;
 
         [SerializeField]
         public float m_StartOffset = 0f;
@@ -91,19 +91,22 @@ namespace PlateauToolkit.Sandbox
                 gameObject.transform.forward = vec;
 
                 //m_RespawnPosition = info;
-
-                var bounds = GetComponentInChildren<MeshCollider>()?.bounds;
-                if (bounds != null)
-                {
-                    param.SetBounds(GetComponentInChildren<MeshCollider>().bounds);
-                    Debug.Log($"<color=red>Bounds {bounds.Value.size}</color>");
-                }
+                Initialize();
             }
             else
             {
                 Debug.LogError($"初回Road生成時にIntersectionが設定された");
             }
             return param;
+        }
+
+        public void Initialize()
+        {
+            var bounds = GetComponentInChildren<MeshCollider>()?.bounds;
+            if (bounds != null)
+            {
+                m_TrafficController?.SetBounds(bounds.Value);
+            }
         }
 
 #if UNITY_EDITOR
@@ -174,9 +177,80 @@ namespace PlateauToolkit.Sandbox
         }
 
 
+        //TrafficManager側で動かす場合の処理
+        //Spline m_Spline;
+        //public void PreMove()
+        //{
+        //    if (m_TrafficController == null)
+        //    {
+        //        Stop();
+        //    }
+
+        //    if (m_TrafficController?.IsRoad == true)
+        //    {
+        //        List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
+        //        if (m_TrafficController.IsLineStringReversed)
+        //        {
+        //            points.Reverse();
+        //        }
+
+        //        m_Spline = SplineTool.CreateSplineFromPoints(points);
+
+        //        m_TrafficController.SetDistance(m_Spline.GetLength());
+        //        m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_Spline.GetLength(), m_StartOffset);
+        //        m_DistanceCalc.Start();
+        //    }
+        //    else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
+        //    {
+        //        RnDataTrack track = m_TrafficController.GetTrack();
+
+        //        if (track == null)
+        //        {
+        //            Stop();
+        //            return;
+        //        }
+
+        //        m_Spline = track.Spline;
+
+        //        if (m_TrafficController.IsReversed)
+        //        {
+        //            m_Spline.Knots = m_Spline.Knots.Reverse();
+        //        }
+
+        //        m_TrafficController.SetDistance(m_Spline.GetLength());
+        //        m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_Spline.GetLength(), m_StartOffset);
+        //        m_DistanceCalc.Start();
+        //    }
+        //    m_StartOffset = 0f; //初回のみ利用
+        //}
+
+        //public bool Move()
+        //{
+        //    if (m_TrafficController == null || m_DistanceCalc == null || m_Spline == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    if (m_DistanceCalc.GetPercent() < 1)
+        //    {
+        //        AnimateOnSpline(m_Spline);
+        //        return true;
+        //    }
+        //    else
+        //    {
+        //        m_TrafficController = m_TrafficController.GetNextRoad();
+        //    }
+
+        //    return false;
+        //}
+
+
         //移動処理コルーチン
         IEnumerator MovementEnumerator()
         {
+            //YieldInstruction yieldFunc = new WaitForFixedUpdate();
+            YieldInstruction yieldFunc = new WaitForEndOfFrame();
+
             if (m_TrafficController?.IsRoad == true)
             {
                 List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
@@ -189,12 +263,13 @@ namespace PlateauToolkit.Sandbox
 
                 m_TrafficController.SetDistance(spline.GetLength());
                 m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength(), m_StartOffset);
+                //m_DistanceCalc = new DistanceCalculator(0f, spline.GetLength(), m_StartOffset);
                 m_DistanceCalc.Start();
 
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
                     AnimateOnSpline(spline);
-                    yield return null;
+                    yield return yieldFunc;
                 }
 
                 //Debug.Break();
@@ -218,13 +293,14 @@ namespace PlateauToolkit.Sandbox
 
                 m_TrafficController.SetDistance(spline.GetLength());
                 m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength(), m_StartOffset);
+                //m_DistanceCalc = new DistanceCalculator(0f, spline.GetLength(), m_StartOffset);
                 m_DistanceCalc.Start();
 
                 //intersection
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
                     AnimateOnSpline(spline);
-                    yield return null;
+                    yield return yieldFunc;
                 }
 
                 //Debug.Break();
@@ -233,6 +309,8 @@ namespace PlateauToolkit.Sandbox
             {
                 Stop();
             }
+
+            m_StartOffset = 0f; //初回のみ利用
 
             m_TrafficController = m_TrafficController.GetNextRoad();
 

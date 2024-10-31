@@ -23,6 +23,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public int m_VehicleID;
 
         [SerializeField]
+        public Bounds m_Bounds;
+
+        [SerializeField]
         public float m_CurrentProgress;
 
         public RoadInfo() { }
@@ -34,6 +37,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_IsReverse = false;
             m_VehicleID = -1;
             m_CurrentProgress = 0f;
+        }
+
+        public RoadInfo Clone()
+        {
+            RoadInfo info = new RoadInfo();
+            info.m_VehicleID = m_VehicleID;
+            info.m_Bounds = m_Bounds;
+            return info;
         }
     }
 
@@ -60,6 +71,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public float m_LaneIndex;
 
         [SerializeField]
+        public bool m_IsPriorityTrack;
+
+        [SerializeField]
         public string m_DebugString;
 
         public DebugInfo(TrafficManager.LaneStatus info, ProgressResult prg, RoadNetworkTrafficController cont)
@@ -76,6 +90,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             m_RoadID = info.m_RoadID;
             m_LaneIndex = info.m_LaneIndex;
+
+            m_IsPriorityTrack = info.m_IsPriorityTrack;
+
             m_DebugString = info.m_DebugString;
 
             m_CurrentProgress = cont.m_RoadInfo.m_CurrentProgress;
@@ -118,7 +135,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public float m_Distance;
 
         [SerializeField]
-        public Bounds m_Bounds;
+        public float m_Speed;
 
         [SerializeField]
         public int m_LastRoadId;
@@ -257,10 +274,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             Debug.Log($"<color=blue>Respawn {m_RoadInfo.m_VehicleID}</color>");
 
             var (pos, road, lane) = m_TrafficManager.GetRandomRoad();
-            var info = new RoadInfo(
-                        road.GetId(RnGetter),
-                        road.GetLaneIndexOfMainLanes(RnGetter, lane));
-            info.m_VehicleID = m_RoadInfo.m_VehicleID;
+            //var info = new RoadInfo(
+            //            road.GetId(RnGetter),
+            //            road.GetLaneIndexOfMainLanes(RnGetter, lane));
+            //info.m_VehicleID = m_RoadInfo.m_VehicleID;
+            var info = m_RoadInfo.Clone();
+            info.m_RoadId = road.GetId(RnGetter);
+            info.m_LaneIndex = road.GetLaneIndexOfMainLanes(RnGetter, lane);
             return new(info);
         }
 
@@ -271,7 +291,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public void SetBounds(Bounds bounds)
         {
-            m_Bounds = bounds;
+            m_RoadInfo.m_Bounds = bounds;
         }
 
         public ProgressResult SetProgress(float progress)
@@ -279,9 +299,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //m_CurrentProgress = progress;
             m_RoadInfo.m_CurrentProgress = progress;
 
-            TrafficManager.LaneStatus info = TrafficManager.GetLaneInfo(m_RoadInfo, IsRoad); // Debug Lane info
+            TrafficManager.LaneStatus info = TrafficManager.GetLaneInfo(m_RoadInfo); // Debug Lane info
 
             var result = new ProgressResult(this, info, RnGetter);
+
+            m_Speed = result.m_Speed;
 
             DebugLaneStatus(info, result);
 
@@ -290,7 +312,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         void DebugLaneStatus(TrafficManager.LaneStatus info, ProgressResult prg)
         {
-            m_DebugInfo = new DebugInfo(info, prg, this);
+            if (info.m_IsValid)
+            {
+                m_DebugInfo = new DebugInfo(info, prg, this);
+            }
         }
 
         //次のRoadBaseを取得
@@ -315,7 +340,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 else
                 {
                     //取得失敗
-                    Debug.Log($"<color=red>Next Road is not Valid Prev{road.Prev.ID} Next{road.Next.ID}</color>");
+                    Debug.Log($"<color=red>Next Road is not Valid Prev{road?.Prev.ID} Next{road?.Next.ID}</color>");
                 }
             }
             else if (IsIntersection)
@@ -392,7 +417,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return;
             }
 
-            RoadInfo nextRoadInfo = new();
+            RoadInfo nextRoadInfo = current.m_RoadInfo.Clone();
             if (current.IsIntersection && next is RnDataRoad)
             {
                 // Intersection -> Road 
@@ -536,7 +561,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 m_LastRoadId = current.m_RoadInfo.m_RoadId;
                 m_RoadInfo = nextRoadInfo;
                 m_RoadInfo.m_RoadId = next.GetId(RnGetter);
-                m_RoadInfo.m_VehicleID = current.m_RoadInfo.m_VehicleID;
+                //m_RoadInfo.m_VehicleID = current.m_RoadInfo.m_VehicleID;
                 //expectedBorders = new() { current.m_ToBorder };
                 success = SetRoadBase();
 

@@ -15,24 +15,31 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             m_Distance_from_Other = -1f;
 
-            if (status.m_NumVehiclesOnTheLane > 0)
+            if (status.m_IsValid && status.m_NumVehiclesOnTheLane > 0)
             {
                 if (status.m_NumVehiclesForward > 0)
                 {
-                    //var boundsOffset = controller.m_Distance / Mathf.Abs(Vector3.Distance(controller.m_Bounds.max, controller.m_Bounds.center));
-                    //var currentProgress = controller.m_CurrentProgress - boundsOffset;
-                    //var currentProgress = controller.m_CurrentProgress;
+                    //var boundsOffset = controller.m_Distance / Mathf.Abs(Vector3.Distance(controller.m_RoadInfo.m_Bounds.max, controller.m_RoadInfo.m_Bounds.center));
+                    //var currentProgress = controller.m_RoadInfo.m_CurrentProgress - boundsOffset;
                     var currentProgress = controller.m_RoadInfo.m_CurrentProgress;
 
                     m_Distance_from_Other = (status.m_LastCarProgress - currentProgress) * controller.m_Distance; // * controller.m_Distance;
 
-                    if (m_Distance_from_Other < 5f)
+                    var distance_from_start = controller.m_RoadInfo.m_CurrentProgress * controller.m_Distance;
+
+                    if (m_Distance_from_Other < 10f)
                     {
-                        m_Speed = 30f;
+                        m_Speed = 1f; //適当なスピード
+                        //m_Speed = 10f;
                     }
-                    else if (m_Distance_from_Other < 10f) //適当な差 
+                    else if (m_Distance_from_Other < 20f) //適当な差 
                     {
-                        m_Speed = controller.IsRoad ? 15f : 10f; //適当なスピード
+                        //m_Speed = Mathf.Min(controller.m_Speed - 1f, 5f); //減速
+                        m_Speed = 5f;
+                    }
+                    else if (distance_from_start < 3f) //侵入したて
+                    {
+                        m_Speed = 3f;
                     }
                     else
                     {
@@ -45,25 +52,32 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 }
 
                 //intersection
-                //T字路 (行くまで待機）
+                //T字路
                 if (controller.m_Intersection?.GetAllConnectedRoads(getter).Count == 3)
                 {
-                    //Debug.LogWarning($"T字路 {info.m_NumVehiclesCrossing}");
-                    //if (info.m_NumVehiclesOncominglane > 0 || info.m_NumVehiclesCrossing > 0)
-
+                    //直線トラックがない場合は待機
                     var straightTrack = controller.m_Intersection.GetTraksOfSameOriginByType(getter, controller.GetTrack(), RnTurnType.Straight)?.FirstOrDefault();
                     if (straightTrack != null && status.m_NumVehiclesCrossing > 0)
-                    //if (controller.GetTrack().TurnType != RnTurnType.Straight && status.m_NumVehiclesCrossing > 0)
                     {
-                        //m_Speed = 0f;
+                        m_Speed = 0f;
                     }
                 }
                 else if (controller.m_Intersection?.GetAllConnectedRoads(getter).Count == 4)
                 {
                     var straightTrack = controller.m_Intersection.GetTraksOfSameOriginByType(getter, controller.GetTrack(), RnTurnType.Straight)?.FirstOrDefault();
-                    if (straightTrack != null && status.m_NumVehiclesCrossing > 0)
+                    if (controller.GetTrack().TurnType == RnTurnType.Straight || controller.GetTrack().TurnType == RnTurnType.LeftTurn)
                     {
-                        //m_Speed = 0f;
+                        if (straightTrack != null && status.m_NumVehiclesCrossing > 0 && !status.m_IsPriorityTrack) // TODO : 優先順位をつける
+                        {
+                            m_Speed = 0f;
+                        }
+                    }
+                    else if (controller.GetTrack().TurnType == RnTurnType.RightTurn)
+                    {
+                        if (straightTrack != null && status.m_NumVehiclesOncominglane > 0)
+                        {
+                            m_Speed = 3f;
+                        }
                     }
                 }
 

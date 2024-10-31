@@ -1,6 +1,7 @@
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PLATEAU.Util;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -10,7 +11,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class RoadStatus
     {
+        public int RoadId;
+
         public List<RoadInfo> m_Vehicles = new();
+
+        public RoadStatus(int id)
+        {
+            RoadId = id;
+        }
 
         public void Add(RoadInfo info)
         {
@@ -28,6 +36,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
         Dictionary<int, RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
+
+        List<PlateauSandboxTrafficMovement> m_Vehicles;
+
+        Coroutine m_MovementCoroutine;
 
         public RoadNetworkDataGetter RnGetter
         {
@@ -53,13 +65,63 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             InitializeVehicles();
         }
 
+        //void Start()
+        //{
+        //    if (!Application.isPlaying)
+        //    {
+        //        return;
+        //    }
+
+        //    StartMovement();
+        //}
+
+        //[ContextMenu("Start Movement")]
+        //public void StartMovement()
+        //{
+        //   // m_MovementCoroutine = StartCoroutine(MovementEnumerator());
+        //}
+
+        //[ContextMenu("Stop Movement")]
+        //public void Stop()
+        //{
+        //    if (m_MovementCoroutine == null)
+        //    {
+        //        return;
+        //    }
+
+        //    StopCoroutine(m_MovementCoroutine);
+        //    m_MovementCoroutine = null;
+        //}
+
+        ////移動処理コルーチン
+        //IEnumerator MovementEnumerator()
+        //{
+        //    //YieldInstruction yieldFunc = new WaitForFixedUpdate();
+        //    YieldInstruction yieldFunc = new WaitForEndOfFrame();
+
+        //    while (Application.isPlaying)
+        //    {
+        //        //AnimateOnSpline(spline);
+        //        foreach (var vehicle in m_Vehicles)
+        //        {
+        //            if (!vehicle.Move())
+        //            {
+        //                vehicle.PreMove();
+        //            }
+        //        }
+
+        //        yield return yieldFunc;
+        //    }
+        //}
+
         public void InitializeVehicles()
         {
             //VehicleID 振り直し
-            var vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
-            foreach (var vehicle in vehicles.Select((value, index) => new { value, index }))
+            m_Vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
+            foreach (var vehicle in m_Vehicles.Select((value, index) => new { value, index }))
             {
                 vehicle.value.RoadInfo.m_VehicleID = vehicle.index; //Reassign ID
+                vehicle.value.Initialize();
             }
         }
 
@@ -109,7 +171,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
             else
             {
-                stat = new RoadStatus();
+                stat = new RoadStatus(current.m_RoadId);
                 stat.Add(current);
 
                 m_RoadSituation.Add(current.m_RoadId, stat);
@@ -128,17 +190,23 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             //public int m_NumConnectedRoads;
 
+            public bool m_IsPriorityTrack; //直進可能
+
             public int m_RoadID;
             public int m_LaneIndex;
 
             public string m_DebugString;
 
+            public bool m_IsValid;
         }
 
-        //isRoad : falseの場合はIntersection
-        public LaneStatus GetLaneInfo(RoadInfo roadInfo, bool isRoad)
+        public LaneStatus GetLaneInfo(RoadInfo roadInfo)
         {
             LaneStatus stat = new LaneStatus();
+            stat.m_IsValid = false;
+
+            var roadBase = RnGetter.GetRoadBases().TryGet(roadInfo.m_RoadId);
+            var isRoad = (roadBase is RnDataRoad);
 
             if (m_RoadSituation.TryGetValue(roadInfo.m_RoadId, out RoadStatus roadStat))
             {
@@ -152,11 +220,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 stat.m_NumVehiclesOnTheLane = vehiclesOnTheLane.Count;
 
-                stat.m_DebugString = string.Join(",", roadStat.m_Vehicles.Select(x => x.m_VehicleID));
-
+                //List<RoadInfo> veheclesForward = roadInfo.m_IsReverse ?
+                //    vehiclesOnTheLane.FindAll(x => x.m_CurrentProgress > roadInfo.m_CurrentProgress) :
+                //    vehiclesOnTheLane.FindAll(x => x.m_CurrentProgress > roadInfo.m_CurrentProgress);
                 List<RoadInfo> veheclesForward = vehiclesOnTheLane.FindAll(x => x.m_CurrentProgress > roadInfo.m_CurrentProgress);
 
                 stat.m_NumVehiclesForward = veheclesForward.Count;
+
+                stat.m_DebugString = string.Join(",", veheclesForward.Select(x => x.m_VehicleID));
 
                 if (veheclesForward.TryFindMax(x => x.m_CurrentProgress, out RoadInfo lastCar))
                 {
@@ -172,26 +243,34 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 //intersection用
                 if (!isRoad)
                 {
-                    var intersection = RnGetter.GetRoadBases().TryGet(roadInfo.m_RoadId) as RnDataIntersection;
+                    var intersection = roadBase as RnDataIntersection;
 
                     var targetTrack = intersection.Tracks.TryGet(roadInfo.m_TrackIndex);
                     RnDataTrack straightTrack = intersection.GetTraksOfSameOriginByType(RnGetter, targetTrack, RnTurnType.Straight)?.FirstOrDefault();
-                    if(straightTrack != null)
+                    if (straightTrack != null)
                     {
-                        //if (targetTrack.TurnType == RnTurnType.RightTurn) //とりあえず右折時のみ 
-                        {
-                            //対向車
-                            var onComingTracks = intersection.GetOncomingTracks(RnGetter, straightTrack);
-                            List<RoadInfo> veheclesOncomingLane = roadStat.m_Vehicles.FindAll(x => onComingTracks.Contains(intersection.Tracks.TryGet(x.m_TrackIndex)));
-                            stat.m_NumVehiclesOncominglane = veheclesOncomingLane.Count;
+                        //対向車
+                        var onComingTracks = intersection.GetOncomingTracks(RnGetter, straightTrack);
+                        List<RoadInfo> veheclesOncomingLane = roadStat.m_Vehicles.FindAll(x => onComingTracks.Contains(intersection.Tracks.TryGet(x.m_TrackIndex)));
+                        stat.m_NumVehiclesOncominglane = veheclesOncomingLane.Count;
 
-                            //横断
-                            var crossingTracks = intersection.GetCrossingTracks(RnGetter, straightTrack);
-                            List<RoadInfo> veheclesCrossing = roadStat.m_Vehicles.FindAll(x => crossingTracks.Contains(intersection.Tracks.TryGet(x.m_TrackIndex)));
-                            stat.m_NumVehiclesCrossing = veheclesCrossing.Count;
+                        //横断
+                        var crossingTracks = intersection.GetCrossingTracks(RnGetter, straightTrack);
+                        List<RoadInfo> veheclesCrossing = roadStat.m_Vehicles.FindAll(x => crossingTracks.Contains(intersection.Tracks.TryGet(x.m_TrackIndex)));
+                        stat.m_NumVehiclesCrossing = veheclesCrossing.Count;
+
+                        //優先トラック（直進可否）
+                        var priorityTracks = new List<RnDataTrack>(crossingTracks);
+                        priorityTracks.Add(straightTrack);
+                        //一番IDの高いRoadと繋がるTrackが優先　暫定
+                        if(priorityTracks.TryFindMax(x => intersection.GetEdgesFromBorder(RnGetter, x.GetFromBorder(RnGetter))?.FirstOrDefault()?.Road.ID ?? 0, out var priorityTrack)) 
+                        {
+                            stat.m_IsPriorityTrack = (priorityTrack == targetTrack);
                         }
                     }
                 }
+
+                stat.m_IsValid = true;
             }
             else
             {

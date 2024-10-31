@@ -381,14 +381,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public static RnDataRoadBase GetNextRoad([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
-            if (road.Next.IsValid)
+            if (road?.Next.IsValid ?? false)
                 return getter.GetRoadBases().TryGet(road.Next);
             return null;
         }
 
         public static RnDataRoadBase GetPrevRoad([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
-            if (road.Prev.IsValid)
+            if (road?.Prev.IsValid ?? false)
                 return getter.GetRoadBases().TryGet(road.Prev);
             return null;
         }
