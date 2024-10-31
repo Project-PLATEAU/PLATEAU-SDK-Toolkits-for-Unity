@@ -91,7 +91,13 @@ namespace PlateauToolkit.Sandbox
                 gameObject.transform.forward = vec;
 
                 //m_RespawnPosition = info;
-                param.SetBounds(GetComponentInChildren<MeshCollider>().bounds);
+
+                var bounds = GetComponentInChildren<MeshCollider>()?.bounds;
+                if (bounds != null)
+                {
+                    param.SetBounds(GetComponentInChildren<MeshCollider>().bounds);
+                    Debug.Log($"<color=red>Bounds {bounds.Value.size}</color>");
+                }
             }
             else
             {
@@ -110,6 +116,8 @@ namespace PlateauToolkit.Sandbox
         {
             TryGetComponent(out IPlateauSandboxTrafficObject trafficObject);
             m_TrafficObject = trafficObject;
+
+            m_TrafficController?.Initialize();
         }
 
         void Start()
@@ -252,7 +260,6 @@ namespace PlateauToolkit.Sandbox
         void AnimateBetweenPoints(List<Vector3> points)
         {
             float percent = m_DistanceCalc.GetPercent();
-
             ProgressResult stat = m_TrafficController.SetProgress(percent);
             SetSpeed(stat);
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using PLATEAU.RoadNetwork.Structure;
+using static Codice.CM.Common.CmCallContext;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -21,22 +22,78 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField]
         public int m_VehicleID;
 
+        [SerializeField]
+        public float m_CurrentProgress;
+
         public RoadInfo() { }
         public RoadInfo(int road, int lane)
         {
             m_RoadId = road;
             m_LaneIndex = lane;
+            m_TrackIndex = 0;
+            m_IsReverse = false;
+            m_VehicleID = -1;
+            m_CurrentProgress = 0f;
         }
     }
 
-    //public struct ProgressResult
-    //{
-    //    public float m_Speed;
-    //}
+    [Serializable]
+    public class DebugInfo
+    {
+        [SerializeField] public int m_NumVehiclesOnTheRoad;
+        [SerializeField] public int m_NumVehiclesOnTheLane;
+        [SerializeField] public int m_NumVehiclesForward;
+        [SerializeField] public float m_LastCarProgress;
+
+        [SerializeField] public int m_NumVehiclesOncominglane; //対向車(Intersection only)
+        [SerializeField] public int m_NumVehiclesCrossing; //横断車(Intersection only)
+
+        [SerializeField] public float m_Distance_from_Other;
+        [SerializeField] public float m_Speed;
+
+        [SerializeField]
+        public float m_CurrentProgress;
+
+        [SerializeField]
+        public float m_RoadID;
+        [SerializeField]
+        public float m_LaneIndex;
+
+        [SerializeField]
+        public string m_DebugString;
+
+        public DebugInfo(TrafficManager.LaneStatus info, ProgressResult prg, RoadNetworkTrafficController cont)
+        {
+            m_NumVehiclesOnTheRoad = info.m_NumVehiclesOnTheRoad;
+            m_NumVehiclesOnTheLane = info.m_NumVehiclesOnTheLane;
+            m_NumVehiclesForward = info.m_NumVehiclesForward;
+            m_LastCarProgress = info.m_LastCarProgress;
+            m_NumVehiclesOncominglane = info.m_NumVehiclesOncominglane;
+            m_NumVehiclesCrossing = info.m_NumVehiclesCrossing;
+
+            m_Distance_from_Other = prg.m_Distance_from_Other;
+            m_Speed = prg.m_Speed;
+
+            m_RoadID = info.m_RoadID;
+            m_LaneIndex = info.m_LaneIndex;
+            m_DebugString = info.m_DebugString;
+
+            m_CurrentProgress = cont.m_RoadInfo.m_CurrentProgress;
+        }
+    }
 
     [Serializable]
     public class RoadNetworkTrafficController : IDisposable
     {
+
+        //Debug用 ==========================================================
+        //public List<RnDataWay> expectedBorders = new List<RnDataWay>();
+        //public List<RnDataWay> actualBorders = new List<RnDataWay>();
+        [SerializeField]
+        public DebugInfo m_DebugInfo;
+        //Debug用 ==========================================================
+
+
         [SerializeField]
         public RoadInfo m_RoadInfo;
 
@@ -54,8 +111,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public RnDataWay m_ToBorder;
 
         // Linestring位置パーセント( 0f - 1f )
-        [SerializeField]
-        public float m_CurrentProgress;
+        //[SerializeField]
+        //public float m_CurrentProgress;
 
         [SerializeField]
         public float m_Distance;
@@ -65,10 +122,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         [SerializeField]
         public int m_LastRoadId;
-
-        //Debug用
-        //public List<RnDataWay> expectedBorders = new List<RnDataWay>();
-        //public List<RnDataWay> actualBorders = new List<RnDataWay>();
 
         public bool m_EnableRunningBackwards = false; //逆走可能・禁止
 
@@ -174,15 +227,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public RnDataTrack GetTrack()
         {
-            if (!IsIntersection)
+            if (!IsIntersection || GetIntersection()?.Tracks == null)
             {
                 return null;
             }
-            if (GetIntersection().Tracks.Count < m_RoadInfo.m_TrackIndex)
+            else if (GetIntersection().Tracks.Count < m_RoadInfo.m_TrackIndex)
             {
                 return null;
             }
             return GetIntersection().Tracks[m_RoadInfo.m_TrackIndex];
+        }
+
+        public void Initialize()
+        {
+            TrafficManager.SetRoadInfo(m_LastRoadId, m_RoadInfo);
         }
 
         //初回
@@ -190,6 +248,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             m_RoadInfo = roadInfo;
             SetRoadBase();
+            Initialize();
             Debug.Log($"<color=yellow>roadInfo {roadInfo.m_RoadId} {roadInfo.m_LaneIndex}</color>");
         }
 
@@ -217,9 +276,21 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public ProgressResult SetProgress(float progress)
         {
-            m_CurrentProgress = progress;
+            //m_CurrentProgress = progress;
+            m_RoadInfo.m_CurrentProgress = progress;
+
             TrafficManager.LaneStatus info = TrafficManager.GetLaneInfo(m_RoadInfo, IsRoad); // Debug Lane info
-            return new ProgressResult(this, info, RnGetter);
+
+            var result = new ProgressResult(this, info, RnGetter);
+
+            DebugLaneStatus(info, result);
+
+            return result;
+        }
+
+        void DebugLaneStatus(TrafficManager.LaneStatus info, ProgressResult prg)
+        {
+            m_DebugInfo = new DebugInfo(info, prg, this);
         }
 
         //次のRoadBaseを取得
@@ -316,6 +387,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             bool success = false;
             if (next == null)
             {
+                TrafficManager.RemoveRoadInfo(m_LastRoadId, current.m_RoadInfo.m_VehicleID);
                 Debug.LogError($"<color=cyan>next is null</color>");
                 return;
             }
@@ -469,9 +541,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 success = SetRoadBase();
 
                 TrafficManager.SetRoadInfo(m_LastRoadId, m_RoadInfo);
+                SetProgress(0f);
             }
             if (!success)
             {
+                TrafficManager.RemoveRoadInfo(m_LastRoadId, current.m_RoadInfo.m_VehicleID);
                 Debug.LogError($"<color=cyan>SetRoadBase Failed {next.GetId(RnGetter)}</color>");
             }
         }

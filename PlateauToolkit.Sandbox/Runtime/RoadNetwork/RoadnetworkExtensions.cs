@@ -513,7 +513,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static List<RnDataTrack> GetTraksOfSameOriginByType([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track, RnTurnType turnType)
         {
             var fromBorder = track.GetFromBorder(getter);
-            return intersection.GetFromTracksFromBorder(getter, fromBorder).FindAll(x => x.TurnType == turnType).ToList();
+            if (fromBorder != null)
+                return intersection.GetFromTracksFromBorder(getter, fromBorder)?.FindAll(x => x.TurnType == turnType)?.ToList() ?? null;
+            return null;
         }
 
         #endregion Intersection

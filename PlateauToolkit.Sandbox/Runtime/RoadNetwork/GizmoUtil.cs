@@ -4,9 +4,6 @@ using UnityEngine.Splines;
 using PLATEAU.RoadNetwork.Data;
 using System.Linq;
 using PLATEAU.RoadNetwork.Structure;
-using UnityEngine.InputSystem.XR;
-using static Codice.Client.Common.Servers.RecentlyUsedServers;
-
 
 
 #if UNITY_EDITOR
@@ -62,9 +59,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             if (cont.IsRoad)
             {
-                //var points = cont.GetLineString().GetChildPointsVector(getter);
-                //GizmoUtil.DrawLine(points, Color.blue);
-                //GizmoUtil.DrawSpline(SplineTool.CreateSplineFromPoints(points), Color.magenta);
+                var points = cont.GetLineString().GetChildPointsVector(getter);
+                GizmoUtil.DrawLine(points, Color.blue);
+                GizmoUtil.DrawSpline(SplineTool.CreateSplineFromPoints(points), Color.magenta);
             }
             else if (cont.IsIntersection)
             {
@@ -72,18 +69,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 GizmoUtil.DrawSpline(cont.GetTrack().Spline, Color.yellow);
 
                 //debug
-                //var straightTrack = cont.m_Intersection.GetTraksOfSameOriginByType(getter, cont.GetTrack(), RnTurnType.Straight);
-
-                var onComing = cont.m_Intersection.GetOncomingTracks(getter, cont.GetTrack());
-                foreach (var track in onComing)
+                var straightTrack = cont.m_Intersection.GetTraksOfSameOriginByType(getter, cont.GetTrack(), RnTurnType.Straight)?.FirstOrDefault();
+                if (straightTrack != null)
                 {
-                    GizmoUtil.DrawSpline(track.Spline, Color.green);
-                }
+                    var onComing = cont.m_Intersection.GetOncomingTracks(getter, straightTrack);
+                    foreach (var track in onComing)
+                    {
+                        GizmoUtil.DrawSpline(track.Spline, Color.green);
+                    }
 
-                var crossingTracks = cont.m_Intersection.GetCrossingTracks(getter, cont.GetTrack());
-                foreach (var track in crossingTracks)
-                {
-                    GizmoUtil.DrawSpline(track.Spline, Color.magenta);
+                    var crossingTracks = cont.m_Intersection.GetCrossingTracks(getter, straightTrack);
+                    foreach (var track in crossingTracks)
+                    {
+                        GizmoUtil.DrawSpline(track.Spline, Color.magenta);
+                    }
                 }
 
                 //var edges = cont.m_Intersection.GetStraightLineEdgesFromBorder(getter, cont.m_FromBorder);
@@ -94,32 +93,33 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 //GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"TurnType:{cont.GetTrack().TurnType.ToString()}", Color.red);
 
-                var numRoads = cont.m_Intersection.GetAllConnectedRoads(getter).Count();
-                GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"Roads:{numRoads}", Color.red);
+                //var numRoads = cont.m_Intersection.GetAllConnectedRoads(getter).Count();
+                //GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"Roads:{numRoads}", Color.red);
+
                 //var roadIDs = string.Join("," ,cont.m_Intersection.GetAllConnectedRoads(getter).Select(x => x.GetId(getter)).ToList());
                 //GizmoUtil.DrawLabel(cont.GetTrack().Spline.Knots.First().Position, $"Roads:{numRoads} : {roadIDs}", Color.red);
             }
 
             //From / To Border
-            if (cont.m_FromBorder != null)
-            {
-                List<Vector3> vec = cont.m_FromBorder.GetChildLineString(getter).GetChildPointsVector(getter);
-                if (vec.Count > 0)
-                {
-                    Handles.Label(vec.First(), $"from :{cont.m_FromBorder.LineString.ID}");
-                    GizmoUtil.DrawLine(vec, Color.blue);
-                }
-            }
+            //if (cont.m_FromBorder != null)
+            //{
+            //    List<Vector3> vec = cont.m_FromBorder.GetChildLineString(getter).GetChildPointsVector(getter);
+            //    if (vec.Count > 0)
+            //    {
+            //        Handles.Label(vec.First(), $"from :{cont.m_FromBorder.LineString.ID}");
+            //        GizmoUtil.DrawLine(vec, Color.blue);
+            //    }
+            //}
 
-            if (cont.m_ToBorder != null)
-            {
-                List<Vector3> vec = cont.m_ToBorder.GetChildLineString(getter).GetChildPointsVector(getter);
-                if (vec.Count > 0)
-                {
-                    Handles.Label(vec.First(), $"to :{cont.m_ToBorder.LineString.ID} rev {cont.m_RoadInfo.m_IsReverse}/{cont.GetLane()?.IsReverse::false}");
-                    GizmoUtil.DrawLine(vec, Color.cyan);
-                }
-            }
+            //if (cont.m_ToBorder != null)
+            //{
+            //    List<Vector3> vec = cont.m_ToBorder.GetChildLineString(getter).GetChildPointsVector(getter);
+            //    if (vec.Count > 0)
+            //    {
+            //        Handles.Label(vec.First(), $"to :{cont.m_ToBorder.LineString.ID} rev {cont.m_RoadInfo.m_IsReverse}/{cont.GetLane()?.IsReverse::false}");
+            //        GizmoUtil.DrawLine(vec, Color.cyan);
+            //    }
+            //}
 
             //Debug
             //if (m_RoadParam.expectedBorders?.Count > 0)

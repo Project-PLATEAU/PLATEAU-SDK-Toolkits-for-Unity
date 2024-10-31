@@ -8,18 +8,25 @@ using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
-
     public class RoadStatus
     {
-        public List<int> m_VehiclesOnRoad = new List<int>();
+        public List<RoadInfo> m_Vehicles = new();
+
+        public void Add(RoadInfo info)
+        {
+            m_Vehicles.Add(info);
+        }
+
+        public void Remove(int vehicleID)
+        {
+            m_Vehicles.RemoveAll(x => x.m_VehicleID == vehicleID);
+        }
     }
 
     //交通状況管理 (各道路の自動車）
     public class TrafficManager : MonoBehaviour
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
-
-        Dictionary<int, PlateauSandboxTrafficMovement> m_Vehicles;
         Dictionary<int, RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
 
         public RoadNetworkDataGetter RnGetter
@@ -48,13 +55,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public void InitializeVehicles()
         {
+            //VehicleID 振り直し
             var vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
-            m_Vehicles = new();
-
             foreach (var vehicle in vehicles.Select((value, index) => new { value, index }))
             {
                 vehicle.value.RoadInfo.m_VehicleID = vehicle.index; //Reassign ID
-                m_Vehicles.Add(vehicle.value.RoadInfo.m_VehicleID, vehicle.value);
             }
         }
 
@@ -62,7 +67,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public (Vector3, RnDataRoad, RnDataLane) GetRandomRoad()
         {
             var roadNetworkRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
-            int randValue = Random.Range(0, roadNetworkRoads.Count());
+            int randValue = UnityEngine.Random.Range(0, roadNetworkRoads.Count());
 
             RnDataRoad outRoad = roadNetworkRoads[randValue];
             RnDataLane outlane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
@@ -78,42 +83,55 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public RnDataTrack GetTrackByLottery(RnDataIntersection intersection, List<RnDataTrack> tracks)
         {
-            var turnTypes = string.Join(",", tracks.Select(x => x.TurnType).ToList());
-            Debug.Log($"<color=yellow>turnTypes {turnTypes}</color>");
+            //var turnTypes = string.Join(",", tracks.Select(x => x.TurnType).ToList());
+            //Debug.Log($"<color=yellow>turnTypes {turnTypes}</color>");
 
             return tracks.TryGet(UnityEngine.Random.Range(0, tracks.Count)); // Random抽選
         }
 
+        public void RemoveRoadInfo(int fromRoadId, int vehicleID)
+        {
+            if (m_RoadSituation.TryGetValue(fromRoadId, out RoadStatus fromStat))
+            {
+                fromStat.Remove(vehicleID);
+            }
+        }
+
         public void SetRoadInfo(int fromRoadId, RoadInfo current)
         {
-            if(m_RoadSituation.TryGetValue(fromRoadId, out var fromStat))
+            RemoveRoadInfo(fromRoadId, current.m_VehicleID);
+            if (m_RoadSituation.TryGetValue(current.m_RoadId, out RoadStatus stat))
             {
-                fromStat.m_VehiclesOnRoad.Remove(current.m_VehicleID);
-            }
-
-            if (m_RoadSituation.TryGetValue(current.m_RoadId, out var stat))
-            {
-                if (!stat.m_VehiclesOnRoad.Contains(current.m_VehicleID))
+                if (stat.m_Vehicles.All(x => x.m_VehicleID != current.m_VehicleID))
                 {
-                    stat.m_VehiclesOnRoad.Add(current.m_VehicleID);
+                    stat.Add(current);
                 }
             }
             else
             {
                 stat = new RoadStatus();
-                stat.m_VehiclesOnRoad.Add(current.m_VehicleID);
+                stat.Add(current);
+
                 m_RoadSituation.Add(current.m_RoadId, stat);
             }
         }
 
         public struct LaneStatus
         {
-            public int m_NumVehicles;
+            public int m_NumVehiclesOnTheRoad;
+            public int m_NumVehiclesOnTheLane;
             public int m_NumVehiclesForward;
             public float m_LastCarProgress;
 
             public int m_NumVehiclesOncominglane; //対向車(Intersection only)
             public int m_NumVehiclesCrossing; //横断車(Intersection only)
+
+            //public int m_NumConnectedRoads;
+
+            public int m_RoadID;
+            public int m_LaneIndex;
+
+            public string m_DebugString;
 
         }
 
@@ -122,25 +140,27 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             LaneStatus stat = new LaneStatus();
 
-            if (m_Vehicles == null)
-                Debug.LogError("m_Vehicles == null");
-
             if (m_RoadSituation.TryGetValue(roadInfo.m_RoadId, out RoadStatus roadStat))
             {
-                List<PlateauSandboxTrafficMovement> veheclesOnTheLane = isRoad ?
-                    roadStat.m_VehiclesOnRoad.Select(x => m_Vehicles[x]).Where(x => x.RoadInfo.m_LaneIndex == roadInfo.m_LaneIndex && x.RoadInfo.m_VehicleID != roadInfo.m_VehicleID).ToList() :
-                    roadStat.m_VehiclesOnRoad.Select(x => m_Vehicles[x]).Where(x => x.RoadInfo.m_TrackIndex == roadInfo.m_TrackIndex && x.RoadInfo.m_VehicleID != roadInfo.m_VehicleID).ToList();
+                stat.m_RoadID = roadInfo.m_RoadId;
+                stat.m_LaneIndex = isRoad ? roadInfo.m_LaneIndex : roadInfo.m_TrackIndex;
+                stat.m_NumVehiclesOnTheRoad = roadStat.m_Vehicles.Count;
 
-                stat.m_NumVehicles = veheclesOnTheLane.Count;
+                List<RoadInfo> vehiclesOnTheLane = isRoad ?
+                    roadStat.m_Vehicles.FindAll(x => x.m_LaneIndex == roadInfo.m_LaneIndex && x.m_VehicleID != roadInfo.m_VehicleID).ToList() :
+                    roadStat.m_Vehicles.FindAll(x => x.m_TrackIndex == roadInfo.m_TrackIndex && x.m_VehicleID != roadInfo.m_VehicleID).ToList();
 
-                PlateauSandboxTrafficMovement targetVehecle = m_Vehicles[roadInfo.m_VehicleID];
-                List<PlateauSandboxTrafficMovement> veheclesForward = veheclesOnTheLane.FindAll(x => x.m_TrafficController.m_CurrentProgress > targetVehecle.m_TrafficController.m_CurrentProgress);
+                stat.m_NumVehiclesOnTheLane = vehiclesOnTheLane.Count;
+
+                stat.m_DebugString = string.Join(",", roadStat.m_Vehicles.Select(x => x.m_VehicleID));
+
+                List<RoadInfo> veheclesForward = vehiclesOnTheLane.FindAll(x => x.m_CurrentProgress > roadInfo.m_CurrentProgress);
 
                 stat.m_NumVehiclesForward = veheclesForward.Count;
 
-                if (veheclesForward.TryFindMax(x => x.m_TrafficController.m_CurrentProgress, out PlateauSandboxTrafficMovement lastCar))
+                if (veheclesForward.TryFindMax(x => x.m_CurrentProgress, out RoadInfo lastCar))
                 {
-                    stat.m_LastCarProgress = lastCar.m_TrafficController.m_CurrentProgress;
+                    stat.m_LastCarProgress = lastCar.m_CurrentProgress;
 
                     //bounds Collider
                     //var bounds = lastCar.GetComponentInChildren<MeshCollider>().bounds;
@@ -152,41 +172,31 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 //intersection用
                 if (!isRoad)
                 {
-                    if (m_Vehicles.TryGetValue(roadInfo.m_VehicleID, out PlateauSandboxTrafficMovement currentVehicle))
+                    var intersection = RnGetter.GetRoadBases().TryGet(roadInfo.m_RoadId) as RnDataIntersection;
+
+                    var targetTrack = intersection.Tracks.TryGet(roadInfo.m_TrackIndex);
+                    RnDataTrack straightTrack = intersection.GetTraksOfSameOriginByType(RnGetter, targetTrack, RnTurnType.Straight)?.FirstOrDefault();
+                    if(straightTrack != null)
                     {
-                        var intersection = RnGetter.GetRoadBases().TryGet(roadInfo.m_RoadId) as RnDataIntersection;
-
-                        var targetTrack = intersection.Tracks.TryGet(roadInfo.m_TrackIndex); // TODO : RnTurnType.Straight をターゲットにする
-                        //targetTrack = intersection.GetTraksOfSameOriginByType(RnGetter, targetTrack, RnTurnType.Straight).First(); 
-
-                        var veheclesOnTheRoad = roadStat.m_VehiclesOnRoad.Select(x => m_Vehicles[x]).ToList();
-                        if (targetTrack.TurnType != RnTurnType.Straight)
+                        //if (targetTrack.TurnType == RnTurnType.RightTurn) //とりあえず右折時のみ 
                         {
-                            //if (targetTrack.TurnType == RnTurnType.RightTurn) //とりあえず右折時のみ 
-                            {
-                                //対向車
-                                var onComingTracks = intersection.GetOncomingTracks(RnGetter, targetTrack);
-                                List<PlateauSandboxTrafficMovement> veheclesOncomingLane = veheclesOnTheRoad.FindAll(x => onComingTracks.Contains(x.m_TrafficController.GetTrack()));
-                                stat.m_NumVehiclesOncominglane = veheclesOncomingLane.Count;
+                            //対向車
+                            var onComingTracks = intersection.GetOncomingTracks(RnGetter, straightTrack);
+                            List<RoadInfo> veheclesOncomingLane = roadStat.m_Vehicles.FindAll(x => onComingTracks.Contains(intersection.Tracks.TryGet(x.m_TrackIndex)));
+                            stat.m_NumVehiclesOncominglane = veheclesOncomingLane.Count;
 
-                                //横断
-                                var crossingTracks = intersection.GetCrossingTracks(RnGetter, targetTrack);
-                                List<PlateauSandboxTrafficMovement> veheclesCrossing = veheclesOnTheRoad.FindAll(x => crossingTracks.Contains(x.m_TrafficController.GetTrack()));
-                                stat.m_NumVehiclesCrossing = veheclesCrossing.Count;
-                            }
+                            //横断
+                            var crossingTracks = intersection.GetCrossingTracks(RnGetter, straightTrack);
+                            List<RoadInfo> veheclesCrossing = roadStat.m_Vehicles.FindAll(x => crossingTracks.Contains(intersection.Tracks.TryGet(x.m_TrackIndex)));
+                            stat.m_NumVehiclesCrossing = veheclesCrossing.Count;
                         }
-                    }
-                    else
-                    {
-                        Debug.LogError($"m_Vehicles not found {roadInfo.m_VehicleID}");
                     }
                 }
             }
             else
             {
-                stat.m_NumVehicles = 0;
+               stat.m_NumVehiclesOnTheRoad = stat.m_NumVehiclesOnTheLane = 0;
             }
-
             return stat;
         }
     }

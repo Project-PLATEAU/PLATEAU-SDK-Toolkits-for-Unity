@@ -1,6 +1,7 @@
 ﻿using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using UnityEngine;
+using System.Linq;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -8,20 +9,28 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
         public float m_Speed;
 
+        public float m_Distance_from_Other;
+
         public ProgressResult(RoadNetworkTrafficController controller, TrafficManager.LaneStatus status, RoadNetworkDataGetter getter)
         {
-            if (status.m_NumVehicles > 0)
+            m_Distance_from_Other = -1f;
+
+            if (status.m_NumVehiclesOnTheLane > 0)
             {
                 if (status.m_NumVehiclesForward > 0)
                 {
-                    var boundsOffset = controller.m_Distance / Mathf.Abs(Vector3.Distance(controller.m_Bounds.max, controller.m_Bounds.center));
-                    var currentProgress = controller.m_CurrentProgress - boundsOffset;
+                    //var boundsOffset = controller.m_Distance / Mathf.Abs(Vector3.Distance(controller.m_Bounds.max, controller.m_Bounds.center));
+                    //var currentProgress = controller.m_CurrentProgress - boundsOffset;
+                    //var currentProgress = controller.m_CurrentProgress;
+                    var currentProgress = controller.m_RoadInfo.m_CurrentProgress;
 
-                    if ((status.m_LastCarProgress - currentProgress) * controller.m_Distance < 50f)
+                    m_Distance_from_Other = (status.m_LastCarProgress - currentProgress) * controller.m_Distance; // * controller.m_Distance;
+
+                    if (m_Distance_from_Other < 5f)
                     {
-                        m_Speed = 3f;
+                        m_Speed = 30f;
                     }
-                    else if ((controller.m_CurrentProgress - currentProgress) * controller.m_Distance < 100f) //適当な差 
+                    else if (m_Distance_from_Other < 10f) //適当な差 
                     {
                         m_Speed = controller.IsRoad ? 15f : 10f; //適当なスピード
                     }
@@ -41,11 +50,23 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     //Debug.LogWarning($"T字路 {info.m_NumVehiclesCrossing}");
                     //if (info.m_NumVehiclesOncominglane > 0 || info.m_NumVehiclesCrossing > 0)
-                    if (controller.GetTrack().TurnType != RnTurnType.Straight && status.m_NumVehiclesCrossing > 0)
+
+                    var straightTrack = controller.m_Intersection.GetTraksOfSameOriginByType(getter, controller.GetTrack(), RnTurnType.Straight)?.FirstOrDefault();
+                    if (straightTrack != null && status.m_NumVehiclesCrossing > 0)
+                    //if (controller.GetTrack().TurnType != RnTurnType.Straight && status.m_NumVehiclesCrossing > 0)
                     {
-                        //result.m_Speed = 0f;
+                        //m_Speed = 0f;
                     }
                 }
+                else if (controller.m_Intersection?.GetAllConnectedRoads(getter).Count == 4)
+                {
+                    var straightTrack = controller.m_Intersection.GetTraksOfSameOriginByType(getter, controller.GetTrack(), RnTurnType.Straight)?.FirstOrDefault();
+                    if (straightTrack != null && status.m_NumVehiclesCrossing > 0)
+                    {
+                        //m_Speed = 0f;
+                    }
+                }
+
             }
             else
             {
