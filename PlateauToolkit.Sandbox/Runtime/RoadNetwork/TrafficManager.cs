@@ -1,10 +1,10 @@
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PLATEAU.Util;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Splines;
 using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
@@ -39,6 +39,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         List<PlateauSandboxTrafficMovement> m_Vehicles;
 
+        TrafficJob m_job = new TrafficJob(100);
+
         Coroutine m_MovementCoroutine;
 
         public RoadNetworkDataGetter RnGetter
@@ -65,55 +67,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             InitializeVehicles();
         }
 
-        //void Start()
-        //{
-        //    if (!Application.isPlaying)
-        //    {
-        //        return;
-        //    }
-
-        //    StartMovement();
-        //}
-
-        //[ContextMenu("Start Movement")]
-        //public void StartMovement()
-        //{
-        //   // m_MovementCoroutine = StartCoroutine(MovementEnumerator());
-        //}
-
-        //[ContextMenu("Stop Movement")]
-        //public void Stop()
-        //{
-        //    if (m_MovementCoroutine == null)
-        //    {
-        //        return;
-        //    }
-
-        //    StopCoroutine(m_MovementCoroutine);
-        //    m_MovementCoroutine = null;
-        //}
-
-        ////移動処理コルーチン
-        //IEnumerator MovementEnumerator()
-        //{
-        //    //YieldInstruction yieldFunc = new WaitForFixedUpdate();
-        //    YieldInstruction yieldFunc = new WaitForEndOfFrame();
-
-        //    while (Application.isPlaying)
-        //    {
-        //        //AnimateOnSpline(spline);
-        //        foreach (var vehicle in m_Vehicles)
-        //        {
-        //            if (!vehicle.Move())
-        //            {
-        //                vehicle.PreMove();
-        //            }
-        //        }
-
-        //        yield return yieldFunc;
-        //    }
-        //}
-
         public void InitializeVehicles()
         {
             //VehicleID 振り直し
@@ -136,6 +89,45 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             RnDataLineString outLinestring = outlane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
             Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
             return (position, outRoad, outlane);
+        }
+
+        /// <summary>
+        /// IDが一番小さいRoad
+        /// </summary>
+        /// <returns></returns>
+        public (Vector3, RnDataRoad, RnDataLane) GetStaticRoad()
+        {
+            var roadNetworkRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
+            if(roadNetworkRoads.TryFindMin(x => x.GetId(RnGetter), out var road)){
+                RnDataRoad outRoad = road;
+                RnDataLane outlane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
+                RnDataLineString outLinestring = outlane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
+                Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
+                return (position, outRoad, outlane);
+            }
+            return GetRandomRoad();
+        }
+
+        public bool IsRoadFilled(int roadId, int laneIndex, int currentVehicleID)
+        {
+            if (m_RoadSituation.TryGetValue(roadId, out RoadStatus roadStat))
+            {
+                var roadBase = RnGetter.GetRoadBases().TryGet(roadId);
+                var isRoad = (roadBase is RnDataRoad);
+
+                List<RoadInfo> vehiclesOnTheLane = isRoad ?
+                    roadStat.m_Vehicles.FindAll(x => x.m_LaneIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList() :
+                    roadStat.m_Vehicles.FindAll(x => x.m_TrackIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList();
+
+                if (vehiclesOnTheLane.TryFindMin(x => x.m_CurrentProgress, out RoadInfo firstCar))
+                {
+                    if (firstCar.m_CurrentProgress < 0.05f) // TODO : 距離判定
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         public RnDataLane GetLaneByLottery(RnDataRoad road, List<RnDataLane> lanes)
@@ -184,6 +176,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             public int m_NumVehiclesOnTheLane;
             public int m_NumVehiclesForward;
             public float m_LastCarProgress;
+            public float m_DistanceBetweenLastCar;
+
+            public float m_DistanceFromFirstPoint;
 
             public int m_NumVehiclesOncominglane; //対向車(Intersection only)
             public int m_NumVehiclesCrossing; //横断車(Intersection only)
@@ -233,11 +228,26 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     stat.m_LastCarProgress = lastCar.m_CurrentProgress;
 
+                    stat.m_DistanceBetweenLastCar = Vector3.Distance(lastCar.m_CurrentPosition, roadInfo.m_CurrentPosition);
+
                     //bounds Collider
                     //var bounds = lastCar.GetComponentInChildren<MeshCollider>().bounds;
                     //var boundsAddition = lastCar.m_TrafficController.m_Distance / Mathf.Abs(Vector3.Distance(bounds.max, bounds.center));
                     ////Debug.Log($"boundsAddition {boundsAddition}");
                     //stat.m_LastCarProgress += boundsAddition;
+                }
+
+                //Road
+                if (isRoad)
+                {
+                    var road = roadBase as RnDataRoad;
+                    var way = road.GetChildWay(RnGetter, roadInfo.m_LaneIndex);
+                    var linestring = road.GetChildLineString(RnGetter, roadInfo.m_LaneIndex);
+                    var firstPoint = way?.IsReversed ?? false ? linestring?.GetChildPointsVector(RnGetter)?.LastOrDefault() : linestring.GetChildPointsVector(RnGetter)?.FirstOrDefault();
+                    if(firstPoint != null)
+                    {
+                        stat.m_DistanceFromFirstPoint = Vector3.Distance(roadInfo.m_CurrentPosition, firstPoint.Value);
+                    }
                 }
 
                 //intersection用
@@ -268,6 +278,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             stat.m_IsPriorityTrack = (priorityTrack == targetTrack);
                         }
                     }
+
+                    stat.m_DistanceFromFirstPoint = Vector3.Distance(roadInfo.m_CurrentPosition, targetTrack.Spline.EvaluatePosition(0f));
                 }
 
                 stat.m_IsValid = true;

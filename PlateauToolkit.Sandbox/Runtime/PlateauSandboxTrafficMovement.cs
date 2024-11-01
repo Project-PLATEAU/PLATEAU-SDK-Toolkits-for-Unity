@@ -34,6 +34,8 @@ namespace PlateauToolkit.Sandbox
         [SerializeField]
         public float m_StartOffset = 0f;
 
+        [SerializeField] public float m_CurrentSpeed;
+
         TrafficManager m_TrafficManager;
         Coroutine m_MovementCoroutine;
 
@@ -102,6 +104,7 @@ namespace PlateauToolkit.Sandbox
 
         public void Initialize()
         {
+
             var bounds = GetComponentInChildren<MeshCollider>()?.bounds;
             if (bounds != null)
             {
@@ -251,6 +254,17 @@ namespace PlateauToolkit.Sandbox
             //YieldInstruction yieldFunc = new WaitForFixedUpdate();
             YieldInstruction yieldFunc = new WaitForEndOfFrame();
 
+            while (m_TrafficManager?.IsRoadFilled(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) == true) //レーンがいっぱい
+            {
+                if(m_TrafficController?.m_DebugInfo != null)
+                    m_TrafficController.m_DebugInfo.IsRoadFilled = true;
+
+                //待機
+                yield return yieldFunc;
+            }
+            if (m_TrafficController?.m_DebugInfo != null)
+                m_TrafficController.m_DebugInfo.IsRoadFilled = false;
+
             if (m_TrafficController?.IsRoad == true)
             {
                 List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
@@ -317,6 +331,8 @@ namespace PlateauToolkit.Sandbox
             if (m_TrafficController == null)
             {
                 Stop();
+
+                DestroyImmediate(gameObject); //破棄
             }
             else
             {
@@ -328,22 +344,26 @@ namespace PlateauToolkit.Sandbox
         void AnimateOnSpline(Spline spline)
         {
             float percent = m_DistanceCalc.GetPercent();
-            ProgressResult stat = m_TrafficController.SetProgress(percent);
-            SetSpeed(stat);
 
             Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
+
+            ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
+            SetSpeed(stat);
+
             SetTransfrorm(pos);
         }
 
         void AnimateBetweenPoints(List<Vector3> points)
         {
             float percent = m_DistanceCalc.GetPercent();
-            ProgressResult stat = m_TrafficController.SetProgress(percent);
+
+            Vector3 pos = SplineTool.GetPointOnLine(points, percent);
+
+            ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
             SetSpeed(stat);
 
             //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, percent);
             //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
-            Vector3 pos = SplineTool.GetPointOnLine(points, percent);
             SetTransfrorm(pos);
         }
 
@@ -352,7 +372,10 @@ namespace PlateauToolkit.Sandbox
             if (result.m_Speed != m_SpeedKm)
             {
                 m_SpeedKm = result.m_Speed;
+                //m_DistanceCalc.ChangeSpeedTo(m_SpeedKm);
                 m_DistanceCalc.ChangeSpeed(m_SpeedKm);
+
+                m_CurrentSpeed = m_DistanceCalc.GetCurrentSpeedKm(); //debug
             }
         }
 

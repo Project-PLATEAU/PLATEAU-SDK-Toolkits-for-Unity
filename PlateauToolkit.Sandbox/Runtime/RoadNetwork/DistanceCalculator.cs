@@ -15,6 +15,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         float m_AdditionalPercentage = 0f;
 
+        float m_TargetSpeedKm = 0f; //ChangeSpeedTo の目標値
+
         public DistanceCalculator(float speed, float distance, float offset)
         {
             m_SpeedKmPerHour = speed;
@@ -22,6 +24,23 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_TotalDistanceMeters = distance;
             m_AdditionalPercentage = offset;
             Start();
+        }
+
+        public float GetCurrentSpeedKm()
+        {
+            return m_SpeedKmPerHour;
+        }
+
+        //呼ばれる度に速度をstep単位で変更(加速、減速）
+        public void ChangeSpeedTo(float speed, float step = 1f)
+        {
+            m_TargetSpeedKm = speed;
+            var diff = m_SpeedKmPerHour - m_TargetSpeedKm;
+            if (diff == 0f)
+                return;
+
+            var nextSpeed = diff > 0f ? m_SpeedKmPerHour - step : m_SpeedKmPerHour + step;
+            ChangeSpeed(nextSpeed);
         }
 
         //走行中に速度変更

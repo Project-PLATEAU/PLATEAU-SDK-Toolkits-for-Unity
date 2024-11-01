@@ -117,7 +117,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     var result = m_TrafficManager.GetLaneInfo(trafficMovement.RoadInfo);
                     if (result.m_NumVehiclesOnTheLane > 0)
                     {
-                        trafficMovement.m_StartOffset = result.m_NumVehiclesOnTheLane * 0.15f; // TODO: 距離で
+                        //trafficMovement.m_StartOffset = result.m_NumVehiclesOnTheLane * 0.2f; // TODO: 距離で
                     }
                 }
             }
