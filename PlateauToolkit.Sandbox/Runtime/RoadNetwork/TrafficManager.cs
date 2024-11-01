@@ -1,8 +1,10 @@
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PLATEAU.Util;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Unity.Jobs;
 using UnityEngine;
 using UnityEngine.Splines;
 using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
@@ -39,7 +41,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         List<PlateauSandboxTrafficMovement> m_Vehicles;
 
-        TrafficJob m_job = new TrafficJob(100);
+        TrafficJob m_job = new TrafficJob();
 
         Coroutine m_MovementCoroutine;
 
@@ -67,6 +69,57 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             InitializeVehicles();
         }
 
+        void Start()
+        {
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+
+            StartMovement();
+        }
+
+        [ContextMenu("Start Movement")]
+        public void StartMovement()
+        {
+             m_MovementCoroutine = StartCoroutine(MovementEnumerator());
+        }
+
+        [ContextMenu("Stop Movement")]
+        public void Stop()
+        {
+            if (m_MovementCoroutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(m_MovementCoroutine);
+            m_MovementCoroutine = null;
+        }
+
+        //移動処理コルーチン
+        IEnumerator MovementEnumerator()
+        {
+            //YieldInstruction yieldFunc = new WaitForFixedUpdate();
+            YieldInstruction yieldFunc = new WaitForEndOfFrame();
+
+            while (Application.isPlaying)
+            {
+                //AnimateOnSpline(spline);
+                //foreach (var vehicle in m_Vehicles)
+                //{
+                //    if (!vehicle.Move())
+                //    {
+                //        vehicle.PreMove();
+                //    }
+                //}
+
+                m_job.Execute();
+
+                yield return yieldFunc;
+            }
+        }
+
         public void InitializeVehicles()
         {
             //VehicleID 振り直し
@@ -86,6 +139,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             RnDataRoad outRoad = roadNetworkRoads[randValue];
             RnDataLane outlane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
+
+            if (IsRoadFilled(outRoad.GetId(RnGetter),outRoad.GetLaneIndexOfMainLanes(RnGetter,outlane), -1))
+            {
+                return GetRandomRoad();
+            }
+
             RnDataLineString outLinestring = outlane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
             Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
             return (position, outRoad, outlane);
@@ -108,8 +167,61 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return GetRandomRoad();
         }
 
+        public struct RoadFilledStatus
+        {
+            public bool Filled;
+            public int Count;
+            public float lastPercent;
+
+            public string DebugInfo;
+        }
+
         public bool IsRoadFilled(int roadId, int laneIndex, int currentVehicleID)
         {
+            RoadFilledStatus stat = new();
+            stat.Filled = false;
+            stat.Count = 0;
+            stat.lastPercent = 0;
+
+            if (m_RoadSituation.TryGetValue(roadId, out RoadStatus roadStat))
+            {
+                var roadBase = RnGetter.GetRoadBases().TryGet(roadId);
+                var isRoad = (roadBase is RnDataRoad);
+
+                List<RoadInfo> vehiclesOnTheLane = isRoad ?
+                    roadStat.m_Vehicles.FindAll(x => x.m_LaneIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList() :
+                    roadStat.m_Vehicles.FindAll(x => x.m_TrackIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList();
+
+                if (vehiclesOnTheLane.TryFindMin(x => x.m_CurrentProgress, out RoadInfo firstCar))
+                {
+                    if(vehiclesOnTheLane.Count > 5)
+                    {
+                        //5台以上なら解放　暫定処置
+                        return false;
+                    }
+
+
+                    if (vehiclesOnTheLane.Count > 2 && firstCar.m_CurrentProgress < 0.05f) // TODO : 距離判定
+                    {
+                        stat.Filled = true;
+                        stat.Count = vehiclesOnTheLane.Count;
+                        stat.lastPercent = firstCar.m_CurrentProgress;
+
+                        stat.DebugInfo = string.Join(",", vehiclesOnTheLane.Select(x => x.m_VehicleID));
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public RoadFilledStatus GetRoadFillStatus(int roadId, int laneIndex, int currentVehicleID)
+        {
+            RoadFilledStatus stat = new();
+            stat.Filled = false;
+            stat.Count = 0;
+            stat.lastPercent = 0;
+
             if (m_RoadSituation.TryGetValue(roadId, out RoadStatus roadStat))
             {
                 var roadBase = RnGetter.GetRoadBases().TryGet(roadId);
@@ -123,11 +235,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     if (firstCar.m_CurrentProgress < 0.05f) // TODO : 距離判定
                     {
-                        return true;
+                        stat.Filled = true;
+                        stat.Count = vehiclesOnTheLane.Count;
+                        stat.lastPercent = firstCar.m_CurrentProgress;
+
+                        stat.DebugInfo = string.Join(",", vehiclesOnTheLane.Select(x => x.m_VehicleID));
+                        return stat;
                     }
                 }
             }
-            return false;
+            return stat;
         }
 
         public RnDataLane GetLaneByLottery(RnDataRoad road, List<RnDataLane> lanes)

@@ -31,17 +31,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return m_SpeedKmPerHour;
         }
 
+        //バグってる
         //呼ばれる度に速度をstep単位で変更(加速、減速）
-        public void ChangeSpeedTo(float speed, float step = 1f)
-        {
-            m_TargetSpeedKm = speed;
-            var diff = m_SpeedKmPerHour - m_TargetSpeedKm;
-            if (diff == 0f)
-                return;
+        //public void ChangeSpeedTo(float speed, float step = 0.1f)
+        //{
+        //    m_TargetSpeedKm = speed;
+        //    var diff = m_SpeedKmPerHour - m_TargetSpeedKm;
+        //    if (diff == 0f)
+        //        return;
 
-            var nextSpeed = diff > 0f ? m_SpeedKmPerHour - step : m_SpeedKmPerHour + step;
-            ChangeSpeed(nextSpeed);
-        }
+        //    var nextSpeed = diff > 0f ? m_SpeedKmPerHour - step : m_SpeedKmPerHour + step;
+
+        //    Debug.Log($"nextSpeed {nextSpeed}");
+        //    ChangeSpeed(nextSpeed);
+        //}
 
         //走行中に速度変更
         public void ChangeSpeed(float speed)

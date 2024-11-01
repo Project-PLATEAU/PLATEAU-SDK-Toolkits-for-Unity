@@ -7,51 +7,94 @@ using System.Threading.Tasks;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.Splines;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class TrafficJob:IDisposable
     {
-        private const int MaxBoxcastCount = 5;
-
-        private JobHandle obstacleCheckJobHandle;
-        private JobHandle raycastJobHandle;
-        private JobHandle boxcastJobHandle;
-        private JobHandle calculateObstacleDistanceJobHandle;
-
-        // Obstacle Check
-        private NativeArray<BoxcastCommand> boxcastCommands;
-        private NativeArray<RaycastHit> obstacleHitInfoArray;
-        private NativeArray<float> obstacleDistances;
-
-        public TrafficJob(int maxVehicleCount)
+        private struct NativeState
         {
-            boxcastCommands = new NativeArray<BoxcastCommand>(maxVehicleCount * MaxBoxcastCount, Allocator.Persistent);
-            obstacleHitInfoArray =
-                new NativeArray<RaycastHit>(maxVehicleCount * MaxBoxcastCount, Allocator.Persistent);
-            obstacleDistances = new NativeArray<float>(maxVehicleCount, Allocator.Persistent);
+            public Vector3 Extents;
+            public Vector3 FrontCenterPosition;
+            //public float Yaw;
+            //public int WaypointCount;
+            //public Spline Spline;
+            public float SplinePosition;
+
+            public static NativeState Create(PlateauSandboxTrafficMovement vehicle, int waypointCount)
+            {
+                return new NativeState
+                {
+                    Extents = vehicle.GetComponentInChildren<MeshCollider>().bounds.extents,
+                    FrontCenterPosition = vehicle.transform.position,
+                    //Yaw = vehicle.Yaw,
+                    //WaypointCount = waypointCount
+                    SplinePosition = vehicle.RoadInfo.m_CurrentProgress
+                };
+            }
+        }
+
+
+        //private const int MaxBoxcastCount = 5;
+
+        //private JobHandle obstacleCheckJobHandle;
+        //private JobHandle raycastJobHandle;
+        //private JobHandle boxcastJobHandle;
+        //private JobHandle calculateObstacleDistanceJobHandle;
+
+        //// Obstacle Check
+        //private NativeArray<BoxcastCommand> boxcastCommands;
+        //private NativeArray<RaycastHit> obstacleHitInfoArray;
+        //private NativeArray<float> obstacleDistances;
+
+        private JobHandle positionOnSplineJobHandle;
+
+        public TrafficJob()
+        {
+            //boxcastCommands = new NativeArray<BoxcastCommand>(maxVehicleCount * MaxBoxcastCount, Allocator.Persistent);
+            //obstacleHitInfoArray =
+            //    new NativeArray<RaycastHit>(maxVehicleCount * MaxBoxcastCount, Allocator.Persistent);
+            //obstacleDistances = new NativeArray<float>(maxVehicleCount, Allocator.Persistent);
         }
 
         public void Execute()
         {
-            obstacleCheckJobHandle =
-            new ObstacleCheckJob
+            //obstacleCheckJobHandle =
+            //new ObstacleCheckJob
+            //{
+            //    Commands = boxcastCommands,
+            //    //States = nativeStates,
+            //    //VehicleLayerMask = vehicleLayerMask,
+            //    //Waypoints = waypoints
+            //}.Schedule(boxcastCommands.Length, 16);
+
+            //boxcastJobHandle =
+            //    BoxcastCommand.ScheduleBatch(
+            //        boxcastCommands,
+            //        obstacleHitInfoArray,
+            //        16,
+            //        obstacleCheckJobHandle);
+
+            //// Start background jobs
+            //JobHandle.ScheduleBatchedJobs();
+
+            positionOnSplineJobHandle = new PositionOnSplineJob
             {
-                Commands = boxcastCommands,
-                //States = nativeStates,
-                //VehicleLayerMask = vehicleLayerMask,
-                //Waypoints = waypoints
-            }.Schedule(boxcastCommands.Length, 16);
 
-            boxcastJobHandle =
-                BoxcastCommand.ScheduleBatch(
-                    boxcastCommands,
-                    obstacleHitInfoArray,
-                    16,
-                    obstacleCheckJobHandle);
+            }.Schedule();
 
-            // Start background jobs
-            JobHandle.ScheduleBatchedJobs();
+            positionOnSplineJobHandle.Complete();
+        }
+
+        private struct PositionOnSplineJob : IJob
+        {
+            public Vector3 postion;
+
+            public void Execute()
+            {
+                postion = new Vector3(1,0,0);
+            }
         }
 
         /// <summary>
@@ -59,12 +102,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         /// </summary>
         private struct ObstacleCheckJob : IJobParallelFor
         {
-            public LayerMask VehicleLayerMask;
+            //public LayerMask VehicleLayerMask;
 
             //[ReadOnly] public NativeArray<NativeState> States;
             //[ReadOnly] public NativeArray<Vector3> Waypoints;
 
-            [WriteOnly] public NativeArray<BoxcastCommand> Commands;
+            //[WriteOnly] public NativeArray<BoxcastCommand> Commands;
 
             public void Execute(int index)
             {
@@ -104,13 +147,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public void Dispose()
         {
-            var dependsOn = JobHandle.CombineDependencies(
-                raycastJobHandle,
-                calculateObstacleDistanceJobHandle);
+            //var dependsOn = JobHandle.CombineDependencies(
+            //    raycastJobHandle,
+            //    calculateObstacleDistanceJobHandle);
 
-            boxcastCommands.Dispose(dependsOn);
-            obstacleHitInfoArray.Dispose(dependsOn);
-            obstacleDistances.Dispose(dependsOn);
+            //boxcastCommands.Dispose(dependsOn);
+            //obstacleHitInfoArray.Dispose(dependsOn);
+            //obstacleDistances.Dispose(dependsOn);
         }
     }
 

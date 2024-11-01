@@ -115,7 +115,9 @@ namespace PlateauToolkit.Sandbox
 #if UNITY_EDITOR
         void OnValidate()
         {
-
+            //debug
+            //Debug.Log($"change speed {m_CurrentSpeed}");
+            //m_DistanceCalc.ChangeSpeed(m_CurrentSpeed);
         }
 #endif
         void Awake()
@@ -256,14 +258,16 @@ namespace PlateauToolkit.Sandbox
 
             while (m_TrafficManager?.IsRoadFilled(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) == true) //レーンがいっぱい
             {
-                if(m_TrafficController?.m_DebugInfo != null)
-                    m_TrafficController.m_DebugInfo.IsRoadFilled = true;
+                if (m_TrafficController?.m_DebugInfo != null)
+                    m_TrafficController.m_DebugInfo.SetFillStatus(m_TrafficManager?.GetRoadFillStatus(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) ?? default);
+
 
                 //待機
                 yield return yieldFunc;
             }
+
             if (m_TrafficController?.m_DebugInfo != null)
-                m_TrafficController.m_DebugInfo.IsRoadFilled = false;
+                m_TrafficController.m_DebugInfo.SetFillStatus(m_TrafficManager?.GetRoadFillStatus(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) ?? default);
 
             if (m_TrafficController?.IsRoad == true)
             {
@@ -327,6 +331,19 @@ namespace PlateauToolkit.Sandbox
             m_StartOffset = 0f; //初回のみ利用
 
             m_TrafficController = m_TrafficController.GetNextRoad();
+
+            // EmptyIntersectionは更に次へ
+            if (m_TrafficController?.m_Intersection?.IsEmptyIntersection == true)
+            {
+                m_TrafficController = m_TrafficController.GetNextRoad();
+            }
+
+            if(m_TrafficController.m_RoadInfo.m_RoadId == 0)
+            {
+                //Road id 0 はなぜかバグるので、次へ
+                Debug.LogError($"m_RoadId is zero {m_TrafficController.m_Road.TargetTran.name} ");
+                m_TrafficController = m_TrafficController.Respawn();
+            }
 
             if (m_TrafficController == null)
             {

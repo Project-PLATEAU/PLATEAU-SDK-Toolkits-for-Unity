@@ -2,18 +2,34 @@
 using PLATEAU.RoadNetwork.Structure;
 using UnityEngine;
 using System.Linq;
+using Unity.Collections;
+using Unity.Jobs;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
+    //public struct ProgressJob : IJob
+    //{
+    //    public ProgressResult Results;
+
+    //    public float time;
+
+    //    // 1つのコアで一回実行される
+    //    void IJob.Execute()
+    //    {
+    //        Results = new ProgressResult();
+    //    }
+    //}
+
     public struct ProgressResult
     {
         public float m_Speed;
-
         public float m_Distance_from_Other;
 
         public ProgressResult(RoadNetworkTrafficController controller, TrafficManager.LaneStatus status, RoadNetworkDataGetter getter)
         {
             m_Distance_from_Other = -1f;
+
+            m_Speed = 40f;
 
             if (status.m_IsValid)
             {
@@ -28,15 +44,17 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                     if (status.m_DistanceBetweenLastCar < 10f)
                     {
-                        m_Speed = 0f; //適当なスピード
+                        m_Speed = 10f; //適当なスピード
+                        //m_Speed = Mathf.Max(controller.m_Speed - 2f, 0f);
                     }
                     else if (status.m_DistanceBetweenLastCar < 20f) //適当な差 
                     {
-                        m_Speed = 10f;
+                        m_Speed = 20f;
+                        //m_Speed = Mathf.Max(controller.m_Speed - 1f, 0f);
                     }
                     else if (status.m_DistanceFromFirstPoint < 1f) //侵入したて
                     {
-                        m_Speed = 5f;
+                        //m_Speed = 20f;
                     }
                     else
                     {
@@ -56,7 +74,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     var straightTrack = controller.m_Intersection.GetTraksOfSameOriginByType(getter, controller.GetTrack(), RnTurnType.Straight)?.FirstOrDefault();
                     if (straightTrack == null && status.m_NumVehiclesCrossing > 0)
                     {
-                        //m_Speed = 2f;
+                        m_Speed = 10f;
                     }
                 }
                 else if (controller.m_Intersection?.GetAllConnectedRoads(getter).Count == 4)
@@ -64,11 +82,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     var straightTrack = controller.m_Intersection.GetTraksOfSameOriginByType(getter, controller.GetTrack(), RnTurnType.Straight)?.FirstOrDefault();
                     if (straightTrack != null && status.m_NumVehiclesCrossing > 0 && !status.m_IsPriorityTrack)
                     {
-                        //m_Speed = 5f;
+                        m_Speed = 15f;
                     }
                     else if (controller.GetTrack().TurnType == RnTurnType.RightTurn && straightTrack != null && status.m_NumVehiclesOncominglane > 0)
                     {
-                        //m_Speed = 3f;
+                        m_Speed = 10f;
                     }
                 }
 

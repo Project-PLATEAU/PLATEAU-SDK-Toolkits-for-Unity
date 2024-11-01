@@ -6,6 +6,7 @@ using UnityEngine;
 using PLATEAU.RoadNetwork.Structure;
 using static Codice.CM.Common.CmCallContext;
 using UnityEngine.UIElements;
+using static PlateauToolkit.Sandbox.RoadNetwork.TrafficManager;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -71,6 +72,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField] public float m_Speed;
 
         [SerializeField] public bool IsRoadFilled;
+        [SerializeField] public int RoadFillCount;
+        [SerializeField] public float RoadFillPercent;
+        [SerializeField]
+        public string m_RoadFillDebugString;
 
         [SerializeField]
         public float m_CurrentProgress;
@@ -112,6 +117,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_Speed = prg.m_Speed;
 
             m_CurrentProgress = cont.m_RoadInfo.m_CurrentProgress;
+        }
+
+        public void SetFillStatus(RoadFilledStatus stat)
+        {
+            IsRoadFilled = stat.Filled;
+            RoadFillCount = stat.Count;
+            RoadFillPercent = stat.lastPercent;
+            m_RoadFillDebugString = stat.DebugInfo;
         }
     }
 
@@ -171,7 +184,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             get
             {
-                return m_RoadInfo?.m_IsReverse ?? false;
+                if (m_EnableRunningBackwards)
+                {
+                    return m_RoadInfo?.m_IsReverse ?? false;
+                }
+
+                return false;
             }
         }
 
@@ -296,8 +314,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             Debug.Log($"<color=blue>Respawn {m_RoadInfo.m_VehicleID}</color>");
 
-            //var (pos, road, lane) = m_TrafficManager.GetRandomRoad();
-            var (pos, road, lane) = m_TrafficManager.GetStaticRoad();
+            var (pos, road, lane) = m_TrafficManager.GetRandomRoad();
+            //var (pos, road, lane) = m_TrafficManager.GetStaticRoad();
             //var info = new RoadInfo(
             //            road.GetId(RnGetter),
             //            road.GetLaneIndexOfMainLanes(RnGetter, lane));
@@ -404,6 +422,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     if (nextParam.IsValid)
                     {
                         //Debug.Log($"<color=green>next road found {nextRoad.GetId(RnGetter)}</color>");
+
                         return nextParam;
                     }
                 }
