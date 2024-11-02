@@ -669,17 +669,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         //不要
         public void Dispose()
         {
-            //m_RoadNetworkGetter = null;
-            m_TrafficManager = null;
-            m_RoadInfo = null;
-            m_Road = null;
-            m_Intersection = null;
-            m_FromBorder = null;
-            m_ToBorder = null;
-
-            //Debug用
-            //expectedBorders?.Clear();
-            //actualBorders?.Clear();
         }
     }
 }

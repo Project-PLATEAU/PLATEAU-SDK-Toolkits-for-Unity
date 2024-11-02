@@ -6,7 +6,7 @@ using UnityEngine;
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
 
-    public class DistanceCalculator2
+    public class DistanceCalculator
     {
         float m_SpeedKmPerHour = 0f;
         float m_SpeedMetersPerSecond = 0f;
@@ -14,7 +14,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         float m_TotalDistanceMeters = 0f;
         float m_Fps = 12f;
 
-        public DistanceCalculator2(float speed, float distance, float fps)
+        public DistanceCalculator(float speed, float distance, float fps)
         {
             m_SpeedKmPerHour = speed;
             m_SpeedMetersPerSecond = (m_SpeedKmPerHour * 1000f) / 3600f;
@@ -50,7 +50,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     }
 
     //Start後の経過時間から移動パーセント(0-1f)を計測
-    public class DistanceCalculator
+    public class DistanceCalculatorTimeBased
     {
         float m_SpeedKmPerHour = 0f;
         float m_SpeedMetersPerSecond = 0f;
@@ -59,9 +59,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         float m_AdditionalPercentage = 0f;
 
-        float m_TargetSpeedKm = 0f; //ChangeSpeedTo の目標値
+        //float m_TargetSpeedKm = 0f; //ChangeSpeedTo の目標値
 
-        public DistanceCalculator(float speed, float distance, float offset)
+        public DistanceCalculatorTimeBased(float speed, float distance, float offset)
         {
             m_SpeedKmPerHour = speed;
             m_SpeedMetersPerSecond = (m_SpeedKmPerHour * 1000f) / 3600f;

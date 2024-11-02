@@ -44,8 +44,7 @@ namespace PlateauToolkit.Sandbox
 
         public static readonly float k_FPS = 60f;
 
-        //DistanceCalculator m_DistanceCalc;
-        DistanceCalculator2 m_DistanceCalc2;
+        DistanceCalculator m_DistanceCalc;
 
         public float CollisionDetectRadius { get => m_CollisionDetectRadius; }
 
@@ -152,19 +151,6 @@ namespace PlateauToolkit.Sandbox
         [ContextMenu("Start Movement")]
         public void StartMovement()
         {
-            //if (m_MovementCoroutine != null)
-            //{
-            //    Debug.LogWarning("既に移動を開始しています");
-            //    return;
-            //}
-            //if (m_MovingObject == null)
-            //{
-            //    Debug.LogError("移動に対応したオブジェクトにアタッチされていません");
-            //    return;
-            //}
-
-            //m_MovingObject.OnMoveBegin();
-
             m_IsPaused = false;
 
             m_MovementCoroutine = StartCoroutine(MovementEnumerator());
@@ -184,75 +170,6 @@ namespace PlateauToolkit.Sandbox
 
             m_IsPaused = false;
         }
-
-
-        //TrafficManager側で動かす場合の処理
-        //Spline m_Spline;
-        //public void PreMove()
-        //{
-        //    if (m_TrafficController == null)
-        //    {
-        //        Stop();
-        //    }
-
-        //    if (m_TrafficController?.IsRoad == true)
-        //    {
-        //        List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
-        //        if (m_TrafficController.IsLineStringReversed)
-        //        {
-        //            points.Reverse();
-        //        }
-
-        //        m_Spline = SplineTool.CreateSplineFromPoints(points);
-
-        //        m_TrafficController.SetDistance(m_Spline.GetLength());
-        //        m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_Spline.GetLength(), m_StartOffset);
-        //        m_DistanceCalc.Start();
-        //    }
-        //    else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
-        //    {
-        //        RnDataTrack track = m_TrafficController.GetTrack();
-
-        //        if (track == null)
-        //        {
-        //            Stop();
-        //            return;
-        //        }
-
-        //        m_Spline = track.Spline;
-
-        //        if (m_TrafficController.IsReversed)
-        //        {
-        //            m_Spline.Knots = m_Spline.Knots.Reverse();
-        //        }
-
-        //        m_TrafficController.SetDistance(m_Spline.GetLength());
-        //        m_DistanceCalc = new DistanceCalculator(m_SpeedKm, m_Spline.GetLength(), m_StartOffset);
-        //        m_DistanceCalc.Start();
-        //    }
-        //    m_StartOffset = 0f; //初回のみ利用
-        //}
-
-        //public bool Move()
-        //{
-        //    if (m_TrafficController == null || m_DistanceCalc == null || m_Spline == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (m_DistanceCalc.GetPercent() < 1)
-        //    {
-        //        AnimateOnSpline(m_Spline);
-        //        return true;
-        //    }
-        //    else
-        //    {
-        //        m_TrafficController = m_TrafficController.GetNextRoad();
-        //    }
-
-        //    return false;
-        //}
-
 
         //移動処理コルーチン
         IEnumerator MovementEnumerator()
@@ -306,15 +223,10 @@ namespace PlateauToolkit.Sandbox
             if (currentSpline != null)
             {
                 m_TrafficController.SetDistance(currentSpline.GetLength());
-                //m_DistanceCalc = new DistanceCalculator(m_SpeedKm, currentSpline.GetLength(), m_StartOffset);
-                //m_DistanceCalc = new DistanceCalculator(0f, spline.GetLength(), m_StartOffset);
-                //m_DistanceCalc.Start();
 
-                m_DistanceCalc2 = new DistanceCalculator2(m_SpeedKm, currentSpline.GetLength(), k_FPS);
+                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, currentSpline.GetLength(), k_FPS);
 
-                //intersection
-                //while (m_DistanceCalc.GetPercent() < 1)
-                while (m_DistanceCalc2.GetPercent() < 1)
+                while (m_DistanceCalc.GetPercent() < 1)
                 {
                     AnimateOnSpline(currentSpline);
                     yield return yieldFunc;
@@ -333,13 +245,6 @@ namespace PlateauToolkit.Sandbox
                 m_TrafficController = m_TrafficController.GetNextRoad();
             }
 
-            //if(m_TrafficController.m_RoadInfo.m_RoadId == 0)
-            //{
-            //    //Road id 0 はなぜかバグるので、次へ
-            //    Debug.Log($"m_RoadId is zero {m_TrafficController.m_Road.TargetTran.name} ");
-            //    m_TrafficController = m_TrafficController.Respawn();
-            //}
-
             if (m_TrafficController == null)
             {
                 Stop();
@@ -355,43 +260,13 @@ namespace PlateauToolkit.Sandbox
 
         void AnimateOnSpline(Spline spline)
         {
-            //float percent = m_DistanceCalc.GetPercent();
-            float percent = m_DistanceCalc2.GetPercent();
-
-            //Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
-            //ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
-            //SetSpeed(stat);
+            float percent = m_DistanceCalc.GetPercent();
 
             ProgressResult stat = m_TrafficController.SetProgress(percent, transform.position);
-            percent = m_DistanceCalc2.GetNextPercent(stat.m_Speed, stat.m_LastCarProgress);
-            //percent = m_DistanceCalc2.GetNextPercent(10f, 1f);
+            percent = m_DistanceCalc.GetNextPercent(stat.m_Speed, stat.m_LastCarProgress);
             Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
             SetTransfrorm(pos);
         }
-
-        //void AnimateBetweenPoints(List<Vector3> points)
-        //{
-        //    float percent = m_DistanceCalc.GetPercent();
-
-        //    Vector3 pos = SplineTool.GetPointOnLine(points, percent);
-
-        //    ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
-        //    SetSpeed(stat);
-
-        //    SetTransfrorm(pos);
-        //}
-
-        //void SetSpeed(ProgressResult result)
-        //{
-        //    if (result.m_Speed != m_SpeedKm)
-        //    {
-        //        m_SpeedKm = result.m_Speed;
-        //        //m_DistanceCalc.ChangeSpeedTo(m_SpeedKm);
-        //        m_DistanceCalc.ChangeSpeed(m_SpeedKm);
-
-        //        m_CurrentSpeed = m_DistanceCalc.GetCurrentSpeedKm(); //debug
-        //    }
-        //}
 
         void SetTransfrorm(Vector3 pos)
         {
@@ -427,7 +302,6 @@ namespace PlateauToolkit.Sandbox
             }
 
             GizmoUtil.DebugRoadNetwork(m_TrafficController, RnGetter);
-
             GizmoUtil.DebugVehicle(this);
         }
     }
