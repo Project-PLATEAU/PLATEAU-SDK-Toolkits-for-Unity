@@ -269,6 +269,8 @@ namespace PlateauToolkit.Sandbox
             if (m_TrafficController?.m_DebugInfo != null)
                 m_TrafficController.m_DebugInfo.SetFillStatus(m_TrafficManager?.GetRoadFillStatus(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) ?? default);
 
+
+            Spline currentSpline = null;
             if (m_TrafficController?.IsRoad == true)
             {
                 List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
@@ -277,20 +279,7 @@ namespace PlateauToolkit.Sandbox
                     points.Reverse();
                 }
 
-                Spline spline = SplineTool.CreateSplineFromPoints(points);
-
-                m_TrafficController.SetDistance(spline.GetLength());
-                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength(), m_StartOffset);
-                //m_DistanceCalc = new DistanceCalculator(0f, spline.GetLength(), m_StartOffset);
-                m_DistanceCalc.Start();
-
-                while (m_DistanceCalc.GetPercent() < 1)
-                {
-                    AnimateOnSpline(spline);
-                    yield return yieldFunc;
-                }
-
-                //Debug.Break();
+                currentSpline = SplineTool.CreateSplineFromPoints(points);
             }
             else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
             {
@@ -302,30 +291,34 @@ namespace PlateauToolkit.Sandbox
                     yield break;
                 }
 
-                Spline spline = track.Spline;
+                currentSpline = track.Spline;
 
                 if (m_TrafficController.IsReversed)
                 {
-                    spline.Knots = spline.Knots.Reverse();
+                    currentSpline.Knots = currentSpline.Knots.Reverse();
                 }
+            }
 
-                m_TrafficController.SetDistance(spline.GetLength());
-                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, spline.GetLength(), m_StartOffset);
+
+            if(currentSpline == null)
+            {
+                Stop();
+            }
+            else
+            {
+                m_TrafficController.SetDistance(currentSpline.GetLength());
+                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, currentSpline.GetLength(), m_StartOffset);
                 //m_DistanceCalc = new DistanceCalculator(0f, spline.GetLength(), m_StartOffset);
                 m_DistanceCalc.Start();
 
                 //intersection
                 while (m_DistanceCalc.GetPercent() < 1)
                 {
-                    AnimateOnSpline(spline);
+                    AnimateOnSpline(currentSpline);
                     yield return yieldFunc;
                 }
 
                 //Debug.Break();
-            }
-            else
-            {
-                Stop();
             }
 
             m_StartOffset = 0f; //初回のみ利用

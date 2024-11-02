@@ -5,6 +5,57 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
+
+    public class DistanceCalculator2
+    {
+        float m_SpeedKmPerHour = 0f;
+        float m_SpeedMetersPerSecond = 0f;
+        float m_ElapsedPercentage = 0f;
+        float m_TotalDistanceMeters = 0f;
+        float m_Fps = 12f;
+
+        public DistanceCalculator2(float speed, float distance, float fps)
+        {
+            m_SpeedKmPerHour = speed;
+            m_SpeedMetersPerSecond = (m_SpeedKmPerHour * 1000f) / 3600f;
+            m_TotalDistanceMeters = distance;
+            m_Fps = fps;
+        }
+
+        public float GetPercent()
+        {
+            return m_ElapsedPercentage;
+        }
+
+        public float GetStep(float fps, float speed)
+        {
+            if (m_SpeedKmPerHour != speed)
+            {
+                m_SpeedKmPerHour = speed;
+                m_SpeedMetersPerSecond = (m_SpeedKmPerHour * 1000f) / 3600f;
+            }
+
+            var step = m_SpeedMetersPerSecond / fps / m_TotalDistanceMeters;
+            //Debug.LogWarning($"step : {step} m_SpeedMetersPerSecond: {m_SpeedMetersPerSecond}");
+            //return step;
+            return 0.01f;
+        }
+
+        public float GetPercentBySpeed(float speed, float maxPercent)
+        {
+            var percentage = m_ElapsedPercentage + GetStep(m_Fps, speed);
+            if (percentage <= maxPercent)
+            {
+                m_ElapsedPercentage = Mathf.Clamp(percentage, 0f, 1f);
+                //m_ElapsedPercentage = percentage;
+            }
+            return m_ElapsedPercentage;
+        }
+
+    }
+
+
+
     //Start後の経過時間から移動パーセント(0-1f)を計測
     public class DistanceCalculator
     {
