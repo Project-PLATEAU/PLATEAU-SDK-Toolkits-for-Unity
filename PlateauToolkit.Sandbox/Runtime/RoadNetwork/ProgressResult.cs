@@ -23,13 +23,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     public struct ProgressResult
     {
         public float m_Speed;
+        public float m_LastCarProgress;
         public float m_Distance_from_Other;
 
         public ProgressResult(RoadNetworkTrafficController controller, TrafficManager.LaneStatus status, RoadNetworkDataGetter getter)
         {
             m_Distance_from_Other = -1f;
 
-            m_Speed = 40f;
+            m_Speed = 20f;
+
+            m_LastCarProgress = 1f;
 
             if (status.m_IsValid)
             {
@@ -41,6 +44,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     //var currentProgress = controller.m_RoadInfo.m_CurrentProgress;
                     //m_Distance_from_Other = (status.m_LastCarProgress - currentProgress) * controller.m_Distance; // * controller.m_Distance;
                     //var distance_from_start = controller.m_RoadInfo.m_CurrentProgress * controller.m_Distance;
+
+                    m_LastCarProgress = status.m_LastCarProgress;
 
                     if (status.m_DistanceBetweenLastCar < 10f)
                     {

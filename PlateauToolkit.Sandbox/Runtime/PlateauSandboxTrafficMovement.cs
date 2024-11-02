@@ -7,6 +7,7 @@ using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using UnityEngine.Splines;
+using PLATEAU.Util;
 
 namespace PlateauToolkit.Sandbox
 {
@@ -41,7 +42,10 @@ namespace PlateauToolkit.Sandbox
 
         IPlateauSandboxTrafficObject m_TrafficObject;
 
-        DistanceCalculator m_DistanceCalc;
+        public static readonly float k_FPS = 60f;
+
+        //DistanceCalculator m_DistanceCalc;
+        DistanceCalculator2 m_DistanceCalc2;
 
         public float CollisionDetectRadius { get => m_CollisionDetectRadius; }
 
@@ -299,20 +303,18 @@ namespace PlateauToolkit.Sandbox
                 }
             }
 
-
-            if(currentSpline == null)
-            {
-                Stop();
-            }
-            else
+            if (currentSpline != null)
             {
                 m_TrafficController.SetDistance(currentSpline.GetLength());
-                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, currentSpline.GetLength(), m_StartOffset);
+                //m_DistanceCalc = new DistanceCalculator(m_SpeedKm, currentSpline.GetLength(), m_StartOffset);
                 //m_DistanceCalc = new DistanceCalculator(0f, spline.GetLength(), m_StartOffset);
-                m_DistanceCalc.Start();
+                //m_DistanceCalc.Start();
+
+                m_DistanceCalc2 = new DistanceCalculator2(m_SpeedKm, currentSpline.GetLength(), k_FPS);
 
                 //intersection
-                while (m_DistanceCalc.GetPercent() < 1)
+                //while (m_DistanceCalc.GetPercent() < 1)
+                while (m_DistanceCalc2.GetPercent() < 1)
                 {
                     AnimateOnSpline(currentSpline);
                     yield return yieldFunc;
@@ -331,12 +333,12 @@ namespace PlateauToolkit.Sandbox
                 m_TrafficController = m_TrafficController.GetNextRoad();
             }
 
-            if(m_TrafficController.m_RoadInfo.m_RoadId == 0)
-            {
-                //Road id 0 はなぜかバグるので、次へ
-                Debug.LogError($"m_RoadId is zero {m_TrafficController.m_Road.TargetTran.name} ");
-                m_TrafficController = m_TrafficController.Respawn();
-            }
+            //if(m_TrafficController.m_RoadInfo.m_RoadId == 0)
+            //{
+            //    //Road id 0 はなぜかバグるので、次へ
+            //    Debug.Log($"m_RoadId is zero {m_TrafficController.m_Road.TargetTran.name} ");
+            //    m_TrafficController = m_TrafficController.Respawn();
+            //}
 
             if (m_TrafficController == null)
             {
@@ -353,44 +355,49 @@ namespace PlateauToolkit.Sandbox
 
         void AnimateOnSpline(Spline spline)
         {
-            float percent = m_DistanceCalc.GetPercent();
+            //float percent = m_DistanceCalc.GetPercent();
+            float percent = m_DistanceCalc2.GetPercent();
 
+            //Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
+            //ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
+            //SetSpeed(stat);
+
+            ProgressResult stat = m_TrafficController.SetProgress(percent, transform.position);
+            percent = m_DistanceCalc2.GetNextPercent(stat.m_Speed, stat.m_LastCarProgress);
+            //percent = m_DistanceCalc2.GetNextPercent(10f, 1f);
             Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
-
-            ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
-            SetSpeed(stat);
-
             SetTransfrorm(pos);
         }
 
-        void AnimateBetweenPoints(List<Vector3> points)
-        {
-            float percent = m_DistanceCalc.GetPercent();
+        //void AnimateBetweenPoints(List<Vector3> points)
+        //{
+        //    float percent = m_DistanceCalc.GetPercent();
 
-            Vector3 pos = SplineTool.GetPointOnLine(points, percent);
+        //    Vector3 pos = SplineTool.GetPointOnLine(points, percent);
 
-            ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
-            SetSpeed(stat);
+        //    ProgressResult stat = m_TrafficController.SetProgress(percent, pos);
+        //    SetSpeed(stat);
 
-            //Vector3 pos = SplineTool.GetPointOnSplineDistanceBased(points, percent);
-            //Vector3 pos = SplineTool.GetPointOnSpline(points, percent);
-            SetTransfrorm(pos);
-        }
+        //    SetTransfrorm(pos);
+        //}
 
-        void SetSpeed(ProgressResult result)
-        {
-            if (result.m_Speed != m_SpeedKm)
-            {
-                m_SpeedKm = result.m_Speed;
-                //m_DistanceCalc.ChangeSpeedTo(m_SpeedKm);
-                m_DistanceCalc.ChangeSpeed(m_SpeedKm);
+        //void SetSpeed(ProgressResult result)
+        //{
+        //    if (result.m_Speed != m_SpeedKm)
+        //    {
+        //        m_SpeedKm = result.m_Speed;
+        //        //m_DistanceCalc.ChangeSpeedTo(m_SpeedKm);
+        //        m_DistanceCalc.ChangeSpeed(m_SpeedKm);
 
-                m_CurrentSpeed = m_DistanceCalc.GetCurrentSpeedKm(); //debug
-            }
-        }
+        //        m_CurrentSpeed = m_DistanceCalc.GetCurrentSpeedKm(); //debug
+        //    }
+        //}
 
         void SetTransfrorm(Vector3 pos)
         {
+            if (pos.IsNaNOrInfinity())
+                return;
+
             Vector3 lastpos = gameObject.transform.position;
             Vector3 vec = (pos - lastpos).normalized;
             gameObject.transform.position = pos;

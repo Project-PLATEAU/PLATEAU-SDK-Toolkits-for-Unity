@@ -37,24 +37,17 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             var step = m_SpeedMetersPerSecond / fps / m_TotalDistanceMeters;
             //Debug.LogWarning($"step : {step} m_SpeedMetersPerSecond: {m_SpeedMetersPerSecond}");
-            //return step;
-            return 0.01f;
+            return step;
         }
 
-        public float GetPercentBySpeed(float speed, float maxPercent)
+        public float GetNextPercent(float speed, float maxPercent)
         {
             var percentage = m_ElapsedPercentage + GetStep(m_Fps, speed);
-            if (percentage <= maxPercent)
-            {
-                m_ElapsedPercentage = Mathf.Clamp(percentage, 0f, 1f);
-                //m_ElapsedPercentage = percentage;
-            }
+            m_ElapsedPercentage = Mathf.Min(percentage , maxPercent);
+
             return m_ElapsedPercentage;
         }
-
     }
-
-
 
     //Start後の経過時間から移動パーセント(0-1f)を計測
     public class DistanceCalculator

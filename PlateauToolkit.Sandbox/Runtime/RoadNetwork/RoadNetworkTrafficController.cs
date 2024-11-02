@@ -3,9 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using PLATEAU.RoadNetwork.Structure;
-using static Codice.CM.Common.CmCallContext;
-using UnityEngine.UIElements;
 using static PlateauToolkit.Sandbox.RoadNetwork.TrafficManager;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
@@ -316,10 +313,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             var (pos, road, lane) = m_TrafficManager.GetRandomRoad();
             //var (pos, road, lane) = m_TrafficManager.GetStaticRoad();
-            //var info = new RoadInfo(
-            //            road.GetId(RnGetter),
-            //            road.GetLaneIndexOfMainLanes(RnGetter, lane));
-            //info.m_VehicleID = m_RoadInfo.m_VehicleID;
             var info = m_RoadInfo.Clone();
             info.m_RoadId = road.GetId(RnGetter);
             info.m_LaneIndex = road.GetLaneIndexOfMainLanes(RnGetter, lane);
@@ -458,7 +451,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (next == null)
             {
                 TrafficManager.RemoveRoadInfo(m_LastRoadId, current.m_RoadInfo.m_VehicleID);
-                Debug.LogError($"<color=cyan>next is null</color>");
+                Debug.Log($"<color=cyan>next is null</color>");
                 return;
             }
 
@@ -574,15 +567,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     //expectedBorders = new() { RnGetter.GetWays().TryGet(current.GetLane().PrevBorder), RnGetter.GetWays().TryGet(current.GetLane().NextBorder) };
                     //actualBorders = intersection.Edges.Select(x => x.GetBorder(RnGetter)).ToList();
 
-                    Debug.LogError($"<color=red>Intersection Track ToBorders {toborders} FromBorders {fromborders} expected Lane PrevBorder{current.GetLane().PrevBorder.ID} NextBorder{current.GetLane().NextBorder.ID}</color>");
-                    Debug.LogError($"<color=red>Intersection Edge Roads {connectedRoadId} expected Road {current.GetRoad().GetId(RnGetter)} </color>");
-                    Debug.LogError($"<color=red>Intersection Edge Borders {edgeBorders} </color>");
-                    Debug.LogError($"No tracks found.");
+                    Debug.Log($"<color=red>Intersection Track ToBorders {toborders} FromBorders {fromborders} expected Lane PrevBorder{current.GetLane().PrevBorder.ID} NextBorder{current.GetLane().NextBorder.ID}</color>");
+                    Debug.Log($"<color=red>Intersection Edge Roads {connectedRoadId} expected Road {current.GetRoad().GetId(RnGetter)} </color>");
+                    Debug.Log($"<color=red>Intersection Edge Borders {edgeBorders} </color>");
+                    Debug.Log($"No tracks found.");
                 }
             }
             else if (next is RnDataRoad && current.IsRoad) //Road->Road(あり得ない？）
             {
-                Debug.LogError($"Road {current.m_Road.GetId(RnGetter)} -> Road {next.GetId(RnGetter)} : {current.m_RoadInfo.m_VehicleID}");
+                Debug.Log($"Road {current.m_Road.GetId(RnGetter)} -> Road {next.GetId(RnGetter)} : {current.m_RoadInfo.m_VehicleID}");
                 //そのまま
                 //nextRoadInfo = current.m_RoadInfo;
                 //nextRoadInfo.m_RoadId = next.GetId(RnGetter);
@@ -592,7 +585,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
             else if (next is RnDataIntersection && current.IsIntersection) //Intersection -> Intersection (あり得ない？）
             {
-                Debug.LogError($"Intersection {current.m_Intersection.GetId(RnGetter)} -> Intersection {next.GetId(RnGetter)} : {current.m_RoadInfo.m_VehicleID}");
+                Debug.Log($"Intersection {current.m_Intersection.GetId(RnGetter)} -> Intersection {next.GetId(RnGetter)} : {current.m_RoadInfo.m_VehicleID}");
                 //そのまま
                 //nextRoadInfo = current.m_RoadInfo;
                 //nextRoadInfo.m_RoadId = next.GetId(RnGetter);
