@@ -8,6 +8,7 @@ using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using UnityEngine.Splines;
 using PLATEAU.Util;
+using AWSIM.TrafficSimulation;
 
 namespace PlateauToolkit.Sandbox
 {
@@ -49,6 +50,11 @@ namespace PlateauToolkit.Sandbox
         public float CollisionDetectRadius { get => m_CollisionDetectRadius; }
 
         RoadNetworkDataGetter RnGetter { get => TrafficManager?.RnGetter; }
+
+        public NPCVehicleInternalState InternalState = new();
+
+        [SerializeField] new Rigidbody rigidbody;
+        public Transform RigidBodyTransform => rigidbody.transform;
 
         TrafficManager TrafficManager
         {
@@ -148,12 +154,70 @@ namespace PlateauToolkit.Sandbox
         {
         }
 
+
+        //TrafficManager側で動かす場合の処理
+        public void PreMove()
+        {
+            if (m_TrafficController == null)
+            {
+                Stop();
+            }
+
+            if (m_TrafficController?.IsRoad == true)
+            {
+                List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
+                if (m_TrafficController.IsLineStringReversed)
+                {
+                    points.Reverse();
+                }
+
+                //InternalState = NPCVehicleInternalState.Create(this, m_TrafficController.GetLane());
+
+            }
+
+            else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
+            {
+                RnDataTrack track = m_TrafficController.GetTrack();
+                if (track == null)
+                {
+                    Stop();
+                    return;
+                }
+
+                //InternalState = NPCVehicleInternalState.Create(this, m_TrafficController.GetTrack());
+
+            }
+            m_StartOffset = 0f; //初回のみ利用
+        }
+
+        public bool Move()
+        {
+            //if (m_TrafficController == null || m_DistanceCalc == null || m_Spline == null)
+            //{
+            //    return false;
+            //}
+
+            //if (m_DistanceCalc.GetPercent() < 1)
+            //{
+            //    AnimateOnSpline(m_Spline);
+            //    return true;
+            //}
+            //else
+            //{
+            //    m_TrafficController = m_TrafficController.GetNextRoad();
+            //}
+
+            return false;
+        }
+
+
+
         [ContextMenu("Start Movement")]
         public void StartMovement()
         {
             m_IsPaused = false;
 
-            m_MovementCoroutine = StartCoroutine(MovementEnumerator());
+            //m_MovementCoroutine = StartCoroutine(MovementEnumerator());
         }
 
         [ContextMenu("Stop Movement")]

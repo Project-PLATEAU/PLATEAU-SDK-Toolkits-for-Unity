@@ -1,3 +1,4 @@
+using AWSIM.TrafficSimulation;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PLATEAU.Util;
@@ -40,8 +41,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         Dictionary<int, RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
 
         List<PlateauSandboxTrafficMovement> m_Vehicles;
+        List<NPCVehicleInternalState> m_VehiclesStates;
 
-        TrafficJob m_job = new TrafficJob();
+        //TrafficJob m_job = new TrafficJob();
+        NPCVehicleCognitionStep m_NPCVehicleCognitionStep;
 
         Coroutine m_MovementCoroutine;
 
@@ -82,7 +85,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [ContextMenu("Start Movement")]
         public void StartMovement()
         {
-             m_MovementCoroutine = StartCoroutine(MovementEnumerator());
+            m_NPCVehicleCognitionStep = new NPCVehicleCognitionStep(0, 0, m_Vehicles.Count);
+            m_VehiclesStates = m_Vehicles.Select(x => x.InternalState).ToList();
+
+            m_MovementCoroutine = StartCoroutine(MovementEnumerator());
         }
 
         [ContextMenu("Stop Movement")]
@@ -103,18 +109,22 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //YieldInstruction yieldFunc = new WaitForFixedUpdate();
             YieldInstruction yieldFunc = new WaitForEndOfFrame();
 
+            foreach (var vehicle in m_Vehicles)
+            {
+                vehicle.PreMove();
+            }
+
             while (Application.isPlaying)
             {
-                //AnimateOnSpline(spline);
-                //foreach (var vehicle in m_Vehicles)
-                //{
-                //    if (!vehicle.Move())
-                //    {
-                //        vehicle.PreMove();
-                //    }
-                //}
+                m_NPCVehicleCognitionStep.Execute(m_VehiclesStates, m_Vehicles.FirstOrDefault().transform);
 
-                m_job.Execute();
+                foreach (var vehicle in m_Vehicles)
+                {
+                    if (vehicle.Move())
+                    {
+                        vehicle.PreMove();
+                    }
+                }
 
                 yield return yieldFunc;
             }

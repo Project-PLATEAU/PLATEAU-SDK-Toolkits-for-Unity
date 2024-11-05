@@ -11,7 +11,7 @@ namespace PlateauToolkit.Sandbox.Editor
 {
     public class PlateauSandboxRoadNetwork
     {
-        public static readonly int k_PLACEMENT_MODE = 1; // (0:各Prefab, 1:各道路)
+        public static readonly int k_PLACEMENT_MODE = 0; // (0:各Prefab, 1:各道路)
         public static readonly int k_NUM_VEHICLE_ON_PLACE = 1;
 
         RoadNetworkDataGetter m_RoadNetworkGetter;
