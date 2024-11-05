@@ -118,26 +118,31 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_Controllers = controllers;
         }
 
-        [ContextMenu("Start Movement")]
-        public void StartMovement()
+        public void CreateSimulator()
         {
-            //var prefabs = m_Vehicles.Select(x => x.gameObject).ToArray();
-
             TrManager.Initialize();
 
             NPCVehicleConfig config = new NPCVehicleConfig();
-            m_Simulator = new NPCVehicleSimulator(config, 0, 0, 100, gameObject);
+            m_Simulator = new NPCVehicleSimulator(config, 0, 0, m_Controllers.Count, gameObject);
 
             foreach (var controller in m_Controllers)
             {
-                List<TrafficLane> route =  controller.CreateRoute();
+                List<TrafficLane> route = controller.CreateRoute();
                 RouteTrafficSimulator routeSimulator = new RouteTrafficSimulator(gameObject, m_VehiclePrefabs.ToArray(), route.ToArray(), m_Simulator);
+                routeSimulator.enabled = true;
+
                 m_RouteSimulators.Add(routeSimulator);
 
                 TrManager.AddTrafficSimulator(routeSimulator);
             }
+        }
 
+        [ContextMenu("Start Movement")]
+        public void StartMovement()
+        {
+            CreateSimulator();
 
+            //var prefabs = m_Vehicles.Select(x => x.gameObject).ToArray();
             //m_MovementCoroutine = StartCoroutine(MovementEnumerator());
         }
 

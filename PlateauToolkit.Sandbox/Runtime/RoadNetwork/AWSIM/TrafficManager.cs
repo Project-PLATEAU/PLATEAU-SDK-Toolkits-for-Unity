@@ -95,7 +95,7 @@ namespace AWSIM.TrafficSimulation
             npcVehicleSimulator = new NPCVehicleSimulator(vehicleConfig, vehicleLayerMask, groundLayerMask, maxVehicleCount, _egoVehicle);
             npcVehicleSimulator.SetDummyEgo(dummyEgo);
 
-            //verifyIntegrationEnvironmentElements();
+            verifyIntegrationEnvironmentElements();
             trafficSimulatorNodes = new List<ITrafficSimulator>();
             if (npcVehicleSimulator == null)
             {
@@ -160,6 +160,7 @@ namespace AWSIM.TrafficSimulation
 
         private void verifyIntegrationEnvironmentElements()
         {
+            return;
             GameObject trafficLanesObject = GameObject.Find("TrafficLanes");
             if (trafficLanesObject == null)
             {

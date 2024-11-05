@@ -307,7 +307,11 @@ namespace AWSIM
         void FixedUpdate()
         {
             if (rigidbody == null)
-               rigidbody = gameObject.AddComponent<Rigidbody>();
+            {
+                rigidbody = gameObject.AddComponent<Rigidbody>();
+                rigidbody.mass = 1500f;
+            }
+               
 
 
             // Calculate physical states for visual update.

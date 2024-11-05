@@ -46,15 +46,18 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             var currentController = m_Controller;
 
+            int laneIndex = 0;
+
+            var parent = new GameObject("TrafficLanes");
+
             while (currentController != null)
             {
-
                 if (currentController.IsRoad)
                 {
                     var points = currentController.GetLineString().GetChildPointsVector(getter);
                     if (points.Count > 0)
                     {
-                        TrafficLane lane = TrafficLane.Create(points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT);
+                        TrafficLane lane = TrafficLane.Create($"TrafficLane_Road_{laneIndex}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT);
                         route.Add(lane);
                     }
                 }
@@ -65,11 +68,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     if (knotsPosistions.Count > 0)
                     {
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
-                        TrafficLane lane = TrafficLane.Create(knotsPosistions.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT);
+                        TrafficLane lane = TrafficLane.Create($"TrafficLane_Intersection_{laneIndex}", parent.transform, knotsPosistions.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT);
                         route.Add(lane);
                     }
                 }
 
+                laneIndex++;
                 currentController = currentController.GetNextRoad();
             }
 

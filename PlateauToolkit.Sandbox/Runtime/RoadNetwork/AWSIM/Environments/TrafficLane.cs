@@ -86,10 +86,11 @@ namespace AWSIM.TrafficSimulation
         /// <param name="wayPoints"></param>
         /// <param name="speedLimit"></param>
         /// <returns><see cref="TrafficLane"/> instance.</returns>
-        public static TrafficLane Create(Vector3[] wayPoints, TurnDirectionType turnDirection, float speedLimit = 0f)
+        public static TrafficLane Create(string name, Transform parent, Vector3[] wayPoints, TurnDirectionType turnDirection, float speedLimit = 0f)
         {
-            var gameObject = new GameObject("TrafficLane", typeof(TrafficLane));
+            var gameObject = new GameObject(name, typeof(TrafficLane));
             gameObject.transform.position = wayPoints[0];
+            gameObject.transform.SetParent(parent, true);
             var trafficLane = gameObject.GetComponent<TrafficLane>();
             trafficLane.waypoints = wayPoints;
             trafficLane.turnDirection = turnDirection;
