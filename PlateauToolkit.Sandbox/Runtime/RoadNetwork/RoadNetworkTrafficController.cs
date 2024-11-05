@@ -1,9 +1,10 @@
-﻿using PLATEAU.RoadNetwork.Data;
+﻿using AWSIM.TrafficSimulation;
+using PLATEAU.RoadNetwork.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using static PlateauToolkit.Sandbox.RoadNetwork.TrafficManager;
+using static PlateauToolkit.Sandbox.RoadNetwork.RoadNetworkTrafficManager;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -88,7 +89,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField]
         public string m_DebugString;
 
-        public DebugInfo(TrafficManager.LaneStatus info, ProgressResult prg, RoadNetworkTrafficController cont)
+        public DebugInfo(RoadNetworkTrafficManager.LaneStatus info, ProgressResult prg, RoadNetworkTrafficController cont)
         {
             if (info.m_IsValid)
             {
@@ -167,14 +168,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public int m_LastRoadId;
 
         public bool m_EnableRunningBackwards = false; //逆走可能・禁止
-        public bool m_EnableRespawn = true; //リスポーン禁止
+        public bool m_EnableRespawn = false; //リスポーン禁止
 
-        TrafficManager m_TrafficManager;
+        RoadNetworkTrafficManager m_TrafficManager;
 
         public bool IsRoad => m_Road != null;
         public bool IsIntersection => m_Intersection != null;
 
         public bool IsValid => IsRoad || IsIntersection;
+
 
         //prev/nextの切替用
         public bool IsReversed
@@ -223,7 +225,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
-        RoadNetworkDataGetter RnGetter
+        public RoadNetworkDataGetter RnGetter
         {
             get
             {
@@ -231,13 +233,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
         }
 
-        TrafficManager TrafficManager
+        RoadNetworkTrafficManager TrafficManager
         {
             get
             {
                 if (m_TrafficManager == null)
                 {
-                    m_TrafficManager = GameObject.FindObjectOfType<TrafficManager>();
+                    m_TrafficManager = GameObject.FindObjectOfType<RoadNetworkTrafficManager>();
                     if (m_TrafficManager == null)
                     {
                         Debug.LogError($"TrafficManager is null");
@@ -285,6 +287,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return null;
             }
             return GetIntersection().Tracks[m_RoadInfo.m_TrackIndex];
+        }
+
+        public List<TrafficLane> CreateRoute()
+        {
+            TrafficRouteCreator route = new TrafficRouteCreator(this);
+            return route.Create();
         }
 
         public void Initialize()
@@ -336,7 +344,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //m_CurrentProgress = progress;
             m_RoadInfo.m_CurrentProgress = progress;
 
-            TrafficManager.LaneStatus info = TrafficManager.GetLaneInfo(m_RoadInfo); // Debug Lane info
+            RoadNetworkTrafficManager.LaneStatus info = TrafficManager.GetLaneInfo(m_RoadInfo); // Debug Lane info
 
             var result = new ProgressResult(this, info, RnGetter);
 
@@ -347,7 +355,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return result;
         }
 
-        void DebugLaneStatus(TrafficManager.LaneStatus info, ProgressResult prg)
+        void DebugLaneStatus(RoadNetworkTrafficManager.LaneStatus info, ProgressResult prg)
         {
             if (info.m_IsValid)
             {

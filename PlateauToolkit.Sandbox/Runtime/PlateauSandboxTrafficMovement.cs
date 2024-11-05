@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using UnityEngine.Splines;
 using PLATEAU.Util;
 using AWSIM.TrafficSimulation;
+using RoadNetworkTrafficManager = PlateauToolkit.Sandbox.RoadNetwork.RoadNetworkTrafficManager;
 
 namespace PlateauToolkit.Sandbox
 {
@@ -24,7 +25,7 @@ namespace PlateauToolkit.Sandbox
         void OnMove(in MovementInfo movementInfo);
     }
 
-    [ExecuteAlways]
+    //[ExecuteAlways]
     public class PlateauSandboxTrafficMovement : PlateauSandboxMovementBase
     {
         [SerializeField]
@@ -38,7 +39,7 @@ namespace PlateauToolkit.Sandbox
 
         [SerializeField] public float m_CurrentSpeed;
 
-        TrafficManager m_TrafficManager;
+        RoadNetworkTrafficManager m_TrafficManager;
         Coroutine m_MovementCoroutine;
 
         IPlateauSandboxTrafficObject m_TrafficObject;
@@ -47,7 +48,7 @@ namespace PlateauToolkit.Sandbox
 
         DistanceCalculator m_DistanceCalc;
 
-        public float CollisionDetectRadius { get => m_CollisionDetectRadius; }
+        //public float CollisionDetectRadius { get => m_CollisionDetectRadius; }
 
         RoadNetworkDataGetter RnGetter { get => TrafficManager?.RnGetter; }
 
@@ -56,13 +57,13 @@ namespace PlateauToolkit.Sandbox
         [SerializeField] new Rigidbody rigidbody;
         public Transform RigidBodyTransform => rigidbody.transform;
 
-        TrafficManager TrafficManager
+        RoadNetworkTrafficManager TrafficManager
         {
             get
             {
                 if (m_TrafficManager == null)
                 {
-                    m_TrafficManager = GameObject.FindObjectOfType<TrafficManager>();
+                    m_TrafficManager = GameObject.FindObjectOfType<RoadNetworkTrafficManager>();
                     if (m_TrafficManager == null)
                     {
                         Debug.LogError($"TrafficManager is null");
@@ -134,7 +135,7 @@ namespace PlateauToolkit.Sandbox
             TryGetComponent(out IPlateauSandboxTrafficObject trafficObject);
             m_TrafficObject = trafficObject;
 
-            m_TrafficController?.Initialize();
+            //m_TrafficController?.Initialize();
         }
 
         void Start()
@@ -144,7 +145,7 @@ namespace PlateauToolkit.Sandbox
                 return;
             }
 
-            if (m_RunOnAwake)
+            //if (m_RunOnAwake)
             {
                 StartMovement();
             }
@@ -215,7 +216,7 @@ namespace PlateauToolkit.Sandbox
         [ContextMenu("Start Movement")]
         public void StartMovement()
         {
-            m_IsPaused = false;
+            //m_IsPaused = false;
 
             //m_MovementCoroutine = StartCoroutine(MovementEnumerator());
         }
@@ -232,7 +233,7 @@ namespace PlateauToolkit.Sandbox
             m_MovementCoroutine = null;
             //m_MovingObject.OnMoveEnd();
 
-            m_IsPaused = false;
+            //m_IsPaused = false;
         }
 
         //移動処理コルーチン

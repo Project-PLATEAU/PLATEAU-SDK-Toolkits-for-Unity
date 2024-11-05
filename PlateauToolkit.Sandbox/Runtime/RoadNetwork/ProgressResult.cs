@@ -26,7 +26,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public float m_LastCarProgress;
         public float m_Distance_from_Other;
 
-        public ProgressResult(RoadNetworkTrafficController controller, TrafficManager.LaneStatus status, RoadNetworkDataGetter getter)
+        public ProgressResult(RoadNetworkTrafficController controller, RoadNetworkTrafficManager.LaneStatus status, RoadNetworkDataGetter getter)
         {
             m_Distance_from_Other = -1f;
 

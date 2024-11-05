@@ -29,8 +29,8 @@ namespace AWSIM.TrafficSimulation
         private List<TrafficLane> prevLanes = new List<TrafficLane>();
         [SerializeField, Tooltip("Lanes to which vehicles in this lane should yield the right of way.")]
         private List<TrafficLane> rightOfWayLanes = new List<TrafficLane>();
-        //[SerializeField, Tooltip("Stop line in the lane")]
-        //private StopLine stopLine;
+        [SerializeField, Tooltip("Stop line in the lane")]
+        private StopLine stopLine;
         [SerializeField, Tooltip("Speed limit in m/s")]
         private float speedLimit;
         [SerializeField, Tooltip("Is intersection lane")]
@@ -64,16 +64,16 @@ namespace AWSIM.TrafficSimulation
         /// <summary>
         /// Get a stop line in the lane.
         /// </summary>
-        //public StopLine StopLine
-        //{
-        //    get => stopLine;
-        //    set => stopLine = value;
-        //}
+        public StopLine StopLine
+        {
+            get => stopLine;
+            set => stopLine = value;
+        }
 
-        //public Vector3 GetStopPoint(int waypointIndex = 0)
-        //{
-        //    return StopLine == null ? Waypoints[waypointIndex] : StopLine.CenterPoint;
-        //}
+        public Vector3 GetStopPoint(int waypointIndex = 0)
+        {
+            return StopLine == null ? Waypoints[waypointIndex] : StopLine.CenterPoint;
+        }
 
         /// <summary>
         /// Get speed limit in m/s.

@@ -18,6 +18,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public List<RoadInfo> m_Vehicles = new();
 
+        public List<GameObject> m_VehiclePrefabs = new();
+
         public RoadStatus(int id)
         {
             RoadId = id;
@@ -35,18 +37,42 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     }
 
     //交通状況管理 (各道路の自動車）
-    public class TrafficManager : MonoBehaviour
+    public class RoadNetworkTrafficManager : MonoBehaviour
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
         Dictionary<int, RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
 
-        List<PlateauSandboxTrafficMovement> m_Vehicles;
-        List<NPCVehicleInternalState> m_VehiclesStates;
+        //List<PlateauSandboxTrafficMovement> m_Vehicles;
+        //List<NPCVehicleInternalState> m_VehiclesStates;
 
         //TrafficJob m_job = new TrafficJob();
-        NPCVehicleCognitionStep m_NPCVehicleCognitionStep;
+        //NPCVehicleCognitionStep m_NPCVehicleCognitionStep;
+
+
+        [SerializeField]
+        List<GameObject> m_VehiclePrefabs;
+
+        [SerializeField]
+        List<RoadNetworkTrafficController> m_Controllers;
+
+        NPCVehicleSimulator m_Simulator;
+        //RouteTrafficSimulator m_RouteSimulator;
+        List<RouteTrafficSimulator> m_RouteSimulators = new List<RouteTrafficSimulator>();
 
         Coroutine m_MovementCoroutine;
+
+        public TrafficManager TrManager
+        {
+            get
+            {
+                if (TryGetComponent<TrafficManager>(out TrafficManager tManager))
+                {
+                    return tManager;
+                }
+
+                return gameObject.AddComponent<TrafficManager>();
+            }
+        }
 
         public RoadNetworkDataGetter RnGetter
         {
@@ -82,13 +108,37 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             StartMovement();
         }
 
+        public void SetPrefabs(List<GameObject> prefabs)
+        {
+            m_VehiclePrefabs = prefabs;
+        }
+
+        public void SetTrafficController(List<RoadNetworkTrafficController> controllers)
+        {
+            m_Controllers = controllers;
+        }
+
         [ContextMenu("Start Movement")]
         public void StartMovement()
         {
-            m_NPCVehicleCognitionStep = new NPCVehicleCognitionStep(0, 0, m_Vehicles.Count);
-            m_VehiclesStates = m_Vehicles.Select(x => x.InternalState).ToList();
+            //var prefabs = m_Vehicles.Select(x => x.gameObject).ToArray();
 
-            m_MovementCoroutine = StartCoroutine(MovementEnumerator());
+            TrManager.Initialize();
+
+            NPCVehicleConfig config = new NPCVehicleConfig();
+            m_Simulator = new NPCVehicleSimulator(config, 0, 0, 100, gameObject);
+
+            foreach (var controller in m_Controllers)
+            {
+                List<TrafficLane> route =  controller.CreateRoute();
+                RouteTrafficSimulator routeSimulator = new RouteTrafficSimulator(gameObject, m_VehiclePrefabs.ToArray(), route.ToArray(), m_Simulator);
+                m_RouteSimulators.Add(routeSimulator);
+
+                TrManager.AddTrafficSimulator(routeSimulator);
+            }
+
+
+            //m_MovementCoroutine = StartCoroutine(MovementEnumerator());
         }
 
         [ContextMenu("Stop Movement")]
@@ -99,46 +149,46 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return;
             }
 
-            StopCoroutine(m_MovementCoroutine);
-            m_MovementCoroutine = null;
+            //StopCoroutine(m_MovementCoroutine);
+            //m_MovementCoroutine = null;
         }
 
         //移動処理コルーチン
-        IEnumerator MovementEnumerator()
-        {
-            //YieldInstruction yieldFunc = new WaitForFixedUpdate();
-            YieldInstruction yieldFunc = new WaitForEndOfFrame();
+        //IEnumerator MovementEnumerator()
+        //{
+        //    //YieldInstruction yieldFunc = new WaitForFixedUpdate();
+        //    YieldInstruction yieldFunc = new WaitForEndOfFrame();
 
-            foreach (var vehicle in m_Vehicles)
-            {
-                vehicle.PreMove();
-            }
+        //    foreach (var vehicle in m_Vehicles)
+        //    {
+        //        vehicle.PreMove();
+        //    }
 
-            while (Application.isPlaying)
-            {
-                m_NPCVehicleCognitionStep.Execute(m_VehiclesStates, m_Vehicles.FirstOrDefault().transform);
+        //    while (Application.isPlaying)
+        //    {
+        //        //m_NPCVehicleCognitionStep.Execute(m_VehiclesStates, m_Vehicles.FirstOrDefault().transform);
 
-                foreach (var vehicle in m_Vehicles)
-                {
-                    if (vehicle.Move())
-                    {
-                        vehicle.PreMove();
-                    }
-                }
+        //        foreach (var vehicle in m_Vehicles)
+        //        {
+        //            if (vehicle.Move())
+        //            {
+        //                vehicle.PreMove();
+        //            }
+        //        }
 
-                yield return yieldFunc;
-            }
-        }
+        //        yield return yieldFunc;
+        //    }
+        //}
 
         public void InitializeVehicles()
         {
             //VehicleID 振り直し
-            m_Vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
-            foreach (var vehicle in m_Vehicles.Select((value, index) => new { value, index }))
-            {
-                vehicle.value.RoadInfo.m_VehicleID = vehicle.index; //Reassign ID
-                vehicle.value.Initialize();
-            }
+            //m_Vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
+            //foreach (var vehicle in m_Vehicles.Select((value, index) => new { value, index }))
+            //{
+            //    vehicle.value.RoadInfo.m_VehicleID = vehicle.index; //Reassign ID
+            //    vehicle.value.Initialize();
+            //}
         }
 
         //暫定　ランダムにロードを抽出

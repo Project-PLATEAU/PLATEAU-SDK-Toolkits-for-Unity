@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 
 namespace AWSIM
 {
@@ -167,6 +168,7 @@ namespace AWSIM
 
         [Header("Physics Settings")]
         [SerializeField] Transform centerOfMass;
+        //[SerializeField] new Rigidbody rigidbody;
         [SerializeField] new Rigidbody rigidbody;
         [SerializeField] Rigidbody trailer = null;
         [SerializeField] AxleSettings axleSettings;
@@ -218,11 +220,11 @@ namespace AWSIM
         {
             // Update Wheel visuals.
             var steerAngle = CalcSteerAngle(speed, yawAngularSpeed, wheelbase);
-            axleSettings.UpdateVisual(speed, steerAngle);
+            //axleSettings.UpdateVisual(speed, steerAngle);
 
             // brake light.
             var isBrakeLightOn = IsBrakeLightOn();
-            brakeLight.Set(isBrakeLightOn);
+            //brakeLight.Set(isBrakeLightOn);
 
             // turn signal.
             if (IsAnyTurnSignalInputs() == false)
@@ -233,8 +235,8 @@ namespace AWSIM
                 if (currentTurnSignalOn != false)
                     currentTurnSignalOn = false;
 
-                leftTurnSignalLight.Set(false);
-                rightTurnSignalLight.Set(false);
+                //leftTurnSignalLight.Set(false);
+                //rightTurnSignalLight.Set(false);
 
                 return;
             }
@@ -304,9 +306,14 @@ namespace AWSIM
 
         void FixedUpdate()
         {
+            if (rigidbody == null)
+               rigidbody = gameObject.AddComponent<Rigidbody>();
+
+
             // Calculate physical states for visual update.
             // velocity & speed.
             velocity = (rigidbody.position - lastPosition) / Time.deltaTime;
+
             speed = Vector3.Dot(velocity, transform.forward);
 
             // accleration.

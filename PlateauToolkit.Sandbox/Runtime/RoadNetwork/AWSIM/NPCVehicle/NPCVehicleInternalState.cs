@@ -1,4 +1,3 @@
-using PlateauToolkit.Sandbox;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -33,9 +32,7 @@ namespace AWSIM.TrafficSimulation
     public class NPCVehicleInternalState
     {
         // Immutable states
-        //public NPCVehicle Vehicle { get; private set; }
-        public PlateauSandboxTrafficMovement Vehicle { get; private set; }
-        
+        public NPCVehicle Vehicle { get; private set; }
         public Vector3 FrontCenterLocalPosition { get; private set; }
         public List<TrafficLane> Route { get; set; }
         public Vector3 BackCenterLocalPosition { get; private set; }
@@ -52,7 +49,7 @@ namespace AWSIM.TrafficSimulation
 
         // Output from Cognition (Traffic Light)
         public TrafficLane TrafficLightLane { get; set; }
-        //public TrafficLightPassability TrafficLightPassability { get; set; }
+        public TrafficLightPassability TrafficLightPassability { get; set; }
 
         // Output from Cognition (Right of Way)
         public TrafficLane? YieldLane { get; set; }
@@ -87,12 +84,12 @@ namespace AWSIM.TrafficSimulation
         {
             var backCenterPositionRaw = BackCenterLocalPosition;
             backCenterPositionRaw.z -= extensionToRear;
-            //if (Vehicle.TrailerTransform)
-            //{
-            //    var yaw = Vehicle.TrailerTransform.rotation.eulerAngles.y;
-            //    return Vehicle.TrailerTransform.position + Quaternion.AngleAxis(yaw, Vector3.up) * backCenterPositionRaw;
-            //}
-            //else
+            if (Vehicle.TrailerTransform)
+            {
+                var yaw = Vehicle.TrailerTransform.rotation.eulerAngles.y;
+                return Vehicle.TrailerTransform.position + Quaternion.AngleAxis(yaw, Vector3.up) * backCenterPositionRaw;
+            }
+            else
             {
                 return Position + Quaternion.AngleAxis(Yaw, Vector3.up) * backCenterPositionRaw;
             }
@@ -114,9 +111,7 @@ namespace AWSIM.TrafficSimulation
 
         public float DistanceToIntersection
             => FirstLaneWithIntersection == null ? float.MaxValue
-            : SignedDistanceToPointOnLane(FirstLaneWithIntersection.Waypoints[0]);
-        //=> FirstLaneWithIntersection == null ? float.MaxValue
-        //: SignedDistanceToPointOnLane(FirstLaneWithIntersection.StopLine?.CenterPoint ?? FirstLaneWithIntersection.Waypoints[0]);
+            : SignedDistanceToPointOnLane(FirstLaneWithIntersection.StopLine?.CenterPoint ?? FirstLaneWithIntersection.Waypoints[0]);
 
         public bool ObstructedByVehicleBehindIntersection => DistanceToIntersection > DistanceToFrontVehicle;
 
@@ -149,8 +144,8 @@ namespace AWSIM.TrafficSimulation
             => FirstLaneWithIntersection?.Waypoints?.Any() != true ? (Vector3?)null
             : FirstLaneWithIntersection.Waypoints.First();
 
-        public bool yieldingPriorityAtTrafficLight => !CurrentFollowingLane.intersectionLane; //(!CurrentFollowingLane.intersectionLane
-                    //&& TrafficLightPassability == TrafficLightPassability.RED);
+        public bool yieldingPriorityAtTrafficLight => (!CurrentFollowingLane.intersectionLane
+                    && TrafficLightPassability == TrafficLightPassability.RED);
 
         public bool isOnIntersection => FollowingLanes.Count > 0 && CurrentFollowingLane.intersectionLane;
 
@@ -213,8 +208,7 @@ namespace AWSIM.TrafficSimulation
             FollowingLanes.RemoveAt(0);
         }
 
-        //public static NPCVehicleInternalState Create(NPCVehicle vehicle, TrafficLane lane, int waypointIndex = 0)
-        public static NPCVehicleInternalState Create(PlateauSandboxTrafficMovement vehicle, TrafficLane lane, int waypointIndex = 0)
+        public static NPCVehicleInternalState Create(NPCVehicle vehicle, TrafficLane lane, int waypointIndex = 0)
         {
             var state = new NPCVehicleInternalState
             {
@@ -227,25 +221,21 @@ namespace AWSIM.TrafficSimulation
                 {
                     x = 0f,
                     y = 0f,
-                    //z = vehicle.Bounds.max.z
-                    z = vehicle.GetComponentInChildren<MeshCollider>().bounds.max.z,
+                    z = vehicle.Bounds.max.z
                 },
                 BackCenterLocalPosition = new Vector3
                 {
                     x = 0f,
                     y = 0f,
-                    //z = vehicle.Bounds.min.z
-                    z = vehicle.GetComponentInChildren<MeshCollider>().bounds.min.z,
+                    z = vehicle.Bounds.min.z
                 },
-                //Width = vehicle.Bounds.size.x
-                Width = vehicle.GetComponentInChildren<MeshCollider>().bounds.size.x
+                Width = vehicle.Bounds.size.x
             };
             state.FollowingLanes.Add(lane);
             return state;
         }
 
-        //public static NPCVehicleInternalState Create(NPCVehicle vehicle, List<TrafficLane> route, int waypointIndex = 0)
-        public static NPCVehicleInternalState Create(PlateauSandboxTrafficMovement vehicle, List<TrafficLane> route, int waypointIndex = 0)
+        public static NPCVehicleInternalState Create(NPCVehicle vehicle, List<TrafficLane> route, int waypointIndex = 0)
         {
             var state = NPCVehicleInternalState.Create(vehicle, route.First(), waypointIndex);
             state.Route = route;

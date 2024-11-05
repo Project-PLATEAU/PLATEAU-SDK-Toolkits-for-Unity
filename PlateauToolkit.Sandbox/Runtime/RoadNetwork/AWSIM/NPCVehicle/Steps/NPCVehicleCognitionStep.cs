@@ -1,5 +1,3 @@
-using PlateauToolkit.Sandbox;
-using PlateauToolkit.Sandbox.RoadNetwork;
 using System;
 using System.Collections.Generic;
 using Unity.Collections;
@@ -36,21 +34,9 @@ namespace AWSIM.TrafficSimulation
             {
                 return new NativeState
                 {
-                    //Extents = state.Vehicle.Bounds.extents,
-                    Extents = state.Vehicle.RoadInfo.m_Bounds.extents,
+                    Extents = state.Vehicle.Bounds.extents,
                     FrontCenterPosition = state.FrontCenterPosition,
                     Yaw = state.Yaw,
-                    WaypointCount = waypointCount
-                };
-            }
-
-            public static NativeState Create(PlateauSandboxTrafficMovement state, int waypointCount)
-            {
-                return new NativeState
-                {
-                    Extents = state.GetComponentInChildren<MeshCollider>().bounds.extents,
-                    FrontCenterPosition = state.transform.position,
-                    Yaw = state.transform.forward.y,
                     WaypointCount = waypointCount
                 };
             }
@@ -323,7 +309,7 @@ namespace AWSIM.TrafficSimulation
                             refState.YieldLane = null;
                             if (isEnteringIntersection(refState))
                             {
-                                //refState.YieldPoint = refState.FirstLaneWithIntersection.GetStopPoint();
+                                refState.YieldPoint = refState.FirstLaneWithIntersection.GetStopPoint();
                                 refState.YieldPhase = NPCVehicleYieldPhase.ENTERING_INTERSECTION;
                             }
                             else if (refState.isOnIntersection)
@@ -486,8 +472,7 @@ namespace AWSIM.TrafficSimulation
             /// </summary>
             static private bool shouldBeConsideredForYielding(NPCVehicleInternalState refState, NPCVehicleInternalState otherState)
             {
-                //return refState.Vehicle.VehicleID != otherState.Vehicle.VehicleID && isEnteringIntersection(otherState);
-                return refState.Vehicle.RoadInfo.m_VehicleID != otherState.Vehicle.RoadInfo.m_VehicleID && isEnteringIntersection(otherState);
+                return refState.Vehicle.VehicleID != otherState.Vehicle.VehicleID && isEnteringIntersection(otherState);
             }
 
             /// <summary>
@@ -520,7 +505,7 @@ namespace AWSIM.TrafficSimulation
                     if (intersectOverall(refState, otherState))
                     {
                         refState.DominatingVehicle = otherState.Vehicle.RigidBodyTransform;
-                        //refState.YieldPoint = refState.FollowingLanes[0].GetStopPoint();
+                        refState.YieldPoint = refState.FollowingLanes[0].GetStopPoint();
                         return true;
                     }
                 }
@@ -586,7 +571,7 @@ namespace AWSIM.TrafficSimulation
                     if (intersectOverall(refState, otherState))
                     {
                         refState.DominatingVehicle = otherState.Vehicle.RigidBodyTransform;
-                        //refState.YieldPoint = refState.FollowingLanes[0].GetStopPoint();
+                        refState.YieldPoint = refState.FollowingLanes[0].GetStopPoint();
                         return true;
                     }
                 }
@@ -633,8 +618,7 @@ namespace AWSIM.TrafficSimulation
                     return false;
 
                 var isNowYielding = isYieldingDueToRules(refState);
-                //var stopPoint = refOnIntersection ? (refState.YieldLane.GetStopPoint(1)) : (refState.YieldLane.GetStopPoint());
-                var stopPoint = Vector3.zero;
+                var stopPoint = refOnIntersection ? (refState.YieldLane.GetStopPoint(1)) : (refState.YieldLane.GetStopPoint());
                 // provide hysteresis equal to maximumOverrunStopPointForLaneRules/2.0
                 if (isNowYielding && refState.SignedDistanceToPointOnLane(refState.YieldPoint) < -maximumOverrunStopPointForLaneRules)
                     return false;
@@ -881,48 +865,48 @@ namespace AWSIM.TrafficSimulation
 
             public void Execute()
             {
-                //foreach (var state in States)
-                //{
-                //    if (state.ShouldDespawn)
-                //        continue;
+                foreach (var state in States)
+                {
+                    if (state.ShouldDespawn)
+                        continue;
 
-                //    // Find next stop line with a traffic light.
-                //    // If the vehicle is stopping, use cached stop line.
-                //    // This is in case a vehicle crosses the stop line while stopping.
-                //    if (state.TrafficLightPassability != TrafficLightPassability.RED)
-                //    {
-                //        // Find far traffic light by extending lane to follow.
-                //        // This is done because if a lane is too short, it may not be able to stop at a stop line.
-                //        if (state.FollowingLanes.Count < 3)
-                //        {
-                //            state.ExtendFollowingLane();
-                //        }
+                    // Find next stop line with a traffic light.
+                    // If the vehicle is stopping, use cached stop line.
+                    // This is in case a vehicle crosses the stop line while stopping.
+                    if (state.TrafficLightPassability != TrafficLightPassability.RED)
+                    {
+                        // Find far traffic light by extending lane to follow.
+                        // This is done because if a lane is too short, it may not be able to stop at a stop line.
+                        if (state.FollowingLanes.Count < 3)
+                        {
+                            state.ExtendFollowingLane();
+                        }
 
-                //        state.TrafficLightLane = null;
-                //        foreach (var lane in state.FollowingLanes)
-                //        {
-                //            if (lane.StopLine?.TrafficLight == null)
-                //                continue;
+                        state.TrafficLightLane = null;
+                        foreach (var lane in state.FollowingLanes)
+                        {
+                            if (lane.StopLine?.TrafficLight == null)
+                                continue;
 
-                //            state.TrafficLightLane = lane;
-                //            break;
-                //        }
+                            state.TrafficLightLane = lane;
+                            break;
+                        }
 
-                //    }
+                    }
 
-                //    var trafficLight = state.TrafficLightLane?.StopLine.TrafficLight;
-                //    if (trafficLight == null)
-                //    {
-                //        state.TrafficLightPassability = TrafficLightPassability.GREEN;
-                //        continue;
-                //    }
+                    var trafficLight = state.TrafficLightLane?.StopLine.TrafficLight;
+                    if (trafficLight == null)
+                    {
+                        state.TrafficLightPassability = TrafficLightPassability.GREEN;
+                        continue;
+                    }
 
-                //    var intersectionLane = state.GetOrExtendNextLane(state.TrafficLightLane);
-                //    if (intersectionLane == null)
-                //        continue;
-                //    state.TrafficLightPassability =
-                //        RandomTrafficUtils.GetPassability(trafficLight, intersectionLane.TurnDirection);
-                //}
+                    var intersectionLane = state.GetOrExtendNextLane(state.TrafficLightLane);
+                    if (intersectionLane == null)
+                        continue;
+                    state.TrafficLightPassability =
+                        RandomTrafficUtils.GetPassability(trafficLight, intersectionLane.TurnDirection);
+                }
             }
         }
 
@@ -1030,7 +1014,6 @@ namespace AWSIM.TrafficSimulation
 
         public void Execute(
             IReadOnlyList<NPCVehicleInternalState> states,
-            //IReadOnlyList<PlateauSandboxTrafficMovement> states,
             Transform egoTransform)
         {
             Profiler.BeginSample("Cognition.CheckNextWaypoint");

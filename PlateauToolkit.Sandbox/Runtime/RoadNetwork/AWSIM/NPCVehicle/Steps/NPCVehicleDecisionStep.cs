@@ -88,27 +88,25 @@ namespace AWSIM.TrafficSimulation
 
         private static float CalculateTrafficLightDistance(NPCVehicleInternalState state, float suddenStopDistance)
         {
-            //var distanceToStopPointByTrafficLight = float.MaxValue;
-            //if (state.TrafficLightLane != null)
-            //{
-            //    var distanceToStopLine =
-            //        state.SignedDistanceToPointOnLane(state.TrafficLightLane.StopLine.CenterPoint);
-            //    switch (state.TrafficLightPassability)
-            //    {
-            //        case TrafficLightPassability.GREEN:
-            //            break;
-            //        case TrafficLightPassability.YELLOW:
-            //            if (distanceToStopLine < suddenStopDistance)
-            //                break;
-            //            distanceToStopPointByTrafficLight = distanceToStopLine;
-            //            break;
-            //        case TrafficLightPassability.RED:
-            //            distanceToStopPointByTrafficLight = distanceToStopLine;
-            //            break;
-            //    }
-            //}
-            //return onlyGreaterThan(distanceToStopPointByTrafficLight, 0);
-            return 0;
+            var distanceToStopPointByTrafficLight = float.MaxValue;
+            if (state.TrafficLightLane != null)
+            {
+                var distanceToStopLine =
+                    state.SignedDistanceToPointOnLane(state.TrafficLightLane.StopLine.CenterPoint);
+                switch (state.TrafficLightPassability)
+                {
+                    case TrafficLightPassability.GREEN:
+                        break;
+                    case TrafficLightPassability.YELLOW:
+                        if (distanceToStopLine < suddenStopDistance) break;
+                        distanceToStopPointByTrafficLight = distanceToStopLine;
+                        break;
+                    case TrafficLightPassability.RED:
+                        distanceToStopPointByTrafficLight = distanceToStopLine;
+                        break;
+                }
+            }
+            return onlyGreaterThan(distanceToStopPointByTrafficLight, 0);
         }
 
         private static float CalculateYieldingDistance(NPCVehicleInternalState state)

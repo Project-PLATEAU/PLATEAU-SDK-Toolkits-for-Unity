@@ -1,4 +1,5 @@
-using Codice.CM.Common;
+using PlateauToolkit.Sandbox.RoadNetwork;
+using PlateauToolkit.Sandbox;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -97,6 +98,16 @@ namespace AWSIM.TrafficSimulation
             obj.name = obj.name + "_" + vehicleID.ToString();
             obj.transform.forward = npcVehicleSpawnPoint.Forward;
             obj.transform.parent = NPCVehicleParentsObj.transform;
+
+            if (obj.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
+            !obj.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
+            {
+                PlateauSandboxTrafficMovement trafficMovement = obj.AddComponent<PlateauSandboxTrafficMovement>();
+                //trafficMovement.RoadInfo = new RoadInfo(
+                //    road.GetId(m_RoadNetworkGetter),
+                //    road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
+            }
+
             var vehicle = obj.GetComponent<NPCVehicle>();
             vehicle.VehicleID = vehicleID;
             return vehicle;
@@ -117,8 +128,7 @@ namespace AWSIM.TrafficSimulation
         {
             var rotation = Quaternion.LookRotation(npcVehicleSpawnPoint.Forward);
             var center = rotation * localBounds.center + npcVehicleSpawnPoint.Position;
-            //var ignoreGroundLayerMask = ~LayerMask.GetMask(Constants.Layers.Ground);
-            var ignoreGroundLayerMask = 0;
+            var ignoreGroundLayerMask = ~LayerMask.GetMask(Constants.Layers.Ground);
             return !Physics.CheckBox(
                 center,
                 localBounds.extents,

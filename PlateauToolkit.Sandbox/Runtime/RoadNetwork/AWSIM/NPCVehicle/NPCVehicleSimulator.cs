@@ -84,10 +84,10 @@ namespace AWSIM.TrafficSimulation
         /// <param name="vehicle">The vehicle to be registered</param>
         /// <param name="lane">Initial lane of the vehicle</param>
         /// <param name="waypointIndex">Current waypoint index of the vehicle</param>
-        //public void Register(NPCVehicle vehicle, TrafficLane lane, int waypointIndex)
-        //{
-        //    vehicleStates.Add(NPCVehicleInternalState.Create(vehicle, lane, waypointIndex));
-        //}
+        public void Register(NPCVehicle vehicle, TrafficLane lane, int waypointIndex)
+        {
+            vehicleStates.Add(NPCVehicleInternalState.Create(vehicle, lane, waypointIndex));
+        }
 
         /// <summary>
         /// Register <see cref="NPCVehicle"/> to be updated by the simulator.
@@ -95,10 +95,10 @@ namespace AWSIM.TrafficSimulation
         /// <param name="vehicle">The vehicle to be registered</param>
         /// <param name="route">Route for vehicle to follow</param>
         /// <param name="waypointIndex">Current waypoint index of the vehicle</param>
-        //public void Register(NPCVehicle vehicle, List<TrafficLane> route, int waypointIndex)
-        //{
-        //    vehicleStates.Add(NPCVehicleInternalState.Create(vehicle, route, waypointIndex));
-        //}
+        public void Register(NPCVehicle vehicle, List<TrafficLane> route, int waypointIndex)
+        {
+            vehicleStates.Add(NPCVehicleInternalState.Create(vehicle, route, waypointIndex));
+        }
 
         /// <summary>
         /// This should be called every time any vehicle is destroyed.
@@ -126,16 +126,16 @@ namespace AWSIM.TrafficSimulation
             Profiler.EndSample();
 
             Profiler.BeginSample("NPCVehicleSimulator.Decision");
-            //decisionStep.Execute(VehicleStates);
+            decisionStep.Execute(VehicleStates);
             Profiler.EndSample();
 
             Profiler.BeginSample("NPCVehicleSimulator.Control");
-            //controlStep.Execute(VehicleStates, deltaTime);
+            controlStep.Execute(VehicleStates, deltaTime);
             Profiler.EndSample();
 
             // Visualization step
             Profiler.BeginSample("NPCVehicleSimulator.Visualize");
-            //visualizationStep.Execute(VehicleStates, EGOVehicle);
+            visualizationStep.Execute(VehicleStates, EGOVehicle);
             Profiler.EndSample();
         }
 
