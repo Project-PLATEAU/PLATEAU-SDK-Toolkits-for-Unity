@@ -22,7 +22,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
 
-
         TrafficLane.TurnDirectionType ConvertTurnType(RnTurnType turnType)
         {
             if (turnType == RnTurnType.LeftTurn || turnType == RnTurnType.LeftFront || turnType == RnTurnType.LeftBack)
@@ -48,7 +47,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             int laneIndex = 0;
 
-            var parent = new GameObject("TrafficLanes");
+            var parent = GameObject.Find("TrafficLanes");
+            if(parent == null)
+            {
+                parent = new GameObject("TrafficLanes");
+            }
 
             while (currentController != null)
             {
@@ -71,7 +74,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     if (knotsPosistions.Count > 0)
                     {
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
-                        TrafficLane lane = TrafficLane.Create($"TrafficLane_Intersection_{laneIndex}", parent.transform, knotsPosistions.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT);
+                        TrafficLane lane = TrafficLane.Create($"TrafficLane_Intersection_{laneIndex}", parent.transform, knotsPosistions.ToArray(), turnDirType);
                         lane.intersectionLane = true;
                         lane.enabled = true;
                         route.Add(lane);

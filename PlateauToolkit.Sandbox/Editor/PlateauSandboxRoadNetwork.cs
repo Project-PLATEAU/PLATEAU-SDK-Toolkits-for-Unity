@@ -90,6 +90,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
             m_RnTrafficManager.SetTrafficController(controllers);
 
+            m_RnTrafficManager.CreateSimulator();
+
             //m_RnTrafficManager.CreateSimulator();
         }
 
@@ -182,16 +184,23 @@ namespace PlateauToolkit.Sandbox.Editor
             m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
 
             //Component attach
-            m_RnTrafficManager = roadNetwork.gameObject.GetComponent<RoadNetworkTrafficManager>();
-            if (m_RnTrafficManager == null)
+
+            GameObject managerGo = GameObject.Find("TrafficManager");
+            if (managerGo == null)
             {
-                m_RnTrafficManager = roadNetwork.gameObject.AddComponent<RoadNetworkTrafficManager>();
+                managerGo = new GameObject("TrafficManager");
             }
 
-            m_TrafficManager = roadNetwork.gameObject.GetComponent<TrafficManager>();
+            m_RnTrafficManager = managerGo.GetComponent<RoadNetworkTrafficManager>();
+            if (m_RnTrafficManager == null)
+            {
+                m_RnTrafficManager = managerGo.AddComponent<RoadNetworkTrafficManager>();
+            }
+
+            m_TrafficManager = managerGo.GetComponent<TrafficManager>();
             if (m_TrafficManager == null)
             {
-                m_TrafficManager = roadNetwork.gameObject.AddComponent<TrafficManager>();
+                m_TrafficManager = managerGo.AddComponent<TrafficManager>();
             }
         }
     }

@@ -1,4 +1,3 @@
-using PlateauToolkit.Sandbox.RoadNetwork;
 using PlateauToolkit.Sandbox;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,9 +19,19 @@ namespace AWSIM.TrafficSimulation
             Lane = lane;
             WaypointIndex = waypointIndex;
             Position = lane.Waypoints[waypointIndex];
-            Forward = waypointIndex == lane.Waypoints.Length - 1
+
+            try
+            {
+                Forward = waypointIndex == lane.Waypoints.Length - 1
                 ? Position - lane.Waypoints[waypointIndex - 1]
                 : lane.Waypoints[waypointIndex + 1] - Position;
+            }catch(System.Exception ex)
+            {
+                Debug.LogError($"Index out of range : {waypointIndex} / {lane.Waypoints.Length}");
+
+                Forward = Vector3.zero;
+            }
+
         }
     }
 

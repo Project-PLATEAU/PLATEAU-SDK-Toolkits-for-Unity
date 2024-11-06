@@ -57,7 +57,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         NPCVehicleSimulator m_Simulator;
         //RouteTrafficSimulator m_RouteSimulator;
-        List<RouteTrafficSimulator> m_RouteSimulators = new List<RouteTrafficSimulator>();
+        //List<RouteTrafficSimulator> m_RouteSimulators = new List<RouteTrafficSimulator>();
+
+        RandomTrafficSimulatorConfiguration m_TrafficSimulatorConfiguration;
 
         //Coroutine m_MovementCoroutine;
 
@@ -120,31 +122,51 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public void CreateSimulator()
         {
-            GameObject egoVehicle = new GameObject("EgoVehicle");
-            GameObject vehicles = new GameObject("Vehicles");
-            int max_vehicles = 200;
+            //GameObject egoVehicle = GameObject.Find("EgoVehicle");
+            //if(egoVehicle == null)
+            //    egoVehicle = new GameObject("EgoVehicle");
+
+            GameObject vehicles = GameObject.Find("Vehicles");
+            if (vehicles == null)
+                vehicles = new GameObject("Vehicles");
+
+            int max_vehicles = 40;
+
+            TrManager.InitParams(0, ~0, max_vehicles, vehicles);
+
+            //NPCVehicleConfig config = new NPCVehicleConfig();
+            //m_Simulator = new NPCVehicleSimulator(config, 0, 0, m_Controllers.Count, egoVehicle);
+
+            //foreach (var controller in m_Controllers)
+            //{
+            //    List<TrafficLane> route = controller.CreateRoute();
+            //    RouteTrafficSimulator routeSimulator = new RouteTrafficSimulator(vehicles, m_VehiclePrefabs.ToArray(), route.ToArray(), m_Simulator, max_vehicles);
+            //    routeSimulator.enabled = true;
+            //    m_RouteSimulators.Add(routeSimulator);
+            //    TrManager.AddTrafficSimulator(routeSimulator);
+
+            //    RouteTrafficSimulatorConfiguration routeTrafficSimConfig = new RouteTrafficSimulatorConfiguration();
+            //    routeTrafficSimConfig.maximumSpawns = max_vehicles;
+            //    routeTrafficSimConfig.npcPrefabs = m_VehiclePrefabs.ToArray();
+            //    routeTrafficSimConfig.route = route.ToArray();
+            //    routeTrafficSimConfig.enabled = true;
+            //    TrManager.routeTrafficSims = new RouteTrafficSimulatorConfiguration[] { routeTrafficSimConfig };
+            //}
+
+            RandomTrafficSimulatorConfiguration RandomTrafficSimConfig = new RandomTrafficSimulatorConfiguration();
+            RandomTrafficSimConfig.maximumSpawns = max_vehicles;
+            RandomTrafficSimConfig.npcPrefabs = m_VehiclePrefabs.ToArray();
+            RandomTrafficSimConfig.spawnableLanes = new RoadNetworkLaneConverter().Create(RnGetter).ToArray(); //全て変換
+            RandomTrafficSimConfig.enabled = true;
+            TrManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { RandomTrafficSimConfig };
 
             TrManager.Initialize();
-
-            NPCVehicleConfig config = new NPCVehicleConfig();
-            m_Simulator = new NPCVehicleSimulator(config, 0, 0, m_Controllers.Count, egoVehicle);
-
-            foreach (var controller in m_Controllers)
-            {
-                List<TrafficLane> route = controller.CreateRoute();
-                RouteTrafficSimulator routeSimulator = new RouteTrafficSimulator(vehicles, m_VehiclePrefabs.ToArray(), route.ToArray(), m_Simulator, max_vehicles);
-                routeSimulator.enabled = true;
-
-                m_RouteSimulators.Add(routeSimulator);
-
-                TrManager.AddTrafficSimulator(routeSimulator);
-            }
         }
 
         [ContextMenu("Start Movement")]
         public void StartMovement()
         {
-            CreateSimulator();
+            //CreateSimulator();
 
             //var prefabs = m_Vehicles.Select(x => x.gameObject).ToArray();
             //m_MovementCoroutine = StartCoroutine(MovementEnumerator());

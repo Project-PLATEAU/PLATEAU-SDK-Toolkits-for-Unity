@@ -31,6 +31,8 @@ namespace AWSIM.TrafficSimulation
         [SerializeField, Tooltip("Ego vehicle handler. If not set, the manager creates a dummy ego. This reference is also set automatically when the Ego spawns via the traffic simulator.")]
         private GameObject _egoVehicle;
 
+        private GameObject _vehicleRoot;
+
         public GameObject egoVehicle
         {
             get
@@ -82,12 +84,24 @@ namespace AWSIM.TrafficSimulation
             npcVehicleSimulator?.ClearAll();
         }
 
+        public void InitParams(LayerMask _vehicleLayerMask, LayerMask _groundLayerMask, int _maxVehicleCount, GameObject vehicleRoot)
+        {
+            vehicleLayerMask = _vehicleLayerMask;
+            groundLayerMask = _groundLayerMask;
+            maxVehicleCount = _maxVehicleCount;
+            _vehicleRoot = vehicleRoot;
+        }
+
         public void Initialize()
         {
             Random.InitState(seed);
 
             spawnLanes = new Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>>();
-            dummyEgo = new GameObject("DummyEgo");
+
+            dummyEgo = GameObject.Find("DummyEgo");
+            if(dummyEgo == null)
+                dummyEgo = new GameObject("DummyEgo");
+
             if (_egoVehicle == null)
             {
                 _egoVehicle = dummyEgo;
@@ -102,31 +116,36 @@ namespace AWSIM.TrafficSimulation
                 Debug.LogError("Traffic manager requires NPC Vehicle Simulator script.");
                 return;
             }
-
-            foreach (var randomTrafficConf in randomTrafficSims)
+            if(randomTrafficSims != null)
             {
-                RandomTrafficSimulator randomTs = new RandomTrafficSimulator(
-                    this.gameObject,
-                    randomTrafficConf.npcPrefabs,
-                    randomTrafficConf.spawnableLanes,
-                    npcVehicleSimulator,
-                    randomTrafficConf.maximumSpawns
-                );
-                randomTs.enabled = randomTrafficConf.enabled;
-                trafficSimulatorNodes.Add(randomTs);
+                foreach (var randomTrafficConf in randomTrafficSims)
+                {
+                    RandomTrafficSimulator randomTs = new RandomTrafficSimulator(
+                        _vehicleRoot,
+                        randomTrafficConf.npcPrefabs,
+                        randomTrafficConf.spawnableLanes,
+                        npcVehicleSimulator,
+                        randomTrafficConf.maximumSpawns
+                    );
+                    randomTs.enabled = randomTrafficConf.enabled;
+                    trafficSimulatorNodes.Add(randomTs);
+                }
             }
 
-            foreach (var routeTrafficSimConf in routeTrafficSims)
+            if(routeTrafficSims != null)
             {
-                RouteTrafficSimulator routeTs = new RouteTrafficSimulator(
-                    this.gameObject,
-                    routeTrafficSimConf.npcPrefabs,
-                    routeTrafficSimConf.route,
-                    npcVehicleSimulator,
-                    routeTrafficSimConf.maximumSpawns
-                );
-                routeTs.enabled = routeTrafficSimConf.enabled;
-                trafficSimulatorNodes.Add(routeTs);
+                foreach (var routeTrafficSimConf in routeTrafficSims)
+                {
+                    RouteTrafficSimulator routeTs = new RouteTrafficSimulator(
+                        _vehicleRoot,
+                        routeTrafficSimConf.npcPrefabs,
+                        routeTrafficSimConf.route,
+                        npcVehicleSimulator,
+                        routeTrafficSimConf.maximumSpawns
+                    );
+                    routeTs.enabled = routeTrafficSimConf.enabled;
+                    trafficSimulatorNodes.Add(routeTs);
+                }
             }
         }
 
