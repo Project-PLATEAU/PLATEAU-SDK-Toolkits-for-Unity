@@ -108,7 +108,9 @@ namespace AWSIM.TrafficSimulation
                 //    road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
             }
 
-            var vehicle = obj.GetComponent<NPCVehicle>();
+            //var vehicle = obj.GetComponent<NPCVehicle>();
+            var vehicle = obj.GetComponent<PlateauSandboxTrafficMovement>() as NPCVehicle;
+
             vehicle.VehicleID = vehicleID;
             return vehicle;
         }

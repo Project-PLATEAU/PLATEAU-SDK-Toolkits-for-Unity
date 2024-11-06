@@ -169,7 +169,23 @@ namespace AWSIM
         [Header("Physics Settings")]
         [SerializeField] Transform centerOfMass;
         //[SerializeField] new Rigidbody rigidbody;
-        [SerializeField] new Rigidbody rigidbody;
+
+        Rigidbody rigidbody {
+            get
+            {
+                if (gameObject.TryGetComponent<Rigidbody>(out var _rb))
+                {
+                    return _rb;
+                }
+                else
+                {
+                    var rigidbody = gameObject.AddComponent<Rigidbody>();
+                    rigidbody.mass = 1500f;
+                    return rigidbody;
+                }
+            }
+        }
+
         [SerializeField] Rigidbody trailer = null;
         [SerializeField] AxleSettings axleSettings;
 
@@ -206,13 +222,13 @@ namespace AWSIM
         {
             if (trailer == null)
                 trailer = rigidbody;
-            leftTurnSignalLight.Initialize();
-            rightTurnSignalLight.Initialize();
-            brakeLight.Initialize();
+            //leftTurnSignalLight.Initialize();
+            //rightTurnSignalLight.Initialize();
+            //brakeLight.Initialize();
 
-            rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
-            lastPosition = rigidbody.position;
-            wheelbase = axleSettings.GetWheelBase();
+            //rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
+            //lastPosition = rigidbody.position;
+            //wheelbase = axleSettings.GetWheelBase();
         }
 
         // Update is called once per frame
@@ -306,14 +322,6 @@ namespace AWSIM
 
         void FixedUpdate()
         {
-            if (rigidbody == null)
-            {
-                rigidbody = gameObject.AddComponent<Rigidbody>();
-                rigidbody.mass = 1500f;
-            }
-               
-
-
             // Calculate physical states for visual update.
             // velocity & speed.
             velocity = (rigidbody.position - lastPosition) / Time.deltaTime;
@@ -337,8 +345,8 @@ namespace AWSIM
 
         void Reset()
         {
-            if (rigidbody == null)
-                rigidbody = GetComponent<Rigidbody>();
+            //if (rigidbody == null)
+            //    rigidbody = GetComponent<Rigidbody>();
         }
 
         void OnValidate()
@@ -350,9 +358,9 @@ namespace AWSIM
 
         void OnDestroy()
         {
-            leftTurnSignalLight.Destroy();
-            rightTurnSignalLight.Destroy();
-            brakeLight.Destroy();
+            //leftTurnSignalLight.Destroy();
+            //rightTurnSignalLight.Destroy();
+            //brakeLight.Destroy();
         }
 
         /// <summary>

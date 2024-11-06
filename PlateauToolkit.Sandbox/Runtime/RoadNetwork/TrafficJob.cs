@@ -13,27 +13,27 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class TrafficJob:IDisposable
     {
-        private struct NativeState
-        {
-            public Vector3 Extents;
-            public Vector3 FrontCenterPosition;
-            //public float Yaw;
-            //public int WaypointCount;
-            //public Spline Spline;
-            public float SplinePosition;
+        //private struct NativeState
+        //{
+        //    public Vector3 Extents;
+        //    public Vector3 FrontCenterPosition;
+        //    //public float Yaw;
+        //    //public int WaypointCount;
+        //    //public Spline Spline;
+        //    public float SplinePosition;
 
-            public static NativeState Create(PlateauSandboxTrafficMovement vehicle, int waypointCount)
-            {
-                return new NativeState
-                {
-                    Extents = vehicle.GetComponentInChildren<MeshCollider>().bounds.extents,
-                    FrontCenterPosition = vehicle.transform.position,
-                    //Yaw = vehicle.Yaw,
-                    //WaypointCount = waypointCount
-                    SplinePosition = vehicle.RoadInfo.m_CurrentProgress
-                };
-            }
-        }
+        //    public static NativeState Create(PlateauSandboxTrafficMovement vehicle, int waypointCount)
+        //    {
+        //        return new NativeState
+        //        {
+        //            Extents = vehicle.GetComponentInChildren<MeshCollider>().bounds.extents,
+        //            FrontCenterPosition = vehicle.transform.position,
+        //            //Yaw = vehicle.Yaw,
+        //            //WaypointCount = waypointCount
+        //            SplinePosition = vehicle.RoadInfo.m_CurrentProgress
+        //        };
+        //    }
+        //}
 
 
         //private const int MaxBoxcastCount = 5;

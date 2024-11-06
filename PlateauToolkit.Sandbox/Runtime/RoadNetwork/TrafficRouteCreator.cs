@@ -58,7 +58,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     if (points.Count > 0)
                     {
                         TrafficLane lane = TrafficLane.Create($"TrafficLane_Road_{laneIndex}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT);
+                        lane.enabled = true;
                         route.Add(lane);
+
+                        Debug.Log($"lane points {points.Count}");
                     }
                 }
                 else if (currentController.IsIntersection)
@@ -69,7 +72,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     {
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
                         TrafficLane lane = TrafficLane.Create($"TrafficLane_Intersection_{laneIndex}", parent.transform, knotsPosistions.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT);
+                        lane.intersectionLane = true;
+                        lane.enabled = true;
                         route.Add(lane);
+
+                        Debug.Log($"lane intersection points {knotsPosistions.Count}");
                     }
                 }
 
@@ -77,6 +84,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 currentController = currentController.GetNextRoad();
             }
 
+            Debug.Log($"routes {route.Count}");
 
             return route;
         }
