@@ -102,8 +102,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         var points = lane.GetChildLineString(getter).GetChildPointsVector(getter);
                         if (points.Count > 1)
                         {
-                            points = ConvertToSplinePoints(points);
-
+                            //points = ConvertToSplinePoints(points);
                             //Debug.Log($"lane points {points.Count}");
 
                             TrafficLane tlane = TrafficLane.Create($"TrafficLane_Road_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
@@ -234,7 +233,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     foreach (var t in info.prevTracks)
                     {
                         if (trackDict.ContainsKey(t))
-                            lane.NextLanes.Add(trackDict[t]);
+                            lane.PrevLanes.Add(trackDict[t]);
                     }
                 }
 
