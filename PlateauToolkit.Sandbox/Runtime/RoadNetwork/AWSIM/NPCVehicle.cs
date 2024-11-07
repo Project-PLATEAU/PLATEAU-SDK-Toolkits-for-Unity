@@ -181,6 +181,10 @@ namespace AWSIM
                 {
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
                     rigidbody.mass = 1500f;
+                    rigidbody.angularDrag = 0.0f;
+                    rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+
+
                     return rigidbody;
                 }
             }
@@ -217,11 +221,27 @@ namespace AWSIM
         public Transform RigidBodyTransform => rigidbody.transform;
         public Transform TrailerTransform => trailer?.transform;
 
+        protected void Initialize(GameObject _visualObjectRoot, Transform _centerOfMass)
+        {
+            visualObjectRoot = _visualObjectRoot;
+
+            bounds = visualObjectRoot.GetComponentInChildren<MeshCollider>().bounds;
+            bounds.center = bounds.center - _visualObjectRoot.transform.position;
+
+            centerOfMass = _centerOfMass;
+
+            rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
+            lastPosition = rigidbody.position;
+
+            if (trailer == null)
+                trailer = rigidbody;
+        }
+
         // Start is called before the first frame update
         void Awake()
         {
-            if (trailer == null)
-                trailer = rigidbody;
+            //if (trailer == null)
+            //    trailer = rigidbody;
             //leftTurnSignalLight.Initialize();
             //rightTurnSignalLight.Initialize();
             //brakeLight.Initialize();

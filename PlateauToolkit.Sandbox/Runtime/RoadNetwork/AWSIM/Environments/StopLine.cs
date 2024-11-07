@@ -38,7 +38,14 @@ namespace AWSIM.TrafficSimulation
 
         public static StopLine Create(Vector3 p1, Vector3 p2)
         {
+            var parent = GameObject.Find("StopLines");
+            if (parent == null)
+            {
+                parent = new GameObject("StopLines");
+            }
+
             var gameObject = new GameObject("StopLine", typeof(StopLine));
+            gameObject.transform.SetParent(parent.transform, false);
             gameObject.transform.position = p1;
             var stopLine = gameObject.GetComponent<StopLine>();
             stopLine.points[0] = p1;

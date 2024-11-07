@@ -31,8 +31,6 @@ namespace AWSIM.TrafficSimulation
         [SerializeField, Tooltip("Ego vehicle handler. If not set, the manager creates a dummy ego. This reference is also set automatically when the Ego spawns via the traffic simulator.")]
         private GameObject _egoVehicle;
 
-        private GameObject _vehicleRoot;
-
         public GameObject egoVehicle
         {
             get
@@ -53,6 +51,20 @@ namespace AWSIM.TrafficSimulation
                 }
             }
         }
+
+        [SerializeField, Tooltip("Vehicle Root GameObject")]
+        private GameObject _vehicleRoot;
+        public GameObject VehicleRoot
+        {
+            get
+            {
+                if(_vehicleRoot != null)
+                    return _vehicleRoot;
+
+                return gameObject;
+            }
+        }
+
 
         [Header("Debug")]
         [SerializeField] protected bool showGizmos = false;

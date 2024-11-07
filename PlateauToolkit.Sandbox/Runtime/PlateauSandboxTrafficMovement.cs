@@ -28,6 +28,14 @@ namespace PlateauToolkit.Sandbox
     //[ExecuteAlways]
     public class PlateauSandboxTrafficMovement : PlateauSandboxMovementBase
     {
+
+        private void Awake()
+        {
+            Initialize(gameObject, transform);
+
+        }
+
+
         //[SerializeField]
         //public RoadNetworkTrafficController m_TrafficController;
 
@@ -57,317 +65,317 @@ namespace PlateauToolkit.Sandbox
         //[SerializeField] new Rigidbody rigidbody;
         //public Transform RigidBodyTransform => rigidbody.transform;
 
-//        RoadNetworkTrafficManager TrafficManager
-//        {
-//            get
-//            {
-//                if (m_TrafficManager == null)
-//                {
-//                    m_TrafficManager = GameObject.FindObjectOfType<RoadNetworkTrafficManager>();
-//                    if (m_TrafficManager == null)
-//                    {
-//                        Debug.LogError($"TrafficManager is null");
-//                    }
-//                }
-//                return m_TrafficManager;
-//            }
-//        }
+        //        RoadNetworkTrafficManager TrafficManager
+        //        {
+        //            get
+        //            {
+        //                if (m_TrafficManager == null)
+        //                {
+        //                    m_TrafficManager = GameObject.FindObjectOfType<RoadNetworkTrafficManager>();
+        //                    if (m_TrafficManager == null)
+        //                    {
+        //                        Debug.LogError($"TrafficManager is null");
+        //                    }
+        //                }
+        //                return m_TrafficManager;
+        //            }
+        //        }
 
-//        public RoadInfo RoadInfo
-//        {
-//            set
-//            {
-//                m_TrafficController = CreateTrafficController(value);
-//            }
-//            get
-//            {
-//                return m_TrafficController?.m_RoadInfo;
-//            }
-//        }
+        //        public RoadInfo RoadInfo
+        //        {
+        //            set
+        //            {
+        //                m_TrafficController = CreateTrafficController(value);
+        //            }
+        //            get
+        //            {
+        //                return m_TrafficController?.m_RoadInfo;
+        //            }
+        //        }
 
-//        RoadNetworkTrafficController CreateTrafficController(RoadInfo info)
-//        {
-//            var param = new RoadNetworkTrafficController(info);
-//            if(param.IsRoad)
-//            {
-//                var lineString = param.GetLineString();
-//                //Debug.Log($"lineString count {lineString?.Points?.Count}");
+        //        RoadNetworkTrafficController CreateTrafficController(RoadInfo info)
+        //        {
+        //            var param = new RoadNetworkTrafficController(info);
+        //            if(param.IsRoad)
+        //            {
+        //                var lineString = param.GetLineString();
+        //                //Debug.Log($"lineString count {lineString?.Points?.Count}");
 
-//                //初回配置
-//                var points = lineString.GetChildPointsVector(RnGetter);
-//                var pos = points.FirstOrDefault();
-//                var nextPos = points.Count > 1 ? points[1] : pos;
+        //                //初回配置
+        //                var points = lineString.GetChildPointsVector(RnGetter);
+        //                var pos = points.FirstOrDefault();
+        //                var nextPos = points.Count > 1 ? points[1] : pos;
 
-//                Vector3 vec = (nextPos - pos).normalized;
-//                gameObject.transform.position = pos;
-//                gameObject.transform.forward = vec;
+        //                Vector3 vec = (nextPos - pos).normalized;
+        //                gameObject.transform.position = pos;
+        //                gameObject.transform.forward = vec;
 
-//                //m_RespawnPosition = info;
-//                Initialize();
-//            }
-//            else
-//            {
-//                Debug.LogError($"初回Road生成時にIntersectionが設定された");
-//            }
-//            return param;
-//        }
+        //                //m_RespawnPosition = info;
+        //                Initialize();
+        //            }
+        //            else
+        //            {
+        //                Debug.LogError($"初回Road生成時にIntersectionが設定された");
+        //            }
+        //            return param;
+        //        }
 
-//        public void Initialize()
-//        {
+        //        public void Initialize()
+        //        {
 
-//            var bounds = GetComponentInChildren<MeshCollider>()?.bounds;
-//            if (bounds != null)
-//            {
-//                m_TrafficController?.SetBounds(bounds.Value);
-//            }
-//        }
+        //            var bounds = GetComponentInChildren<MeshCollider>()?.bounds;
+        //            if (bounds != null)
+        //            {
+        //                m_TrafficController?.SetBounds(bounds.Value);
+        //            }
+        //        }
 
-//#if UNITY_EDITOR
-//        void OnValidate()
-//        {
-//            //debug
-//            //Debug.Log($"change speed {m_CurrentSpeed}");
-//            //m_DistanceCalc.ChangeSpeed(m_CurrentSpeed);
-//        }
-//#endif
-//        void Awake()
-//        {
-//            TryGetComponent(out IPlateauSandboxTrafficObject trafficObject);
-//            m_TrafficObject = trafficObject;
+        //#if UNITY_EDITOR
+        //        void OnValidate()
+        //        {
+        //            //debug
+        //            //Debug.Log($"change speed {m_CurrentSpeed}");
+        //            //m_DistanceCalc.ChangeSpeed(m_CurrentSpeed);
+        //        }
+        //#endif
+        //        void Awake()
+        //        {
+        //            TryGetComponent(out IPlateauSandboxTrafficObject trafficObject);
+        //            m_TrafficObject = trafficObject;
 
-//            //m_TrafficController?.Initialize();
-//        }
+        //            //m_TrafficController?.Initialize();
+        //        }
 
-//        void Start()
-//        {
-//            if (!Application.isPlaying)
-//            {
-//                return;
-//            }
+        //        void Start()
+        //        {
+        //            if (!Application.isPlaying)
+        //            {
+        //                return;
+        //            }
 
-//            //if (m_RunOnAwake)
-//            {
-//                StartMovement();
-//            }
-//        }
+        //            //if (m_RunOnAwake)
+        //            {
+        //                StartMovement();
+        //            }
+        //        }
 
-//        void OnDestroy()
-//        {
-//        }
-
-
-//        //TrafficManager側で動かす場合の処理
-//        public void PreMove()
-//        {
-//            if (m_TrafficController == null)
-//            {
-//                Stop();
-//            }
-
-//            if (m_TrafficController?.IsRoad == true)
-//            {
-//                List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
-//                if (m_TrafficController.IsLineStringReversed)
-//                {
-//                    points.Reverse();
-//                }
-
-//                //InternalState = NPCVehicleInternalState.Create(this, m_TrafficController.GetLane());
-
-//            }
-
-//            else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
-//            {
-//                RnDataTrack track = m_TrafficController.GetTrack();
-//                if (track == null)
-//                {
-//                    Stop();
-//                    return;
-//                }
-
-//                //InternalState = NPCVehicleInternalState.Create(this, m_TrafficController.GetTrack());
-
-//            }
-//            m_StartOffset = 0f; //初回のみ利用
-//        }
-
-//        public bool Move()
-//        {
-//            //if (m_TrafficController == null || m_DistanceCalc == null || m_Spline == null)
-//            //{
-//            //    return false;
-//            //}
-
-//            //if (m_DistanceCalc.GetPercent() < 1)
-//            //{
-//            //    AnimateOnSpline(m_Spline);
-//            //    return true;
-//            //}
-//            //else
-//            //{
-//            //    m_TrafficController = m_TrafficController.GetNextRoad();
-//            //}
-
-//            return false;
-//        }
+        //        void OnDestroy()
+        //        {
+        //        }
 
 
+        //        //TrafficManager側で動かす場合の処理
+        //        public void PreMove()
+        //        {
+        //            if (m_TrafficController == null)
+        //            {
+        //                Stop();
+        //            }
 
-//        [ContextMenu("Start Movement")]
-//        public void StartMovement()
-//        {
-//            //m_IsPaused = false;
+        //            if (m_TrafficController?.IsRoad == true)
+        //            {
+        //                List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
+        //                if (m_TrafficController.IsLineStringReversed)
+        //                {
+        //                    points.Reverse();
+        //                }
 
-//            //m_MovementCoroutine = StartCoroutine(MovementEnumerator());
-//        }
+        //                //InternalState = NPCVehicleInternalState.Create(this, m_TrafficController.GetLane());
 
-//        [ContextMenu("Stop Movement")]
-//        public void Stop()
-//        {
-//            if (m_MovementCoroutine == null)
-//            {
-//                return;
-//            }
+        //            }
 
-//            StopCoroutine(m_MovementCoroutine);
-//            m_MovementCoroutine = null;
-//            //m_MovingObject.OnMoveEnd();
+        //            else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
+        //            {
+        //                RnDataTrack track = m_TrafficController.GetTrack();
+        //                if (track == null)
+        //                {
+        //                    Stop();
+        //                    return;
+        //                }
 
-//            //m_IsPaused = false;
-//        }
+        //                //InternalState = NPCVehicleInternalState.Create(this, m_TrafficController.GetTrack());
 
-//        //移動処理コルーチン
-//        IEnumerator MovementEnumerator()
-//        {
-//            //YieldInstruction yieldFunc = new WaitForFixedUpdate();
-//            YieldInstruction yieldFunc = new WaitForEndOfFrame();
+        //            }
+        //            m_StartOffset = 0f; //初回のみ利用
+        //        }
 
-//            while (m_TrafficManager?.IsRoadFilled(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) == true) //レーンがいっぱい
-//            {
-//                if (m_TrafficController?.m_DebugInfo != null)
-//                    m_TrafficController.m_DebugInfo.SetFillStatus(m_TrafficManager?.GetRoadFillStatus(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) ?? default);
+        //        public bool Move()
+        //        {
+        //            //if (m_TrafficController == null || m_DistanceCalc == null || m_Spline == null)
+        //            //{
+        //            //    return false;
+        //            //}
+
+        //            //if (m_DistanceCalc.GetPercent() < 1)
+        //            //{
+        //            //    AnimateOnSpline(m_Spline);
+        //            //    return true;
+        //            //}
+        //            //else
+        //            //{
+        //            //    m_TrafficController = m_TrafficController.GetNextRoad();
+        //            //}
+
+        //            return false;
+        //        }
 
 
-//                //待機
-//                yield return yieldFunc;
-//            }
 
-//            if (m_TrafficController?.m_DebugInfo != null)
-//                m_TrafficController.m_DebugInfo.SetFillStatus(m_TrafficManager?.GetRoadFillStatus(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) ?? default);
+        //        [ContextMenu("Start Movement")]
+        //        public void StartMovement()
+        //        {
+        //            //m_IsPaused = false;
+
+        //            //m_MovementCoroutine = StartCoroutine(MovementEnumerator());
+        //        }
+
+        //        [ContextMenu("Stop Movement")]
+        //        public void Stop()
+        //        {
+        //            if (m_MovementCoroutine == null)
+        //            {
+        //                return;
+        //            }
+
+        //            StopCoroutine(m_MovementCoroutine);
+        //            m_MovementCoroutine = null;
+        //            //m_MovingObject.OnMoveEnd();
+
+        //            //m_IsPaused = false;
+        //        }
+
+        //        //移動処理コルーチン
+        //        IEnumerator MovementEnumerator()
+        //        {
+        //            //YieldInstruction yieldFunc = new WaitForFixedUpdate();
+        //            YieldInstruction yieldFunc = new WaitForEndOfFrame();
+
+        //            while (m_TrafficManager?.IsRoadFilled(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) == true) //レーンがいっぱい
+        //            {
+        //                if (m_TrafficController?.m_DebugInfo != null)
+        //                    m_TrafficController.m_DebugInfo.SetFillStatus(m_TrafficManager?.GetRoadFillStatus(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) ?? default);
 
 
-//            Spline currentSpline = null;
-//            if (m_TrafficController?.IsRoad == true)
-//            {
-//                List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
-//                if (m_TrafficController.IsLineStringReversed)
-//                {
-//                    points.Reverse();
-//                }
+        //                //待機
+        //                yield return yieldFunc;
+        //            }
 
-//                currentSpline = SplineTool.CreateSplineFromPoints(points);
-//            }
-//            else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
-//            {
-//                RnDataTrack track = m_TrafficController.GetTrack();
+        //            if (m_TrafficController?.m_DebugInfo != null)
+        //                m_TrafficController.m_DebugInfo.SetFillStatus(m_TrafficManager?.GetRoadFillStatus(m_TrafficController.m_RoadInfo.m_RoadId, m_TrafficController.m_RoadInfo.m_LaneIndex, m_TrafficController.m_RoadInfo.m_VehicleID) ?? default);
 
-//                if (track == null)
-//                {
-//                    Stop();
-//                    yield break;
-//                }
 
-//                currentSpline = track.Spline;
+        //            Spline currentSpline = null;
+        //            if (m_TrafficController?.IsRoad == true)
+        //            {
+        //                List<Vector3> points = m_TrafficController.GetLineString().GetChildPointsVector(RnGetter);
+        //                if (m_TrafficController.IsLineStringReversed)
+        //                {
+        //                    points.Reverse();
+        //                }
 
-//                if (m_TrafficController.IsReversed)
-//                {
-//                    currentSpline.Knots = currentSpline.Knots.Reverse();
-//                }
-//            }
+        //                currentSpline = SplineTool.CreateSplineFromPoints(points);
+        //            }
+        //            else if (m_TrafficController?.IsIntersection == true && m_TrafficController?.m_Intersection?.IsEmptyIntersection == false) // EmptyIntersectionは処理しない
+        //            {
+        //                RnDataTrack track = m_TrafficController.GetTrack();
 
-//            if (currentSpline != null)
-//            {
-//                m_TrafficController.SetDistance(currentSpline.GetLength());
+        //                if (track == null)
+        //                {
+        //                    Stop();
+        //                    yield break;
+        //                }
 
-//                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, currentSpline.GetLength(), k_FPS);
+        //                currentSpline = track.Spline;
 
-//                while (m_DistanceCalc.GetPercent() < 1)
-//                {
-//                    AnimateOnSpline(currentSpline);
-//                    yield return yieldFunc;
-//                }
+        //                if (m_TrafficController.IsReversed)
+        //                {
+        //                    currentSpline.Knots = currentSpline.Knots.Reverse();
+        //                }
+        //            }
 
-//                //Debug.Break();
-//            }
+        //            if (currentSpline != null)
+        //            {
+        //                m_TrafficController.SetDistance(currentSpline.GetLength());
 
-//            m_StartOffset = 0f; //初回のみ利用
+        //                m_DistanceCalc = new DistanceCalculator(m_SpeedKm, currentSpline.GetLength(), k_FPS);
 
-//            m_TrafficController = m_TrafficController.GetNextRoad();
+        //                while (m_DistanceCalc.GetPercent() < 1)
+        //                {
+        //                    AnimateOnSpline(currentSpline);
+        //                    yield return yieldFunc;
+        //                }
 
-//            // EmptyIntersectionは更に次へ
-//            if (m_TrafficController?.m_Intersection?.IsEmptyIntersection == true)
-//            {
-//                m_TrafficController = m_TrafficController.GetNextRoad();
-//            }
+        //                //Debug.Break();
+        //            }
 
-//            if (m_TrafficController == null)
-//            {
-//                Stop();
+        //            m_StartOffset = 0f; //初回のみ利用
 
-//                DestroyImmediate(gameObject); //破棄
-//            }
-//            else
-//            {
-//                //次回移動開始
-//                StartMovement();
-//            }
-//        }
+        //            m_TrafficController = m_TrafficController.GetNextRoad();
 
-//        void AnimateOnSpline(Spline spline)
-//        {
-//            float percent = m_DistanceCalc.GetPercent();
+        //            // EmptyIntersectionは更に次へ
+        //            if (m_TrafficController?.m_Intersection?.IsEmptyIntersection == true)
+        //            {
+        //                m_TrafficController = m_TrafficController.GetNextRoad();
+        //            }
 
-//            ProgressResult stat = m_TrafficController.SetProgress(percent, transform.position);
-//            percent = m_DistanceCalc.GetNextPercent(stat.m_Speed, stat.m_LastCarProgress);
-//            Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
-//            SetTransfrorm(pos);
-//        }
+        //            if (m_TrafficController == null)
+        //            {
+        //                Stop();
 
-//        void SetTransfrorm(Vector3 pos)
-//        {
-//            if (pos.IsNaNOrInfinity())
-//                return;
+        //                DestroyImmediate(gameObject); //破棄
+        //            }
+        //            else
+        //            {
+        //                //次回移動開始
+        //                StartMovement();
+        //            }
+        //        }
 
-//            Vector3 lastpos = gameObject.transform.position;
-//            Vector3 vec = (pos - lastpos).normalized;
-//            gameObject.transform.position = pos;
-//            if (vec != Vector3.zero)
-//            {
-//                gameObject.transform.forward = vec;
-//            }
+        //        void AnimateOnSpline(Spline spline)
+        //        {
+        //            float percent = m_DistanceCalc.GetPercent();
 
-//            MovementInfo movementInfo = CreateMovementInfo(pos, vec);
-//            m_TrafficObject.OnMove(movementInfo);
-//        }
+        //            ProgressResult stat = m_TrafficController.SetProgress(percent, transform.position);
+        //            percent = m_DistanceCalc.GetNextPercent(stat.m_Speed, stat.m_LastCarProgress);
+        //            Vector3 pos = SplineTool.GetPointOnSpline(spline, percent);
+        //            SetTransfrorm(pos);
+        //        }
 
-//        MovementInfo CreateMovementInfo(Vector3 pos, Vector3 vec)
-//        {
-//            MovementInfo movementInfo = new MovementInfo();
-//            movementInfo.m_SecondAxisForward = vec;
-//            movementInfo.m_MoveDelta = m_SpeedKm;
-//            return movementInfo;
-//        }
+        //        void SetTransfrorm(Vector3 pos)
+        //        {
+        //            if (pos.IsNaNOrInfinity())
+        //                return;
 
-//        //Debug Gizmo
-//        void OnDrawGizmos()
-//        {
-//            if (m_TrafficController == null || RnGetter == null)
-//            {
-//                return;
-//            }
+        //            Vector3 lastpos = gameObject.transform.position;
+        //            Vector3 vec = (pos - lastpos).normalized;
+        //            gameObject.transform.position = pos;
+        //            if (vec != Vector3.zero)
+        //            {
+        //                gameObject.transform.forward = vec;
+        //            }
 
-//            GizmoUtil.DebugRoadNetwork(m_TrafficController, RnGetter);
-//            GizmoUtil.DebugVehicle(this);
-//        }
+        //            MovementInfo movementInfo = CreateMovementInfo(pos, vec);
+        //            m_TrafficObject.OnMove(movementInfo);
+        //        }
+
+        //        MovementInfo CreateMovementInfo(Vector3 pos, Vector3 vec)
+        //        {
+        //            MovementInfo movementInfo = new MovementInfo();
+        //            movementInfo.m_SecondAxisForward = vec;
+        //            movementInfo.m_MoveDelta = m_SpeedKm;
+        //            return movementInfo;
+        //        }
+
+        //        //Debug Gizmo
+        //        void OnDrawGizmos()
+        //        {
+        //            if (m_TrafficController == null || RnGetter == null)
+        //            {
+        //                return;
+        //            }
+
+        //            GizmoUtil.DebugRoadNetwork(m_TrafficController, RnGetter);
+        //            GizmoUtil.DebugVehicle(this);
+        //        }
     }
 }
