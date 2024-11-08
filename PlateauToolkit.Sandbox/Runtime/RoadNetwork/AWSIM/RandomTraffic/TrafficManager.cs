@@ -281,8 +281,11 @@ namespace AWSIM.TrafficSimulation
                     var trafficSim = tsimAndPrefab.Key;
                     var prefab = tsimAndPrefab.Value;
                     //if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
-                    if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponentInChildren<MeshRenderer>().bounds, spawnLoc.Key))
+                    if (!NPCVehicleSpawner.IsSpawnable(prefab, spawnLoc.Key))
+                    {
+                        //Debug.LogError($"NPCVehicleSpawner not Spawnable!");
                         continue;
+                    }
                     var spawned = trafficSim.Spawn(prefab, spawnLoc.Key, out spawnedVehicle);
                 }
                 else

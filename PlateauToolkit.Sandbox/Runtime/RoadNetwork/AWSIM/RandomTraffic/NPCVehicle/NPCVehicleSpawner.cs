@@ -147,6 +147,23 @@ namespace AWSIM.TrafficSimulation
                 ignoreGroundLayerMask,
                 QueryTriggerInteraction.Ignore);
         }
+        public static bool IsSpawnable(GameObject prefab, NPCVehicleSpawnPoint npcVehicleSpawnPoint)
+        {
+            Bounds bounds;
+            var meshCollider = prefab.GetComponentInChildren<MeshCollider>();
+            if(meshCollider != null)
+            {
+                bounds = meshCollider.bounds;
+            }
+            else
+            {
+                var meshRenderer = prefab.GetComponentInChildren<MeshRenderer>();
+                bounds = meshRenderer.bounds;
+            }
+
+            return IsSpawnable(bounds, npcVehicleSpawnPoint);
+        }
+
 
         /// <summary>
         /// Get all spawnable point from spawnable lanes.
