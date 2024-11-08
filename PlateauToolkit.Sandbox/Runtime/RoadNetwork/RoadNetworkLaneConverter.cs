@@ -28,8 +28,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             public RnDataLane lane;
         }
 
-
-
         public List<Vector3> ConvertToSplinePoints(List<Vector3> points, int numPoints = 10)
         {
             List<Vector3> outPoints = new List<Vector3>();
@@ -89,73 +87,66 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             var roadbases = getter.GetRoadBases();
 
-            foreach(var rb in roadbases)
+            foreach (RnDataRoadBase rb in roadbases)
             {
                 if (rb is RnDataRoad)
                 {
                     RnDataRoad road = (RnDataRoad)rb;
 
                     List<RnDataLane> lanes = road.GetMainLanes(getter);
-                    
-                    foreach(var lane in lanes)
+
+                    foreach (var lane in lanes)
                     {
                         var points = lane.GetChildLineString(getter).GetChildPointsVector(getter);
-                        if (points.Count > 1)
+
+                        //ポイント数が足りない場合は、暫定的にポイントを作成
+                        if (points.Count == 0)
                         {
-                            //points = ConvertToSplinePoints(points);
-                            //Debug.Log($"lane points {points.Count}");
-
-                            TrafficLane tlane = TrafficLane.Create($"TrafficLane_Road_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
-                            tlane.enabled = true;
-                            //allLanes.Add(tlane);
-                            laneDict.Add(lane, tlane);
-
-                            LaneConvertInfo info = new LaneConvertInfo();
-                            info.trafficLane = tlane;
-                            info.lane = lane;
-
-                            RnDataIntersection nextIntersection = road.GetNextRoad(getter) as RnDataIntersection;
-                            if(nextIntersection != null)
-                            {
-                                if (!nextIntersection.IsEmptyIntersection)
-                                {
-                                    info.nextTracks = nextIntersection.GetFromTracksFromLane(getter, lane);
-                                }
-                                else
-                                {
-                                    //Next Road
-                                    var edges = nextIntersection.Edges;
-                                    edges.RemoveAll(e => e.Road.ID == road.GetId(getter) || !e.Road.IsValid);
-                                    if (edges.Count > 0)
-                                    {
-                                        var nextRoad = edges.FirstOrDefault().GetRoad(getter) as RnDataRoad;
-                                        info.nextLanes = nextRoad.GetLanesFromPrevBorder(getter, lane.GetNextBorder(getter));
-                                    }
-                                }
-                            }
-
-                            RnDataIntersection prevIntersection = road.GetPrevRoad(getter) as RnDataIntersection;
-                            if(prevIntersection != null)
-                            {
-                                if (!prevIntersection.IsEmptyIntersection)
-                                {
-                                    info.prevTracks = nextIntersection.GetToTracksFromLane(getter, lane);
-                                }
-                                else
-                                {
-                                    //Prev Road
-                                    var edges = prevIntersection.Edges;
-                                    edges.RemoveAll(e => e.Road.ID == road.GetId(getter) || !e.Road.IsValid);
-                                    if (edges.Count > 0)
-                                    {
-                                        var prevRoad = edges.FirstOrDefault().GetRoad(getter) as RnDataRoad;
-                                        info.prevLanes = prevRoad.GetLanesFromNextBorder(getter, lane.GetPrevBorder(getter));
-                                    }
-                                }
-                            }
-
-                            laneInfo.Add(info);
+                            Debug.LogError($"points not found");
+                            points = new() { Vector3.zero, Vector3.zero };
                         }
+                        else if (points.Count == 1)
+                        {
+                            Debug.LogError($"points size are 1");
+                            points.Add(points.FirstOrDefault());
+                        }
+                        //points = ConvertToSplinePoints(points);
+
+                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
+                        trafficLane.enabled = true;
+                        laneDict.Add(lane, trafficLane);
+
+                        LaneConvertInfo info = new LaneConvertInfo();
+                        info.trafficLane = trafficLane;
+                        info.lane = lane;
+
+                        RnDataIntersection nextIntersection = road.GetNextRoad(getter) as RnDataIntersection;
+                        if (nextIntersection != null)
+                        {
+                            if (!nextIntersection.IsEmptyIntersection)
+                            {
+                                info.nextTracks = nextIntersection.GetFromTracksFromLane(getter, lane);
+                            }
+                            else
+                            {
+                                info.nextLanes = nextIntersection.GetNextLanesFromLane(getter, road, lane);
+                            }
+                        }
+
+                        RnDataIntersection prevIntersection = road.GetPrevRoad(getter) as RnDataIntersection;
+                        if (prevIntersection != null)
+                        {
+                            if (!prevIntersection.IsEmptyIntersection)
+                            {
+                                info.prevTracks = prevIntersection.GetToTracksFromLane(getter, lane);
+                            }
+                            else
+                            {
+                                info.prevLanes = prevIntersection.GetPrevLanesFromLane(getter, road, lane);
+                            }
+                        }
+
+                        laneInfo.Add(info);
                     }
                 }
                 else if (rb is RnDataIntersection)
@@ -168,39 +159,30 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     }
 
                     var tracks = intersection.Tracks;
-                    foreach(var track in tracks)
+                    foreach (RnDataTrack track in tracks)
                     {
-                        //var knotsPosistions = track.Spline.Knots.Select(x => (Vector3)x.Position).ToList();
-                        var points = ConvertToSplinePoints(track.Spline);
-                        if (points.Count > 0)
-                        {
-                            //Debug.Log($"lane intersection points {points.Count}");
+                        List<Vector3> points = ConvertToSplinePoints(track.Spline, 5);
 
-                            TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
-                            TrafficLane lane = TrafficLane.Create($"TrafficLane_Intersection_{index++}", parent.transform, points.ToArray(), turnDirType, speedLimit);
-                            lane.intersectionLane = true;
-                            lane.enabled = true;
-                            //allLanes.Add(lane);
-                            trackDict.Add(track, lane);
+                        TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
+                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Intersection_{index++}", parent.transform, points.ToArray(), turnDirType, speedLimit);
+                        trafficLane.intersectionLane = true;
+                        trafficLane.enabled = true;
+                        trackDict.Add(track, trafficLane);
 
-                            LaneConvertInfo info = new LaneConvertInfo();
-                            info.trafficLane = lane;
-                            info.track = track;
+                        LaneConvertInfo info = new LaneConvertInfo();
+                        info.trafficLane = trafficLane;
+                        info.track = track;
 
-                            var nextEdge = intersection.GetEdgesFromBorder(getter, track.GetToBorder(getter)).FirstOrDefault();
-                            var nextRoad = nextEdge.GetRoad(getter) as RnDataRoad;
-                            info.nextLanes = nextRoad.GetLanesFromPrevTrack(getter, track);
+                        info.nextLanes = intersection.GetNextLanesFromTrack(getter, track);
 
-                            var prevEdge = intersection.GetEdgesFromBorder(getter, track.GetFromBorder(getter)).FirstOrDefault();
-                            var prevRoad = prevEdge.GetRoad(getter) as RnDataRoad;
-                            info.prevLanes = prevRoad.GetLanesFromNextTrack(getter, track);
+                        info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track);
 
-                            //Stopline
-                            var borderPoints = nextEdge.GetBorder(getter).GetChildLineString(getter).GetChildPointsVector(getter);
-                            AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
+                        //Stopline
+                        RnDataNeighbor nextEdge = intersection.GetEdgesFromBorder(getter, track.GetToBorder(getter)).FirstOrDefault();
+                        List<Vector3> borderPoints = nextEdge.GetBorder(getter).GetChildLineString(getter).GetChildPointsVector(getter);
+                        AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
 
-                            laneInfo.Add(info);
-                        }
+                        laneInfo.Add(info);
                     }
                 }
             }
@@ -227,7 +209,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     }
                 }
 
-
                 if (info.prevTracks != null)
                 {
                     foreach (var t in info.prevTracks)
@@ -251,9 +232,5 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             return allLanes;
         }
-
-
-
-
     }
 }

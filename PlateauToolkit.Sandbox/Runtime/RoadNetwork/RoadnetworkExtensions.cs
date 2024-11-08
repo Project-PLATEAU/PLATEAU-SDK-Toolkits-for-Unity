@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using PLATEAU.RoadNetwork.Structure;
 using System.Linq;
 using UnityEngine;
+using static PlasticPipe.Server.MonitorStats;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -461,6 +462,49 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static List<RnDataNeighbor> GetEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
         {
             return intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
+        }
+        public static List<RnDataLane> GetNextLanesFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            var nextEdge = intersection.GetEdgesFromBorder(getter, track.GetToBorder(getter)).FirstOrDefault();
+            var nextRoad = nextEdge.GetRoad(getter) as RnDataRoad;
+            return nextRoad.GetLanesFromPrevTrack(getter, track);
+        }
+
+        public static List<RnDataLane> GetPrevLanesFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            var prevEdge = intersection.GetEdgesFromBorder(getter, track.GetFromBorder(getter)).FirstOrDefault();
+            var prevRoad = prevEdge.GetRoad(getter) as RnDataRoad;
+            return prevRoad.GetLanesFromNextTrack(getter, track);
+        }
+
+        public static List<RnDataNeighbor> GetOppositeSideEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, int roadId)
+        {
+            var edges = intersection.Edges;
+            edges.RemoveAll(e => e.Road.ID == roadId || !e.Road.IsValid);
+            return edges;
+        }
+
+        //Empty Intersectionの場合
+        public static List<RnDataLane> GetPrevLanesFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad currentRoad, RnDataLane currentLane)
+        {
+            var edge = intersection.GetOppositeSideEdgesFromRoad(currentRoad.GetId(getter)).FirstOrDefault();
+            if (edge != null)
+            {
+                var prevRoad = edge.GetRoad(getter) as RnDataRoad;
+                return prevRoad.GetLanesFromNextBorder(getter, currentLane.GetPrevBorder(getter));
+            }
+            return null;
+        }
+
+        public static List<RnDataLane> GetNextLanesFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad currentRoad, RnDataLane currentLane)
+        {
+            var edge = intersection.GetOppositeSideEdgesFromRoad(currentRoad.GetId(getter)).FirstOrDefault();
+            if (edge != null)
+            {
+                var nextRoad = edge.GetRoad(getter) as RnDataRoad;
+                return nextRoad.GetLanesFromPrevBorder(getter, currentLane.GetNextBorder(getter));
+            }
+            return null;
         }
 
         //同一線状のEdge

@@ -40,26 +40,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     public class RoadNetworkTrafficManager : MonoBehaviour
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
-        Dictionary<int, RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
-
-        //List<PlateauSandboxTrafficMovement> m_Vehicles;
-        //List<NPCVehicleInternalState> m_VehiclesStates;
-
-        //TrafficJob m_job = new TrafficJob();
-        //NPCVehicleCognitionStep m_NPCVehicleCognitionStep;
-
+        //Dictionary<int, RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
 
         [SerializeField]
         List<GameObject> m_VehiclePrefabs;
 
-        [SerializeField]
-        List<RoadNetworkTrafficController> m_Controllers;
-
-        NPCVehicleSimulator m_Simulator;
+        //NPCVehicleSimulator m_Simulator;
         //RouteTrafficSimulator m_RouteSimulator;
         //List<RouteTrafficSimulator> m_RouteSimulators = new List<RouteTrafficSimulator>();
 
-        RandomTrafficSimulatorConfiguration m_TrafficSimulatorConfiguration;
+        //RandomTrafficSimulatorConfiguration m_TrafficSimulatorConfiguration;
 
         //Coroutine m_MovementCoroutine;
 
@@ -115,10 +105,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             m_VehiclePrefabs = prefabs;
         }
 
-        public void SetTrafficController(List<RoadNetworkTrafficController> controllers)
-        {
-            m_Controllers = controllers;
-        }
+        //public void SetTrafficController(List<RoadNetworkTrafficController> controllers)
+        //{
+        //    m_Controllers = controllers;
+        //}
 
         public void CreateSimulator()
         {

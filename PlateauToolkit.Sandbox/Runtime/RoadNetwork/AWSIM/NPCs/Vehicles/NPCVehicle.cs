@@ -183,7 +183,7 @@ namespace AWSIM
                     rigidbody.mass = 1500f;
                     rigidbody.angularDrag = 0.0f;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
-
+                    rigidbody.automaticCenterOfMass = true;
 
                     return rigidbody;
                 }
@@ -225,7 +225,17 @@ namespace AWSIM
         {
             visualObjectRoot = _visualObjectRoot;
 
-            bounds = visualObjectRoot.GetComponentInChildren<MeshCollider>().bounds;
+            MeshCollider meshCollider = visualObjectRoot.GetComponent<MeshCollider>();
+            if(meshCollider != null)
+            {
+                bounds = meshCollider.bounds;
+            }
+            else
+            {
+                MeshRenderer meshRenderer = visualObjectRoot.GetComponentInChildren<MeshRenderer>();
+                bounds = meshRenderer.bounds;
+            }
+
             bounds.center = bounds.center - _visualObjectRoot.transform.position;
 
             centerOfMass = _centerOfMass;

@@ -88,7 +88,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            m_RnTrafficManager.SetTrafficController(controllers);
+            //m_RnTrafficManager.SetTrafficController(controllers);
 
             m_RnTrafficManager.CreateSimulator();
 
