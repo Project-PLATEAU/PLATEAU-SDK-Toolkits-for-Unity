@@ -99,6 +99,7 @@ namespace AWSIM.TrafficSimulation
         {
             if(IsMaximumSpawnsNumberReached()) { 
                 spawnedVehicle = null;
+
                 return false;
             };
 
@@ -121,6 +122,11 @@ namespace AWSIM.TrafficSimulation
 
         private bool IsMaximumSpawnsNumberReached()
         {
+            //bool res = (currentSpawnNumber == maximumSpawns && maximumSpawns > 0);
+            //if (res)
+            //{
+            //    Debug.Log($"currentSpawnNumber {currentSpawnNumber} maximumSpawns {maximumSpawns} VehicleStates {npcVehicleSimulator.VehicleStates.Count} ");
+            //}
             return (currentSpawnNumber == maximumSpawns && maximumSpawns > 0);
         }
     }

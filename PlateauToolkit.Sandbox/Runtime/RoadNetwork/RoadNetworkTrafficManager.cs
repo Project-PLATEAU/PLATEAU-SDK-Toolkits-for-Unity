@@ -39,6 +39,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     //交通状況管理 (各道路の自動車）
     public class RoadNetworkTrafficManager : MonoBehaviour
     {
+
+        public static readonly int NUM_MAX_VEHICLES = 30;
+
         RoadNetworkDataGetter m_RoadNetworkGetter;
         //Dictionary<int, RoadStatus> m_RoadSituation = new Dictionary<int,RoadStatus>();
 
@@ -53,7 +56,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         //Coroutine m_MovementCoroutine;
 
-        public TrafficManager TrManager
+        public TrafficManager SimTrafficManager
         {
             get
             {
@@ -85,21 +88,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
         }
 
-        void Awake()
-        {
-            InitializeVehicles();
-        }
-
-        void Start()
-        {
-            if (!Application.isPlaying)
-            {
-                return;
-            }
-
-            StartMovement();
-        }
-
         public void SetPrefabs(List<GameObject> prefabs)
         {
             m_VehiclePrefabs = prefabs;
@@ -120,9 +108,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (vehicles == null)
                 vehicles = new GameObject("Vehicles");
 
-            int max_vehicles = 100;
-
-            TrManager.InitParams(0, ~0, max_vehicles, vehicles);
+            SimTrafficManager.InitParams(0, ~0, NUM_MAX_VEHICLES, vehicles);
 
             //NPCVehicleConfig config = new NPCVehicleConfig();
             //m_Simulator = new NPCVehicleSimulator(config, 0, 0, m_Controllers.Count, egoVehicle);
@@ -143,73 +129,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //    TrManager.routeTrafficSims = new RouteTrafficSimulatorConfiguration[] { routeTrafficSimConfig };
             //}
 
+            List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter); //全て変換 (TrafficLane)
+
             RandomTrafficSimulatorConfiguration RandomTrafficSimConfig = new RandomTrafficSimulatorConfiguration();
-            RandomTrafficSimConfig.maximumSpawns = max_vehicles;
+            RandomTrafficSimConfig.maximumSpawns = 0; //0以外だとRespawnしなくなる
             RandomTrafficSimConfig.npcPrefabs = m_VehiclePrefabs.ToArray();
-            RandomTrafficSimConfig.spawnableLanes = new RoadNetworkLaneConverter().Create(RnGetter).ToArray(); //全て変換
+            RandomTrafficSimConfig.spawnableLanes = allLanes.FindAll(x => !x.intersectionLane).ToArray(); //交差点以外
             RandomTrafficSimConfig.enabled = true;
-            TrManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { RandomTrafficSimConfig };
+            SimTrafficManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { RandomTrafficSimConfig };
 
-            TrManager.Initialize();
-        }
-
-        [ContextMenu("Start Movement")]
-        public void StartMovement()
-        {
-            //CreateSimulator();
-
-            //var prefabs = m_Vehicles.Select(x => x.gameObject).ToArray();
-            //m_MovementCoroutine = StartCoroutine(MovementEnumerator());
-        }
-
-        [ContextMenu("Stop Movement")]
-        public void Stop()
-        {
-            //if (m_MovementCoroutine == null)
-            //{
-            //    return;
-            //}
-
-            //StopCoroutine(m_MovementCoroutine);
-            //m_MovementCoroutine = null;
-        }
-
-        //移動処理コルーチン
-        //IEnumerator MovementEnumerator()
-        //{
-        //    //YieldInstruction yieldFunc = new WaitForFixedUpdate();
-        //    YieldInstruction yieldFunc = new WaitForEndOfFrame();
-
-        //    foreach (var vehicle in m_Vehicles)
-        //    {
-        //        vehicle.PreMove();
-        //    }
-
-        //    while (Application.isPlaying)
-        //    {
-        //        //m_NPCVehicleCognitionStep.Execute(m_VehiclesStates, m_Vehicles.FirstOrDefault().transform);
-
-        //        foreach (var vehicle in m_Vehicles)
-        //        {
-        //            if (vehicle.Move())
-        //            {
-        //                vehicle.PreMove();
-        //            }
-        //        }
-
-        //        yield return yieldFunc;
-        //    }
-        //}
-
-        public void InitializeVehicles()
-        {
-            //VehicleID 振り直し
-            //m_Vehicles = new List<PlateauSandboxTrafficMovement>(GameObject.FindObjectsByType<PlateauSandboxTrafficMovement>(FindObjectsSortMode.None));
-            //foreach (var vehicle in m_Vehicles.Select((value, index) => new { value, index }))
-            //{
-            //    vehicle.value.RoadInfo.m_VehicleID = vehicle.index; //Reassign ID
-            //    vehicle.value.Initialize();
-            //}
+            SimTrafficManager.Initialize();
         }
 
         //暫定　ランダムにロードを抽出
@@ -230,104 +159,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
             return (position, outRoad, outlane);
         }
-
-        /// <summary>
-        /// IDが一番小さいRoad
-        /// </summary>
-        ///// <returns></returns>
-        //public (Vector3, RnDataRoad, RnDataLane) GetStaticRoad()
-        //{
-        //    var roadNetworkRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().ToList();
-        //    if(roadNetworkRoads.TryFindMin(x => x.GetId(RnGetter), out var road)){
-        //        RnDataRoad outRoad = road;
-        //        RnDataLane outlane = outRoad.GetMainLanes(m_RoadNetworkGetter).First();
-        //        RnDataLineString outLinestring = outlane.GetChildLineString(m_RoadNetworkGetter, LanePosition.Center);
-        //        Vector3 position = outLinestring.GetChildPointsVector(m_RoadNetworkGetter).FirstOrDefault();
-        //        return (position, outRoad, outlane);
-        //    }
-        //    return GetRandomRoad();
-        //}
-
-        //public struct RoadFilledStatus
-        //{
-        //    public bool Filled;
-        //    public int Count;
-        //    public float lastPercent;
-
-        //    public string DebugInfo;
-        //}
-
-        //public bool IsRoadFilled(int roadId, int laneIndex, int currentVehicleID)
-        //{
-        //    RoadFilledStatus stat = new();
-        //    stat.Filled = false;
-        //    stat.Count = 0;
-        //    stat.lastPercent = 0;
-
-        //    if (m_RoadSituation.TryGetValue(roadId, out RoadStatus roadStat))
-        //    {
-        //        var roadBase = RnGetter.GetRoadBases().TryGet(roadId);
-        //        var isRoad = (roadBase is RnDataRoad);
-
-        //        List<RoadInfo> vehiclesOnTheLane = isRoad ?
-        //            roadStat.m_Vehicles.FindAll(x => x.m_LaneIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList() :
-        //            roadStat.m_Vehicles.FindAll(x => x.m_TrackIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList();
-
-        //        if (vehiclesOnTheLane.TryFindMin(x => x.m_CurrentProgress, out RoadInfo firstCar))
-        //        {
-        //            if(vehiclesOnTheLane.Count > 5)
-        //            {
-        //                //5台以上なら解放　暫定処置
-        //                return false;
-        //            }
-
-
-        //            if (vehiclesOnTheLane.Count > 2 && firstCar.m_CurrentProgress < 0.05f) // TODO : 距離判定
-        //            {
-        //                stat.Filled = true;
-        //                stat.Count = vehiclesOnTheLane.Count;
-        //                stat.lastPercent = firstCar.m_CurrentProgress;
-
-        //                stat.DebugInfo = string.Join(",", vehiclesOnTheLane.Select(x => x.m_VehicleID));
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
-
-        //public RoadFilledStatus GetRoadFillStatus(int roadId, int laneIndex, int currentVehicleID)
-        //{
-        //    RoadFilledStatus stat = new();
-        //    stat.Filled = false;
-        //    stat.Count = 0;
-        //    stat.lastPercent = 0;
-
-        //    if (m_RoadSituation.TryGetValue(roadId, out RoadStatus roadStat))
-        //    {
-        //        var roadBase = RnGetter.GetRoadBases().TryGet(roadId);
-        //        var isRoad = (roadBase is RnDataRoad);
-
-        //        List<RoadInfo> vehiclesOnTheLane = isRoad ?
-        //            roadStat.m_Vehicles.FindAll(x => x.m_LaneIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList() :
-        //            roadStat.m_Vehicles.FindAll(x => x.m_TrackIndex == laneIndex && x.m_VehicleID != currentVehicleID).ToList();
-
-        //        if (vehiclesOnTheLane.TryFindMin(x => x.m_CurrentProgress, out RoadInfo firstCar))
-        //        {
-        //            if (firstCar.m_CurrentProgress < 0.05f) // TODO : 距離判定
-        //            {
-        //                stat.Filled = true;
-        //                stat.Count = vehiclesOnTheLane.Count;
-        //                stat.lastPercent = firstCar.m_CurrentProgress;
-
-        //                stat.DebugInfo = string.Join(",", vehiclesOnTheLane.Select(x => x.m_VehicleID));
-        //                return stat;
-        //            }
-        //        }
-        //    }
-        //    return stat;
-        //}
-
         public RnDataLane GetLaneByLottery(RnDataRoad road, List<RnDataLane> lanes)
         {
             return lanes.TryGet(UnityEngine.Random.Range(0, lanes.Count)); // Random抽選

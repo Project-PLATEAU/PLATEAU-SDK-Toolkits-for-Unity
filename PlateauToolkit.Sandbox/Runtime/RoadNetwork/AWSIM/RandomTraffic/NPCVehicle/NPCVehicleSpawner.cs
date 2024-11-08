@@ -83,7 +83,8 @@ namespace AWSIM.TrafficSimulation
         /// <returns>Whether there was a spawnable point.</returns>
         public bool TryGetRandomSpawnablePoint(GameObject prefab, out NPCVehicleSpawnPoint npcVehicleSpawnPoint)
         {
-            var bounds = prefab.GetComponent<NPCVehicle>().Bounds;
+            //var bounds = prefab.GetComponent<NPCVehicle>().Bounds;
+            var bounds = GetBounds(prefab);
             var spawnablePoints = GetSpawnablePoints(bounds);
             if (spawnablePoints.Count == 0)
             {
@@ -149,9 +150,14 @@ namespace AWSIM.TrafficSimulation
         }
         public static bool IsSpawnable(GameObject prefab, NPCVehicleSpawnPoint npcVehicleSpawnPoint)
         {
+            return IsSpawnable(GetBounds(prefab), npcVehicleSpawnPoint);
+        }
+
+        public static Bounds GetBounds(GameObject prefab)
+        {
             Bounds bounds;
             var meshCollider = prefab.GetComponentInChildren<MeshCollider>();
-            if(meshCollider != null)
+            if (meshCollider != null)
             {
                 bounds = meshCollider.bounds;
             }
@@ -160,10 +166,8 @@ namespace AWSIM.TrafficSimulation
                 var meshRenderer = prefab.GetComponentInChildren<MeshRenderer>();
                 bounds = meshRenderer.bounds;
             }
-
-            return IsSpawnable(bounds, npcVehicleSpawnPoint);
+            return bounds;
         }
-
 
         /// <summary>
         /// Get all spawnable point from spawnable lanes.

@@ -248,11 +248,6 @@ namespace AWSIM.TrafficSimulation
                 trafficSimulator.GetRandomSpawnInfo(out var spawnPoint, out var prefab);
                 if (spawnLanes.ContainsKey(spawnPoint))
                 {
-                    //if (spawnLanes[spawnPoint].ContainsKey(trafficSimulator))
-                    //{
-                    //    spawnLanes[spawnPoint].Remove(trafficSimulator);
-                    //}
-
                     spawnLanes[spawnPoint].Add(trafficSimulator, prefab);
                 }
                 else
@@ -293,7 +288,8 @@ namespace AWSIM.TrafficSimulation
                     var priorityTrafficSimList = spawnLoc.Value.OrderByDescending(x => x.Key.GetCurrentPriority());
                     var priorityTrafficSimGo = priorityTrafficSimList.First();
                     var prefab = priorityTrafficSimGo.Value;
-                    if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
+                    //if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
+                    if (!NPCVehicleSpawner.IsSpawnable(prefab, spawnLoc.Key))
                     {
                         continue;
                     }
