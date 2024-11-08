@@ -103,9 +103,6 @@ namespace AWSIM.TrafficSimulation
             }
 
             var vehicle = npcVehicleSpawner.Spawn(prefab, SpawnIdGenerator.Generate(), spawnPoint);
-
-            Debug.Log($"Spawn {vehicle.VehicleID}");
-
             npcVehicleSimulator.Register(vehicle, route.ToList<TrafficLane>(), spawnPoint.WaypointIndex);
             nextPrefabToSpawn = null;
             

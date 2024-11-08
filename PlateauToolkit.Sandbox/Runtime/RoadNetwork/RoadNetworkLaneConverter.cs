@@ -102,12 +102,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         //ポイント数が足りない場合は、暫定的にポイントを作成
                         if (points.Count == 0)
                         {
-                            Debug.LogError($"points not found");
+                            Debug.Log($"points not found");
                             points = new() { Vector3.zero, Vector3.zero };
                         }
                         else if (points.Count == 1)
                         {
-                            Debug.LogError($"points size are 1");
+                            Debug.Log($"points size are 1");
                             points.Add(points.FirstOrDefault());
                         }
                         //points = ConvertToSplinePoints(points);

@@ -84,7 +84,6 @@ namespace AWSIM.TrafficSimulation
         public void AddTrafficSimulator(ITrafficSimulator simulator)
         {
             trafficSimulatorNodes.Add(simulator);
-
         }
 
         /// <summary>
@@ -247,22 +246,21 @@ namespace AWSIM.TrafficSimulation
                 if (!trafficSimulator.IsEnabled()) continue;
 
                 trafficSimulator.GetRandomSpawnInfo(out var spawnPoint, out var prefab);
-                try
+                if (spawnLanes.ContainsKey(spawnPoint))
                 {
-                    if (spawnLanes.ContainsKey(spawnPoint))
-                    {
-                        spawnLanes[spawnPoint].Add(trafficSimulator, prefab);
-                    }
-                    else
-                    {
-                        var tsims = new Dictionary<ITrafficSimulator, GameObject>();
-                        tsims.Add(trafficSimulator, prefab);
-                        spawnLanes.Add(spawnPoint, tsims);
-                    }
+                    //if (spawnLanes[spawnPoint].ContainsKey(trafficSimulator))
+                    //{
+                    //    spawnLanes[spawnPoint].Remove(trafficSimulator);
+                    //}
 
+                    spawnLanes[spawnPoint].Add(trafficSimulator, prefab);
                 }
-                catch { }
-
+                else
+                {
+                    var tsims = new Dictionary<ITrafficSimulator, GameObject>();
+                    tsims.Add(trafficSimulator, prefab);
+                    spawnLanes.Add(spawnPoint, tsims);
+                }
             }
 
             // For lane with single vehicle spawner - just spawn it.
@@ -283,7 +281,8 @@ namespace AWSIM.TrafficSimulation
                     var trafficSim = tsimAndPrefab.Key;
                     var prefab = tsimAndPrefab.Value;
                     //if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
-                    //    continue;
+                    if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponentInChildren<MeshRenderer>().bounds, spawnLoc.Key))
+                        continue;
                     var spawned = trafficSim.Spawn(prefab, spawnLoc.Key, out spawnedVehicle);
                 }
                 else

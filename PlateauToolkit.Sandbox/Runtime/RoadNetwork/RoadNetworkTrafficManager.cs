@@ -120,7 +120,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (vehicles == null)
                 vehicles = new GameObject("Vehicles");
 
-            int max_vehicles = 40;
+            int max_vehicles = 100;
 
             TrManager.InitParams(0, ~0, max_vehicles, vehicles);
 
