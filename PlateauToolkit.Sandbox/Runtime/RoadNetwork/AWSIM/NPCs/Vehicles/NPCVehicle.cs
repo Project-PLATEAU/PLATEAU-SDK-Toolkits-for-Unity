@@ -225,28 +225,45 @@ namespace AWSIM
         public Transform RigidBodyTransform => rigidbody.transform;
         public Transform TrailerTransform => trailer?.transform;
 
+        public static Bounds GetBounds(GameObject prefab)
+        {
+            Bounds bounds;
+            var meshCollider = prefab.GetComponentInChildren<MeshCollider>();
+            if (meshCollider != null)
+            {
+                bounds = meshCollider.bounds;
+            }
+            else
+            {
+                var renderer = prefab.GetComponentInChildren<Renderer>();
+                bounds = renderer.bounds;
+            }
+
+            bounds.center = bounds.center - prefab.transform.position;
+
+            return bounds;
+        }
+
+        public void SetBounds(Bounds b)
+        {
+            bounds = b;
+        }
+
         protected void Initialize(GameObject _visualObjectRoot, Transform _centerOfMass)
         {
             visualObjectRoot = _visualObjectRoot;
 
             if(visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject)){
                 m_TrafficObject = trafficObject;
-
-
             }
 
-            MeshCollider meshCollider = visualObjectRoot.GetComponentInChildren<MeshCollider>();
-            if(meshCollider != null)
+            if(visualObjectRoot.GetComponentInChildren<Collider>() == null)
             {
-                bounds = meshCollider.bounds;
-            }
-            else
-            {
-                MeshRenderer meshRenderer = visualObjectRoot.GetComponentInChildren<MeshRenderer>();
-                bounds = meshRenderer.bounds;
+                var collider = visualObjectRoot.AddComponent<BoxCollider>();
+                //bounds = new Bounds(collider.center, collider.size);
             }
 
-            bounds.center = bounds.center - _visualObjectRoot.transform.position;
+            //bounds = GetBounds(visualObjectRoot);
 
             //centerOfMass = _centerOfMass;
             //rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);

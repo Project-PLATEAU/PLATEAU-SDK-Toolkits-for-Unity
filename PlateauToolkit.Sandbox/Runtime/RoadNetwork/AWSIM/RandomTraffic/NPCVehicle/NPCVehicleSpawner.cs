@@ -86,7 +86,7 @@ namespace AWSIM.TrafficSimulation
         public bool TryGetRandomSpawnablePoint(GameObject prefab, out NPCVehicleSpawnPoint npcVehicleSpawnPoint)
         {
             //var bounds = prefab.GetComponent<NPCVehicle>().Bounds;
-            var bounds = GetBounds(prefab);
+            var bounds = NPCVehicle.GetBounds(prefab);
             var spawnablePoints = GetSpawnablePoints(bounds);
             if (spawnablePoints.Count == 0)
             {
@@ -107,7 +107,7 @@ namespace AWSIM.TrafficSimulation
         public NPCVehicle Spawn(GameObject prefab, uint vehicleID, NPCVehicleSpawnPoint npcVehicleSpawnPoint)
         {
             var obj = Object.Instantiate(prefab, npcVehicleSpawnPoint.Position, Quaternion.identity);
-            obj.name = obj.name + "_" + vehicleID.ToString();
+            var bounds = NPCVehicle.GetBounds(obj);
             obj.transform.forward = npcVehicleSpawnPoint.Forward;
             obj.transform.parent = NPCVehicleParentsObj.transform;
 
@@ -124,6 +124,8 @@ namespace AWSIM.TrafficSimulation
                 PlateauSandboxTrafficMovement trafficMovement = obj.AddComponent<PlateauSandboxTrafficMovement>();
             }
             var vehicle = obj.GetComponent<PlateauSandboxTrafficMovement>() as NPCVehicle;
+
+            vehicle.SetBounds(bounds);
 
             vehicle.VehicleID = vehicleID;
             return vehicle;
@@ -154,23 +156,7 @@ namespace AWSIM.TrafficSimulation
         }
         public static bool IsSpawnable(GameObject prefab, NPCVehicleSpawnPoint npcVehicleSpawnPoint)
         {
-            return IsSpawnable(GetBounds(prefab), npcVehicleSpawnPoint);
-        }
-
-        public static Bounds GetBounds(GameObject prefab)
-        {
-            Bounds bounds;
-            var meshCollider = prefab.GetComponentInChildren<MeshCollider>();
-            if (meshCollider != null)
-            {
-                bounds = meshCollider.bounds;
-            }
-            else
-            {
-                var meshRenderer = prefab.GetComponentInChildren<MeshRenderer>();
-                bounds = meshRenderer.bounds;
-            }
-            return bounds;
+            return IsSpawnable(NPCVehicle.GetBounds(prefab), npcVehicleSpawnPoint);
         }
 
         /// <summary>
