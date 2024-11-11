@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
+using PlateauToolkit.Sandbox;
 
 namespace AWSIM
 {
@@ -180,7 +181,7 @@ namespace AWSIM
                 else
                 {
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
-                    rigidbody.mass = 1500f;
+                    rigidbody.mass = 15000f;
                     rigidbody.angularDrag = 0.0f;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
@@ -218,6 +219,8 @@ namespace AWSIM
         float lastEulerAnguleY;
         float lastSpeed;
 
+        IPlateauSandboxTrafficObject m_TrafficObject;
+
         public Transform RigidBodyTransform => rigidbody.transform;
         public Transform TrailerTransform => trailer?.transform;
 
@@ -225,7 +228,13 @@ namespace AWSIM
         {
             visualObjectRoot = _visualObjectRoot;
 
-            MeshCollider meshCollider = visualObjectRoot.GetComponent<MeshCollider>();
+            if(visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject)){
+                m_TrafficObject = trafficObject;
+
+
+            }
+
+            MeshCollider meshCollider = visualObjectRoot.GetComponentInChildren<MeshCollider>();
             if(meshCollider != null)
             {
                 bounds = meshCollider.bounds;
@@ -238,10 +247,9 @@ namespace AWSIM
 
             bounds.center = bounds.center - _visualObjectRoot.transform.position;
 
-            centerOfMass = _centerOfMass;
-
-            rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
-            lastPosition = rigidbody.position;
+            //centerOfMass = _centerOfMass;
+            //rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
+            //lastPosition = rigidbody.position;
 
             if (trailer == null)
                 trailer = rigidbody;
@@ -269,37 +277,43 @@ namespace AWSIM
             //axleSettings.UpdateVisual(speed, steerAngle);
 
             // brake light.
-            var isBrakeLightOn = IsBrakeLightOn();
+            //var isBrakeLightOn = IsBrakeLightOn();
             //brakeLight.Set(isBrakeLightOn);
 
-            // turn signal.
-            if (IsAnyTurnSignalInputs() == false)
-            {
-                if (turnSignalTimer != 0)
-                    turnSignalTimer = 0;
+            //// turn signal.
+            //if (IsAnyTurnSignalInputs() == false)
+            //{
+            //    if (turnSignalTimer != 0)
+            //        turnSignalTimer = 0;
 
-                if (currentTurnSignalOn != false)
-                    currentTurnSignalOn = false;
+            //    if (currentTurnSignalOn != false)
+            //        currentTurnSignalOn = false;
 
-                //leftTurnSignalLight.Set(false);
-                //rightTurnSignalLight.Set(false);
+            //    leftTurnSignalLight.Set(false);
+            //    rightTurnSignalLight.Set(false);
 
-                return;
-            }
+            //    return;
+            //}
 
-            turnSignalTimer -= Time.deltaTime;
-            if (turnSignalTimer < 0f)
-            {
-                turnSignalTimer = turnSignalBlinkSec;
-                currentTurnSignalOn = !currentTurnSignalOn;
-            }
+            //turnSignalTimer -= Time.deltaTime;
+            //if (turnSignalTimer < 0f)
+            //{
+            //    turnSignalTimer = turnSignalBlinkSec;
+            //    currentTurnSignalOn = !currentTurnSignalOn;
+            //}
 
-            var isLeftTurnSignalOn = IsLeftTurnSignalOn();
-            leftTurnSignalLight?.Set(isLeftTurnSignalOn);
+            //var isLeftTurnSignalOn = IsLeftTurnSignalOn();
+            //leftTurnSignalLight?.Set(isLeftTurnSignalOn);
 
-            var isRightTurnSignalOn = IsRightTurniSignalOn();
-            rightTurnSignalLight?.Set(isRightTurnSignalOn);
+            //var isRightTurnSignalOn = IsRightTurniSignalOn();
+            //rightTurnSignalLight?.Set(isRightTurnSignalOn);
 
+            //MovementInfo movementInfo = new MovementInfo();
+            //movementInfo.m_SecondAxisForward = new Vector3(0, steerAngle, 0);
+            //movementInfo.m_MoveDelta = speed;
+            //m_TrafficObject.OnMove(movementInfo);
+
+            m_TrafficObject.UpdateVisual(speed, steerAngle);
 
             // --- inner methods ---
             static float CalcSteerAngle(float speed, float yawAngularSpeed, float wheelBase)
@@ -317,38 +331,40 @@ namespace AWSIM
                 return yaw;
             }
 
-            bool IsBrakeLightOn()
-            {
-                var isOn = false;
-                if (speed < 0.03f)
-                    isOn = true;
-                //if (acceleration < brakeLightAccelThreshold)
-                //    isOn = true;
+            //bool IsBrakeLightOn()
+            //{
+            //    var isOn = false;
+            //    if (speed < 0.03f)
+            //        isOn = true;
+            //    if (acceleration < brakeLightAccelThreshold)
+            //        isOn = true;
 
-                return isOn;
-            }
+            //    return isOn;
+            //}
 
-            bool IsAnyTurnSignalInputs()
-            {
-                return turnSignalState == TurnSignalState.LEFT
-                    || turnSignalState == TurnSignalState.RIGHT
-                    || turnSignalState == TurnSignalState.HAZARD;
-            }
+            //bool IsAnyTurnSignalInputs()
+            //{
+            //    return turnSignalState == TurnSignalState.LEFT
+            //        || turnSignalState == TurnSignalState.RIGHT
+            //        || turnSignalState == TurnSignalState.HAZARD;
+            //}
 
-            bool IsLeftTurnSignalOn()
-            {
-                return (turnSignalState == TurnSignalState.LEFT
-                    || turnSignalState == TurnSignalState.HAZARD)
-                    && currentTurnSignalOn;
-            }
+            //bool IsLeftTurnSignalOn()
+            //{
+            //    return (turnSignalState == TurnSignalState.LEFT
+            //        || turnSignalState == TurnSignalState.HAZARD)
+            //        && currentTurnSignalOn;
+            //}
 
-            bool IsRightTurniSignalOn()
-            {
-                return (turnSignalState == TurnSignalState.RIGHT
-                    || turnSignalState == TurnSignalState.HAZARD)
-                    && currentTurnSignalOn;
-            }
+            //bool IsRightTurniSignalOn()
+            //{
+            //    return (turnSignalState == TurnSignalState.RIGHT
+            //        || turnSignalState == TurnSignalState.HAZARD)
+            //        && currentTurnSignalOn;
+            //}
         }
+
+
 
         void FixedUpdate()
         {

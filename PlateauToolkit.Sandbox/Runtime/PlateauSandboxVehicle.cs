@@ -137,6 +137,45 @@ namespace PlateauToolkit.Sandbox
 
         static readonly float k_GizmoSize = 0.15f;
 
+        //NPC
+        const float maxSteerSpeed = 60f;                    // deg/s
+        //public WheelCollider WheelCollider;
+        //public Transform VisualTransform;
+
+        float wheelPitchAngle = 0;
+        float lastSteerAngle = 0;
+
+        public void UpdateVisual(float speed, float steerAngle)
+        {
+            // Apply WheelCollider position to visual object.
+            //WheelCollider.GetWorldPose(out var pos, out _);
+            //VisualTransform.position = pos;
+
+            // wheel forward rotation(pitch).
+            var additionalPitchAngle = (speed * Time.deltaTime / m_WheelRadius) * Mathf.Rad2Deg;
+            wheelPitchAngle += additionalPitchAngle;
+            wheelPitchAngle %= 360;
+
+            foreach (Transform wheelTransform in m_AllWheels)
+            {
+                wheelTransform.Rotate(new Vector3(wheelPitchAngle, 0, 0));
+            }
+
+            // steer angle.
+            var fixedSteerAngle = Mathf.MoveTowardsAngle(lastSteerAngle, steerAngle, Time.deltaTime * maxSteerSpeed);
+
+            // Apply rotations to visual wheel object.
+            //VisualTransform.localEulerAngles = new Vector3(wheelPitchAngle, fixedSteerAngle, 0);
+            foreach (Transform frontWheel in m_FrontWheels)
+            {
+                frontWheel.localEulerAngles = new Vector3(wheelPitchAngle, fixedSteerAngle, 0);
+            }
+            // Cache steer angle value for next update.
+            lastSteerAngle = fixedSteerAngle;
+        }
+
+
+
         void OnDrawGizmos()
         {
             if (m_BackWheelAxisTransform != null)

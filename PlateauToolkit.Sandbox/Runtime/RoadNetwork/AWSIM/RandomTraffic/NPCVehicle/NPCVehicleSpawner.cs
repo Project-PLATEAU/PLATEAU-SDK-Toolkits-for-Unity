@@ -1,4 +1,5 @@
 using PlateauToolkit.Sandbox;
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -108,6 +109,8 @@ namespace AWSIM.TrafficSimulation
             obj.name = obj.name + "_" + vehicleID.ToString();
             obj.transform.forward = npcVehicleSpawnPoint.Forward;
             obj.transform.parent = NPCVehicleParentsObj.transform;
+
+            obj.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLES);
 
             if (obj.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
             !obj.TryGetComponent<PlateauSandboxTrafficMovement>(out _))

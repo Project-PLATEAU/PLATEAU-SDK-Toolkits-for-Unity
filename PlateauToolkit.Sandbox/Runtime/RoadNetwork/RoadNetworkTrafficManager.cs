@@ -108,7 +108,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (vehicles == null)
                 vehicles = new GameObject("Vehicles");
 
-            SimTrafficManager.InitParams(0, ~0, NUM_MAX_VEHICLES, vehicles);
+            SimTrafficManager.InitParams(LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLES), LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND), NUM_MAX_VEHICLES, vehicles);
 
             //NPCVehicleConfig config = new NPCVehicleConfig();
             //m_Simulator = new NPCVehicleSimulator(config, 0, 0, m_Controllers.Count, egoVehicle);

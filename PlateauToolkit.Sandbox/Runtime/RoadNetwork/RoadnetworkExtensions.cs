@@ -479,7 +479,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public static List<RnDataNeighbor> GetOppositeSideEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, int roadId)
         {
-            var edges = intersection.Edges;
+            var edges = new List<RnDataNeighbor>(intersection.Edges);
             edges.RemoveAll(e => e.Road.ID == roadId || !e.Road.IsValid);
             return edges;
         }

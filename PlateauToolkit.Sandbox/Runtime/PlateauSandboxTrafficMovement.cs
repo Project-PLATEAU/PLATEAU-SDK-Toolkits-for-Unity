@@ -23,6 +23,7 @@ namespace PlateauToolkit.Sandbox
         }
 
         void OnMove(in MovementInfo movementInfo);
+        void UpdateVisual(float speed, float steerAngle);
     }
 
     //[ExecuteAlways]

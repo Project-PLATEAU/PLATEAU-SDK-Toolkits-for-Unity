@@ -3,11 +3,9 @@ using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Splines;
-using static Codice.CM.WorkspaceServer.DataStore.WkTree.WriteWorkspaceTree;
-using static PLATEAU.RoadNetwork.Util.LineCrossPointResult;
-
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -93,6 +91,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     RnDataRoad road = (RnDataRoad)rb;
 
+                    road.TargetTran.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+
                     List<RnDataLane> lanes = road.GetMainLanes(getter);
 
                     foreach (var lane in lanes)
@@ -157,6 +157,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     {
                         continue;
                     }
+
+                    intersection.TargetTran.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
 
                     var tracks = intersection.Tracks;
                     foreach (RnDataTrack track in tracks)
@@ -226,6 +228,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             lane.NextLanes.Add(trackDict[t]);
                     }
                 }
+#if UNITY_EDITOR
+
+                GameObjectUtility.SetStaticEditorFlags(lane.gameObject, StaticEditorFlags.BatchingStatic | StaticEditorFlags.ContributeGI | StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic);
+#endif
 
                 allLanes.Add(lane);
             }
