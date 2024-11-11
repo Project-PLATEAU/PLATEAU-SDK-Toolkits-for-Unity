@@ -1,3 +1,4 @@
+using log4net.Util;
 using PlateauToolkit.Sandbox;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
@@ -110,18 +111,18 @@ namespace AWSIM.TrafficSimulation
             obj.transform.forward = npcVehicleSpawnPoint.Forward;
             obj.transform.parent = NPCVehicleParentsObj.transform;
 
+            //Layer ïœçX (ChildÇÃColliderÇÃLayerÇïœçXÇµÇ»Ç¢Ç∆BoxcastÇ™å¯Ç©Ç»Ç¢Åj
             obj.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLES);
+            foreach (UnityEngine.Transform child in obj.transform)
+            {
+                child.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLES);
+            }
 
             if (obj.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
             !obj.TryGetComponent<PlateauSandboxTrafficMovement>(out _))
             {
                 PlateauSandboxTrafficMovement trafficMovement = obj.AddComponent<PlateauSandboxTrafficMovement>();
-                //trafficMovement.RoadInfo = new RoadInfo(
-                //    road.GetId(m_RoadNetworkGetter),
-                //    road.GetLaneIndexOfMainLanes(m_RoadNetworkGetter, lane));
             }
-
-            //var vehicle = obj.GetComponent<NPCVehicle>();
             var vehicle = obj.GetComponent<PlateauSandboxTrafficMovement>() as NPCVehicle;
 
             vehicle.VehicleID = vehicleID;

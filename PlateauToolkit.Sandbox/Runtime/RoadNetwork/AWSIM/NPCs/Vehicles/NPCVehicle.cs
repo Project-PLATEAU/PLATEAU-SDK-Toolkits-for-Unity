@@ -181,10 +181,11 @@ namespace AWSIM
                 else
                 {
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
-                    rigidbody.mass = 15000f;
+                    rigidbody.mass = 1500f;
                     rigidbody.angularDrag = 0.0f;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
+                    rigidbody.isKinematic = true;
 
                     return rigidbody;
                 }

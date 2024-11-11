@@ -183,6 +183,7 @@ namespace AWSIM.TrafficSimulation
                 var boxCastExtents = States[stateIndex].Extents * 0.5f;
                 boxCastExtents.y *= 1;
                 boxCastExtents.z = 0.1f;
+
                 var endPoint = Waypoints[waypointOffset + waypointIndex];
 
                 var distance = Vector3.Distance(startPoint, endPoint);
@@ -947,6 +948,7 @@ namespace AWSIM.TrafficSimulation
         /// This value should be less than or equal to <see cref="MaxWaypointCount"/>.
         /// </summary>
         private const int MaxBoxcastCount = 5;
+        //private const int MaxBoxcastCount = 10;
 
         private readonly LayerMask vehicleLayerMask;
         private readonly LayerMask groundLayerMask;

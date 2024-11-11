@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -95,12 +96,12 @@ namespace AWSIM.TrafficSimulation
             npcVehicleSimulator?.ClearAll();
         }
 
-        public void InitParams(LayerMask _vehicleLayerMask, LayerMask _groundLayerMask, int _maxVehicleCount, GameObject vehicleRoot)
+        public void InitParams(LayerMask _vehicleLayerMask_, LayerMask _groundLayerMask_, int _maxVehicleCount_, GameObject _vehicleRoot_)
         {
-            vehicleLayerMask = _vehicleLayerMask;
-            groundLayerMask = _groundLayerMask;
-            maxVehicleCount = _maxVehicleCount;
-            _vehicleRoot = vehicleRoot;
+            vehicleLayerMask = (1 << _vehicleLayerMask_);
+            groundLayerMask = (1 << _groundLayerMask_);
+            maxVehicleCount = _maxVehicleCount_;
+            _vehicleRoot = _vehicleRoot_;
         }
 
         public void Initialize()
