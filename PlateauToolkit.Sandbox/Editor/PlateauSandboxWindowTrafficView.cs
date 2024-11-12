@@ -7,7 +7,7 @@ namespace PlateauToolkit.Sandbox.Editor
     class PlateauSandboxWindowTrafficView : IPlateauSandboxWindowView
     {
         IPlateauSandboxAssetListView m_CurrentAssetList;
-        bool m_IsShowAssetCreate = false;
+        bool m_IsShowAssetCreate = true;
         GameObject m_SelectedUserAsset = null;
 
         public string Name => "";
@@ -39,12 +39,14 @@ namespace PlateauToolkit.Sandbox.Editor
 
                 DrawTab(window.position.width);
 
+                m_IsShowAssetCreate = m_CurrentAssetList.SelectedAssetType == SandboxAssetType.UserDefined;
+
                 m_CurrentAssetList.OnGUI(context, window.position.width, m_IsShowAssetCreate);
 
-                if (m_CurrentAssetList.SelectedAssetType == SandboxAssetType.UserDefined)
-                {
-                    DrawAddUserAsset();
-                }
+                //if (m_CurrentAssetList.SelectedAssetType == SandboxAssetType.UserDefined)
+                //{
+                //    DrawAddUserAsset();
+                //}
 
                 using (new EditorGUILayout.HorizontalScope())
                 {
@@ -104,36 +106,22 @@ namespace PlateauToolkit.Sandbox.Editor
             }
         }
 
-        void DrawAddUserAsset()
-        {
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                GUILayout.Space(15);
+        //void DrawAddUserAsset()
+        //{
+        //    using (new EditorGUILayout.HorizontalScope())
+        //    {
+        //        GUILayout.Space(15);
 
-                if (new PlateauToolkitImageButtonGUI(
-                220,
-                40,
-                PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button("アセットを作成"))
-                {
-                    PlateauSandboxPrefabCreationWizard.DisplayWizard();
-                }
-
-                //m_SelectedUserAsset = (GameObject)EditorGUILayout.ObjectField("ユーザーアセットを追加", m_SelectedUserAsset, typeof(GameObject), true, GUILayout.MinWidth(300));
-                //GUILayout.Space(5);
-                //if (new PlateauToolkitImageButtonGUI(
-                //    60,
-                //    20,
-                //    PlateauToolkitGUIStyles.k_ButtonPrimaryColor,
-                //    false)
-                //.Button("追加"))
-                //{
-                //    //TODO
-                //    Debug.Log($"<color=red>追加</color>");
-                //}
-                //GUILayout.Space(15);
-            }
-            GUILayout.Space(15);
-        }
+        //        if (new PlateauToolkitImageButtonGUI(
+        //        220,
+        //        40,
+        //        PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button("アセットを作成"))
+        //        {
+        //            PlateauSandboxPrefabCreationWizard.DisplayWizard();
+        //        }
+        //    }
+        //    GUILayout.Space(15);
+        //}
 
         void DrawTab(float windowWidth)
         {

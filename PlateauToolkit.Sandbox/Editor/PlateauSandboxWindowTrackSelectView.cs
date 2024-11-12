@@ -18,7 +18,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void OnBegin(PlateauSandboxContext context, EditorWindow editorWindow)
         {
-            m_SelectedView = new PlateauSandboxWindowTrackView();
+            m_SelectedView = new PlateauSandboxWindowTrafficView();
             m_SelectedView.OnBegin(context, editorWindow);
         }
 

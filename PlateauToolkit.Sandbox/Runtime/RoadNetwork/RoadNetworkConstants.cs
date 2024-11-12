@@ -10,7 +10,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static readonly string LAYER_MASK_VEHICLE = "Vehicle";
         public static readonly string LAYER_MASK_GROUND = "Ground";
 
-
         public static readonly string TRAFFIC_MANAGER_NAME = "TrafficManager";
         public static readonly string VEHICLE_ROOT_NAME = "Vehicles";
         public static readonly string TRAFFIC_LANE_ROOT_NAME = "TrafficLanes";
