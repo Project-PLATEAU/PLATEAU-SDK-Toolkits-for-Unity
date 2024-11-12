@@ -1,5 +1,8 @@
+using PLATEAU.RoadNetwork.Data;
+using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
 using UnityEngine;
+using static PLATEAU.RoadNetwork.Util.LineCrossPointResult;
 
 namespace AWSIM.TrafficSimulation
 {
@@ -35,6 +38,23 @@ namespace AWSIM.TrafficSimulation
         private float speedLimit;
         [SerializeField, Tooltip("Is intersection lane")]
         public bool intersectionLane;
+
+        [SerializeField, Tooltip("RoadNetwork")]
+        public RnDataRoad rnRoad;
+        public RnDataLane rnLane;
+        public RnDataIntersection rnIntersection;
+        public RnDataTrack rnTrack;
+
+        public void SetRoadNetworkData(RnDataRoadBase road, RnDataLane lane, RnDataTrack track)
+        {
+            if (road is RnDataRoad)
+                rnRoad = road as RnDataRoad;
+            else if (road is RnDataIntersection)
+                rnIntersection = road as RnDataIntersection;
+
+            rnLane = lane;
+            rnTrack = track;
+        }
 
         /// <summary>
         /// Get waypoints in this lane.

@@ -58,9 +58,23 @@ namespace AWSIM.TrafficSimulation
             Gizmos.color = defaultColor;
         }
 
+        SerializedProperty rnRoad;
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
+            //base.OnInspectorGUI();
+            TrafficLane trafficLane = target as TrafficLane;
+            serializedObject.Update();
+            if (trafficLane.intersectionLane)
+            {
+                DrawPropertiesExcluding(serializedObject, "rnRoad", "rnLane");
+            }
+            else
+            {
+                DrawPropertiesExcluding(serializedObject, "rnIntersection", "rnTrack");
+            }
+            serializedObject.ApplyModifiedProperties();
+
+
             if (GUILayout.Button("Set RightOfWays"))
             {
                 FindAndSetRightOfWays(target as TrafficLane);

@@ -70,12 +70,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter); //全て変換 (TrafficLane)
 
+            //Spawn可能なTrafficLanes
+            List<TrafficLane> spawnableLanes = allLanes.FindAll(x => !x.intersectionLane && x.NextLanes.Count > 0 && x.PrevLanes.Count <= 0); //交差点以外 : Prevが空でNextが存在
+
             RandomTrafficSimulatorConfiguration RandomTrafficSimConfig = new RandomTrafficSimulatorConfiguration();
             RandomTrafficSimConfig.maximumSpawns = 0; //0以外だとRespawnしなくなる
             RandomTrafficSimConfig.npcPrefabs = m_VehiclePrefabs.ToArray();
-            RandomTrafficSimConfig.spawnableLanes = allLanes.FindAll(x => !x.intersectionLane).ToArray(); //交差点以外
+            RandomTrafficSimConfig.spawnableLanes = spawnableLanes.ToArray();
             RandomTrafficSimConfig.enabled = true;
             SimTrafficManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { RandomTrafficSimConfig };
+
 
             SimTrafficManager.Initialize();
         }

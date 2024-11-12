@@ -24,6 +24,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             public RnDataTrack track;
             public RnDataLane lane;
+            public RnDataRoadBase road;
         }
 
         public List<Vector3> ConvertToSplinePoints(List<Vector3> points, int numPoints = 10)
@@ -37,7 +38,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
             return outPoints;
         }
-
 
         public List<Vector3> ConvertToSplinePoints(Spline spline, int numPoints = 10)
         {
@@ -107,7 +107,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         }
                         else if (points.Count == 1)
                         {
-                            Debug.Log($"points size are 1");
+                            Debug.Log($"point size is 1");
                             points.Add(points.FirstOrDefault());
                         }
                         //points = ConvertToSplinePoints(points);
@@ -119,6 +119,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         LaneConvertInfo info = new LaneConvertInfo();
                         info.trafficLane = trafficLane;
                         info.lane = lane;
+                        info.road = rb;
 
                         RnDataIntersection nextIntersection = road.GetNextRoad(getter) as RnDataIntersection;
                         if (nextIntersection != null)
@@ -174,6 +175,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         LaneConvertInfo info = new LaneConvertInfo();
                         info.trafficLane = trafficLane;
                         info.track = track;
+                        info.road = rb;
 
                         info.nextLanes = intersection.GetNextLanesFromTrack(getter, track);
 
@@ -193,6 +195,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             foreach (LaneConvertInfo info in laneInfo)
             {
                 TrafficLane lane = info.trafficLane;
+                lane.SetRoadNetworkData(info.road, info.lane, info.track);
 
                 if (info.prevLanes != null)
                 {
