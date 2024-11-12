@@ -79,6 +79,14 @@ namespace AWSIM.TrafficSimulation
         private Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>> spawnLanes;
         private GameObject dummyEgo;
 
+        public void InitParams(LayerMask _vehicleLayerMask_, LayerMask _groundLayerMask_, int _maxVehicleCount_, GameObject _vehicleRoot_)
+        {
+            vehicleLayerMask = (1 << _vehicleLayerMask_);
+            groundLayerMask = (1 << _groundLayerMask_);
+            maxVehicleCount = _maxVehicleCount_;
+            _vehicleRoot = _vehicleRoot_;
+        }
+
         /// <summary>
         /// Adds traffic simulator to the manager
         /// </summary>
@@ -96,23 +104,15 @@ namespace AWSIM.TrafficSimulation
             npcVehicleSimulator?.ClearAll();
         }
 
-        public void InitParams(LayerMask _vehicleLayerMask_, LayerMask _groundLayerMask_, int _maxVehicleCount_, GameObject _vehicleRoot_)
-        {
-            vehicleLayerMask = (1 << _vehicleLayerMask_);
-            groundLayerMask = (1 << _groundLayerMask_);
-            maxVehicleCount = _maxVehicleCount_;
-            _vehicleRoot = _vehicleRoot_;
-        }
-
         public void Initialize()
         {
             Random.InitState(seed);
 
             spawnLanes = new Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>>();
 
-            dummyEgo = GameObject.Find("DummyEgo");
+            dummyEgo = GameObject.Find(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
             if(dummyEgo == null)
-                dummyEgo = new GameObject("DummyEgo");
+                dummyEgo = new GameObject(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
 
             if (_egoVehicle == null)
             {
@@ -225,7 +225,6 @@ namespace AWSIM.TrafficSimulation
             {
                 Debug.LogError("VerifyIntegrationEnvironmentElements error: Not found any TrafficLane with 'TrafficScript'.");
             }
-
         }
 
         private void FixedUpdate()

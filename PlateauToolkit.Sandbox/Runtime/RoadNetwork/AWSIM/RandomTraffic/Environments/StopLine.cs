@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.RoadNetwork;
 using UnityEngine;
 
 namespace AWSIM.TrafficSimulation
@@ -38,10 +39,10 @@ namespace AWSIM.TrafficSimulation
 
         public static StopLine Create(Vector3 p1, Vector3 p2)
         {
-            var parent = GameObject.Find("StopLines");
+            var parent = GameObject.Find(RoadNetworkConstants.STOPLINE_ROOT_NAME);
             if (parent == null)
             {
-                parent = new GameObject("StopLines");
+                parent = new GameObject(RoadNetworkConstants.STOPLINE_ROOT_NAME);
             }
 
             var gameObject = new GameObject("StopLine", typeof(StopLine));

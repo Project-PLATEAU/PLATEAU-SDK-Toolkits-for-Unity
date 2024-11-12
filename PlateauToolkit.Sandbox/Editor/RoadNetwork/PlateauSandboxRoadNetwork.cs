@@ -1,11 +1,8 @@
 ﻿using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
-using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 using AWSIM.TrafficSimulation;
 
 namespace PlateauToolkit.Sandbox.Editor
@@ -16,38 +13,38 @@ namespace PlateauToolkit.Sandbox.Editor
         RoadNetworkTrafficManager m_RnTrafficManager;
         TrafficManager m_TrafficManager;
 
-        internal PlateauSandboxInstantiation InstantiateSelectedObject(GameObject obj, Vector3 position, Quaternion rotation, HideFlags? hideFlags = null)
+        public void ClearTrafficManager()
         {
-            string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null, obj.name);
-
-            var gameObject = (GameObject)PrefabUtility.InstantiatePrefab(obj);
-            gameObject.name = gameObjectName;
-            gameObject.transform.rotation = rotation;
-
-            if (gameObject.TryGetComponent(out IPlateauSandboxPlaceableObject placeable))
+            var manager = GameObject.Find(RoadNetworkConstants.TRAFFIC_MANAGER_NAME);
+            if (manager != null)
             {
-                placeable.SetPosition(position);
+                GameObject.DestroyImmediate(manager);
             }
-            else
+            var vehicles = GameObject.Find(RoadNetworkConstants.VEHICLE_ROOT_NAME);
+            if (vehicles != null)
             {
-                gameObject.transform.position = position;
+                GameObject.DestroyImmediate(vehicles);
             }
-
-            if (hideFlags != null)
+            var trafficLanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+            if (trafficLanes != null)
             {
-                gameObject.hideFlags = hideFlags.Value;
+                GameObject.DestroyImmediate(trafficLanes);
             }
-
-            return new PlateauSandboxInstantiation(gameObject, obj);
+            var stoplines = GameObject.Find(RoadNetworkConstants.STOPLINE_ROOT_NAME);
+            if (stoplines != null)
+            {
+                GameObject.DestroyImmediate(stoplines);
+            }
         }
-
 
         //AWSIM用
         public void PlaceVehicles(List<GameObject> vehiclePrefabs)
         {
+            Initialize();
+
             m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
 
-            if(!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_VEHICLE))
+            if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_VEHICLE))
                 Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_GROUND))
                 Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
@@ -58,15 +55,17 @@ namespace PlateauToolkit.Sandbox.Editor
         // 交通シミュレータ配置　実行時に呼ばれる
         public void Initialize()
         {
+            ClearTrafficManager();
+
             PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
             m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
 
             //Component attach
 
-            GameObject managerGo = GameObject.Find("TrafficManager");
+            GameObject managerGo = GameObject.Find(RoadNetworkConstants.TRAFFIC_MANAGER_NAME);
             if (managerGo == null)
             {
-                managerGo = new GameObject("TrafficManager");
+                managerGo = new GameObject(RoadNetworkConstants.TRAFFIC_MANAGER_NAME);
             }
 
             m_RnTrafficManager = managerGo.GetComponent<RoadNetworkTrafficManager>();

@@ -69,10 +69,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             float speedLimit = 15f;
 
-            var parent = GameObject.Find("TrafficLanes");
+            var parent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
             if (parent == null)
             {
-                parent = new GameObject("TrafficLanes");
+                parent = new GameObject(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
             }
 
             List<TrafficLane> allLanes = new();
@@ -110,6 +110,12 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             Debug.Log($"point size is 1");
                             points.Add(points.FirstOrDefault());
                         }
+
+                        if (lane.IsReverse)
+                        {
+                            points.Reverse();
+                        }
+
                         //points = ConvertToSplinePoints(points);
 
                         TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);

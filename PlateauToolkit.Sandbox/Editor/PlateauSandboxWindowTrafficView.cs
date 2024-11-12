@@ -1,10 +1,5 @@
 ﻿using PlateauToolkit.Editor;
-using System;
-using System.Linq;
 using UnityEditor;
-using UnityEditor.EditorTools;
-using UnityEditor.IMGUI.Controls;
-using UnityEditor.Splines;
 using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Editor
@@ -69,9 +64,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         }
 
                         PlateauSandboxRoadNetwork roadNetwork = new PlateauSandboxRoadNetwork();
-                        roadNetwork.Initialize();
                         roadNetwork.PlaceVehicles(context.SelectedObjectsMultiple);
-
                     }
                 }
             }

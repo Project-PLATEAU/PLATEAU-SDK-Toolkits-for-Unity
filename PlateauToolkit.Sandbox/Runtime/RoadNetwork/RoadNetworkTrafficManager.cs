@@ -1,23 +1,14 @@
 using AWSIM.TrafficSimulation;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
-using PLATEAU.Util;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Jobs;
 using UnityEngine;
-using UnityEngine.Splines;
-using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     //交通状況管理 (各道路の自動車）
     public class RoadNetworkTrafficManager : MonoBehaviour
     {
-
-        public static readonly int NUM_MAX_VEHICLES = 60;
-
         RoadNetworkDataGetter m_RoadNetworkGetter;
         [SerializeField]
         List<GameObject> m_VehiclePrefabs;
@@ -62,11 +53,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public void CreateSimulator()
         {
 
-            GameObject vehicles = GameObject.Find("Vehicles");
+            GameObject vehicles = GameObject.Find(RoadNetworkConstants.VEHICLE_ROOT_NAME);
             if (vehicles == null)
-                vehicles = new GameObject("Vehicles");
+                vehicles = new GameObject(RoadNetworkConstants.VEHICLE_ROOT_NAME);
 
-            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), NUM_MAX_VEHICLES, vehicles);
+            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), RoadNetworkConstants.NUM_MAX_VEHICLES, vehicles);
 
             List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter); //全て変換 (TrafficLane)
 
