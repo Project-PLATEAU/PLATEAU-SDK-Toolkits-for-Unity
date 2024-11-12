@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using AWSIM;
+using PlateauToolkit.Sandbox.RoadNetwork;
 
 namespace AWSIM.TrafficSimulation
 {
@@ -149,7 +150,7 @@ namespace AWSIM.TrafficSimulation
             lightingSequences = defaultSequences;
 
             // layer and collider mask
-            var vehiclelayer = LayerMask.NameToLayer(Constants.Layers.Vehicle);
+            var vehiclelayer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             colliderMask.value = 1 << vehiclelayer;
 
             // default traffic light groups

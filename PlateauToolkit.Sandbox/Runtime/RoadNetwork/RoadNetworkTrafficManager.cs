@@ -66,7 +66,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (vehicles == null)
                 vehicles = new GameObject("Vehicles");
 
-            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLES), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), NUM_MAX_VEHICLES, vehicles);
+            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), NUM_MAX_VEHICLES, vehicles);
 
             List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter); //全て変換 (TrafficLane)
 

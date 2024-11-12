@@ -279,7 +279,7 @@ namespace AWSIM.TrafficSimulation
                     //if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
                     if (!NPCVehicleSpawner.IsSpawnable(prefab, spawnLoc.Key))
                     {
-                        //Debug.LogError($"NPCVehicleSpawner not Spawnable!");
+                        //Debug.LogError($"NPCVehicleSpawner not Spawnable! {spawnLoc.Key.Lane.gameObject.name}");
                         continue;
                     }
                     var spawned = trafficSim.Spawn(prefab, spawnLoc.Key, out spawnedVehicle);
@@ -292,6 +292,7 @@ namespace AWSIM.TrafficSimulation
                     //if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
                     if (!NPCVehicleSpawner.IsSpawnable(prefab, spawnLoc.Key))
                     {
+                        //Debug.LogError($"NPCVehicleSpawner not Spawnable!  {spawnLoc.Key.Lane.gameObject.name}");
                         continue;
                     }
                     bool spawned = priorityTrafficSimGo.Key.Spawn(prefab, spawnLoc.Key, out spawnedVehicle);

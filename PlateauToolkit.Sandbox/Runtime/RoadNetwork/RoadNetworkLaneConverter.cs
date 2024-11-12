@@ -112,7 +112,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         }
                         //points = ConvertToSplinePoints(points);
 
-                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
+                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
                         trafficLane.enabled = true;
                         laneDict.Add(lane, trafficLane);
 
@@ -167,7 +167,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         List<Vector3> points = ConvertToSplinePoints(track.Spline, 5);
 
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
-                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Intersection_{index++}", parent.transform, points.ToArray(), turnDirType, speedLimit);
+                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Intersection_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), turnDirType, speedLimit);
                         trafficLane.intersectionLane = true;
                         trafficLane.enabled = true;
                         trackDict.Add(track, trafficLane);

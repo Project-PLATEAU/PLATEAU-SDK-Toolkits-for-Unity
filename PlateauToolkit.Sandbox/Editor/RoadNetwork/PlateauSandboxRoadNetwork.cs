@@ -47,8 +47,8 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
 
-            if(!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_VEHICLES))
-                Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_VEHICLES);
+            if(!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_VEHICLE))
+                Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_GROUND))
                 Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
 

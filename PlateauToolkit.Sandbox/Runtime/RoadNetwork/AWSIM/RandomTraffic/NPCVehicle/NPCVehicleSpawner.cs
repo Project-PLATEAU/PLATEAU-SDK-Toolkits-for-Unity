@@ -30,7 +30,6 @@ namespace AWSIM.TrafficSimulation
             }catch(System.Exception ex)
             {
                 Debug.LogError($"Index out of range : {waypointIndex} / {lane.Waypoints.Length}");
-
                 Forward = Vector3.zero;
             }
 
@@ -112,10 +111,10 @@ namespace AWSIM.TrafficSimulation
             obj.transform.parent = NPCVehicleParentsObj.transform;
 
             //Layer ïœçX (ChildÇÃColliderÇÃLayerÇïœçXÇµÇ»Ç¢Ç∆BoxcastÇ™å¯Ç©Ç»Ç¢Åj
-            obj.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLES);
+            obj.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             foreach (UnityEngine.Transform child in obj.transform)
             {
-                child.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLES);
+                child.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             }
 
             if (obj.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
@@ -146,7 +145,7 @@ namespace AWSIM.TrafficSimulation
         {
             var rotation = Quaternion.LookRotation(npcVehicleSpawnPoint.Forward);
             var center = rotation * localBounds.center + npcVehicleSpawnPoint.Position;
-            var ignoreGroundLayerMask = ~LayerMask.GetMask(Constants.Layers.Ground);
+            var ignoreGroundLayerMask = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND);
             return !Physics.CheckBox(
                 center,
                 localBounds.extents,
