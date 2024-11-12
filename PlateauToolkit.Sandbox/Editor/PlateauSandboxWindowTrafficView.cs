@@ -54,8 +54,6 @@ namespace PlateauToolkit.Sandbox.Editor
                         PlateauToolkitGUIStyles.k_ButtonPrimaryColor)
                     .Button("実行"))
                     {
-                        //TODO
-
                         Debug.Log($"<color=red>実行</color>");
 
                         foreach(var obj in context.SelectedObjectsMultiple)
@@ -64,7 +62,11 @@ namespace PlateauToolkit.Sandbox.Editor
                         }
 
                         PlateauSandboxRoadNetwork roadNetwork = new PlateauSandboxRoadNetwork();
-                        roadNetwork.PlaceVehicles(context.SelectedObjectsMultiple);
+                        var success = roadNetwork.PlaceVehicles(context.SelectedObjectsMultiple);
+                        if (success)
+                        {
+                            m_CurrentAssetList.SelectAll(false, context);
+                        }
                     }
                 }
             }

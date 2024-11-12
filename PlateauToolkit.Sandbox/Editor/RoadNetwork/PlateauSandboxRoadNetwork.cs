@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using AWSIM.TrafficSimulation;
+using UnityEditor;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -38,7 +39,7 @@ namespace PlateauToolkit.Sandbox.Editor
         }
 
         //AWSIM用
-        public void PlaceVehicles(List<GameObject> vehiclePrefabs)
+        public bool PlaceVehicles(List<GameObject> vehiclePrefabs)
         {
             Initialize();
 
@@ -49,7 +50,19 @@ namespace PlateauToolkit.Sandbox.Editor
             if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_GROUND))
                 Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
 
-            m_RnTrafficManager.CreateSimulator();
+            try
+            {
+                m_RnTrafficManager.CreateSimulator();
+            }
+            catch(System.Exception ex)
+            {
+                Debug.LogException(ex);
+                EditorUtility.DisplayDialog("Faild", ex.Message, "OK");
+                return false;
+            }
+
+            EditorUtility.DisplayDialog("Success", $"{vehiclePrefabs.Count} prefabs placed.", "OK");
+            return true;
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる
