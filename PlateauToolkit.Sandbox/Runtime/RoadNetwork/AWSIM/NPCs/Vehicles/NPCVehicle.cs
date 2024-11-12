@@ -239,6 +239,19 @@ namespace AWSIM
                 bounds = renderer.bounds;
             }
 
+            if (bounds.size == Vector3.zero)
+            {
+                bounds = new Bounds(Vector3.zero, Vector3.zero);
+                MeshFilter[] mfs = prefab.GetComponentsInChildren<MeshFilter>();
+                foreach (MeshFilter mf in mfs)
+                {
+                    Vector3 pos = mf.transform.localPosition;
+                    Bounds child_bounds = mf.sharedMesh.bounds;
+                    child_bounds.center += pos;
+                    bounds.Encapsulate(child_bounds);
+                }
+            }
+
             bounds.center = bounds.center - prefab.transform.position;
 
             return bounds;
