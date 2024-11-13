@@ -4,12 +4,14 @@ namespace PlateauToolkit.Sandbox
 {
     interface IPlateauSandboxTrafficObject : IPlateauSandboxPlaceableObject
     {
-        float SecondAxisDistance => 0;
+        //float SecondAxisDistance => 0;
 
-        float GetVelocityRatio(float lookAheadAngle)
-        {
-            return 1f;
-        }
+        //float GetVelocityRatio(float lookAheadAngle)
+        //{
+        //    return 1f;
+        //}
+
+        float GetWheelBase();
 
         //void OnMove(in MovementInfo movementInfo);
         void UpdateVisual(float speed, float steerAngle);

@@ -330,8 +330,6 @@ namespace PlateauToolkit.Sandbox
 
                 m_SplineContainerT = t;
 
-                Debug.Log($"m_SplineContainerT {m_SplineContainerT}");
-
                 MovementInfo movementInfo;
                 movementInfo.m_SplineContainerT = t;
 

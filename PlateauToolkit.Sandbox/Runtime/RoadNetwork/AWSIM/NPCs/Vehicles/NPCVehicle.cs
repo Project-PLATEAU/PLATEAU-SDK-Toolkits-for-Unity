@@ -270,6 +270,8 @@ namespace AWSIM
 
             if (visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject)){
                 m_TrafficObject = trafficObject;
+
+                wheelbase = m_TrafficObject.GetWheelBase();
             }
 
             if(visualObjectRoot.GetComponentInChildren<Collider>() == null)
@@ -282,7 +284,8 @@ namespace AWSIM
 
             //centerOfMass = _centerOfMass;
             //rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
-            //lastPosition = rigidbody.position;
+
+            lastPosition = rigidbody.position;
 
             if (trailer == null)
                 trailer = rigidbody;

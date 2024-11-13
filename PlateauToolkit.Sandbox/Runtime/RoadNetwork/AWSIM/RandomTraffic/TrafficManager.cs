@@ -264,11 +264,11 @@ namespace AWSIM.TrafficSimulation
             {
                 NPCVehicle spawnedVehicle;
 
-                var distance2D = GeometryUtility.Distance2D(_egoVehicle.transform.position, spawnLoc.Key.Position);
-                if (distance2D < spawnDistanceToEgo)
-                {
-                    continue;
-                }
+                //var distance2D = GeometryUtility.Distance2D(_egoVehicle.transform.position, spawnLoc.Key.Position);
+                //if (distance2D < spawnDistanceToEgo)
+                //{
+                //    continue;
+                //}
 
                 if (spawnLoc.Value.Count == 1)
                 {
@@ -305,10 +305,10 @@ namespace AWSIM.TrafficSimulation
                     }
                 }
 
-                if (spawnedVehicle && spawnedVehicle.gameObject.tag == "Ego")
-                {
-                    npcVehicleSimulator.EGOVehicle = spawnedVehicle.transform;
-                }
+                //if (spawnedVehicle && spawnedVehicle.gameObject.tag == "Ego")
+                //{
+                //    npcVehicleSimulator.EGOVehicle = spawnedVehicle.transform;
+                //}
             }
 
             spawnLanes.Clear();

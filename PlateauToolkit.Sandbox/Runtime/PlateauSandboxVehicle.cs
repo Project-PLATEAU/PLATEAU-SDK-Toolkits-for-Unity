@@ -33,6 +33,14 @@ namespace PlateauToolkit.Sandbox
 
         Transform[] m_AllWheels;
 
+        float m_CurrentWheelRotation = 0;
+        static readonly float k_GizmoSize = 0.15f;
+
+        //NPCVehicle
+        const float maxSteerSpeed = 60f;                    // deg/s
+        float wheelPitchAngle = 0;
+        float lastSteerAngle = 0;
+
         public Vector3 TransformUp => transform.up;
 
         public Vector3 FirstPersonViewPosition => transform.position + transform.forward + transform.up;
@@ -55,6 +63,11 @@ namespace PlateauToolkit.Sandbox
         public override void SetPosition(in Vector3 position)
         {
             transform.position = position - (m_BackWheelAxisTransform.position - transform.position);
+        }
+
+        public float GetWheelBase()
+        {
+            return m_Wheelbase;
         }
 
         float IPlateauSandboxMovingObject.GetVelocityRatio(float lookaheadAngle)
@@ -106,51 +119,8 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
-        public void OnMove(in MovementInfo movementInfo)
-        {
-            foreach (Transform wheelTransform in m_AllWheels)
-            {
-                wheelTransform.localRotation = Quaternion.identity;
-            }
-
-            if (movementInfo.m_SecondAxisForward != Vector3.zero)
-            {
-                foreach (Transform frontWheel in m_FrontWheels)
-                {
-                    frontWheel.forward = movementInfo.m_SecondAxisForward;
-                }
-            }
-
-            if (m_WheelRadius > 0)
-            {
-                m_CurrentWheelRotation += 360 * movementInfo.m_MoveDelta / (2 * Mathf.PI * m_WheelRadius);
-                m_CurrentWheelRotation %= 360;
-
-                foreach (Transform wheelTransform in m_AllWheels)
-                {
-                    wheelTransform.Rotate(new Vector3(m_CurrentWheelRotation, 0, 0));
-                }
-            }
-        }
-
-        float m_CurrentWheelRotation = 0;
-
-        static readonly float k_GizmoSize = 0.15f;
-
-        //NPC
-        const float maxSteerSpeed = 60f;                    // deg/s
-        //public WheelCollider WheelCollider;
-        //public Transform VisualTransform;
-
-        float wheelPitchAngle = 0;
-        float lastSteerAngle = 0;
-
         public void UpdateVisual(float speed, float steerAngle)
         {
-            // Apply WheelCollider position to visual object.
-            //WheelCollider.GetWorldPose(out var pos, out _);
-            //VisualTransform.position = pos;
-
             // wheel forward rotation(pitch).
             var additionalPitchAngle = (speed * Time.deltaTime / m_WheelRadius) * Mathf.Rad2Deg;
             wheelPitchAngle += additionalPitchAngle;
@@ -173,8 +143,6 @@ namespace PlateauToolkit.Sandbox
             // Cache steer angle value for next update.
             lastSteerAngle = fixedSteerAngle;
         }
-
-
 
         void OnDrawGizmos()
         {
