@@ -153,7 +153,7 @@ namespace AWSIM.TrafficSimulation
         /// </summary>
         public static bool IsSpawnable(Bounds localBounds, NPCVehicleSpawnPoint npcVehicleSpawnPoint)
         {
-            var rotation = Quaternion.LookRotation(npcVehicleSpawnPoint.Forward);
+            var rotation = npcVehicleSpawnPoint.Forward == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(npcVehicleSpawnPoint.Forward);
             var center = rotation * localBounds.center + npcVehicleSpawnPoint.Position;
             var ignoreGroundLayerMask = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND);
             return !Physics.CheckBox(

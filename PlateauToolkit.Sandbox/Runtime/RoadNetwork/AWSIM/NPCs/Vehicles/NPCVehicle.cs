@@ -4,6 +4,8 @@ using UnityEngine;
 using System;
 using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 using PlateauToolkit.Sandbox;
+using static UnityEngine.ParticleSystem;
+using PlateauToolkit.Sandbox.RoadNetwork;
 
 namespace AWSIM
 {
@@ -89,58 +91,58 @@ namespace AWSIM
         [SerializeField]
         GameObject visualObjectRoot;
 
-        [Serializable]
-        public class EmissionMaterial
-        {
-            [SerializeField] MeshRenderer meshRenderer;
-            [SerializeField] int materialIndex;
-            [SerializeField] float lightingIntensity;
-            [SerializeField] Color lightingColor;
-            [SerializeField, Range(0, 1)] float lightingExposureWeight;
+        //[Serializable]
+        //public class EmissionMaterial
+        //{
+        //    [SerializeField] MeshRenderer meshRenderer;
+        //    [SerializeField] int materialIndex;
+        //    [SerializeField] float lightingIntensity;
+        //    [SerializeField] Color lightingColor;
+        //    [SerializeField, Range(0, 1)] float lightingExposureWeight;
 
-            Material material = null;
-            Color defaultEmissiveColor;
-            float defaultExposureWeight;
-            bool isOn = false;
+        //    Material material = null;
+        //    Color defaultEmissiveColor;
+        //    float defaultExposureWeight;
+        //    bool isOn = false;
 
-            const string EmissiveColor = "_EmissiveColor";
-            const string EmissiveExposureWeight = "_EmissiveExposureWeight";
+        //    const string EmissiveColor = "_EmissiveColor";
+        //    const string EmissiveExposureWeight = "_EmissiveExposureWeight";
 
-            public void Initialize()
-            {
-                if (material == null)
-                {
-                    material = meshRenderer.materials[materialIndex];
-                    material.EnableKeyword("_EMISSION");
-                    defaultEmissiveColor = material.GetColor(EmissiveColor);
-                    defaultExposureWeight = material.GetFloat(EmissiveExposureWeight);
-                }
-            }
+        //    public void Initialize()
+        //    {
+        //        if (material == null)
+        //        {
+        //            material = meshRenderer.materials[materialIndex];
+        //            material.EnableKeyword("_EMISSION");
+        //            defaultEmissiveColor = material.GetColor(EmissiveColor);
+        //            defaultExposureWeight = material.GetFloat(EmissiveExposureWeight);
+        //        }
+        //    }
 
-            public void Set(bool isLightOn)
-            {
-                if (this.isOn == isLightOn)
-                    return;
+        //    public void Set(bool isLightOn)
+        //    {
+        //        if (this.isOn == isLightOn)
+        //            return;
 
-                this.isOn = isLightOn;
-                if (isLightOn)
-                {
-                    material.SetColor(EmissiveColor, lightingColor * lightingIntensity);
-                    material.SetFloat(EmissiveExposureWeight, lightingExposureWeight);
-                }
-                else
-                {
-                    material.SetColor(EmissiveColor, defaultEmissiveColor);
-                    material.SetFloat(EmissiveExposureWeight, defaultExposureWeight);
-                }
-            }
+        //        this.isOn = isLightOn;
+        //        if (isLightOn)
+        //        {
+        //            material.SetColor(EmissiveColor, lightingColor * lightingIntensity);
+        //            material.SetFloat(EmissiveExposureWeight, lightingExposureWeight);
+        //        }
+        //        else
+        //        {
+        //            material.SetColor(EmissiveColor, defaultEmissiveColor);
+        //            material.SetFloat(EmissiveExposureWeight, defaultExposureWeight);
+        //        }
+        //    }
 
-            public void Destroy()
-            {
-                if (material != null)
-                    UnityEngine.Object.Destroy(material);
-            }
-        }
+        //    public void Destroy()
+        //    {
+        //        if (material != null)
+        //            UnityEngine.Object.Destroy(material);
+        //    }
+        //}
 
         /// <summary>
         /// Current visualObject's activeself
@@ -167,8 +169,8 @@ namespace AWSIM
         const float turnSignalBlinkSec = 0.5f;             // seconds
         const float brakeLightAccelThreshold = -0.1f;      // m/s
 
-        [Header("Physics Settings")]
-        [SerializeField] Transform centerOfMass;
+        //[Header("Physics Settings")]
+        //[SerializeField] Transform centerOfMass;
         //[SerializeField] new Rigidbody rigidbody;
 
         Rigidbody rigidbody {
@@ -194,7 +196,7 @@ namespace AWSIM
             }
         }
 
-        [SerializeField] Rigidbody trailer = null;
+        //[SerializeField] Rigidbody trailer = null;
         //[SerializeField] AxleSettings axleSettings;
 
         [Header("Bounding box Settngs")]
@@ -225,7 +227,8 @@ namespace AWSIM
         IPlateauSandboxTrafficObject m_TrafficObject;
 
         public Transform RigidBodyTransform => rigidbody.transform;
-        public Transform TrailerTransform => trailer?.transform;
+        //public Transform TrailerTransform => trailer?.transform;
+        public Transform TrailerTransform => null;
 
         public static Bounds GetBounds(GameObject prefab)
         {
@@ -270,25 +273,28 @@ namespace AWSIM
 
             if (visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject)){
                 m_TrafficObject = trafficObject;
-
                 wheelbase = m_TrafficObject.GetWheelBase();
             }
 
-            if(visualObjectRoot.GetComponentInChildren<Collider>() == null)
+            var collider = visualObjectRoot.GetComponentInChildren<Collider>();
+            if (collider != null)
             {
-                var collider = visualObjectRoot.AddComponent<BoxCollider>();
-                //bounds = new Bounds(collider.center, collider.size);
+                collider.excludeLayers = LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLE);
+            }
+            else
+            {
+                var boxCollider =  visualObjectRoot.AddComponent<BoxCollider>();
+                boxCollider.excludeLayers = LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             }
 
             //bounds = GetBounds(visualObjectRoot);
-
             //centerOfMass = _centerOfMass;
             //rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
 
             lastPosition = rigidbody.position;
 
-            if (trailer == null)
-                trailer = rigidbody;
+            //if (trailer == null)
+            //    trailer = rigidbody;
         }
 
         // Start is called before the first frame update

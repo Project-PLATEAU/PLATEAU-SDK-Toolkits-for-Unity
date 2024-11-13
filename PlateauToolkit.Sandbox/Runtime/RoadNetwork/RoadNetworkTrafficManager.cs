@@ -77,7 +77,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             //初期Spawn
             RandomTrafficSimulatorConfiguration RandomTrafficSimConfigInitial = new RandomTrafficSimulatorConfiguration();
-            RandomTrafficSimConfigInitial.maximumSpawns = 1; //初回用.Respawn禁止
+            RandomTrafficSimConfigInitial.maximumSpawns = GetNumMaxVehicles(); //初回用.Respawn禁止
             RandomTrafficSimConfigInitial.npcPrefabs = m_VehiclePrefabs.ToArray();
             RandomTrafficSimConfigInitial.spawnableLanes = spawnableLanes.ToArray();
             RandomTrafficSimConfigInitial.enabled = true;

@@ -67,7 +67,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public List<TrafficLane> Create(RoadNetworkDataGetter getter)
         {
-            float speedLimit = 15f;
+            float speedLimit = RoadNetworkConstants.SPEED_LIMIT;
 
             var parent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
             if (parent == null)
@@ -109,7 +109,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         else if (points.Count == 1)
                         {
                             Debug.Log($"point size is 1 : {index}");
-                            points.Add(points.FirstOrDefault());
+                            //points.Add(points.FirstOrDefault());
+                            continue;
                         }
 
                         if (lane.IsReverse)
