@@ -21,70 +21,70 @@ namespace AWSIM
             HAZARD,
         }
 
-        [Serializable]
-        public class Wheel
-        {
-            public WheelCollider WheelCollider;
-            public Transform VisualTransform;
+        //[Serializable]
+        //public class Wheel
+        //{
+        //    public WheelCollider WheelCollider;
+        //    public Transform VisualTransform;
 
-            float wheelPitchAngle = 0;
-            float lastSteerAngle = 0;
+        //    float wheelPitchAngle = 0;
+        //    float lastSteerAngle = 0;
 
-            public void UpdateVisual(float speed, float steerAngle)
-            {
-                // Apply WheelCollider position to visual object.
-                WheelCollider.GetWorldPose(out var pos, out _);
-                VisualTransform.position = pos;
+        //    public void UpdateVisual(float speed, float steerAngle)
+        //    {
+        //        // Apply WheelCollider position to visual object.
+        //        WheelCollider.GetWorldPose(out var pos, out _);
+        //        VisualTransform.position = pos;
 
-                // wheel forward rotation(pitch).
-                var additionalPitchAngle = (speed * Time.deltaTime / WheelCollider.radius) * Mathf.Rad2Deg;
-                wheelPitchAngle += additionalPitchAngle;
-                wheelPitchAngle %= 360;
+        //        // wheel forward rotation(pitch).
+        //        var additionalPitchAngle = (speed * Time.deltaTime / WheelCollider.radius) * Mathf.Rad2Deg;
+        //        wheelPitchAngle += additionalPitchAngle;
+        //        wheelPitchAngle %= 360;
 
-                // steer angle.
-                var fixedSteerAngle = Mathf.MoveTowardsAngle(lastSteerAngle, steerAngle, Time.deltaTime * maxSteerSpeed);
+        //        // steer angle.
+        //        var fixedSteerAngle = Mathf.MoveTowardsAngle(lastSteerAngle, steerAngle, Time.deltaTime * maxSteerSpeed);
 
-                // Apply rotations to visual wheel object.
-                VisualTransform.localEulerAngles = new Vector3(wheelPitchAngle, fixedSteerAngle, 0);
+        //        // Apply rotations to visual wheel object.
+        //        VisualTransform.localEulerAngles = new Vector3(wheelPitchAngle, fixedSteerAngle, 0);
 
-                // Cache steer angle value for next update.
-                lastSteerAngle = fixedSteerAngle;
-            }
-        }
+        //        // Cache steer angle value for next update.
+        //        lastSteerAngle = fixedSteerAngle;
+        //    }
+        //}
 
-        [Serializable]
-        public class Axle
-        {
-            public Wheel leftWheel;
-            public Wheel rightWheel;
+        //[Serializable]
+        //public class Axle
+        //{
+        //    public Wheel leftWheel;
+        //    public Wheel rightWheel;
 
-            public void UpdateVisual(float speed, float steerAngle)
-            {
-                leftWheel.UpdateVisual(speed, steerAngle);
-                rightWheel.UpdateVisual(speed, steerAngle);
-            }
-        }
+        //    public void UpdateVisual(float speed, float steerAngle)
+        //    {
+        //        leftWheel.UpdateVisual(speed, steerAngle);
+        //        rightWheel.UpdateVisual(speed, steerAngle);
+        //    }
+        //}
 
-        [Serializable]
-        public class AxleSettings
-        {
-            [SerializeField] Axle frontAxle;
-            [SerializeField] Axle rearAxle;
+        //[Serializable]
+        //public class AxleSettings
+        //{
+        //    [SerializeField] Axle frontAxle;
+        //    [SerializeField] Axle rearAxle;
 
-            public float GetWheelBase()
-            {
-                var frontPos = frontAxle.leftWheel.WheelCollider.transform.localPosition;
-                var rearPos = rearAxle.leftWheel.WheelCollider.transform.localPosition;
+        //    public float GetWheelBase()
+        //    {
+        //        var frontPos = frontAxle.leftWheel.WheelCollider.transform.localPosition;
+        //        var rearPos = rearAxle.leftWheel.WheelCollider.transform.localPosition;
 
-                return Mathf.Abs(frontPos.z - rearPos.z);
-            }
+        //        return Mathf.Abs(frontPos.z - rearPos.z);
+        //    }
 
-            public void UpdateVisual(float speed, float steerAngle)
-            {
-                frontAxle.UpdateVisual(speed, steerAngle);
-                rearAxle.UpdateVisual(speed, 0);
-            }
-        }
+        //    public void UpdateVisual(float speed, float steerAngle)
+        //    {
+        //        frontAxle.UpdateVisual(speed, steerAngle);
+        //        rearAxle.UpdateVisual(speed, 0);
+        //    }
+        //}
 
         [SerializeField]
         GameObject visualObjectRoot;
@@ -183,9 +183,11 @@ namespace AWSIM
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
                     rigidbody.mass = 1500f;
                     rigidbody.angularDrag = 0.0f;
+                    rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
-                    rigidbody.isKinematic = true;
+                    rigidbody.useGravity = true;
+                    rigidbody.isKinematic = false;
 
                     return rigidbody;
                 }
@@ -193,17 +195,17 @@ namespace AWSIM
         }
 
         [SerializeField] Rigidbody trailer = null;
-        [SerializeField] AxleSettings axleSettings;
+        //[SerializeField] AxleSettings axleSettings;
 
         [Header("Bounding box Settngs")]
         [SerializeField] Bounds bounds;
 
-        [Header("Brake light parameters")]
-        [SerializeField] EmissionMaterial brakeLight;
+        //[Header("Brake light parameters")]
+        //[SerializeField] EmissionMaterial brakeLight;
 
-        [Header("Turn signal parameters")]
-        [SerializeField] EmissionMaterial leftTurnSignalLight;
-        [SerializeField] EmissionMaterial rightTurnSignalLight;
+        //[Header("Turn signal parameters")]
+        //[SerializeField] EmissionMaterial leftTurnSignalLight;
+        //[SerializeField] EmissionMaterial rightTurnSignalLight;
 
         TurnSignalState turnSignalState = TurnSignalState.OFF;
         float turnSignalTimer = 0;
@@ -266,7 +268,7 @@ namespace AWSIM
         {
             visualObjectRoot = _visualObjectRoot;
 
-            if(visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject)){
+            if (visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject)){
                 m_TrafficObject = trafficObject;
             }
 
@@ -428,9 +430,9 @@ namespace AWSIM
 
         void OnValidate()
         {
-            rigidbody.isKinematic = false;
-            rigidbody.useGravity = true;
-            rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            //rigidbody.isKinematic = false;
+            //rigidbody.useGravity = true;
+            //rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
         }
 
         void OnDestroy()

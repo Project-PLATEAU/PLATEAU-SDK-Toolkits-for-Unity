@@ -92,7 +92,9 @@ namespace AWSIM.TrafficSimulation
 
             // Spawn position is always chosen randomly from the set of all available lanes.
             // This avoids waiting for lanes which are already occupied, but there is another one available somewhere else.
-            spawnPoint = npcVehicleSpawner.GetRandomSpawnPoint();
+            //spawnPoint = npcVehicleSpawner.GetRandomSpawnPoint();
+
+            spawnPoint = npcVehicleSpawner.GetOrderedSpawnPoint();
         }
 
         public bool Spawn(GameObject prefab, NPCVehicleSpawnPoint spawnPoint, out NPCVehicle spawnedVehicle)
@@ -122,11 +124,6 @@ namespace AWSIM.TrafficSimulation
 
         private bool IsMaximumSpawnsNumberReached()
         {
-            //bool res = (currentSpawnNumber == maximumSpawns && maximumSpawns > 0);
-            //if (res)
-            //{
-            //    Debug.Log($"currentSpawnNumber {currentSpawnNumber} maximumSpawns {maximumSpawns} VehicleStates {npcVehicleSimulator.VehicleStates.Count} ");
-            //}
             return (currentSpawnNumber == maximumSpawns && maximumSpawns > 0);
         }
     }

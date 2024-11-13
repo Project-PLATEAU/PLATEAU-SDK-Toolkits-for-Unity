@@ -22,7 +22,6 @@ namespace PlateauToolkit.Sandbox
         private void Awake()
         {
             Initialize(gameObject, transform);
-
         }
     }
 }

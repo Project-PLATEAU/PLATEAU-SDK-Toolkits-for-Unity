@@ -41,10 +41,6 @@ namespace PlateauToolkit.Sandbox.Editor
         //AWSIM用
         public bool PlaceVehicles(List<GameObject> vehiclePrefabs)
         {
-            Initialize();
-
-            m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
-
             if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_VEHICLE))
                 Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_GROUND))
@@ -52,16 +48,18 @@ namespace PlateauToolkit.Sandbox.Editor
 
             try
             {
+                Initialize();
+                m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
                 m_RnTrafficManager.CreateSimulator();
             }
             catch(System.Exception ex)
             {
                 Debug.LogException(ex);
-                EditorUtility.DisplayDialog("Faild", ex.Message, "OK");
+                EditorUtility.DisplayDialog("アセットの配置に失敗しました。", ex.Message, "OK");
                 return false;
             }
 
-            EditorUtility.DisplayDialog("Success", $"{vehiclePrefabs.Count} prefabs placed.", "OK");
+            EditorUtility.DisplayDialog("成功", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
             return true;
         }
 
@@ -71,6 +69,10 @@ namespace PlateauToolkit.Sandbox.Editor
             ClearTrafficManager();
 
             PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
+            if (roadNetwork == null)
+            {
+                throw new System.Exception("道路ネットワークが見つかりませんでした。");
+            }
             m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
 
             //Component attach

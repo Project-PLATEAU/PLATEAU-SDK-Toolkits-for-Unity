@@ -75,6 +75,16 @@ namespace AWSIM.TrafficSimulation
         public NPCVehicleSpawnPoint GetRandomSpawnPoint()
             => spawnPoints[Random.Range(0, spawnPoints.Length)];
 
+        private int currentSpawnPointIndex = 0;
+        public NPCVehicleSpawnPoint GetOrderedSpawnPoint()
+        {
+            var currentSpawnPoint = spawnPoints[currentSpawnPointIndex];
+            currentSpawnPointIndex++;
+            if (spawnPoints.Length <= currentSpawnPointIndex)
+                currentSpawnPointIndex = 0;
+            return currentSpawnPoint;
+        }
+
         /// <summary>
         /// Get a <see cref="NPCVehicleSpawnPoint"/> from spawnable lanes.
         /// Return false if vehicles are present in all lanes.

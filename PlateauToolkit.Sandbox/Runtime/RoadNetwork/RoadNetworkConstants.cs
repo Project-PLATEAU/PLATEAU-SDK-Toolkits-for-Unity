@@ -5,7 +5,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     public class RoadNetworkConstants
     {
 
-        public static readonly int NUM_MAX_VEHICLES = 60;
+        public static readonly int NUM_MAX_VEHICLES = 100;
 
         public static readonly string LAYER_MASK_VEHICLE = "Vehicle";
         public static readonly string LAYER_MASK_GROUND = "Ground";
