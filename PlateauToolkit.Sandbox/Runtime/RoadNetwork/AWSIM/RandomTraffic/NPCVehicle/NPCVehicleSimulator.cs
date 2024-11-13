@@ -25,7 +25,7 @@ namespace AWSIM.TrafficSimulation
         /// <summary>
         /// Get or set EGO Vehicle that should be considered in the simulation.
         /// </summary>
-        public Transform EGOVehicle { get; set; }
+        //public Transform EGOVehicle { get; set; }
         public int maxVehicleCount;
 
         private List<NPCVehicleInternalState> vehicleStates;
@@ -38,8 +38,8 @@ namespace AWSIM.TrafficSimulation
         public NPCVehicleSimulator(NPCVehicleConfig config,
             LayerMask vehicleLayerMask,
             LayerMask groundLayerMask,
-            int maxVehicleCount,
-            GameObject egoVehicle)
+            int maxVehicleCount)//,
+            //GameObject egoVehicle)
         {
             vehicleStates = new List<NPCVehicleInternalState>();
             cognitionStep = new NPCVehicleCognitionStep(vehicleLayerMask, groundLayerMask, maxVehicleCount);
@@ -47,36 +47,36 @@ namespace AWSIM.TrafficSimulation
             controlStep = new NPCVehicleControlStep(config);
             visualizationStep = new NPCVehicleVisualizationStep();
             this.maxVehicleCount = maxVehicleCount;
-            EGOVehicle = egoVehicle.transform;
+            //EGOVehicle = egoVehicle.transform;
         }
 
 
         /// <summary>
         /// When there is no real Ego vehicle in a scene, dummy one must be set.
         /// </summary>
-        public void UnregisterEgo()
-        {
-            if (dummyEgo)
-            {
-                EGOVehicle = dummyEgo;
-            }
-        }
+        //public void UnregisterEgo()
+        //{
+        //    if (dummyEgo)
+        //    {
+        //        EGOVehicle = dummyEgo;
+        //    }
+        //}
 
         /// <summary>
         /// Dummy ego is used when there is no real Ego in the scene
         /// </summary>
-        public void SetDummyEgo(GameObject ego)
-        {
-            dummyEgo = ego.transform;
-        }
+        //public void SetDummyEgo(GameObject ego)
+        //{
+        //    dummyEgo = ego.transform;
+        //}
 
         /// <summary>
         /// Registers Ego vehicle.
         /// </summary>
-        public void RegisterEgo(GameObject egoVehicle)
-        {
-            EGOVehicle = egoVehicle.transform;
-        }
+        //public void RegisterEgo(GameObject egoVehicle)
+        //{
+        //    EGOVehicle = egoVehicle.transform;
+        //}
 
         /// <summary>
         /// Register <see cref="NPCVehicle"/> to be updated by the simulator.
@@ -124,7 +124,7 @@ namespace AWSIM.TrafficSimulation
         {
             // Simulation steps
             Profiler.BeginSample("NPCVehicleSimulator.Cognition");
-            cognitionStep.Execute(vehicleStates, EGOVehicle);
+            cognitionStep.Execute(vehicleStates);//, EGOVehicle);
             Profiler.EndSample();
 
             Profiler.BeginSample("NPCVehicleSimulator.Decision");
@@ -137,7 +137,7 @@ namespace AWSIM.TrafficSimulation
 
             // Visualization step
             Profiler.BeginSample("NPCVehicleSimulator.Visualize");
-            visualizationStep.Execute(VehicleStates, EGOVehicle);
+            visualizationStep.Execute(VehicleStates);//, EGOVehicle);
             Profiler.EndSample();
         }
 

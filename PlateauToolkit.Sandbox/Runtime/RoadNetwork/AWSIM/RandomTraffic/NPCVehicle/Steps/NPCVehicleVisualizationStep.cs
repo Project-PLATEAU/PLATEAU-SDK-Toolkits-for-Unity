@@ -9,7 +9,7 @@ namespace AWSIM.TrafficSimulation
     /// </summary>
     public class NPCVehicleVisualizationStep
     {
-        public void Execute(IReadOnlyList<NPCVehicleInternalState> states, Transform egoVehicle)
+        public void Execute(IReadOnlyList<NPCVehicleInternalState> states)//, Transform egoVehicle)
         {
             foreach (var state in states)
             {

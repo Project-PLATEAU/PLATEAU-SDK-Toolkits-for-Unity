@@ -26,32 +26,32 @@ namespace AWSIM.TrafficSimulation
         [SerializeField, Tooltip("A maximum number of vehicles that can simultaneously live in the scene. Lowering this value results in less dense traffic but improves the simulator's performance.")]
         public int maxVehicleCount = 40;
 
-        [SerializeField, Tooltip("A minimal distance between the EGO and the NPC to spawn")]
-        private float spawnDistanceToEgo = 50.0f;
+        //[SerializeField, Tooltip("A minimal distance between the EGO and the NPC to spawn")]
+        //private float spawnDistanceToEgo = 50.0f;
 
-        [SerializeField, Tooltip("Ego vehicle handler. If not set, the manager creates a dummy ego. This reference is also set automatically when the Ego spawns via the traffic simulator.")]
-        private GameObject _egoVehicle;
+        //[SerializeField, Tooltip("Ego vehicle handler. If not set, the manager creates a dummy ego. This reference is also set automatically when the Ego spawns via the traffic simulator.")]
+        //private GameObject _egoVehicle;
 
-        public GameObject egoVehicle
-        {
-            get
-            {
-                return _egoVehicle;
-            }
-            set
-            {
-                _egoVehicle = value;
-                if (_egoVehicle != null)
-                {
-                    npcVehicleSimulator.RegisterEgo(value);
-                }
-                else
-                {
-                    npcVehicleSimulator.UnregisterEgo();
-                    _egoVehicle = dummyEgo;
-                }
-            }
-        }
+        //public GameObject egoVehicle
+        //{
+        //    get
+        //    {
+        //        return _egoVehicle;
+        //    }
+        //    set
+        //    {
+        //        _egoVehicle = value;
+        //        if (_egoVehicle != null)
+        //        {
+        //            npcVehicleSimulator.RegisterEgo(value);
+        //        }
+        //        else
+        //        {
+        //            npcVehicleSimulator.UnregisterEgo();
+        //            _egoVehicle = dummyEgo;
+        //        }
+        //    }
+        //}
 
         [SerializeField, Tooltip("Vehicle Root GameObject")]
         private GameObject _vehicleRoot;
@@ -110,16 +110,16 @@ namespace AWSIM.TrafficSimulation
 
             spawnLanes = new Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>>();
 
-            dummyEgo = GameObject.Find(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
-            if(dummyEgo == null)
-                dummyEgo = new GameObject(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
+            //dummyEgo = GameObject.Find(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
+            //if(dummyEgo == null)
+            //    dummyEgo = new GameObject(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
 
-            if (_egoVehicle == null)
-            {
-                _egoVehicle = dummyEgo;
-            }
-            npcVehicleSimulator = new NPCVehicleSimulator(vehicleConfig, vehicleLayerMask, groundLayerMask, maxVehicleCount, _egoVehicle);
-            npcVehicleSimulator.SetDummyEgo(dummyEgo);
+            //if (_egoVehicle == null)
+            //{
+            //    _egoVehicle = dummyEgo;
+            //}
+            npcVehicleSimulator = new NPCVehicleSimulator(vehicleConfig, vehicleLayerMask, groundLayerMask, maxVehicleCount);//, _egoVehicle);
+            //npcVehicleSimulator.SetDummyEgo(dummyEgo);
 
             verifyIntegrationEnvironmentElements();
             trafficSimulatorNodes = new List<ITrafficSimulator>();
@@ -167,11 +167,11 @@ namespace AWSIM.TrafficSimulation
             ClearAll();
             Despawn();
             spawnLanes.Clear();
-            if (dummyEgo)
-            {
-                Destroy(dummyEgo);
-                _egoVehicle = null;
-            }
+            //if (dummyEgo)
+            //{
+            //    Destroy(dummyEgo);
+            //    _egoVehicle = null;
+            //}
         }
 
         void Start()
@@ -191,7 +191,7 @@ namespace AWSIM.TrafficSimulation
 
         private void verifyIntegrationEnvironmentElements()
         {
-            GameObject trafficLanesObject = GameObject.Find("TrafficLanes");
+            GameObject trafficLanesObject = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
             if (trafficLanesObject == null)
             {
                 Debug.LogError("VerifyIntegrationEnvironmentElements error: Object 'TrafficLanes' not found in the scene.");

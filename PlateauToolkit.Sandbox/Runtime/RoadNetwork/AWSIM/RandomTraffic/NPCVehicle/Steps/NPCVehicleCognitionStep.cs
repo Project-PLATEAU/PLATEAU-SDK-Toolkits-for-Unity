@@ -1015,8 +1015,8 @@ namespace AWSIM.TrafficSimulation
         }
 
         public void Execute(
-            IReadOnlyList<NPCVehicleInternalState> states,
-            Transform egoTransform)
+            IReadOnlyList<NPCVehicleInternalState> states)//,
+            //Transform egoTransform)
         {
             Profiler.BeginSample("Cognition.CheckNextWaypoint");
 
@@ -1096,7 +1096,7 @@ namespace AWSIM.TrafficSimulation
 
             new RightOfWayCheckJob
             {
-                EGOTransform = egoTransform,
+                //EGOTransform = egoTransform,
                 States = states
             }.Execute();
 

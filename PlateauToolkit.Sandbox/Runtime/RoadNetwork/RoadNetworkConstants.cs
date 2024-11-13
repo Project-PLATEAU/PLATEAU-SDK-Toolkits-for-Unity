@@ -15,7 +15,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static readonly string TRAFFIC_LANE_ROOT_NAME = "TrafficLanes";
         public static readonly string STOPLINE_ROOT_NAME = "StopLines";
 
-        public static readonly string DUMMY_VEHICLE_NAME = "DummyVehicle";
+        //public static readonly string DUMMY_VEHICLE_NAME = "DummyVehicle";
 
     }
 }
