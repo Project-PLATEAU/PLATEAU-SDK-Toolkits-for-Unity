@@ -180,9 +180,11 @@ namespace AWSIM.TrafficSimulation
                     : Waypoints[waypointOffset + waypointIndex - 1];
 
                 // Reduce the detection range so that large sized vehicles can pass each other.
-                var boxCastExtents = States[stateIndex].Extents * 0.5f;
+                //var boxCastExtents = States[stateIndex].Extents * 0.5f;
+                var boxCastExtents = States[stateIndex].Extents * 0.2f;
                 boxCastExtents.y *= 1;
-                boxCastExtents.z = 0.1f;
+                //boxCastExtents.z = 0.1f;
+                boxCastExtents.z = 0.02f;
 
                 var endPoint = Waypoints[waypointOffset + waypointIndex];
 

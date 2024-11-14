@@ -12,6 +12,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class RoadNetworkLaneConverter
     {
+        public static readonly bool ignoreReversedLane = false;
+
         //temporarily keeps Lane information as RoadNetwork data
         public struct LaneConvertInfo
         {
@@ -101,20 +103,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         var points = lane.GetChildLineString(getter).GetChildPointsVector(getter);
 
                         //ポイント数が足りない場合は、暫定的にポイントを作成
-                        if (points.Count == 0)
+                        if (points.Count < 2)
                         {
-                            //Debug.Log($"points not found");
+                            Debug.Log($"point size is {points.Count}");
                             //points = new() { Vector3.zero, Vector3.zero };
                             continue;
                         }
-                        else if (points.Count == 1)
-                        {
-                            Debug.Log($"point size is 1 : {index}");
-                            //points.Add(points.FirstOrDefault());
-                            continue;
-                        }
 
-                        //if (lane.IsReverse)    points.Reverse();
+                        if (ignoreReversedLane && lane.IsReverse)
+                            points.Reverse();
 
                         //points = ConvertToSplinePoints(points);
 
@@ -130,7 +127,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         RnDataIntersection nextIntersection = road.GetNextRoad(getter) as RnDataIntersection;
                         RnDataIntersection prevIntersection = road.GetPrevRoad(getter) as RnDataIntersection;
 
-                        if (lane.IsReverse) //反転している場合 Prev/Nextが逆になるらしい
+                        if (!ignoreReversedLane && lane.IsReverse) //反転している場合 Prev/Nextが逆になるらしい
                         {
                             (nextIntersection, prevIntersection) = (prevIntersection, nextIntersection);
                         }
@@ -143,7 +140,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             }
                             else
                             {
-                                info.nextLanes = nextIntersection.GetNextLanesFromLane(getter, road, lane);
+                                info.nextLanes = nextIntersection.GetNextLanesFromLane(getter, road, lane, ignoreReversedLane);
                             }
                         }
 
@@ -155,7 +152,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             }
                             else
                             {
-                                info.prevLanes = prevIntersection.GetPrevLanesFromLane(getter, road, lane);
+                                info.prevLanes = prevIntersection.GetPrevLanesFromLane(getter, road, lane, ignoreReversedLane);
                             }
                         }
 
@@ -189,9 +186,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         info.track = track;
                         info.road = rb;
 
-                        info.nextLanes = intersection.GetNextLanesFromTrack(getter, track);
+                        info.nextLanes = intersection.GetNextLanesFromTrack(getter, track, ignoreReversedLane);
 
-                        info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track);
+                        info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track, ignoreReversedLane);
 
                         //Stopline
                         RnDataNeighbor nextEdge = intersection.GetEdgesFromBorder(getter, track.GetToBorder(getter)).FirstOrDefault();
