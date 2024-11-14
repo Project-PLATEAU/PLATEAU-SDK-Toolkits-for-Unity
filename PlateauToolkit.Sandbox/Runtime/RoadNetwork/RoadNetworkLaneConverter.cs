@@ -19,6 +19,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             public List<RnDataTrack> nextTracks;
             public List<RnDataTrack> prevTracks;
+            public List<RnDataTrack> rowTracks;
 
             public List<RnDataLane> nextLanes;
             public List<RnDataLane> prevLanes;
@@ -240,6 +241,31 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             lane.NextLanes.Add(trackDict[t]);
                     }
                 }
+
+
+                //if (info.rowTracks != null)
+                //{
+                //    foreach (var t in info.rowTracks)
+                //    {
+                //        if (trackDict.ContainsKey(t))
+                //            lane.RightOfWayLanes.Add(trackDict[t]);
+                //    }
+                //}
+
+
+                if(info.track != null)
+                {
+                    //var intersection = info.road as RnDataIntersection;
+                    //var alltrack = intersection.GetFromTracksFromBorder(getter, info.track.GetFromBorder(getter));
+
+                    //foreach (var t in alltrack)
+                    //{
+                    //    if (trackDict.ContainsKey(t))
+                    //        lane.RightOfWayLanes.Add(trackDict[t]);
+                    //}
+
+                }
+
 #if UNITY_EDITOR
 
                 GameObjectUtility.SetStaticEditorFlags(lane.gameObject, StaticEditorFlags.BatchingStatic | StaticEditorFlags.ContributeGI | StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic);

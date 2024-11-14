@@ -51,6 +51,12 @@ namespace PlateauToolkit.Sandbox.Editor
                 Initialize();
                 m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
                 m_RnTrafficManager.CreateSimulator();
+
+                var lanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+                for (int i = 0;  i < lanes.transform.childCount; i++)
+                {
+                    TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
+                }
             }
             catch(System.Exception ex)
             {
