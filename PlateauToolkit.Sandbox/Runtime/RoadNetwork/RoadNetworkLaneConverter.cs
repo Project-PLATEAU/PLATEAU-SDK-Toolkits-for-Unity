@@ -4,6 +4,7 @@ using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -113,10 +114,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             continue;
                         }
 
-                        if (lane.IsReverse)
-                        {
-                            points.Reverse();
-                        }
+                        //if (lane.IsReverse)    points.Reverse();
 
                         //points = ConvertToSplinePoints(points);
 
@@ -130,6 +128,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         info.road = rb;
 
                         RnDataIntersection nextIntersection = road.GetNextRoad(getter) as RnDataIntersection;
+                        RnDataIntersection prevIntersection = road.GetPrevRoad(getter) as RnDataIntersection;
+
+                        if (lane.IsReverse) //反転している場合 Prev/Nextが逆になるらしい
+                        {
+                            (nextIntersection, prevIntersection) = (prevIntersection, nextIntersection);
+                        }
+
                         if (nextIntersection != null)
                         {
                             if (!nextIntersection.IsEmptyIntersection)
@@ -142,7 +147,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             }
                         }
 
-                        RnDataIntersection prevIntersection = road.GetPrevRoad(getter) as RnDataIntersection;
                         if (prevIntersection != null)
                         {
                             if (!prevIntersection.IsEmptyIntersection)
@@ -244,10 +248,60 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 GameObjectUtility.SetStaticEditorFlags(lane.gameObject, StaticEditorFlags.BatchingStatic | StaticEditorFlags.ContributeGI | StaticEditorFlags.OccluderStatic | StaticEditorFlags.OccludeeStatic);
 #endif
 
+                //Next/Prev共に取得できない場合のDebug 出力
+                DebugLanes(lane, getter);
+
                 allLanes.Add(lane);
             }
 
+            Debug.Log($"<color=green>Num not connected lanes {allLanes.FindAll(x => x.NextLanes.Count == 0 && x.PrevLanes.Count == 0).Count()}</color>");
+
             return allLanes;
+        }
+
+        //Next/Prev共に取得できない場合のDebug確認用
+        void DebugLanes(TrafficLane lane, RoadNetworkDataGetter getter)
+        {
+            if (lane.PrevLanes.Count == 0 && lane.NextLanes.Count == 0)
+            {
+                //Debug.LogError($"Lane has no connection {lane.name}");
+                if (lane.rnRoad != null)
+                {
+                    var nextBorder = lane.rnLane.GetNextBorder(getter);
+                    var prevBorder = lane.rnLane.GetPrevBorder(getter);
+                    var nextIntersection = lane.rnRoad.GetNextRoad(getter) as RnDataIntersection;
+                    var prevIntersection = lane.rnRoad.GetPrevRoad(getter) as RnDataIntersection;
+                    if (nextIntersection != null)
+                    {
+                        var linestrings = nextIntersection.Edges.Select(x => x.GetBorder(getter).LineString.ID);
+                        Debug.Log($"Next Intersection Borders {string.Join(",", linestrings)} : nextBorder {nextBorder.LineString.ID} {lane.rnLane.IsReverse} {lane.name}");
+                    }
+                    if (prevIntersection != null)
+                    {
+                        var linestrings = prevIntersection.Edges.Select(x => x.GetBorder(getter).LineString.ID);
+                        Debug.Log($"Prev Intersection Borders {string.Join(",", linestrings)} : prevBorder {prevBorder.LineString.ID}  {lane.rnLane.IsReverse} {lane.name}");
+                    }
+                }
+                else if(lane.rnIntersection != null)
+                {
+                    var toBorder = lane.rnTrack.GetToBorder(getter);
+                    var fromBorder = lane.rnTrack.GetFromBorder(getter);
+                    var nextRoad = lane.rnIntersection.Edges.Find(x => x.GetBorder(getter).IsSameLine(toBorder)).GetRoad(getter) as RnDataRoad;
+                    var prevRoad = lane.rnIntersection.Edges.Find(x => x.GetBorder(getter).IsSameLine(fromBorder)).GetRoad(getter) as RnDataRoad;
+                    if (nextRoad != null)
+                    {
+                        var nextBorderlinestrings = nextRoad.GetMainLanes(getter).Select(x => x.GetNextBorder(getter).LineString.ID);
+                        var prevBorderlinestrings = nextRoad.GetMainLanes(getter).Select(x => x.GetPrevBorder(getter).LineString.ID);
+                        Debug.Log($"Next Road next {string.Join(",", nextBorderlinestrings)} prev {string.Join(",", prevBorderlinestrings)} : toBorder {toBorder.LineString.ID} ");
+                    }
+                    if (prevRoad != null)
+                    {
+                        var nextBorderlinestrings = prevRoad.GetMainLanes(getter).Select(x => x.GetNextBorder(getter).LineString.ID);
+                        var prevBorderlinestrings = prevRoad.GetMainLanes(getter).Select(x => x.GetPrevBorder(getter).LineString.ID);
+                        Debug.Log($"Prev Road next {string.Join(",", nextBorderlinestrings)} prev {string.Join(",", prevBorderlinestrings)} : fromBorder {fromBorder.LineString.ID} ");
+                    }
+                }
+            }
         }
     }
 }

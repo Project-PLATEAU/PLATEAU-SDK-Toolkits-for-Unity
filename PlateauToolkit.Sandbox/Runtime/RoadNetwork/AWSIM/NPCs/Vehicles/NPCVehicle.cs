@@ -1,10 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System;
-using static PlateauToolkit.Sandbox.RoadNetwork.RoadnetworkExtensions;
 using PlateauToolkit.Sandbox;
-using static UnityEngine.ParticleSystem;
 using PlateauToolkit.Sandbox.RoadNetwork;
 
 namespace AWSIM
@@ -23,126 +18,8 @@ namespace AWSIM
             HAZARD,
         }
 
-        //[Serializable]
-        //public class Wheel
-        //{
-        //    public WheelCollider WheelCollider;
-        //    public Transform VisualTransform;
-
-        //    float wheelPitchAngle = 0;
-        //    float lastSteerAngle = 0;
-
-        //    public void UpdateVisual(float speed, float steerAngle)
-        //    {
-        //        // Apply WheelCollider position to visual object.
-        //        WheelCollider.GetWorldPose(out var pos, out _);
-        //        VisualTransform.position = pos;
-
-        //        // wheel forward rotation(pitch).
-        //        var additionalPitchAngle = (speed * Time.deltaTime / WheelCollider.radius) * Mathf.Rad2Deg;
-        //        wheelPitchAngle += additionalPitchAngle;
-        //        wheelPitchAngle %= 360;
-
-        //        // steer angle.
-        //        var fixedSteerAngle = Mathf.MoveTowardsAngle(lastSteerAngle, steerAngle, Time.deltaTime * maxSteerSpeed);
-
-        //        // Apply rotations to visual wheel object.
-        //        VisualTransform.localEulerAngles = new Vector3(wheelPitchAngle, fixedSteerAngle, 0);
-
-        //        // Cache steer angle value for next update.
-        //        lastSteerAngle = fixedSteerAngle;
-        //    }
-        //}
-
-        //[Serializable]
-        //public class Axle
-        //{
-        //    public Wheel leftWheel;
-        //    public Wheel rightWheel;
-
-        //    public void UpdateVisual(float speed, float steerAngle)
-        //    {
-        //        leftWheel.UpdateVisual(speed, steerAngle);
-        //        rightWheel.UpdateVisual(speed, steerAngle);
-        //    }
-        //}
-
-        //[Serializable]
-        //public class AxleSettings
-        //{
-        //    [SerializeField] Axle frontAxle;
-        //    [SerializeField] Axle rearAxle;
-
-        //    public float GetWheelBase()
-        //    {
-        //        var frontPos = frontAxle.leftWheel.WheelCollider.transform.localPosition;
-        //        var rearPos = rearAxle.leftWheel.WheelCollider.transform.localPosition;
-
-        //        return Mathf.Abs(frontPos.z - rearPos.z);
-        //    }
-
-        //    public void UpdateVisual(float speed, float steerAngle)
-        //    {
-        //        frontAxle.UpdateVisual(speed, steerAngle);
-        //        rearAxle.UpdateVisual(speed, 0);
-        //    }
-        //}
-
         [SerializeField]
         GameObject visualObjectRoot;
-
-        //[Serializable]
-        //public class EmissionMaterial
-        //{
-        //    [SerializeField] MeshRenderer meshRenderer;
-        //    [SerializeField] int materialIndex;
-        //    [SerializeField] float lightingIntensity;
-        //    [SerializeField] Color lightingColor;
-        //    [SerializeField, Range(0, 1)] float lightingExposureWeight;
-
-        //    Material material = null;
-        //    Color defaultEmissiveColor;
-        //    float defaultExposureWeight;
-        //    bool isOn = false;
-
-        //    const string EmissiveColor = "_EmissiveColor";
-        //    const string EmissiveExposureWeight = "_EmissiveExposureWeight";
-
-        //    public void Initialize()
-        //    {
-        //        if (material == null)
-        //        {
-        //            material = meshRenderer.materials[materialIndex];
-        //            material.EnableKeyword("_EMISSION");
-        //            defaultEmissiveColor = material.GetColor(EmissiveColor);
-        //            defaultExposureWeight = material.GetFloat(EmissiveExposureWeight);
-        //        }
-        //    }
-
-        //    public void Set(bool isLightOn)
-        //    {
-        //        if (this.isOn == isLightOn)
-        //            return;
-
-        //        this.isOn = isLightOn;
-        //        if (isLightOn)
-        //        {
-        //            material.SetColor(EmissiveColor, lightingColor * lightingIntensity);
-        //            material.SetFloat(EmissiveExposureWeight, lightingExposureWeight);
-        //        }
-        //        else
-        //        {
-        //            material.SetColor(EmissiveColor, defaultEmissiveColor);
-        //            material.SetFloat(EmissiveExposureWeight, defaultExposureWeight);
-        //        }
-        //    }
-
-        //    public void Destroy()
-        //    {
-        //        if (material != null)
-        //            UnityEngine.Object.Destroy(material);
-        //    }
-        //}
 
         /// <summary>
         /// Current visualObject's activeself
@@ -169,10 +46,6 @@ namespace AWSIM
         const float turnSignalBlinkSec = 0.5f;             // seconds
         const float brakeLightAccelThreshold = -0.1f;      // m/s
 
-        //[Header("Physics Settings")]
-        //[SerializeField] Transform centerOfMass;
-        //[SerializeField] new Rigidbody rigidbody;
-
         Rigidbody rigidbody {
             get
             {
@@ -183,8 +56,9 @@ namespace AWSIM
                 else
                 {
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
-                    rigidbody.mass = 1500f;
-                    rigidbody.angularDrag = 0.0f;
+                    rigidbody.mass = 3000;
+                    rigidbody.drag = 1;
+                    rigidbody.angularDrag = 1;
                     rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
@@ -196,18 +70,9 @@ namespace AWSIM
             }
         }
 
-        //[SerializeField] Rigidbody trailer = null;
-        //[SerializeField] AxleSettings axleSettings;
-
         [Header("Bounding box Settngs")]
         [SerializeField] Bounds bounds;
 
-        //[Header("Brake light parameters")]
-        //[SerializeField] EmissionMaterial brakeLight;
-
-        //[Header("Turn signal parameters")]
-        //[SerializeField] EmissionMaterial leftTurnSignalLight;
-        //[SerializeField] EmissionMaterial rightTurnSignalLight;
 
         TurnSignalState turnSignalState = TurnSignalState.OFF;
         float turnSignalTimer = 0;
@@ -227,7 +92,6 @@ namespace AWSIM
         IPlateauSandboxTrafficObject m_TrafficObject;
 
         public Transform RigidBodyTransform => rigidbody.transform;
-        //public Transform TrailerTransform => trailer?.transform;
         public Transform TrailerTransform => null;
 
         public static Bounds GetBounds(GameObject prefab)
@@ -286,29 +150,12 @@ namespace AWSIM
                 var boxCollider =  visualObjectRoot.AddComponent<BoxCollider>();
                 boxCollider.excludeLayers = LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             }
-
-            //bounds = GetBounds(visualObjectRoot);
-            //centerOfMass = _centerOfMass;
-            //rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
-
             lastPosition = rigidbody.position;
-
-            //if (trailer == null)
-            //    trailer = rigidbody;
         }
 
         // Start is called before the first frame update
         void Awake()
         {
-            //if (trailer == null)
-            //    trailer = rigidbody;
-            //leftTurnSignalLight.Initialize();
-            //rightTurnSignalLight.Initialize();
-            //brakeLight.Initialize();
-
-            //rigidbody.centerOfMass = transform.InverseTransformPoint(centerOfMass.position);
-            //lastPosition = rigidbody.position;
-            //wheelbase = axleSettings.GetWheelBase();
         }
 
         // Update is called once per frame
@@ -316,44 +163,6 @@ namespace AWSIM
         {
             // Update Wheel visuals.
             var steerAngle = CalcSteerAngle(speed, yawAngularSpeed, wheelbase);
-            //axleSettings.UpdateVisual(speed, steerAngle);
-
-            // brake light.
-            //var isBrakeLightOn = IsBrakeLightOn();
-            //brakeLight.Set(isBrakeLightOn);
-
-            //// turn signal.
-            //if (IsAnyTurnSignalInputs() == false)
-            //{
-            //    if (turnSignalTimer != 0)
-            //        turnSignalTimer = 0;
-
-            //    if (currentTurnSignalOn != false)
-            //        currentTurnSignalOn = false;
-
-            //    leftTurnSignalLight.Set(false);
-            //    rightTurnSignalLight.Set(false);
-
-            //    return;
-            //}
-
-            //turnSignalTimer -= Time.deltaTime;
-            //if (turnSignalTimer < 0f)
-            //{
-            //    turnSignalTimer = turnSignalBlinkSec;
-            //    currentTurnSignalOn = !currentTurnSignalOn;
-            //}
-
-            //var isLeftTurnSignalOn = IsLeftTurnSignalOn();
-            //leftTurnSignalLight?.Set(isLeftTurnSignalOn);
-
-            //var isRightTurnSignalOn = IsRightTurniSignalOn();
-            //rightTurnSignalLight?.Set(isRightTurnSignalOn);
-
-            //MovementInfo movementInfo = new MovementInfo();
-            //movementInfo.m_SecondAxisForward = new Vector3(0, steerAngle, 0);
-            //movementInfo.m_MoveDelta = speed;
-            //m_TrafficObject.OnMove(movementInfo);
 
             m_TrafficObject.UpdateVisual(speed, steerAngle);
 
@@ -372,41 +181,7 @@ namespace AWSIM
 
                 return yaw;
             }
-
-            //bool IsBrakeLightOn()
-            //{
-            //    var isOn = false;
-            //    if (speed < 0.03f)
-            //        isOn = true;
-            //    if (acceleration < brakeLightAccelThreshold)
-            //        isOn = true;
-
-            //    return isOn;
-            //}
-
-            //bool IsAnyTurnSignalInputs()
-            //{
-            //    return turnSignalState == TurnSignalState.LEFT
-            //        || turnSignalState == TurnSignalState.RIGHT
-            //        || turnSignalState == TurnSignalState.HAZARD;
-            //}
-
-            //bool IsLeftTurnSignalOn()
-            //{
-            //    return (turnSignalState == TurnSignalState.LEFT
-            //        || turnSignalState == TurnSignalState.HAZARD)
-            //        && currentTurnSignalOn;
-            //}
-
-            //bool IsRightTurniSignalOn()
-            //{
-            //    return (turnSignalState == TurnSignalState.RIGHT
-            //        || turnSignalState == TurnSignalState.HAZARD)
-            //        && currentTurnSignalOn;
-            //}
         }
-
-
 
         void FixedUpdate()
         {
@@ -431,24 +206,8 @@ namespace AWSIM
             lastSpeed = speed;
         }
 
-        void Reset()
-        {
-            //if (rigidbody == null)
-            //    rigidbody = GetComponent<Rigidbody>();
-        }
-
-        void OnValidate()
-        {
-            //rigidbody.isKinematic = false;
-            //rigidbody.useGravity = true;
-            //rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        }
-
         void OnDestroy()
         {
-            //leftTurnSignalLight.Destroy();
-            //rightTurnSignalLight.Destroy();
-            //brakeLight.Destroy();
         }
 
         /// <summary>
