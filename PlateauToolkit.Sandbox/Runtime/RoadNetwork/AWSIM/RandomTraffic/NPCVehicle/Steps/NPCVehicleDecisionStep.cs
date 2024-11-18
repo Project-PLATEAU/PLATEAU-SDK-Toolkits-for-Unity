@@ -16,8 +16,8 @@ namespace AWSIM.TrafficSimulation
         // The vehicle is controlled to stop at this distance away from the obstacle(e.g. another vehicle in front of the vehicle).
         //private const float MinFrontVehicleDistance = 4f;
         //private const float MinStopDistance = 1.5f;
-        private const float MinFrontVehicleDistance = 2f;
-        private const float MinStopDistance = 1.0f;
+        private const float MinFrontVehicleDistance = 1.5f;
+        private const float MinStopDistance = 0.5f;
 
         public NPCVehicleDecisionStep(NPCVehicleConfig config)
         {
@@ -89,7 +89,7 @@ namespace AWSIM.TrafficSimulation
             else
                 state.SpeedMode = NPCVehicleSpeedMode.NORMAL;
 
-            //’âŽÔŽžŠÔ‚ª’·‚·‚¬‚é(15•bj
+            //’âŽÔŽžŠÔ‚ª’·‚·‚¬‚é(15•bjê‡‚ÍÁ‚·
             if (state.SpeedMode != NPCVehicleSpeedMode.NORMAL && state.SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - state.SpeedModeStopStartTime > 15f)
                 state.ShouldDespawn = true;
         }

@@ -9,7 +9,11 @@ namespace AWSIM.TrafficSimulation
         /// <summary>
         /// Multiplier used to determine rotational speed from steering angle and vehicle speed.
         /// </summary>
-        public const float YawSpeedMultiplier = 0.15f;
+        //public const float YawSpeedMultiplier = 0.15f;
+
+        //値が小さいとカーブが大回りになり対向車線にはみ出す
+        public const float YawSpeedMultiplier = 0.3f;
+
 
         /// <summary>
         /// Rate of change of angular velocity per unit time.<br/>
