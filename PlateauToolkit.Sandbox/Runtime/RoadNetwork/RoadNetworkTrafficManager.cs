@@ -63,7 +63,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (vehicles == null)
                 vehicles = new GameObject(RoadNetworkConstants.VEHICLE_ROOT_NAME);
 
-            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), GetNumMaxVehicles(), vehicles);
+            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), GetNumMaxVehicles(), vehicles, true);
 
             List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter); //全て変換 (TrafficLane)
 
@@ -88,7 +88,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             RandomTrafficSimConfig.spawnableLanes = respawnableLanes.ToArray();
             RandomTrafficSimConfig.enabled = true;
             SimTrafficManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { RandomTrafficSimConfigInitial, RandomTrafficSimConfig };
-
 
             SimTrafficManager.Initialize();
         }

@@ -77,14 +77,20 @@ namespace AWSIM.TrafficSimulation
         public NPCVehicleSimulator npcVehicleSimulator;
         private List<ITrafficSimulator> trafficSimulatorNodes;
         private Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>> spawnLanes;
-        private GameObject dummyEgo;
+        //private GameObject dummyEgo;
 
-        public void InitParams(LayerMask _vehicleLayerMask_, LayerMask _groundLayerMask_, int _maxVehicleCount_, GameObject _vehicleRoot_)
+        public void InitParams(LayerMask _vehicleLayerMask_, LayerMask _groundLayerMask_, int _maxVehicleCount_, GameObject _vehicleRoot_, bool _debug_)
         {
             vehicleLayerMask = (1 << _vehicleLayerMask_);
             groundLayerMask = (1 << _groundLayerMask_);
             maxVehicleCount = _maxVehicleCount_;
             _vehicleRoot = _vehicleRoot_;
+
+            if (_debug_)
+            {
+                showGizmos = showYieldingPhase = showObstacleChecking = true;
+                //showSpawnPoints = true;
+            }
         }
 
         /// <summary>
@@ -318,6 +324,8 @@ namespace AWSIM.TrafficSimulation
         }
         private void Despawn()
         {
+            //int startcount = npcVehicleSimulator.VehicleStates.Count;
+
             foreach (var state in npcVehicleSimulator.VehicleStates)
             {
                 if (state.ShouldDespawn)
@@ -326,6 +334,10 @@ namespace AWSIM.TrafficSimulation
                 }
             }
             npcVehicleSimulator.RemoveInvalidVehicles();
+
+            //int endcount = npcVehicleSimulator.VehicleStates.Count;
+            //if(startcount != endcount)
+            //    Debug.Log($"<color=red>Despawn {startcount} -> {endcount}</color>");
         }
 
         private void OnDestroy()

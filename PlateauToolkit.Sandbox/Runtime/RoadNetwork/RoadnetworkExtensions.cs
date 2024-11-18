@@ -479,6 +479,24 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return road.GetLanesFromNextBorder(getter, fromBorder, ignoreReversedLane);
         }
 
+        public static List<RnDataLineString> GetLAllBordersFromMainLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
+        {
+            List<RnDataLane> mainLanes = road.GetMainLanes(getter);
+            var borders = mainLanes.Select(x => x.GetNextBorder(getter).GetChildLineString(getter)).ToList();
+            var prevBorders = mainLanes.Select(x => x.GetPrevBorder(getter).GetChildLineString(getter)).ToList();
+            borders.AddRange(prevBorders);
+            return borders;
+        }
+
+        public static List<RnDataWay> GetLAllBorderWaysFromMainLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
+        {
+            List<RnDataLane> mainLanes = road.GetMainLanes(getter);
+            var borders = mainLanes.Select(x => x.GetNextBorder(getter)).ToList();
+            var prevBorders = mainLanes.Select(x => x.GetPrevBorder(getter)).ToList();
+            borders.AddRange(prevBorders);
+            return borders;
+        }
+
         #endregion road
 
         //Intersection
@@ -655,6 +673,85 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// 境界線borderに対応する辺を取得
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="border"></param>
+        /// <param name="getter"></param>
+        /// <returns></returns>
+        public static RnDataNeighbor GetEdgeByBorder([DisallowNull] this RnDataIntersection self,
+            RoadNetworkDataGetter getter, RnDataWay border)
+        {
+            if (border == null)
+                return null;
+            return self.Edges.FirstOrDefault(x => border.IsSameLine(getter.GetWay(x.Border)));
+        }
+
+        /// <summary>
+        /// selfに対して, 利用可能なトラックかどうか
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="track"></param>
+        /// <param name="getter"></param>
+        /// <returns></returns>
+        public static bool IsAvailableToTrack([DisallowNull] this RnDataIntersection self, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            if (self.Tracks.Contains(track) == false)
+                return false;
+
+            // 行き先の道路を求める
+            var toEdge = self.GetEdgeByBorder(getter, getter.GetWay(track.ToBorder));
+            if (toEdge == null)
+                return false;
+            // 行先の無いトラックは無効
+            var rb = getter.GetRoadBase(toEdge.Road);
+            if (rb == null)
+                return false;
+            // 行き先が道の時, そのレーンがこちらに進入してくるレーンの場合は無効
+            // 道路ネットワーク生成で１車線道路は両方向扱いにしているのでそれ対策)
+            if (rb is RnDataRoad road)
+            {
+                // PrevBorderで繋がっているレーンがあるかどうか
+                return road.GetLanesFromPrevTrack(getter, track, true).Any();
+            }
+            // 行き先が交差点の場合はOK
+            return true;
+        }
+
+        public static bool IsAvailableFromTrack([DisallowNull] this RnDataIntersection self, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            if (self.Tracks.Contains(track) == false)
+                return false;
+
+            // 行き先の道路を求める
+            var fromEdge = self.GetEdgeByBorder(getter, getter.GetWay(track.FromBorder));
+            if (fromEdge == null)
+                return false;
+            // 行先の無いトラックは無効
+            var rb = getter.GetRoadBase(fromEdge.Road);
+            if (rb == null)
+                return false;
+            // 行き先が道の時, そのレーンがこちらに進入してくるレーンの場合は無効
+            // 道路ネットワーク生成で１車線道路は両方向扱いにしているのでそれ対策)
+            if (rb is RnDataRoad road)
+            {
+                // PrevBorderで繋がっているレーンがあるかどうか
+                return road.GetLanesFromNextTrack(getter, track, true).Any();
+            }
+            // 行き先が交差点の場合はOK
+            return true;
+        }
+        public static List<RnDataTrack> FilterAvailableToTracks([DisallowNull] this RnDataIntersection self, RoadNetworkDataGetter getter, List<RnDataTrack> tracks)
+        {
+            return tracks.FindAll(x => self.IsAvailableToTrack(getter, x));
+        }
+
+        public static List<RnDataTrack> FilterAvailableFromTracks([DisallowNull] this RnDataIntersection self, RoadNetworkDataGetter getter, List<RnDataTrack> tracks)
+        {
+            return tracks.FindAll(x => self.IsAvailableFromTrack(getter, x));
+        }
+
         #endregion Intersection
 
         //Track
@@ -688,5 +785,63 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         #endregion Edge
+
+        #region RoadNetworkDataGetter
+
+        /// <summary>
+        /// idで指定したRnDataLineStringを取得. 存在しない場合はnullを返す
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static RnDataWay GetWay([DisallowNull] this RoadNetworkDataGetter self, RnID<RnDataWay> id)
+        {
+            return self.GetWays().TryGet(id);
+        }
+
+        /// <summary>
+        /// idで指定したRnDataLineStringを取得. 存在しない場合はnullを返す
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static RnDataLineString GetLineString([DisallowNull] this RoadNetworkDataGetter self, RnID<RnDataLineString> id)
+        {
+            return self.GetLineStrings().TryGet(id);
+        }
+
+        /// <summary>
+        /// idで指定したRnDataPointを取得. 存在しない場合はnullを返す
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static RnDataPoint GetPoint([DisallowNull] this RoadNetworkDataGetter self, RnID<RnDataPoint> id)
+        {
+            return self.GetPoints().TryGet(id);
+        }
+
+        /// <summary>
+        /// idで指定したRnDataRoadBaseを取得. 存在しない場合はnullを返す
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static RnDataRoadBase GetRoadBase([DisallowNull] this RoadNetworkDataGetter self, RnID<RnDataRoadBase> id)
+        {
+            return self.GetRoadBases().TryGet(id);
+        }
+
+        /// <summary>
+        /// idで指定したRnDataLaneを取得. 存在しない場合はnullを返す
+        /// </summary>
+        /// <param name="self"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public static RnDataLane GetLane([DisallowNull] this RoadNetworkDataGetter self, RnID<RnDataLane> id)
+        {
+            return self.GetLanes().TryGet(id);
+        }
+        #endregion RoadNetworkStorage
     }
 }

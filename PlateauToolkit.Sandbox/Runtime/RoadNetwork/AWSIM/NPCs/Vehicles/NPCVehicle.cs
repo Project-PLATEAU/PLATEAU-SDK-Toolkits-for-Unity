@@ -57,8 +57,8 @@ namespace AWSIM
                 {
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
                     rigidbody.mass = 3000;
-                    rigidbody.drag = 1;
-                    rigidbody.angularDrag = 1;
+                    rigidbody.drag = 0;
+                    rigidbody.angularDrag = 0;
                     rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;

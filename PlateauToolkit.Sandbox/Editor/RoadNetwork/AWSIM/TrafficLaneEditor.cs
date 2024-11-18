@@ -55,16 +55,16 @@ namespace AWSIM.TrafficSimulation
                 }
             }
 
-            if (trafficLane.intersectionLane)
-            {
-                Gizmos.color = Color.green;
+            //if (trafficLane.intersectionLane)
+            //{
+            //    Gizmos.color = Color.green;
 
-                for (int i = 1; i < trafficLane.Waypoints.Length; ++i)
-                {
-                    Gizmos.DrawLine(trafficLane.Waypoints[i - 1], trafficLane.Waypoints[i]);
-                    Gizmos.DrawCube(trafficLane.Waypoints[i], new Vector3(0.3f, 0.3f, 0.3f));
-                }
-            }
+            //    for (int i = 1; i < trafficLane.Waypoints.Length; ++i)
+            //    {
+            //        Gizmos.DrawLine(trafficLane.Waypoints[i - 1], trafficLane.Waypoints[i]);
+            //        Gizmos.DrawCube(trafficLane.Waypoints[i], new Vector3(0.3f, 0.3f, 0.3f));
+            //    }
+            //}
 
             Gizmos.color = defaultColor;
         }

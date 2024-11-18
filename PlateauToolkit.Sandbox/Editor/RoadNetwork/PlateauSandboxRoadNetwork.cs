@@ -51,12 +51,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 Initialize();
                 m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
                 m_RnTrafficManager.CreateSimulator();
-
-                var lanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
-                for (int i = 0;  i < lanes.transform.childCount; i++)
-                {
-                    TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
-                }
+                PostCreateSimulator();
             }
             catch(System.Exception ex)
             {
@@ -67,6 +62,15 @@ namespace PlateauToolkit.Sandbox.Editor
 
             EditorUtility.DisplayDialog("成功", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
             return true;
+        }
+
+        void PostCreateSimulator()
+        {
+            var lanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+            for (int i = 0; i < lanes.transform.childCount; i++)
+            {
+                TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
+            }
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる

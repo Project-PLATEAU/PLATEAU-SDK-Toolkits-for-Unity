@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 namespace AWSIM.TrafficSimulation
@@ -68,11 +69,12 @@ namespace AWSIM.TrafficSimulation
             var distanceToStopPointByRightOfWay = CalculateYieldingDistance(state);
             var distanceToStopPoint = Mathf.Min(distanceToStopPointByFrontVehicle, distanceToStopPointByTrafficLight, distanceToStopPointByRightOfWay);
 
-            state.IsStoppedByFrontVehicle = false;
-            if (distanceToStopPointByFrontVehicle <= stopDistance)
-            {
-                state.IsStoppedByFrontVehicle = true;
-            }
+            state.IsStoppedByFrontVehicle = (distanceToStopPointByFrontVehicle <= stopDistance);
+            //state.IsStoppedByFrontVehicle = false;
+            //if (distanceToStopPointByFrontVehicle <= stopDistance)
+            //{
+            //    state.IsStoppedByFrontVehicle = true;
+            //}
 
             if (distanceToStopPoint <= absoluteStopDistance)
                 state.SpeedMode = NPCVehicleSpeedMode.ABSOLUTE_STOP;
@@ -84,6 +86,10 @@ namespace AWSIM.TrafficSimulation
                 state.SpeedMode = NPCVehicleSpeedMode.SLOW;
             else
                 state.SpeedMode = NPCVehicleSpeedMode.NORMAL;
+
+            //’âŽÔŽžŠÔ‚ª’·‚·‚¬‚é
+            if (state.SpeedMode != NPCVehicleSpeedMode.NORMAL && state.SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - state.SpeedModeStopStartTime > 10f)
+                state.ShouldDespawn = true;
         }
 
         private static float CalculateTrafficLightDistance(NPCVehicleInternalState state, float suddenStopDistance)
@@ -142,6 +148,11 @@ namespace AWSIM.TrafficSimulation
                     default:
                         Gizmos.color = Color.green;
                         break;
+                }
+
+                if (state.IsStoppedByFrontVehicle)
+                {
+                    Handles.Label(state.TargetPoint, $"StoppedByFrontVehicle");
                 }
 
                 var currentPosition = state.FrontCenterPosition;

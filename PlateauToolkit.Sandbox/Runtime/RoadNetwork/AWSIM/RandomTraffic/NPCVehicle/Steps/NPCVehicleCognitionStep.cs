@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Jobs;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
 using GeometryUtility = AWSIM.Lanelet.GeometryUtility;
@@ -271,6 +272,7 @@ namespace AWSIM.TrafficSimulation
                 }
 
                 IsTurnings[index] = turnAngle > 45f;
+                //IsTurnings[index] = false;
             }
         }
 
@@ -289,7 +291,7 @@ namespace AWSIM.TrafficSimulation
             public static float minimumDistanceBetweenNPCs = 70f;
 
             // In
-            public Transform EGOTransform;
+            //public Transform EGOTransform;
 
             // In/Out
             public IReadOnlyList<NPCVehicleInternalState> States;
@@ -931,6 +933,14 @@ namespace AWSIM.TrafficSimulation
                 {
                     if (GroundHitInfoArray[i].collider == null)
                         States[i].ShouldDespawn = true;
+
+                    //Gound‚©‚ç‚Ì‹——£”»’è
+                    if (Vector3.Distance(States[i].Vehicle.transform.position ,GroundHitInfoArray[i].point) > 3f)
+                        States[i].ShouldDespawn = true;
+
+                    //’âŽÔŽžŠÔ‚ª’·‚·‚¬‚é
+                    //if (States[i].IsStoppedByFrontVehicle && Time.time - States[i].IsStoppedByFrontVehicleStartTime > 10f)
+                    //    States[i].ShouldDespawn = true;
 
                     States[i].DistanceToFrontVehicle = ObstacleDistances[i];
                     States[i].IsTurning = IsTurnings[i];

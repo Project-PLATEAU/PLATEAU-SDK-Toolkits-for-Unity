@@ -58,7 +58,24 @@ namespace AWSIM.TrafficSimulation
 
         // Output from Decision
         public Vector3 TargetPoint { get; set; }
-        public NPCVehicleSpeedMode SpeedMode { get; set; }
+        //public NPCVehicleSpeedMode SpeedMode { get; set; }
+        public NPCVehicleSpeedMode SpeedMode
+        {
+            get => _SpeedMode;
+            set
+            {
+                if ((_SpeedMode == NPCVehicleSpeedMode.NORMAL || _SpeedMode == NPCVehicleSpeedMode.SLOW)
+                    && (value != NPCVehicleSpeedMode.NORMAL && value != NPCVehicleSpeedMode.SLOW))
+                {
+                    _SpeedModeStopStartTime = Time.time;
+                }
+                _SpeedMode = value;
+            }
+        }
+        public float SpeedModeStopStartTime => _SpeedModeStopStartTime;
+
+        private NPCVehicleSpeedMode _SpeedMode;
+        private float _SpeedModeStopStartTime;
 
         // Output from Control
         public Vector3 Position { get; set; }
@@ -72,7 +89,24 @@ namespace AWSIM.TrafficSimulation
 
         // Debugs
         public Transform DominatingVehicle { get; set; }
-        public bool IsStoppedByFrontVehicle { get; set; }
+        //public bool IsStoppedByFrontVehicle { get; set; }
+
+        public bool IsStoppedByFrontVehicle
+        {
+            get => _IsStoppedByFrontVehicle;
+            set
+            {
+                if (!_IsStoppedByFrontVehicle && value)
+                {
+                    _IsStoppedByFrontVehicleStartTime = Time.time;
+                }
+                _IsStoppedByFrontVehicle = value;
+            }
+        }
+
+        public float IsStoppedByFrontVehicleStartTime => _IsStoppedByFrontVehicleStartTime;
+        private bool _IsStoppedByFrontVehicle;
+        private float _IsStoppedByFrontVehicleStartTime;
 
         public Vector3 Forward =>
             Quaternion.AngleAxis(Yaw, Vector3.up) * Vector3.forward;
