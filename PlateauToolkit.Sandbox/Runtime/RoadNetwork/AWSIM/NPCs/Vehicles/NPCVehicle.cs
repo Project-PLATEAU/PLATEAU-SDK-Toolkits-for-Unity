@@ -57,8 +57,8 @@ namespace AWSIM
                 {
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
                     rigidbody.mass = 3000;
-                    rigidbody.drag = 0;
-                    rigidbody.angularDrag = 0;
+                    rigidbody.drag = 1;
+                    rigidbody.angularDrag = 1;
                     rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
@@ -141,14 +141,17 @@ namespace AWSIM
             }
 
             var collider = visualObjectRoot.GetComponentInChildren<Collider>();
+            var physicMaterial = Resources.Load<PhysicMaterial>("VehiclePhisicMaterial");
             if (collider != null)
             {
                 collider.excludeLayers = LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLE);
+                collider.material = physicMaterial;
             }
             else
             {
                 var boxCollider =  visualObjectRoot.AddComponent<BoxCollider>();
                 boxCollider.excludeLayers = LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLE);
+                boxCollider.material = physicMaterial;
             }
             lastPosition = rigidbody.position;
         }

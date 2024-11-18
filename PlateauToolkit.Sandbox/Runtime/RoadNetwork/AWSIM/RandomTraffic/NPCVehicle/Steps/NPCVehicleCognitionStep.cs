@@ -271,8 +271,8 @@ namespace AWSIM.TrafficSimulation
                     currentForward = nextForward;
                 }
 
-                IsTurnings[index] = turnAngle > 45f;
-                //IsTurnings[index] = false;
+                //IsTurnings[index] = turnAngle > 45f;
+                IsTurnings[index] = turnAngle > 10f;
             }
         }
 
@@ -1159,6 +1159,8 @@ namespace AWSIM.TrafficSimulation
                     {
                         continue;
                     }
+
+                    Handles.Label(stateCurrentPosition, $"p {state.YieldPhase.ToString()}");
 
                     switch (state.YieldPhase)
                     {

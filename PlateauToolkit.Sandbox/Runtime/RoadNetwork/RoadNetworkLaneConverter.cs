@@ -147,6 +147,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             {
                                 var tracks = nextIntersection.GetFromTracksFromLane(getter, lane);
                                 info.nextTracks = nextIntersection.FilterAvailableToTracks(getter,tracks); //一方通行侵入除外
+                                //info.nextTracks = tracks;
 
                                 Debug.Log($"<color=red>Next Tracks {tracks.Count} -> {info.nextTracks.Count}</color>");
                             }
@@ -162,6 +163,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             {
                                 var tracks = prevIntersection.GetToTracksFromLane(getter, lane);
                                 info.prevTracks = prevIntersection.FilterAvailableFromTracks(getter, tracks); //一方通行侵入除外
+                                //info.prevTracks = tracks;
 
                                 Debug.Log($"<color=red>Prev Tracks {tracks.Count} -> {info.prevTracks.Count}</color>");
                             }

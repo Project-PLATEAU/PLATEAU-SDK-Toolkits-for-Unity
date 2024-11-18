@@ -5,6 +5,8 @@ using UnityEngine;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using AWSIM.TrafficSimulation;
 using UnityEditor;
+using PLATEAU.CityInfo;
+using System.Security.Cryptography;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -64,12 +66,43 @@ namespace PlateauToolkit.Sandbox.Editor
             return true;
         }
 
+
+        void ChangeLayersIncludeChildren(Transform trans, LayerMask layer)
+        {
+            trans.gameObject.layer = layer;
+            int len = trans.childCount;
+            for (int i = 0; i < len; i++)
+            {
+                ChangeLayersIncludeChildren(trans.GetChild(i), layer);
+            }
+        }
+
         void PostCreateSimulator()
         {
             var lanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
             for (int i = 0; i < lanes.transform.childCount; i++)
             {
                 TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
+            }
+
+            //Demをground Layerに
+            List<Transform> dems = new List<Transform>();
+            PLATEAUInstancedCityModel citymodel = GameObject.FindAnyObjectByType<PLATEAUInstancedCityModel>();
+            if(citymodel != null )
+            {
+                int len = citymodel.transform.childCount;
+                for (int i = 0; i < len; i++)
+                {
+                    var child = citymodel.transform.GetChild(i);
+                    if (child.name.Contains("_dem_"))
+                    {
+                        dems.Add(child);
+                    }
+                }
+            }
+            foreach (Transform trans in dems)
+            {
+                ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
             }
         }
 
