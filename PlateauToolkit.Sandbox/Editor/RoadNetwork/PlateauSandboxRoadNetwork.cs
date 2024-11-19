@@ -66,6 +66,28 @@ namespace PlateauToolkit.Sandbox.Editor
             return true;
         }
 
+        //Demをground Layerに
+        void SetDemAsGroundLayer()
+        {
+            List<Transform> dems = new List<Transform>();
+            PLATEAUInstancedCityModel citymodel = GameObject.FindAnyObjectByType<PLATEAUInstancedCityModel>();
+            if (citymodel != null)
+            {
+                int len = citymodel.transform.childCount;
+                for (int i = 0; i < len; i++)
+                {
+                    var child = citymodel.transform.GetChild(i);
+                    if (child.name.Contains("_dem_"))
+                    {
+                        dems.Add(child);
+                    }
+                }
+            }
+            foreach (Transform trans in dems)
+            {
+                ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
+            }
+        }
 
         void ChangeLayersIncludeChildren(Transform trans, LayerMask layer)
         {
@@ -85,25 +107,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
             }
 
-            //Demをground Layerに
-            List<Transform> dems = new List<Transform>();
-            PLATEAUInstancedCityModel citymodel = GameObject.FindAnyObjectByType<PLATEAUInstancedCityModel>();
-            if(citymodel != null )
-            {
-                int len = citymodel.transform.childCount;
-                for (int i = 0; i < len; i++)
-                {
-                    var child = citymodel.transform.GetChild(i);
-                    if (child.name.Contains("_dem_"))
-                    {
-                        dems.Add(child);
-                    }
-                }
-            }
-            foreach (Transform trans in dems)
-            {
-                ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
-            }
+            //SetDemAsGroundLayer(); //Demをground Layerに
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる

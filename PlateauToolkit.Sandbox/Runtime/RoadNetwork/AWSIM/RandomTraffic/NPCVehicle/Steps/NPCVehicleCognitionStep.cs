@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using Unity.Collections;
 using Unity.Jobs;
 using UnityEditor;
@@ -139,15 +140,23 @@ namespace AWSIM.TrafficSimulation
 
             public LayerMask GroundLayerMask;
 
+            public QueryParameters Parameters;
+
             public void Execute(int index)
             {
+                Parameters = new QueryParameters
+                {
+                    layerMask = GroundLayerMask,
+                };
+
                 Commands[index] = new RaycastCommand
                 {
                     from = NativeStates[index].FrontCenterPosition + Vector3.up * 2f,
                     direction = Vector3.down,
                     distance = 10f,
-                    layerMask = GroundLayerMask,
-                    maxHits = 1
+                    queryParameters = Parameters,
+                    //layerMask = GroundLayerMask,
+                    //maxHits = 1
                 };
             }
         }
@@ -158,6 +167,8 @@ namespace AWSIM.TrafficSimulation
         private struct ObstacleCheckJob : IJobParallelFor
         {
             public LayerMask VehicleLayerMask;
+
+            public QueryParameters Parameters;
 
             [ReadOnly] public NativeArray<NativeState> States;
             [ReadOnly] public NativeArray<Vector3> Waypoints;
@@ -187,20 +198,35 @@ namespace AWSIM.TrafficSimulation
 
                 var boxCastExtents = States[stateIndex].Extents * 0.4f;
                 boxCastExtents.y *= 1;
-                boxCastExtents.z = 0.05f;
+                boxCastExtents.z = 0.08f;
 
                 var endPoint = Waypoints[waypointOffset + waypointIndex];
 
                 var distance = Vector3.Distance(startPoint, endPoint);
                 var direction = (endPoint - startPoint).normalized;
                 var rotation = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
+
+                //Commands[index] = new BoxcastCommand(
+                //    startPoint,
+                //    boxCastExtents,
+                //    rotation,
+                //    direction,
+                //    distance,
+                //    VehicleLayerMask
+                //);
+
+                Parameters = new QueryParameters
+                {
+                    layerMask = VehicleLayerMask,
+                };
+
                 Commands[index] = new BoxcastCommand(
                     startPoint,
                     boxCastExtents,
                     rotation,
                     direction,
-                    distance,
-                    VehicleLayerMask
+                    Parameters,
+                    distance
                 );
             }
         }
@@ -273,8 +299,8 @@ namespace AWSIM.TrafficSimulation
                     currentForward = nextForward;
                 }
 
-                //IsTurnings[index] = turnAngle > 45f;
-                IsTurnings[index] = turnAngle > 10f;
+                IsTurnings[index] = turnAngle > 45f;
+                //IsTurnings[index] = turnAngle > 10f;
             }
         }
 
@@ -936,13 +962,9 @@ namespace AWSIM.TrafficSimulation
                     if (GroundHitInfoArray[i].collider == null)
                         States[i].ShouldDespawn = true;
 
-                    //Gound‚©‚ç‚Ì‹——£”»’è
-                    if (Vector3.Distance(States[i].Vehicle.transform.position ,GroundHitInfoArray[i].point) > 3f)
+                    //Gound‚©‚ç‚Ì‹——£”»’è (5fˆÈ‰º‚¾‚ÆBus‚ªdefault‚ÅÁ‚¦‚Ä‚µ‚Ü‚¤j
+                    if (Vector3.Distance(States[i].Vehicle.transform.position, GroundHitInfoArray[i].point) > 10f)
                         States[i].ShouldDespawn = true;
-
-                    //’âŽÔŽžŠÔ‚ª’·‚·‚¬‚é
-                    //if (States[i].IsStoppedByFrontVehicle && Time.time - States[i].IsStoppedByFrontVehicleStartTime > 10f)
-                    //    States[i].ShouldDespawn = true;
 
                     States[i].DistanceToFrontVehicle = ObstacleDistances[i];
                     States[i].IsTurning = IsTurnings[i];
@@ -1085,6 +1107,7 @@ namespace AWSIM.TrafficSimulation
                     raycastCommands,
                     groundHitInfoArray,
                     8,
+                    1,
                     groundCheckJobHandle);
 
             calculateObstacleDistanceJobHandle = new CalculateObstacleDistanceJob

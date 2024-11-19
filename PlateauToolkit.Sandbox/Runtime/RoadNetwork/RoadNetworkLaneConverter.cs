@@ -54,6 +54,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return outPoints;
         }
 
+        public List<Vector3> ChangeYPosition(List<Vector3> points)
+        {
+            var outPoints = new List<Vector3>();
+            foreach (var point in points)
+            {
+                outPoints.Add(new Vector3(point.x, point.y + 1f, point.z));
+            }
+            return outPoints;
+        }
+
         public List<Vector3> GetSimplePoints(Spline spline) //First/Last Points only
         {
             List<Vector3> outPoints = new List<Vector3>();
@@ -123,6 +133,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             points.Reverse();
 
                         //points = ConvertToSplinePoints(points);
+                        //points = ChangeYPosition(points);
 
                         TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
                         trafficLane.enabled = true;
@@ -191,6 +202,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     foreach (RnDataTrack track in tracks)
                     {
                         List<Vector3> points = useSimpleSplinePoints ? GetSimplePoints(track.Spline) : ConvertToSplinePoints(track.Spline, 5);
+                        //points = ChangeYPosition(points);
 
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
                         TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Intersection_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), turnDirType, speedLimit);
