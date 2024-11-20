@@ -14,6 +14,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
         public static readonly bool ignoreReversedLane = false;
         public static readonly bool useSimpleSplinePoints = true; //Trackのspline形状が破綻している場合に停止するのを回避
+        public static readonly bool useSimpleLineStrings = true; //Lane Linestringがガタガタなのを平滑化
+        public static readonly bool addStopLines = false; //信号がない場合は無意味
 
         //temporarily keeps Lane information as RoadNetwork data
         public struct LaneConvertInfo
@@ -29,6 +31,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             public RnDataTrack track;
             public RnDataLane lane;
             public RnDataRoadBase road;
+
+            public AWSIM.TrafficSimulation.StopLine stopline;
         }
 
         public List<Vector3> ConvertToSplinePoints(List<Vector3> points, int numPoints = 10)
@@ -50,16 +54,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             {
                 float percent = (float)i / ((float)numPoints);
                 outPoints.Add(SplineTool.GetPointOnSpline(spline, percent));
-            }
-            return outPoints;
-        }
-
-        public List<Vector3> ChangeYPosition(List<Vector3> points)
-        {
-            var outPoints = new List<Vector3>();
-            foreach (var point in points)
-            {
-                outPoints.Add(new Vector3(point.x, point.y + 1f, point.z));
             }
             return outPoints;
         }
@@ -132,8 +126,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         if (ignoreReversedLane && lane.IsReverse)
                             points.Reverse();
 
-                        //points = ConvertToSplinePoints(points);
-                        //points = ChangeYPosition(points);
+                        if (useSimpleLineStrings)
+                            points = ConvertToSplinePoints(points, 4); //平滑化
 
                         TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
                         trafficLane.enabled = true;
@@ -160,7 +154,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                                 info.nextTracks = nextIntersection.FilterAvailableToTracks(getter,tracks); //一方通行侵入除外
                                 //info.nextTracks = tracks;
 
-                                Debug.Log($"<color=red>Next Tracks {tracks.Count} -> {info.nextTracks.Count}</color>");
+                                //Debug.Log($"<color=red>Next Tracks {tracks.Count} -> {info.nextTracks.Count}</color>");
+
+                                //Stopline
+                                if (addStopLines)
+                                {
+                                    //var border = lane.IsReverse ? lane.GetPrevBorder(getter) : lane.GetNextBorder(getter);
+                                    var border = lane.GetNextBorder(getter);
+                                    List<Vector3> borderPoints = border.GetChildLineString(getter).GetChildPointsVector(getter);
+                                    info.stopline = AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
+                                }
                             }
                             else
                             {
@@ -176,7 +179,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                                 info.prevTracks = prevIntersection.FilterAvailableFromTracks(getter, tracks); //一方通行侵入除外
                                 //info.prevTracks = tracks;
 
-                                Debug.Log($"<color=red>Prev Tracks {tracks.Count} -> {info.prevTracks.Count}</color>");
+                                //Debug.Log($"<color=red>Prev Tracks {tracks.Count} -> {info.prevTracks.Count}</color>");
                             }
                             else
                             {
@@ -222,9 +225,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         //info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track);
 
                         //Stopline
-                        RnDataNeighbor nextEdge = intersection.GetEdgesFromBorder(getter, track.GetToBorder(getter)).FirstOrDefault();
-                        List<Vector3> borderPoints = nextEdge.GetBorder(getter).GetChildLineString(getter).GetChildPointsVector(getter);
-                        AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
+                        //List<Vector3> borderPoints = track.GetFromBorder(getter).GetChildLineString(getter).GetChildPointsVector(getter);
+                        //AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
 
                         laneInfo.Add(info);
                     }
@@ -278,6 +280,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         else
                             Debug.Log($"Track not found : {info.trafficLane.name}");
                     }
+                }
+
+                if (info.stopline != null)
+                {
+                    lane.StopLine = info.stopline;
                 }
 
 #if UNITY_EDITOR

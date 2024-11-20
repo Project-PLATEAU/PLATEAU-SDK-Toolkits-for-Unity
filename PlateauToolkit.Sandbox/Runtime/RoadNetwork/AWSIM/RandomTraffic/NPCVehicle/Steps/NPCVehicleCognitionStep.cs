@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
@@ -192,13 +193,13 @@ namespace AWSIM.TrafficSimulation
                     : Waypoints[waypointOffset + waypointIndex - 1];
 
                 // Reduce the detection range so that large sized vehicles can pass each other.
-                //var boxCastExtents = States[stateIndex].Extents * 0.5f;
-                //boxCastExtents.y *= 1;
-                //boxCastExtents.z = 0.1f;
-
-                var boxCastExtents = States[stateIndex].Extents * 0.4f;
+                var boxCastExtents = States[stateIndex].Extents * 0.5f;
                 boxCastExtents.y *= 1;
-                boxCastExtents.z = 0.08f;
+                boxCastExtents.z = 0.1f;
+
+                //var boxCastExtents = States[stateIndex].Extents * 0.3f;
+                //boxCastExtents.y *= 1;
+                //boxCastExtents.z = 0.03f;
 
                 var endPoint = Waypoints[waypointOffset + waypointIndex];
 
@@ -299,8 +300,8 @@ namespace AWSIM.TrafficSimulation
                     currentForward = nextForward;
                 }
 
-                IsTurnings[index] = turnAngle > 45f;
-                //IsTurnings[index] = turnAngle > 10f;
+                //IsTurnings[index] = turnAngle > 45f;
+                IsTurnings[index] = turnAngle > RoadNetworkConstants.IS_TURNING_ANGLE;
             }
         }
 
@@ -962,9 +963,13 @@ namespace AWSIM.TrafficSimulation
                     if (GroundHitInfoArray[i].collider == null)
                         States[i].ShouldDespawn = true;
 
-                    //Gound‚©‚ç‚Ì‹——£”»’è (5fˆÈ‰º‚¾‚ÆBus‚ªdefault‚ÅÁ‚¦‚Ä‚µ‚Ü‚¤j
-                    if (Vector3.Distance(States[i].Vehicle.transform.position, GroundHitInfoArray[i].point) > 10f)
-                        States[i].ShouldDespawn = true;
+                    if (RoadNetworkConstants.CHECK_DISTANCE_FROM_GROUND)
+                    {
+                        //Gound‚©‚ç‚Ì‹——£”»’è (5fˆÈ‰º‚¾‚ÆBus‚ªdefault‚ÅÁ‚¦‚Ä‚µ‚Ü‚¤j
+                        //if (Vector3.Distance(States[i].FrontCenterPosition, GroundHitInfoArray[i].point) > RoadNetworkConstants.MAX_DISTANCE_FROM_GROUND)
+                        if (Vector3.Distance(States[i].Vehicle.transform.position, GroundHitInfoArray[i].point) > RoadNetworkConstants.MAX_DISTANCE_FROM_GROUND)
+                            States[i].ShouldDespawn = true;
+                    }
 
                     States[i].DistanceToFrontVehicle = ObstacleDistances[i];
                     States[i].IsTurning = IsTurnings[i];

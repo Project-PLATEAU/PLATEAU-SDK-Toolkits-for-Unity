@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -14,12 +15,10 @@ namespace AWSIM.TrafficSimulation
 
         // MinFrontVehicleDistance is added to the threshold for the distance at which an obstacle is considered dangerous.
         // The vehicle is controlled to stop at this distance away from the obstacle(e.g. another vehicle in front of the vehicle).
-        //private const float MinFrontVehicleDistance = 4f;
-        //private const float MinStopDistance = 1.5f;
-        private const float MinFrontVehicleDistance = 3f;
-        private const float MinStopDistance = 1.0f;
-
-        private const float MaxIdlingTime = 20f; //停止してから消すまでの時間(秒）
+        private const float MinFrontVehicleDistance = 4f;
+        private const float MinStopDistance = 1.5f;
+        //private const float MinFrontVehicleDistance = 3f;
+        //private const float MinStopDistance = 1.0f;
 
         public NPCVehicleDecisionStep(NPCVehicleConfig config)
         {
@@ -91,8 +90,8 @@ namespace AWSIM.TrafficSimulation
             else
                 state.SpeedMode = NPCVehicleSpeedMode.NORMAL;
 
-            //停車時間が長すぎる(15秒）場合は消す
-            if (state.SpeedMode != NPCVehicleSpeedMode.NORMAL && state.SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - state.SpeedModeStopStartTime > MaxIdlingTime)
+            //停車時間が長すぎる場合は消す
+            if (state.SpeedMode != NPCVehicleSpeedMode.NORMAL && state.SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - state.SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME)
                 state.ShouldDespawn = true;
         }
 

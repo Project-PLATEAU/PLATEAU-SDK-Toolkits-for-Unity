@@ -101,13 +101,19 @@ namespace PlateauToolkit.Sandbox.Editor
 
         void PostCreateSimulator()
         {
-            var lanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
-            for (int i = 0; i < lanes.transform.childCount; i++)
+            if (RoadNetworkConstants.USE_RIGHT_OF_WAYS)
             {
-                TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
+                var lanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+                for (int i = 0; i < lanes.transform.childCount; i++)
+                {
+                    TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
+                }
             }
 
-            //SetDemAsGroundLayer(); //Demをground Layerに
+            if(RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
+            {
+                SetDemAsGroundLayer(); //Demをground Layerに
+            }
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる
