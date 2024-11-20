@@ -144,14 +144,14 @@ namespace AWSIM
             var physicMaterial = Resources.Load<PhysicMaterial>("VehiclePhisicMaterial");
             if (collider != null)
             {
-                collider.excludeLayers = LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLE);
-                //collider.material = physicMaterial;
+                collider.excludeLayers = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND);  // Everything but ground
+                collider.material = physicMaterial;
             }
             else
             {
                 var boxCollider =  visualObjectRoot.AddComponent<BoxCollider>();
-                boxCollider.excludeLayers = LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_VEHICLE);
-                //boxCollider.material = physicMaterial;
+                boxCollider.excludeLayers = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND); // Everything but ground
+                boxCollider.material = physicMaterial;
             }
             lastPosition = rigidbody.position;
         }
