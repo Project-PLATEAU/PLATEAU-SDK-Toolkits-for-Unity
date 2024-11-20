@@ -26,7 +26,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static readonly bool USE_RIGHT_OF_WAYS = false;
         public static readonly bool SET_DEM_AS_GROUND_LAYER = false;
 
-        public static readonly float IS_TURNING_ANGLE = 25f; //isTurnings 判定用 (Original 45f)
+        public static readonly float IS_TURNING_ANGLE = 30f; //isTurnings 判定用 (Original 45f)
 
         //public static readonly string DUMMY_VEHICLE_NAME = "DummyVehicle";
 

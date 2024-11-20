@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -76,6 +77,12 @@ namespace AWSIM.TrafficSimulation
 
         private NPCVehicleSpeedMode _SpeedMode;
         private float _SpeedModeStopStartTime;
+
+        public bool CheckMaxIdleTimeExceeded()
+        {
+            //停車時間が長すぎる場合は消す
+            return SpeedMode != NPCVehicleSpeedMode.NORMAL && SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME;
+        }
 
         // Output from Control
         public Vector3 Position { get; set; }

@@ -1,6 +1,8 @@
 using UnityEngine;
 using PlateauToolkit.Sandbox;
 using PlateauToolkit.Sandbox.RoadNetwork;
+using System;
+using AWSIM.TrafficSimulation;
 
 namespace AWSIM
 {
@@ -10,6 +12,26 @@ namespace AWSIM
     /// </summary>
     public class NPCVehicle : MonoBehaviour
     {
+        [Serializable]
+        public class VehicleParameters
+        {
+            public NPCVehicleSpeedMode SpeedMode;
+            public string TimeRemains;
+            public TrafficLane FollowingLane;
+
+            public void SetState(NPCVehicleInternalState state)
+            {
+                SpeedMode = state.SpeedMode;
+                if (SpeedMode != NPCVehicleSpeedMode.NORMAL && SpeedMode != NPCVehicleSpeedMode.SLOW)
+                    TimeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{RoadNetworkConstants.MAX_IDLE_TIME}";
+                else
+                    TimeRemains = "-";
+
+                FollowingLane = state.CurrentFollowingLane;
+            }
+        }
+
+
         public enum TurnSignalState
         {
             OFF,
@@ -20,6 +42,10 @@ namespace AWSIM
 
         [SerializeField]
         GameObject visualObjectRoot;
+
+        //debug
+        [SerializeField]
+        public VehicleParameters Param = new VehicleParameters();
 
         /// <summary>
         /// Current visualObject's activeself

@@ -14,7 +14,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
         public static readonly bool ignoreReversedLane = false;
         public static readonly bool useSimpleSplinePoints = true; //Trackのspline形状が破綻している場合に停止するのを回避
-        public static readonly bool useSimpleLineStrings = true; //Lane Linestringがガタガタなのを平滑化
+        public static readonly bool useSimpleLineStrings = false; //Lane Linestringがガタガタなのを平滑化
         public static readonly bool addStopLines = false; //信号がない場合は無意味
 
         //temporarily keeps Lane information as RoadNetwork data
@@ -126,7 +126,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         if (ignoreReversedLane && lane.IsReverse)
                             points.Reverse();
 
-                        if (useSimpleLineStrings)
+                        if (useSimpleLineStrings && points.Count > 3)
                             points = ConvertToSplinePoints(points, 4); //平滑化
 
                         TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
@@ -204,7 +204,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     var tracks = intersection.Tracks;
                     foreach (RnDataTrack track in tracks)
                     {
-                        List<Vector3> points = useSimpleSplinePoints ? GetSimplePoints(track.Spline) : ConvertToSplinePoints(track.Spline, 5);
+                        List<Vector3> points = useSimpleSplinePoints ? GetSimplePoints(track.Spline) : ConvertToSplinePoints(track.Spline, 4);
                         //points = ChangeYPosition(points);
 
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);

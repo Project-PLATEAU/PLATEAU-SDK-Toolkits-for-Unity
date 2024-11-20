@@ -91,8 +91,12 @@ namespace AWSIM.TrafficSimulation
                 state.SpeedMode = NPCVehicleSpeedMode.NORMAL;
 
             //停車時間が長すぎる場合は消す
-            if (state.SpeedMode != NPCVehicleSpeedMode.NORMAL && state.SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - state.SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME)
+            //if (state.SpeedMode != NPCVehicleSpeedMode.NORMAL && state.SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - state.SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME)
+            if (state.CheckMaxIdleTimeExceeded())
                 state.ShouldDespawn = true;
+
+            //Debug
+            state.Vehicle.Param.SetState(state);
         }
 
         private static float CalculateTrafficLightDistance(NPCVehicleInternalState state, float suddenStopDistance)
