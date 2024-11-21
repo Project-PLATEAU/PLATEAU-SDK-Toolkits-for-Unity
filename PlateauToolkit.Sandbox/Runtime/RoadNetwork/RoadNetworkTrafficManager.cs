@@ -71,7 +71,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             List<TrafficLane> spawnableLanes = allLanes.FindAll(x => !x.intersectionLane); //交差点以外
 
             //ReSpawn可能なTrafficLanes
-            List<TrafficLane> respawnableLanes = allLanes.FindAll(x => !x.intersectionLane && x.NextLanes.Count > 0 && x.PrevLanes.Count <= 0); //交差点以外 : Prevが空でNextが存在
+            //List<TrafficLane> respawnableLanes = allLanes.FindAll(x => !x.intersectionLane && x.NextLanes.Count > 0 && x.PrevLanes.Count <= 0); //交差点以外 : Prevが空でNextが存在
+            List<TrafficLane> respawnableLanes = allLanes.FindAll(x => !x.intersectionLane && x.rnRoad.Next.IsValid && !x.rnRoad.Prev.IsValid); //交差点以外 : Prevが空でNextが存在 (RoadNetworkで判定）
 
             spawnableLanes.RemoveAll(x => respawnableLanes.Contains(x)); //重複を除去
 
