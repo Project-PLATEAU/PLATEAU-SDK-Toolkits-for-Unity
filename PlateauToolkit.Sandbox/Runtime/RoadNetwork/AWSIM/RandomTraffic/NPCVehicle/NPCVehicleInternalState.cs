@@ -65,8 +65,9 @@ namespace AWSIM.TrafficSimulation
             get => _SpeedMode;
             set
             {
-                if ((_SpeedMode == NPCVehicleSpeedMode.NORMAL || _SpeedMode == NPCVehicleSpeedMode.SLOW)
-                    && (value != NPCVehicleSpeedMode.NORMAL && value != NPCVehicleSpeedMode.SLOW))
+                //if ((_SpeedMode == NPCVehicleSpeedMode.NORMAL || _SpeedMode == NPCVehicleSpeedMode.SLOW)
+                //    && (value != NPCVehicleSpeedMode.NORMAL && value != NPCVehicleSpeedMode.SLOW))
+                if (_SpeedMode == NPCVehicleSpeedMode.NORMAL && IsStopped(value)) //Slowは無視 (Stop -> Slowを繰り返すため判定できない場合がある）
                 {
                     _SpeedModeStopStartTime = Time.time;
                 }
@@ -77,6 +78,11 @@ namespace AWSIM.TrafficSimulation
 
         private NPCVehicleSpeedMode _SpeedMode;
         private float _SpeedModeStopStartTime;
+
+        private bool IsStopped(NPCVehicleSpeedMode mode)
+        {
+            return (mode != NPCVehicleSpeedMode.NORMAL && mode != NPCVehicleSpeedMode.SLOW);
+        }
 
         public bool CheckMaxIdleTimeExceeded()
         {
@@ -96,24 +102,24 @@ namespace AWSIM.TrafficSimulation
 
         // Debugs
         public Transform DominatingVehicle { get; set; }
-        //public bool IsStoppedByFrontVehicle { get; set; }
+        public bool IsStoppedByFrontVehicle { get; set; }
 
-        public bool IsStoppedByFrontVehicle
-        {
-            get => _IsStoppedByFrontVehicle;
-            set
-            {
-                if (!_IsStoppedByFrontVehicle && value)
-                {
-                    _IsStoppedByFrontVehicleStartTime = Time.time;
-                }
-                _IsStoppedByFrontVehicle = value;
-            }
-        }
+        //public bool IsStoppedByFrontVehicle
+        //{
+        //    get => _IsStoppedByFrontVehicle;
+        //    set
+        //    {
+        //        if (!_IsStoppedByFrontVehicle && value)
+        //        {
+        //            _IsStoppedByFrontVehicleStartTime = Time.time;
+        //        }
+        //        _IsStoppedByFrontVehicle = value;
+        //    }
+        //}
 
-        public float IsStoppedByFrontVehicleStartTime => _IsStoppedByFrontVehicleStartTime;
-        private bool _IsStoppedByFrontVehicle;
-        private float _IsStoppedByFrontVehicleStartTime;
+        //public float IsStoppedByFrontVehicleStartTime => _IsStoppedByFrontVehicleStartTime;
+        //private bool _IsStoppedByFrontVehicle;
+        //private float _IsStoppedByFrontVehicleStartTime;
 
         public Vector3 Forward =>
             Quaternion.AngleAxis(Yaw, Vector3.up) * Vector3.forward;

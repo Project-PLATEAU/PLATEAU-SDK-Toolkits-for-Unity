@@ -9,7 +9,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public static readonly float SPEED_LIMIT = 15f;
 
-        public static readonly float MAX_IDLE_TIME = 10f; //停止してから消すまでの時間(秒）
+        public static readonly float MAX_IDLE_TIME = 20f; //停止してから消すまでの時間(秒）
 
 
         public static readonly bool CHECK_DISTANCE_FROM_GROUND = true; //Goundからの距離判定を行うか
@@ -26,7 +26,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static readonly bool USE_RIGHT_OF_WAYS = false;
         public static readonly bool SET_DEM_AS_GROUND_LAYER = false;
 
-        public static readonly float IS_TURNING_ANGLE = 30f; //isTurnings 判定用 (Original 45f)
+        public static readonly float IS_TURNING_ANGLE = 60f; //isTurnings 判定用 (Original 45f)
 
         //public static readonly string DUMMY_VEHICLE_NAME = "DummyVehicle";
 
