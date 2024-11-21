@@ -12,12 +12,14 @@ namespace AWSIM
     /// </summary>
     public class NPCVehicle : MonoBehaviour
     {
+        //Debug情報
         [Serializable]
         public class VehicleParameters
         {
             public NPCVehicleSpeedMode SpeedMode;
             public string TimeRemains;
             public TrafficLane FollowingLane;
+            public TrafficLane PrevLane;
 
             public void SetState(NPCVehicleInternalState state)
             {
@@ -27,7 +29,11 @@ namespace AWSIM
                 else
                     TimeRemains = "-";
 
-                FollowingLane = state.CurrentFollowingLane;
+                if(state.CurrentFollowingLane != FollowingLane)
+                {
+                    PrevLane = FollowingLane;
+                    FollowingLane = state.CurrentFollowingLane;
+                }
             }
         }
 
