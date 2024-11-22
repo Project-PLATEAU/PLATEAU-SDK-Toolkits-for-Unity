@@ -135,7 +135,6 @@ namespace PlateauToolkit.Sandbox
             var fixedSteerAngle = Mathf.MoveTowardsAngle(lastSteerAngle, steerAngle, Time.deltaTime * maxSteerSpeed);
 
             // Apply rotations to visual wheel object.
-            //VisualTransform.localEulerAngles = new Vector3(wheelPitchAngle, fixedSteerAngle, 0);
             foreach (Transform frontWheel in m_FrontWheels)
             {
                 frontWheel.localEulerAngles = new Vector3(wheelPitchAngle, fixedSteerAngle, 0);

@@ -11,7 +11,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public static readonly float MAX_IDLE_TIME = 20f; //停止してから消すまでの時間(秒）
 
-
         public static readonly bool CHECK_DISTANCE_FROM_GROUND = true; //Goundからの距離判定を行うか
         public static readonly float MAX_DISTANCE_FROM_GROUND = 50f; //Goundからの距離判定 (5f以下だとBusがdefaultで消えてしまう）
 
@@ -26,9 +25,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static readonly bool USE_RIGHT_OF_WAYS = false;
         public static readonly bool SET_DEM_AS_GROUND_LAYER = false;
 
-        public static readonly float IS_TURNING_ANGLE = 45f; //isTurnings 判定用 (Original 45f) 60fとかにすると道がない平地を斜め移動してしまう
+        public static readonly float IS_TURNING_ANGLE = 30f; //isTurnings 判定用 (Original 45f) 60fとかにすると道がない平地を斜め移動してしまう
 
-        //public static readonly string DUMMY_VEHICLE_NAME = "DummyVehicle";
+
+        //RoadNetworkLaneConverter
+
+        public static readonly bool IgnoreReversedLane = false; //LineString IsReverseを無視　(IsReverseの場合はPrev/Nextを逆に）
+        public static readonly bool UseSimpleSplinePoints = false; //Trackのspline形状が破綻している場合に停止するのを回避 (First/Last Knotsのみ利用）
+        public static readonly bool UseSimpleLineStrings = false; //Lane Linestringがガタガタなのを平滑化
+        public static readonly bool AddStopLines = false; //信号がない場合は無意味
+        public static readonly int SplinePoints = 6; //Spline使用時の分割数
 
     }
 }

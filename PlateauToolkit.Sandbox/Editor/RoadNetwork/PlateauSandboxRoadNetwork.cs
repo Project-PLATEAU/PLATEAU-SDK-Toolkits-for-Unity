@@ -43,6 +43,12 @@ namespace PlateauToolkit.Sandbox.Editor
         //AWSIM用
         public bool PlaceVehicles(List<GameObject> vehiclePrefabs)
         {
+            if(vehiclePrefabs == null || vehiclePrefabs?.Count == 0)
+            {
+                EditorUtility.DisplayDialog("アセットの配置に失敗しました。", "アセットが選択されていません。", "OK");
+                return false;
+            }
+
             if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_VEHICLE))
                 Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
             if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_GROUND))
@@ -66,8 +72,8 @@ namespace PlateauToolkit.Sandbox.Editor
             return true;
         }
 
-        //Demをground Layerに
-        void SetDemAsGroundLayer()
+        //名前を含むCityObjectGroupをground Layerに
+        void SetCityObjectAsGroundLayer(string nameContaines)
         {
             List<Transform> dems = new List<Transform>();
             PLATEAUInstancedCityModel citymodel = GameObject.FindAnyObjectByType<PLATEAUInstancedCityModel>();
@@ -77,7 +83,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 for (int i = 0; i < len; i++)
                 {
                     var child = citymodel.transform.GetChild(i);
-                    if (child.name.Contains("_dem_"))
+                    if (child.name.Contains(nameContaines))
                     {
                         dems.Add(child);
                     }
@@ -110,9 +116,11 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            if(RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
+            //SetCityObjectAsGroundLayer("_tran_"); //Tranをground Layerに
+
+            if (RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
             {
-                SetDemAsGroundLayer(); //Demをground Layerに
+                SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
             }
         }
 

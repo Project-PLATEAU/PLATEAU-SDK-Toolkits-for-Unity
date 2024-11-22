@@ -12,7 +12,7 @@ namespace AWSIM
     /// </summary>
     public class NPCVehicle : MonoBehaviour
     {
-        //Debug情報
+        //Debug情報 NPCVehicleInternalState
         [Serializable]
         public class VehicleParameters
         {
@@ -21,7 +21,7 @@ namespace AWSIM
             public TrafficLane FollowingLane;
             public TrafficLane PrevLane;
 
-            public void SetState(NPCVehicleInternalState state)
+            public void SetStatus(NPCVehicleInternalState state)
             {
                 SpeedMode = state.SpeedMode;
                 if (SpeedMode != NPCVehicleSpeedMode.NORMAL && SpeedMode != NPCVehicleSpeedMode.SLOW)
@@ -37,7 +37,6 @@ namespace AWSIM
             }
         }
 
-
         public enum TurnSignalState
         {
             OFF,
@@ -51,7 +50,12 @@ namespace AWSIM
 
         //debug
         [SerializeField]
-        public VehicleParameters Param = new VehicleParameters();
+        public VehicleParameters Status = new VehicleParameters();
+
+        public void SetStatus(NPCVehicleInternalState state)
+        {
+            Status.SetStatus(state);
+        }
 
         /// <summary>
         /// Current visualObject's activeself
@@ -95,8 +99,6 @@ namespace AWSIM
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
                     rigidbody.useGravity = true;
-                    //rigidbody.isKinematic = true;
-
                     return rigidbody;
                 }
             }
@@ -163,11 +165,12 @@ namespace AWSIM
             bounds = b;
         }
 
-        protected void Initialize(GameObject _visualObjectRoot, Transform _centerOfMass)
+        protected void Initialize(GameObject _visualObjectRoot_)
         {
-            visualObjectRoot = _visualObjectRoot;
+            visualObjectRoot = _visualObjectRoot_;
 
-            if (visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject)){
+            if (visualObjectRoot.TryGetComponent<IPlateauSandboxTrafficObject>(out IPlateauSandboxTrafficObject trafficObject))
+            {
                 m_TrafficObject = trafficObject;
                 wheelbase = m_TrafficObject.GetWheelBase();
             }

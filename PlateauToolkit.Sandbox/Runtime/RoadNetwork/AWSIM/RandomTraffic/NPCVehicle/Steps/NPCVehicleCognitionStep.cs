@@ -156,8 +156,6 @@ namespace AWSIM.TrafficSimulation
                     direction = Vector3.down,
                     distance = 10f,
                     queryParameters = Parameters,
-                    //layerMask = GroundLayerMask,
-                    //maxHits = 1
                 };
             }
         }
@@ -197,24 +195,11 @@ namespace AWSIM.TrafficSimulation
                 boxCastExtents.y *= 1;
                 boxCastExtents.z = 0.1f;
 
-                //var boxCastExtents = States[stateIndex].Extents * 0.3f;
-                //boxCastExtents.y *= 1;
-                //boxCastExtents.z = 0.03f;
-
                 var endPoint = Waypoints[waypointOffset + waypointIndex];
 
                 var distance = Vector3.Distance(startPoint, endPoint);
                 var direction = (endPoint - startPoint).normalized;
                 var rotation = direction == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(direction);
-
-                //Commands[index] = new BoxcastCommand(
-                //    startPoint,
-                //    boxCastExtents,
-                //    rotation,
-                //    direction,
-                //    distance,
-                //    VehicleLayerMask
-                //);
 
                 Parameters = new QueryParameters
                 {
@@ -300,7 +285,6 @@ namespace AWSIM.TrafficSimulation
                     currentForward = nextForward;
                 }
 
-                //IsTurnings[index] = turnAngle > 45f;
                 IsTurnings[index] = turnAngle > RoadNetworkConstants.IS_TURNING_ANGLE;
             }
         }
@@ -966,7 +950,6 @@ namespace AWSIM.TrafficSimulation
                     if (RoadNetworkConstants.CHECK_DISTANCE_FROM_GROUND)
                     {
                         //Gound‚©‚ç‚Ì‹——£”»’è (5fˆÈ‰º‚¾‚ÆBus‚ªdefault‚ÅÁ‚¦‚Ä‚µ‚Ü‚¤j
-                        //if (Vector3.Distance(States[i].FrontCenterPosition, GroundHitInfoArray[i].point) > RoadNetworkConstants.MAX_DISTANCE_FROM_GROUND)
                         if (Vector3.Distance(States[i].Vehicle.transform.position, GroundHitInfoArray[i].point) > RoadNetworkConstants.MAX_DISTANCE_FROM_GROUND)
                             States[i].ShouldDespawn = true;
                     }
@@ -1056,8 +1039,8 @@ namespace AWSIM.TrafficSimulation
         }
 
         public void Execute(
-            IReadOnlyList<NPCVehicleInternalState> states)//,
-            //Transform egoTransform)
+            IReadOnlyList<NPCVehicleInternalState> states)
+            //,Transform egoTransform)
         {
             Profiler.BeginSample("Cognition.CheckNextWaypoint");
 
@@ -1190,7 +1173,7 @@ namespace AWSIM.TrafficSimulation
                         continue;
                     }
 
-                    Handles.Label(stateCurrentPosition, $"p {state.YieldPhase.ToString()}");
+                    //Handles.Label(stateCurrentPosition, $"p {state.YieldPhase.ToString()}");
 
                     switch (state.YieldPhase)
                     {

@@ -12,11 +12,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class RoadNetworkLaneConverter
     {
-        public static readonly bool ignoreReversedLane = false;
-        public static readonly bool useSimpleSplinePoints = true; //Trackのspline形状が破綻している場合に停止するのを回避
-        public static readonly bool useSimpleLineStrings = false; //Lane Linestringがガタガタなのを平滑化
-        public static readonly bool addStopLines = false; //信号がない場合は無意味
-
         //temporarily keeps Lane information as RoadNetwork data
         public struct LaneConvertInfo
         {
@@ -107,7 +102,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     RnDataRoad road = (RnDataRoad)rb;
 
-                    road.TargetTran.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+                    if (road.TargetTran != null)
+                        road.TargetTran.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
 
                     List<RnDataLane> lanes = road.GetMainLanes(getter);
 
@@ -123,11 +119,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             continue;
                         }
 
-                        if (ignoreReversedLane && lane.IsReverse)
+                        if (RoadNetworkConstants.IgnoreReversedLane && lane.IsReverse)
                             points.Reverse();
 
-                        if (useSimpleLineStrings && points.Count > 3)
-                            points = ConvertToSplinePoints(points, 4); //平滑化
+                        if (RoadNetworkConstants.UseSimpleLineStrings && points.Count > 3)
+                            points = ConvertToSplinePoints(points, RoadNetworkConstants.SplinePoints); //平滑化
 
                         TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, speedLimit);
                         trafficLane.enabled = true;
@@ -141,7 +137,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         RnDataIntersection nextIntersection = road.GetNextRoad(getter) as RnDataIntersection;
                         RnDataIntersection prevIntersection = road.GetPrevRoad(getter) as RnDataIntersection;
 
-                        if (!ignoreReversedLane && lane.IsReverse) //反転している場合 Prev/Nextが逆になるらしい
+                        if (!RoadNetworkConstants.IgnoreReversedLane && lane.IsReverse) //反転している場合 Prev/Nextが逆になるらしい
                         {
                             (nextIntersection, prevIntersection) = (prevIntersection, nextIntersection);
                         }
@@ -152,14 +148,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             {
                                 var tracks = nextIntersection.GetFromTracksFromLane(getter, lane);
                                 info.nextTracks = nextIntersection.FilterAvailableToTracks(getter,tracks); //一方通行侵入除外
-                                //info.nextTracks = tracks;
-
-                                //Debug.Log($"<color=red>Next Tracks {tracks.Count} -> {info.nextTracks.Count}</color>");
 
                                 //Stopline
-                                if (addStopLines)
+                                if (RoadNetworkConstants.AddStopLines)
                                 {
-                                    //var border = lane.IsReverse ? lane.GetPrevBorder(getter) : lane.GetNextBorder(getter);
                                     var border = lane.GetNextBorder(getter);
                                     List<Vector3> borderPoints = border.GetChildLineString(getter).GetChildPointsVector(getter);
                                     info.stopline = AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
@@ -167,7 +159,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             }
                             else
                             {
-                                info.nextLanes = nextIntersection.GetNextLanesFromLane(getter, road, lane, ignoreReversedLane);
+                                info.nextLanes = nextIntersection.GetNextLanesFromLane(getter, road, lane, RoadNetworkConstants.IgnoreReversedLane);
                             }
                         }
 
@@ -177,13 +169,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             {
                                 var tracks = prevIntersection.GetToTracksFromLane(getter, lane);
                                 info.prevTracks = prevIntersection.FilterAvailableFromTracks(getter, tracks); //一方通行侵入除外
-                                //info.prevTracks = tracks;
-
-                                //Debug.Log($"<color=red>Prev Tracks {tracks.Count} -> {info.prevTracks.Count}</color>");
                             }
                             else
                             {
-                                info.prevLanes = prevIntersection.GetPrevLanesFromLane(getter, road, lane, ignoreReversedLane);
+                                info.prevLanes = prevIntersection.GetPrevLanesFromLane(getter, road, lane, RoadNetworkConstants.IgnoreReversedLane);
                             }
                         }
 
@@ -199,13 +188,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         continue;
                     }
 
-                    intersection.TargetTran.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+                    if (intersection.TargetTran != null)
+                        intersection.TargetTran.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
 
                     var tracks = intersection.Tracks;
                     foreach (RnDataTrack track in tracks)
                     {
-                        List<Vector3> points = useSimpleSplinePoints ? GetSimplePoints(track.Spline) : ConvertToSplinePoints(track.Spline, 4);
-                        //points = ChangeYPosition(points);
+                        List<Vector3> points = RoadNetworkConstants.UseSimpleSplinePoints ? GetSimplePoints(track.Spline) : ConvertToSplinePoints(track.Spline, RoadNetworkConstants.SplinePoints);
 
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
                         TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Intersection_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), turnDirType, speedLimit);
@@ -218,15 +207,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         info.track = track;
                         info.road = rb;
 
-                        info.nextLanes = intersection.GetNextLanesFromTrack(getter, track, ignoreReversedLane);
-                        //info.nextLanes = intersection.GetNextLanesFromTrack(getter, track);
-
-                        info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track, ignoreReversedLane);
-                        //info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track);
-
-                        //Stopline
-                        //List<Vector3> borderPoints = track.GetFromBorder(getter).GetChildLineString(getter).GetChildPointsVector(getter);
-                        //AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
+                        info.nextLanes = intersection.GetNextLanesFromTrack(getter, track, RoadNetworkConstants.IgnoreReversedLane);
+  
+                        info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track, RoadNetworkConstants.IgnoreReversedLane);
 
                         laneInfo.Add(info);
                     }
@@ -293,85 +276,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 #endif
 
                 //Next/Prev共に取得できない場合のDebug 出力
-                //DebugLanes(lane, getter);
+                //DebugLaneConverter.DebugLanes(lane, getter);
 
                 if (lane.PrevLanes.Count > 0 || lane.NextLanes.Count > 0) //接続情報がないLaneは除外
                     allLanes.Add(lane);
             }
 
             //Debug.Log($"<color=green>Num not connected lanes {allLanes.FindAll(x => x.NextLanes.Count == 0 && x.PrevLanes.Count == 0).Count()}</color>");
-
             return allLanes;
-        }
-
-        //Next/Prev共に取得できない場合のDebug確認用
-        void DebugLanes(TrafficLane lane, RoadNetworkDataGetter getter)
-        {
-            if (lane.PrevLanes.Count == 0 && lane.NextLanes.Count == 0)
-            {
-                //Debug.LogError($"Lane has no connection {lane.name}");
-                if (lane.rnRoad != null)
-                {
-                    var nextBorder = lane.rnLane.GetNextBorder(getter);
-                    var prevBorder = lane.rnLane.GetPrevBorder(getter);
-                    var nextIntersection = lane.rnRoad.GetNextRoad(getter) as RnDataIntersection;
-                    var prevIntersection = lane.rnRoad.GetPrevRoad(getter) as RnDataIntersection;
-                    if (nextIntersection != null)
-                    {
-                        var linestrings = nextIntersection.Edges.Select(x => x.GetBorder(getter).LineString.ID);
-                        Debug.Log($"Next Intersection Borders {string.Join(",", linestrings)} : nextBorder {nextBorder.LineString.ID} {lane.rnLane.IsReverse} {nextIntersection.IsEmptyIntersection} {lane.name} ");
-
-                        if (nextIntersection.IsEmptyIntersection)
-                        {
-                            var edges = nextIntersection.GetOppositeSideEdgesFromRoad(lane.rnRoad.GetId(getter));
-
-                            var roadids = edges.Select(x => x.Road.ID).ToList();
-                            Debug.Log($"Next Roads {string.Join(",", roadids)}");
-
-                            foreach(var roadid in roadids)
-                            {
-                                var borders = ((RnDataRoad)getter.GetRoadBases().TryGet(roadid)).GetLAllBorderWaysFromMainLanes(getter);
-                                var borderids = ((RnDataRoad)getter.GetRoadBases().TryGet(roadid)).GetLAllBordersFromMainLanes(getter).Select(x => x.GetId(getter));
-                                Debug.Log($"Next Road borders {string.Join(",", borderids)}");
-
-                                foreach (var border in borders)
-                                {
-                                    Debug.Log($"Next Road border {border.LineString.ID} is same line {nextBorder.LineString.ID} {border.IsSameLine(nextBorder)} ");
-                                }
-                            }
-
-                            var nextLanes = nextIntersection.GetNextLanesFromLane(getter, lane.rnRoad, lane.rnLane, ignoreReversedLane);
-
-                            Debug.Log($"nextLanes {nextLanes.Count}");
-
-                        }
-                    }
-                    if (prevIntersection != null)
-                    {
-                        var linestrings = prevIntersection.Edges.Select(x => x.GetBorder(getter).LineString.ID);
-                        Debug.Log($"Prev Intersection Borders {string.Join(",", linestrings)} : prevBorder {prevBorder.LineString.ID}  {lane.rnLane.IsReverse} {prevIntersection.IsEmptyIntersection} {lane.name}");
-                    }
-                }
-                else if (lane.rnIntersection != null)
-                {
-                    var toBorder = lane.rnTrack.GetToBorder(getter);
-                    var fromBorder = lane.rnTrack.GetFromBorder(getter);
-                    var nextRoad = lane.rnIntersection.Edges.Find(x => x.GetBorder(getter).IsSameLine(toBorder)).GetRoad(getter) as RnDataRoad;
-                    var prevRoad = lane.rnIntersection.Edges.Find(x => x.GetBorder(getter).IsSameLine(fromBorder)).GetRoad(getter) as RnDataRoad;
-                    if (nextRoad != null)
-                    {
-                        var nextBorderlinestrings = nextRoad.GetMainLanes(getter).Select(x => x.GetNextBorder(getter).LineString.ID);
-                        var prevBorderlinestrings = nextRoad.GetMainLanes(getter).Select(x => x.GetPrevBorder(getter).LineString.ID);
-                        Debug.Log($"Next Road next {string.Join(",", nextBorderlinestrings)} prev {string.Join(",", prevBorderlinestrings)} : toBorder {toBorder.LineString.ID} ");
-                    }
-                    if (prevRoad != null)
-                    {
-                        var nextBorderlinestrings = prevRoad.GetMainLanes(getter).Select(x => x.GetNextBorder(getter).LineString.ID);
-                        var prevBorderlinestrings = prevRoad.GetMainLanes(getter).Select(x => x.GetPrevBorder(getter).LineString.ID);
-                        Debug.Log($"Prev Road next {string.Join(",", nextBorderlinestrings)} prev {string.Join(",", prevBorderlinestrings)} : fromBorder {fromBorder.LineString.ID} ");
-                    }
-                }
-            }
         }
     }
 }

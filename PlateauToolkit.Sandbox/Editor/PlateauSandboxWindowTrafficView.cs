@@ -58,11 +58,6 @@ namespace PlateauToolkit.Sandbox.Editor
                     {
                         Debug.Log($"<color=red>実行</color>");
 
-                        foreach(var obj in context.SelectedObjectsMultiple)
-                        {
-                            Debug.Log($"<color=yellow>Selected : {obj.name}</color>");
-                        }
-
                         PlateauSandboxRoadNetwork roadNetwork = new PlateauSandboxRoadNetwork();
                         var success = roadNetwork.PlaceVehicles(context.SelectedObjectsMultiple);
                         if (success)

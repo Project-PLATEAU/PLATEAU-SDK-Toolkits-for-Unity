@@ -6,14 +6,12 @@ namespace AWSIM.TrafficSimulation
     [System.Serializable]
     public struct NPCVehicleConfig
     {
-        //この説明間違ってるのでは？
+
         /// <summary>
         /// Multiplier used to determine rotational speed from steering angle and vehicle speed.
         /// </summary>
         //public const float YawSpeedMultiplier = 0.15f;
-
         //値が小さいとカーブが大回りになり対向車線にはみ出す
-        //public const float YawSpeedMultiplier = 0.3f;
         public const float YawSpeedMultiplier = 0.5f;
 
 
@@ -22,7 +20,8 @@ namespace AWSIM.TrafficSimulation
         /// The higher the value, the faster it can turn, but the more blurred the control becomes.
         /// </summary>
         //public const float YawSpeedLerpFactor = 5f;
-        public const float YawSpeedLerpFactor = 20f; //値が小さいと車がフラフラする
+        //値が小さいと車がフラフラする
+        public const float YawSpeedLerpFactor = 20f; 
 
         /// <summary>
         /// Slow speed at which the vehicle can immediately stop.

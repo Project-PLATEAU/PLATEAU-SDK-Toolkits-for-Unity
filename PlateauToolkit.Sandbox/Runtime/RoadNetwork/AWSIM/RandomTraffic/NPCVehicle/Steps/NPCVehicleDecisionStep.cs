@@ -73,11 +73,6 @@ namespace AWSIM.TrafficSimulation
             var distanceToStopPoint = Mathf.Min(distanceToStopPointByFrontVehicle, distanceToStopPointByTrafficLight, distanceToStopPointByRightOfWay);
 
             state.IsStoppedByFrontVehicle = (distanceToStopPointByFrontVehicle <= stopDistance);
-            //state.IsStoppedByFrontVehicle = false;
-            //if (distanceToStopPointByFrontVehicle <= stopDistance)
-            //{
-            //    state.IsStoppedByFrontVehicle = true;
-            //}
 
             if (distanceToStopPoint <= absoluteStopDistance)
                 state.SpeedMode = NPCVehicleSpeedMode.ABSOLUTE_STOP;
@@ -91,12 +86,11 @@ namespace AWSIM.TrafficSimulation
                 state.SpeedMode = NPCVehicleSpeedMode.NORMAL;
 
             //停車時間が長すぎる場合は消す
-            //if (state.SpeedMode != NPCVehicleSpeedMode.NORMAL && state.SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - state.SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME)
             if (state.CheckMaxIdleTimeExceeded())
                 state.ShouldDespawn = true;
 
-            //Debug
-            state.Vehicle.Param.SetState(state);
+            //Debug情報
+            state.Vehicle.SetStatus(state);
         }
 
         private static float CalculateTrafficLightDistance(NPCVehicleInternalState state, float suddenStopDistance)
@@ -157,10 +151,10 @@ namespace AWSIM.TrafficSimulation
                         break;
                 }
 
-                if (state.IsStoppedByFrontVehicle)
-                {
-                    Handles.Label(state.TargetPoint, $"StoppedByFrontVehicle");
-                }
+                //if (state.IsStoppedByFrontVehicle)
+                //{
+                //    Handles.Label(state.TargetPoint, $"StoppedByFrontVehicle");
+                //}
 
                 var currentPosition = state.FrontCenterPosition;
                 currentPosition.y += 1f;
