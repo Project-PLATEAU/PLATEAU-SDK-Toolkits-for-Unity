@@ -6,7 +6,8 @@
         "Unity.Mathematics",
         "Unity.Splines",
         "PlateauToolkit.Foundation",
-        "PLATEAU.Runtime"
+        "PLATEAU.Runtime",
+        "libplateau"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

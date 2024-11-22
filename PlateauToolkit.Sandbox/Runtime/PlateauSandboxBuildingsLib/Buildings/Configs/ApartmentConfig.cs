@@ -9,6 +9,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         [Serializable]
         public class Params
         {
+            [CustomLabel("バルコニーを外壁にせり出す(1m)")]
+            public bool convexBalcony;
             [CustomLabel("窓ガラスバルコニーに切り替え")]
             public bool hasBalconyGlass;
             [CustomLabel("左側にバルコニーを作成")]

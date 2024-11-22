@@ -61,11 +61,24 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         public HotelConfig.VertexColorMaterialPalette hotelVertexColorMaterialPalette = new();
         public HotelConfig.MaterialPalette hotelMaterialPalette = new();
 
-        public string buildingName = "Building_Name";
         public FacadePlanner facadePlanner;
         public FacadeConstructor facadeConstructor;
         public RoofPlanner roofPlanner;
         public RoofConstructor roofConstructor;
+
+        public string GetBuildingName()
+        {
+            return buildingType switch
+            {
+                BuildingType.k_Apartment => "Apartment",
+                BuildingType.k_OfficeBuilding => "OfficeBuilding",
+                BuildingType.k_House => "House",
+                BuildingType.k_ConvenienceStore => "ConvenienceStore",
+                BuildingType.k_CommercialBuilding => "CommercialBuilding",
+                BuildingType.k_Hotel => "Hotel",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
         public void GenerateMesh(int inLodNum, float inBuildingWidth, float inBuildingDepth)
         {

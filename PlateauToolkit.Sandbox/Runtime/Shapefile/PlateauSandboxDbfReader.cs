@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace PlateauToolkit.Sandbox.Editor
+namespace PlateauToolkit.Sandbox.Runtime
 {
     public class DbfRecord
     {
