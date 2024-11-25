@@ -9,6 +9,10 @@ using PLATEAU.CityInfo;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
+    /// <summary>
+    /// Editor側のTrafficSim生成処理
+    /// PlateauSandboxWindowTrafficViewから呼ばれる
+    /// </summary>
     public class PlateauSandboxRoadNetwork
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;

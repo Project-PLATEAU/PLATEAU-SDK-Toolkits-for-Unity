@@ -51,8 +51,6 @@ namespace PlateauToolkit.Sandbox.Editor
                         PlateauToolkitGUIStyles.k_ButtonPrimaryColor)
                     .Button("実行"))
                     {
-                        Debug.Log($"<color=red>実行</color>");
-
                         PlateauSandboxRoadNetwork roadNetwork = new PlateauSandboxRoadNetwork();
                         var success = roadNetwork.PlaceVehicles(context.SelectedObjectsMultiple);
                         if (success)
@@ -95,23 +93,6 @@ namespace PlateauToolkit.Sandbox.Editor
                 GUILayout.Space(15);
             }
         }
-
-        //void DrawAddUserAsset()
-        //{
-        //    using (new EditorGUILayout.HorizontalScope())
-        //    {
-        //        GUILayout.Space(15);
-
-        //        if (new PlateauToolkitImageButtonGUI(
-        //        220,
-        //        40,
-        //        PlateauToolkitGUIStyles.k_ButtonPrimaryColor).Button("アセットを作成"))
-        //        {
-        //            PlateauSandboxPrefabCreationWizard.DisplayWizard();
-        //        }
-        //    }
-        //    GUILayout.Space(15);
-        //}
 
         void DrawTab(float windowWidth)
         {

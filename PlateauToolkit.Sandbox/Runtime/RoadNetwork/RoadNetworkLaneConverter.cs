@@ -1,4 +1,5 @@
 ﻿using AWSIM.TrafficSimulation;
+using PLATEAU.CityInfo;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
@@ -6,11 +7,18 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Splines;
+using static PLATEAU.RoadNetwork.Util.LineCrossPointResult;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
+    /// <summary>
+    /// RoadNetworkからAWSIM TrafficLaneを生成
+    /// </summary>
     public class RoadNetworkLaneConverter
     {
+
+        public static readonly bool SHOW_DEBUG_INFO = false;
+
         //temporarily keeps Lane information as RoadNetwork data
         public struct LaneConvertInfo
         {
@@ -60,6 +68,17 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return outPoints;
         }
 
+        void SetAsGroundLayer(List<PLATEAUCityObjectGroup> cityObjs)
+        {
+            if (cityObjs?.Count > 0)
+            {
+                foreach (var item in cityObjs)
+                {
+                    item.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+                }
+            }
+        }
+
         TrafficLane.TurnDirectionType ConvertTurnType(RnTurnType turnType)
         {
             if (turnType == RnTurnType.LeftTurn || turnType == RnTurnType.LeftFront || turnType == RnTurnType.LeftBack)
@@ -101,8 +120,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     RnDataRoad road = (RnDataRoad)rb;
 
-                    if (road.TargetTrans?.Count > 0)
-                        road.TargetTrans.FirstOrDefault().gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+                    SetAsGroundLayer(road.TargetTrans);
 
                     List<RnDataLane> lanes = road.GetMainLanes(getter);
 
@@ -113,7 +131,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         //ポイント数が足りない場合
                         if (points.Count < 2)
                         {
-                            //Debug.Log($"point size is {points.Count}");
+                            DebugLog($"point size is {points.Count}");
                             continue;
                         }
 
@@ -186,8 +204,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         continue;
                     }
 
-                    if (intersection.TargetTrans?.Count > 0)
-                        intersection.TargetTrans.FirstOrDefault().gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+                    SetAsGroundLayer(intersection.TargetTrans);
 
                     var tracks = intersection.Tracks;
                     foreach (RnDataTrack track in tracks)
@@ -227,7 +244,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         if (laneDict.ContainsKey(l))
                             lane.PrevLanes.Add(laneDict[l]);
                         else
-                            Debug.Log($"Lane not found : {info.trafficLane.name}");
+                            DebugLog($"Lane not found : {info.trafficLane.name}");
                     }
                 }
                 if (info.nextLanes != null)
@@ -237,7 +254,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         if (laneDict.ContainsKey(l))
                             lane.NextLanes.Add(laneDict[l]);
                         else
-                            Debug.Log($"Lane not found : {info.trafficLane.name}");
+                            DebugLog($"Lane not found : {info.trafficLane.name}");
                     }
                 }
 
@@ -248,7 +265,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         if (trackDict.ContainsKey(t))
                             lane.PrevLanes.Add(trackDict[t]);
                         else
-                            Debug.Log($"Track not found : {info.trafficLane.name}");
+                            DebugLog($"Track not found : {info.trafficLane.name}");
                     }
                 }
 
@@ -259,7 +276,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         if (trackDict.ContainsKey(t))
                             lane.NextLanes.Add(trackDict[t]);
                         else
-                            Debug.Log($"Track not found : {info.trafficLane.name}");
+                            DebugLog($"Track not found : {info.trafficLane.name}");
                     }
                 }
 
@@ -274,13 +291,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 #endif
 
                 //Next/Prev共に取得できない場合のDebug 出力
-                //DebugLaneConverter.DebugLanes(lane, getter);
+                if (SHOW_DEBUG_INFO)
+                    DebugLaneConverter.DebugLanes(lane, getter);
 
                 if (lane.PrevLanes.Count > 0 || lane.NextLanes.Count > 0) //接続情報がないLaneは除外
                     allLanes.Add(lane);
             }
 
             return allLanes;
+        }
+
+        void DebugLog(string debugstr)
+        {
+            if (SHOW_DEBUG_INFO)
+                Debug.Log(debugstr);
         }
     }
 }
