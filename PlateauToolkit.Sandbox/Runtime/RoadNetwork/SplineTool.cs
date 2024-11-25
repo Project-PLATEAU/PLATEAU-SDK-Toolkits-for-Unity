@@ -79,7 +79,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 accumulatedDistance += segmentDistance;
             }
 
-            // 万が一、計算が範囲外の場合、最後の点を返す（通常は起こらない）
+            // 計算が範囲外の場合、最後の点を返す（通常は起こらない）
             return points.Last();
         }
     }

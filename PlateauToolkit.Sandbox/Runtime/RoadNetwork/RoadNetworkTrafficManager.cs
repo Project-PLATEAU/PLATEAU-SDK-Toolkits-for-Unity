@@ -7,7 +7,9 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
-    //交通状況管理 (各道路の自動車）
+    /// <summary>
+    /// Traffic Simulator / RoadNetwork 総合管理
+    /// </summary>
     public class RoadNetworkTrafficManager : MonoBehaviour
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
@@ -71,24 +73,23 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             List<TrafficLane> spawnableLanes = allLanes.FindAll(x => !x.intersectionLane); //交差点以外
 
             //ReSpawn可能なTrafficLanes
-            //List<TrafficLane> respawnableLanes = allLanes.FindAll(x => !x.intersectionLane && x.NextLanes.Count > 0 && x.PrevLanes.Count <= 0); //交差点以外 : Prevが空でNextが存在
             List<TrafficLane> respawnableLanes = allLanes.FindAll(x => !x.intersectionLane && x.rnRoad.Next.IsValid && !x.rnRoad.Prev.IsValid); //交差点以外 : Prevが空でNextが存在 (RoadNetworkで判定）
 
             spawnableLanes.RemoveAll(x => respawnableLanes.Contains(x)); //重複を除去
 
             //初期Spawn
-            RandomTrafficSimulatorConfiguration RandomTrafficSimConfigInitial = new RandomTrafficSimulatorConfiguration();
-            RandomTrafficSimConfigInitial.maximumSpawns = GetNumMaxVehicles(); //初回用.Respawn禁止
-            RandomTrafficSimConfigInitial.npcPrefabs = m_VehiclePrefabs.ToArray();
-            RandomTrafficSimConfigInitial.spawnableLanes = spawnableLanes.ToArray();
-            RandomTrafficSimConfigInitial.enabled = true;
+            RandomTrafficSimulatorConfiguration randomTrafficSimConfigInitial = new RandomTrafficSimulatorConfiguration();
+            randomTrafficSimConfigInitial.maximumSpawns = GetNumMaxVehicles(); //初回用.Respawn禁止
+            randomTrafficSimConfigInitial.npcPrefabs = m_VehiclePrefabs.ToArray();
+            randomTrafficSimConfigInitial.spawnableLanes = spawnableLanes.ToArray();
+            randomTrafficSimConfigInitial.enabled = true;
 
-            RandomTrafficSimulatorConfiguration RandomTrafficSimConfig = new RandomTrafficSimulatorConfiguration();
-            RandomTrafficSimConfig.maximumSpawns = 0; //0以外だとRespawnしなくなる
-            RandomTrafficSimConfig.npcPrefabs = m_VehiclePrefabs.ToArray();
-            RandomTrafficSimConfig.spawnableLanes = respawnableLanes.ToArray();
-            RandomTrafficSimConfig.enabled = true;
-            SimTrafficManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { RandomTrafficSimConfigInitial, RandomTrafficSimConfig };
+            RandomTrafficSimulatorConfiguration randomTrafficSimConfig = new RandomTrafficSimulatorConfiguration();
+            randomTrafficSimConfig.maximumSpawns = 0; //0:Respawn可能
+            randomTrafficSimConfig.npcPrefabs = m_VehiclePrefabs.ToArray();
+            randomTrafficSimConfig.spawnableLanes = respawnableLanes.ToArray();
+            randomTrafficSimConfig.enabled = true;
+            SimTrafficManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { randomTrafficSimConfigInitial, randomTrafficSimConfig };
 
             SimTrafficManager.Initialize();
         }

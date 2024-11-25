@@ -11,7 +11,6 @@ namespace PlateauToolkit.Sandbox
 
     public class PlateauSandboxTrafficMovement : NPCVehicle
     {
-
         private void Awake()
         {
             Initialize(gameObject);

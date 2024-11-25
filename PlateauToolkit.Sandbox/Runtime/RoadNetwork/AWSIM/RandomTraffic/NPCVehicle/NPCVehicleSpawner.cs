@@ -166,7 +166,6 @@ namespace AWSIM.TrafficSimulation
         public static bool IsSpawnable(GameObject prefab, NPCVehicleSpawnPoint npcVehicleSpawnPoint)
         {
             var bounds = NPCVehicle.GetBounds(prefab);
-            //bounds.extents = bounds.extents * 0.5f;
             return IsSpawnable(bounds, npcVehicleSpawnPoint);
         }
 

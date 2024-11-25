@@ -26,33 +26,6 @@ namespace AWSIM.TrafficSimulation
         [SerializeField, Tooltip("A maximum number of vehicles that can simultaneously live in the scene. Lowering this value results in less dense traffic but improves the simulator's performance.")]
         public int maxVehicleCount = 40;
 
-        //[SerializeField, Tooltip("A minimal distance between the EGO and the NPC to spawn")]
-        //private float spawnDistanceToEgo = 50.0f;
-
-        //[SerializeField, Tooltip("Ego vehicle handler. If not set, the manager creates a dummy ego. This reference is also set automatically when the Ego spawns via the traffic simulator.")]
-        //private GameObject _egoVehicle;
-
-        //public GameObject egoVehicle
-        //{
-        //    get
-        //    {
-        //        return _egoVehicle;
-        //    }
-        //    set
-        //    {
-        //        _egoVehicle = value;
-        //        if (_egoVehicle != null)
-        //        {
-        //            npcVehicleSimulator.RegisterEgo(value);
-        //        }
-        //        else
-        //        {
-        //            npcVehicleSimulator.UnregisterEgo();
-        //            _egoVehicle = dummyEgo;
-        //        }
-        //    }
-        //}
-
         [SerializeField, Tooltip("Vehicle Root GameObject")]
         private GameObject _vehicleRoot;
         public GameObject VehicleRoot
@@ -66,7 +39,6 @@ namespace AWSIM.TrafficSimulation
             }
         }
 
-
         [Header("Debug")]
         [SerializeField] protected bool showGizmos = false;
         [SerializeField] protected bool showYieldingPhase = false;
@@ -77,8 +49,15 @@ namespace AWSIM.TrafficSimulation
         public NPCVehicleSimulator npcVehicleSimulator;
         private List<ITrafficSimulator> trafficSimulatorNodes;
         private Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>> spawnLanes;
-        //private GameObject dummyEgo;
 
+        /// <summary>
+        /// äeSerializeFieldÇÃèâä˙ê›íË
+        /// </summary>
+        /// <param name="_vehicleLayerMask_"></param>
+        /// <param name="_groundLayerMask_"></param>
+        /// <param name="_maxVehicleCount_"></param>
+        /// <param name="_vehicleRoot_"></param>
+        /// <param name="_debug_"></param>
         public void InitParams(LayerMask _vehicleLayerMask_, LayerMask _groundLayerMask_, int _maxVehicleCount_, GameObject _vehicleRoot_, bool _debug_)
         {
             vehicleLayerMask = (1 << _vehicleLayerMask_);
@@ -116,16 +95,7 @@ namespace AWSIM.TrafficSimulation
 
             spawnLanes = new Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>>();
 
-            //dummyEgo = GameObject.Find(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
-            //if(dummyEgo == null)
-            //    dummyEgo = new GameObject(RoadNetworkConstants.DUMMY_VEHICLE_NAME);
-
-            //if (_egoVehicle == null)
-            //{
-            //    _egoVehicle = dummyEgo;
-            //}
-            npcVehicleSimulator = new NPCVehicleSimulator(vehicleConfig, vehicleLayerMask, groundLayerMask, maxVehicleCount);//, _egoVehicle);
-            //npcVehicleSimulator.SetDummyEgo(dummyEgo);
+            npcVehicleSimulator = new NPCVehicleSimulator(vehicleConfig, vehicleLayerMask, groundLayerMask, maxVehicleCount);
 
             verifyIntegrationEnvironmentElements();
             trafficSimulatorNodes = new List<ITrafficSimulator>();
@@ -173,11 +143,6 @@ namespace AWSIM.TrafficSimulation
             ClearAll();
             Despawn();
             spawnLanes.Clear();
-            //if (dummyEgo)
-            //{
-            //    Destroy(dummyEgo);
-            //    _egoVehicle = null;
-            //}
         }
 
         void Start()
@@ -270,18 +235,11 @@ namespace AWSIM.TrafficSimulation
             {
                 NPCVehicle spawnedVehicle;
 
-                //var distance2D = GeometryUtility.Distance2D(_egoVehicle.transform.position, spawnLoc.Key.Position);
-                //if (distance2D < spawnDistanceToEgo)
-                //{
-                //    continue;
-                //}
-
                 if (spawnLoc.Value.Count == 1)
                 {
                     var tsimAndPrefab = spawnLoc.Value.First();
                     var trafficSim = tsimAndPrefab.Key;
                     var prefab = tsimAndPrefab.Value;
-                    //if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
                     if (!NPCVehicleSpawner.IsSpawnable(prefab, spawnLoc.Key))
                     {
                         //Debug.LogError($"NPCVehicleSpawner not Spawnable! {spawnLoc.Key.Lane.gameObject.name}");
@@ -294,7 +252,6 @@ namespace AWSIM.TrafficSimulation
                     var priorityTrafficSimList = spawnLoc.Value.OrderByDescending(x => x.Key.GetCurrentPriority());
                     var priorityTrafficSimGo = priorityTrafficSimList.First();
                     var prefab = priorityTrafficSimGo.Value;
-                    //if (!NPCVehicleSpawner.IsSpawnable(prefab.GetComponent<NPCVehicle>().Bounds, spawnLoc.Key))
                     if (!NPCVehicleSpawner.IsSpawnable(prefab, spawnLoc.Key))
                     {
                         //Debug.LogError($"NPCVehicleSpawner not Spawnable!  {spawnLoc.Key.Lane.gameObject.name}");
@@ -310,11 +267,6 @@ namespace AWSIM.TrafficSimulation
                         priorityTrafficSimGo.Key.ResetPriority();
                     }
                 }
-
-                //if (spawnedVehicle && spawnedVehicle.gameObject.tag == "Ego")
-                //{
-                //    npcVehicleSimulator.EGOVehicle = spawnedVehicle.transform;
-                //}
             }
 
             spawnLanes.Clear();
@@ -324,8 +276,6 @@ namespace AWSIM.TrafficSimulation
         }
         private void Despawn()
         {
-            //int startcount = npcVehicleSimulator.VehicleStates.Count;
-
             foreach (var state in npcVehicleSimulator.VehicleStates)
             {
                 if (state.ShouldDespawn)
@@ -334,10 +284,6 @@ namespace AWSIM.TrafficSimulation
                 }
             }
             npcVehicleSimulator.RemoveInvalidVehicles();
-
-            //int endcount = npcVehicleSimulator.VehicleStates.Count;
-            //if(startcount != endcount)
-            //    Debug.Log($"<color=red>Despawn {startcount} -> {endcount}</color>");
         }
 
         private void OnDestroy()

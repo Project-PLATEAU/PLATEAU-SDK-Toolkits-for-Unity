@@ -33,13 +33,11 @@ namespace AWSIM.TrafficSimulation
         private NPCVehicleDecisionStep decisionStep;
         private NPCVehicleControlStep controlStep;
         private NPCVehicleVisualizationStep visualizationStep;
-        private Transform dummyEgo;
 
         public NPCVehicleSimulator(NPCVehicleConfig config,
             LayerMask vehicleLayerMask,
             LayerMask groundLayerMask,
-            int maxVehicleCount)//,
-            //GameObject egoVehicle)
+            int maxVehicleCount)
         {
             vehicleStates = new List<NPCVehicleInternalState>();
             cognitionStep = new NPCVehicleCognitionStep(vehicleLayerMask, groundLayerMask, maxVehicleCount);
@@ -47,36 +45,7 @@ namespace AWSIM.TrafficSimulation
             controlStep = new NPCVehicleControlStep(config);
             visualizationStep = new NPCVehicleVisualizationStep();
             this.maxVehicleCount = maxVehicleCount;
-            //EGOVehicle = egoVehicle.transform;
         }
-
-
-        /// <summary>
-        /// When there is no real Ego vehicle in a scene, dummy one must be set.
-        /// </summary>
-        //public void UnregisterEgo()
-        //{
-        //    if (dummyEgo)
-        //    {
-        //        EGOVehicle = dummyEgo;
-        //    }
-        //}
-
-        /// <summary>
-        /// Dummy ego is used when there is no real Ego in the scene
-        /// </summary>
-        //public void SetDummyEgo(GameObject ego)
-        //{
-        //    dummyEgo = ego.transform;
-        //}
-
-        /// <summary>
-        /// Registers Ego vehicle.
-        /// </summary>
-        //public void RegisterEgo(GameObject egoVehicle)
-        //{
-        //    EGOVehicle = egoVehicle.transform;
-        //}
 
         /// <summary>
         /// Register <see cref="NPCVehicle"/> to be updated by the simulator.

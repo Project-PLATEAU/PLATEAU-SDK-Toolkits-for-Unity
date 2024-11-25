@@ -43,11 +43,6 @@ namespace PlateauToolkit.Sandbox.Editor
 
                 m_CurrentAssetList.OnGUI(context, window.position.width, m_IsShowAssetCreate);
 
-                //if (m_CurrentAssetList.SelectedAssetType == SandboxAssetType.UserDefined)
-                //{
-                //    DrawAddUserAsset();
-                //}
-
                 using (new EditorGUILayout.HorizontalScope())
                 {
                     if (new PlateauToolkitImageButtonGUI(

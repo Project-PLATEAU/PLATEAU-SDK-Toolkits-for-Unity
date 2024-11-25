@@ -6,7 +6,6 @@ using PlateauToolkit.Sandbox.RoadNetwork;
 using AWSIM.TrafficSimulation;
 using UnityEditor;
 using PLATEAU.CityInfo;
-using System.Security.Cryptography;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -68,7 +67,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 return false;
             }
 
-            EditorUtility.DisplayDialog("成功", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
+            EditorUtility.DisplayDialog("成功しました。", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
             return true;
         }
 
@@ -117,7 +116,6 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             //SetCityObjectAsGroundLayer("_tran_"); //Tranをground Layerに
-
             if (RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
             {
                 SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
@@ -136,8 +134,7 @@ namespace PlateauToolkit.Sandbox.Editor
             }
             m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
 
-            //Component attach
-
+            //Attach Components
             GameObject managerGo = GameObject.Find(RoadNetworkConstants.TRAFFIC_MANAGER_NAME);
             if (managerGo == null)
             {

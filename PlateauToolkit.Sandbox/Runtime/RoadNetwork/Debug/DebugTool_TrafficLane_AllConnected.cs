@@ -14,8 +14,6 @@ public class DebugTool_TrafficLane_AllConnected : MonoBehaviour
     [SerializeField]
     private List<TrafficLane> _prevLanes = new List<TrafficLane>();
 
-
-
     // Start is called before the first frame update
     void Start()
     {
