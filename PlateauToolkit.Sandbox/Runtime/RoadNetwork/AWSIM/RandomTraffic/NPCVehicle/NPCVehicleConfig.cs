@@ -21,7 +21,7 @@ namespace AWSIM.TrafficSimulation
         /// </summary>
         //public const float YawSpeedLerpFactor = 5f;
         //値が小さいと車がフラフラする
-        public const float YawSpeedLerpFactor = 20f; 
+        public const float YawSpeedLerpFactor = 20f;
 
         /// <summary>
         /// Slow speed at which the vehicle can immediately stop.

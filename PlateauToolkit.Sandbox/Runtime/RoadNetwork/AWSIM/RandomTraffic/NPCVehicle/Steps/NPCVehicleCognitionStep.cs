@@ -652,12 +652,6 @@ namespace AWSIM.TrafficSimulation
                         refState.DominatingVehicle = dominatingVehicle;
                         return true;
                     }
-                    //else if (IsLaneDominatedByVehicle(lane, EGOTransform.position, EGOTransform.forward))
-                    //{
-                    //    refState.YieldPoint = stopPoint;
-                    //    refState.DominatingVehicle = EGOTransform;
-                    //    return true;
-                    //}
                 }
                 return false;
 
@@ -1040,7 +1034,6 @@ namespace AWSIM.TrafficSimulation
 
         public void Execute(
             IReadOnlyList<NPCVehicleInternalState> states)
-            //,Transform egoTransform)
         {
             Profiler.BeginSample("Cognition.CheckNextWaypoint");
 
@@ -1121,7 +1114,6 @@ namespace AWSIM.TrafficSimulation
 
             new RightOfWayCheckJob
             {
-                //EGOTransform = egoTransform,
                 States = states
             }.Execute();
 
@@ -1172,8 +1164,6 @@ namespace AWSIM.TrafficSimulation
                     {
                         continue;
                     }
-
-                    //Handles.Label(stateCurrentPosition, $"p {state.YieldPhase.ToString()}");
 
                     switch (state.YieldPhase)
                     {

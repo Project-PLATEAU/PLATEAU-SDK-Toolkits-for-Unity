@@ -56,7 +56,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public int GetNumMaxVehicles()
         {
             int numRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().Count();
-            return (int)Mathf.Min(numRoads / 2, RoadNetworkConstants.NUM_MAX_VEHICLES ); //道路数の半分
+            return (int)Mathf.Min(numRoads / 2, RoadNetworkConstants.NUM_MAX_VEHICLES); // 交差点以外の道路数の半分 or 最大車輛数
         }
 
         public void CreateSimulator()
@@ -79,7 +79,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             //初期Spawn
             RandomTrafficSimulatorConfiguration randomTrafficSimConfigInitial = new RandomTrafficSimulatorConfiguration();
-            randomTrafficSimConfigInitial.maximumSpawns = GetNumMaxVehicles(); //初回用.Respawn禁止
+            randomTrafficSimConfigInitial.maximumSpawns = GetNumMaxVehicles(); // 初回用　Respawn禁止
             randomTrafficSimConfigInitial.npcPrefabs = m_VehiclePrefabs.ToArray();
             randomTrafficSimConfigInitial.spawnableLanes = spawnableLanes.ToArray();
             randomTrafficSimConfigInitial.enabled = true;

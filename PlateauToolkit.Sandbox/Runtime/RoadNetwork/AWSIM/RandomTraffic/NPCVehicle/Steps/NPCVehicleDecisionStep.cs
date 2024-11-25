@@ -17,8 +17,6 @@ namespace AWSIM.TrafficSimulation
         // The vehicle is controlled to stop at this distance away from the obstacle(e.g. another vehicle in front of the vehicle).
         private const float MinFrontVehicleDistance = 4f;
         private const float MinStopDistance = 1.5f;
-        //private const float MinFrontVehicleDistance = 3f;
-        //private const float MinStopDistance = 1.0f;
 
         public NPCVehicleDecisionStep(NPCVehicleConfig config)
         {
@@ -150,11 +148,6 @@ namespace AWSIM.TrafficSimulation
                         Gizmos.color = Color.green;
                         break;
                 }
-
-                //if (state.IsStoppedByFrontVehicle)
-                //{
-                //    Handles.Label(state.TargetPoint, $"StoppedByFrontVehicle");
-                //}
 
                 var currentPosition = state.FrontCenterPosition;
                 currentPosition.y += 1f;

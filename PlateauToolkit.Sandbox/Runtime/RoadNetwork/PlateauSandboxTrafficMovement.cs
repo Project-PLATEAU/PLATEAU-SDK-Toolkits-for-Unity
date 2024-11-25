@@ -2,6 +2,9 @@
 
 namespace PlateauToolkit.Sandbox
 {
+    /// <summary>
+    /// NPCVehicleからPlateauSandboxVehicleにアクセスするためのinterface
+    /// </summary>
     interface IPlateauSandboxTrafficObject : IPlateauSandboxPlaceableObject
     {
         float GetWheelBase();
@@ -9,9 +12,13 @@ namespace PlateauToolkit.Sandbox
         void UpdateVisual(float speed, float steerAngle);
     }
 
+    /// <summary>
+    /// NPCVehicle Wrapper
+    /// Spawn時にAssignされる
+    /// </summary>
     public class PlateauSandboxTrafficMovement : NPCVehicle
     {
-        private void Awake()
+        void Awake()
         {
             Initialize(gameObject);
         }

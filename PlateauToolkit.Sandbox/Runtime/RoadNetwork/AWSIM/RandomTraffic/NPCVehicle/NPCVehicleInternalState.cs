@@ -59,7 +59,6 @@ namespace AWSIM.TrafficSimulation
 
         // Output from Decision
         public Vector3 TargetPoint { get; set; }
-        //public NPCVehicleSpeedMode SpeedMode { get; set; }
         public NPCVehicleSpeedMode SpeedMode
         {
             get => _SpeedMode;

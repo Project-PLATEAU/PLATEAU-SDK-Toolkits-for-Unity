@@ -1,20 +1,21 @@
 using AWSIM.TrafficSimulation;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+/// <summary>
+/// TrafficLaneの前後の接続確認用
+/// </summary>
 public class DebugTool_TrafficLane_AllConnected : MonoBehaviour
 {
     [SerializeField]
-    private TrafficLane Lane;
+    private TrafficLane lane;
 
     [SerializeField]
-    private List<TrafficLane> _nextLanes = new List<TrafficLane>();
+    private List<TrafficLane> nextLanes = new List<TrafficLane>();
     [SerializeField]
-    private List<TrafficLane> _prevLanes = new List<TrafficLane>();
+    private List<TrafficLane> prevLanes = new List<TrafficLane>();
 
-    // Start is called before the first frame update
     void Start()
     {
         Init();
@@ -27,30 +28,29 @@ public class DebugTool_TrafficLane_AllConnected : MonoBehaviour
 
     private void Init()
     {
-        if (Lane == null)
+        if (lane == null)
             return;
 
         var trafficLanes = new List<TrafficLane>( GameObject.FindObjectsOfType<TrafficLane>() );
-        _nextLanes = trafficLanes.FindAll(x => x.NextLanes.Contains(Lane));
-        _prevLanes = trafficLanes.FindAll(x => x.PrevLanes.Contains(Lane));
+        nextLanes = trafficLanes.FindAll(x => x.NextLanes.Contains(lane));
+        prevLanes = trafficLanes.FindAll(x => x.PrevLanes.Contains(lane));
 
     }
 
     private void OnDrawGizmos()
     {
-
-        if (Lane != null)
+        if (lane != null)
         {
             Gizmos.color = Color.blue;
-            for (int j = 0; j < Lane.Waypoints.Length - 1; j++)
+            for (int j = 0; j < lane.Waypoints.Length - 1; j++)
             {
-                Gizmos.DrawLine(Lane.Waypoints[j], Lane.Waypoints[j + 1]);
+                Gizmos.DrawLine(lane.Waypoints[j], lane.Waypoints[j + 1]);
             }
         }
 
-        if (_nextLanes.Count > 0)
+        if (nextLanes.Count > 0)
         {
-            foreach (var lane in _nextLanes)
+            foreach (var lane in nextLanes)
             {
                 Gizmos.color = Color.green;
                 for (int j = 0; j < lane.Waypoints.Length - 1; j++)
@@ -61,9 +61,9 @@ public class DebugTool_TrafficLane_AllConnected : MonoBehaviour
             }
         }
 
-        if (_prevLanes.Count > 0)
+        if (prevLanes.Count > 0)
         {
-            foreach (var lane in _prevLanes)
+            foreach (var lane in prevLanes)
             {
                 Gizmos.color = Color.yellow;
                 for (int j = 0; j < lane.Waypoints.Length - 1; j++)

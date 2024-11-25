@@ -18,7 +18,7 @@
         public static readonly float MAX_IDLE_TIME = 20f;
 
         /// <summary>
-        /// Goundからの距離判定を行うか (Groundから一定距離離れた車輛は削除
+        /// Goundからの距離判定を行うか (Groundから一定距離離れた車輛は削除)
         /// </summary>
         public static readonly bool CHECK_DISTANCE_FROM_GROUND = true;
 
@@ -38,7 +38,7 @@
         public static readonly string STOPLINE_ROOT_NAME = "StopLines";
 
         /// <summary>
-        /// RightOfWaysを実行後に自動生成
+        /// 実行後にRightOfWaysを自動生成
         /// </summary>
         public static readonly bool USE_RIGHT_OF_WAYS = false;
 

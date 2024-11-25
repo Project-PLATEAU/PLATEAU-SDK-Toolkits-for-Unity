@@ -71,7 +71,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 return false;
             }
 
-            EditorUtility.DisplayDialog("成功しました。", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
+            EditorUtility.DisplayDialog("アセットの配置に成功しました。", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
             return true;
         }
 

@@ -16,23 +16,23 @@ namespace AWSIM
         [Serializable]
         public class VehicleParameters
         {
-            public NPCVehicleSpeedMode SpeedMode;
-            public string TimeRemains;
-            public TrafficLane FollowingLane;
-            public TrafficLane PrevLane;
+            public NPCVehicleSpeedMode speedMode;
+            public string timeRemains;
+            public TrafficLane followingLane;
+            public TrafficLane prevLane;
 
             public void SetStatus(NPCVehicleInternalState state)
             {
-                SpeedMode = state.SpeedMode;
-                if (SpeedMode != NPCVehicleSpeedMode.NORMAL && SpeedMode != NPCVehicleSpeedMode.SLOW)
-                    TimeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{RoadNetworkConstants.MAX_IDLE_TIME}";
+                speedMode = state.SpeedMode;
+                if (speedMode != NPCVehicleSpeedMode.NORMAL && speedMode != NPCVehicleSpeedMode.SLOW)
+                    timeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{RoadNetworkConstants.MAX_IDLE_TIME}";
                 else
-                    TimeRemains = "-";
+                    timeRemains = "-";
 
-                if(state.CurrentFollowingLane != FollowingLane)
+                if(state.CurrentFollowingLane != followingLane)
                 {
-                    PrevLane = FollowingLane;
-                    FollowingLane = state.CurrentFollowingLane;
+                    prevLane = followingLane;
+                    followingLane = state.CurrentFollowingLane;
                 }
             }
         }
@@ -50,11 +50,11 @@ namespace AWSIM
 
         //debug
         [SerializeField]
-        public VehicleParameters Status = new VehicleParameters();
+        public VehicleParameters status = new VehicleParameters();
 
         public void SetStatus(NPCVehicleInternalState state)
         {
-            Status.SetStatus(state);
+            status.SetStatus(state);
         }
 
         /// <summary>
@@ -77,10 +77,6 @@ namespace AWSIM
         const float maxSteerSpeed = 60f;                    // deg/s
         const float maxVerticalSpeed = 40;                  // m/s
         const float maxSlope = 45;                          // deg
-
-        // light visual settings const values.
-        const float turnSignalBlinkSec = 0.5f;             // seconds
-        const float brakeLightAccelThreshold = -0.1f;      // m/s
 
         Rigidbody rigidbody {
             get

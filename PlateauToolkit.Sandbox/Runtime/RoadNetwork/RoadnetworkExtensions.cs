@@ -66,6 +66,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return points.FindIndex(x => x == point);
         }
 
+        /// <summary>
+        /// RnDataPoint から RnDataLineString取得
+        /// </summary>
         public static List<RnDataLineString> GetParentLineString([DisallowNull] this RnDataPoint point, RoadNetworkDataGetter getter)
         {
             int index = point.GetId(getter);
@@ -73,6 +76,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return lines.Where(x => x.Points.Any(y => y.ID == index)).ToList<RnDataLineString>();
         }
 
+        /// <summary>
+        /// RnDataPoint から RnDataRoad取得
+        /// </summary>
         public static List<RnDataRoad> GetRoad([DisallowNull] this RnDataPoint point, RoadNetworkDataGetter getter)
         {
             List<RnDataRoad> outRoads = new();
@@ -93,6 +99,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             List<RnDataLineString> lines = getter.GetLineStrings() as List<RnDataLineString>;
             return lines.FindIndex(x => x == linestring);
         }
+
+        /// <summary>
+        /// RnDataLineString から RnDataWay取得
+        /// </summary>
         public static List<RnDataWay> GetParentWays([DisallowNull] this RnDataLineString linestring, RoadNetworkDataGetter getter)
         {
             int index = linestring.GetId(getter);
@@ -100,6 +110,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return ways.Where(x => x.LineString.ID == index).ToList<RnDataWay>();
         }
 
+        /// <summary>
+        /// RnDataLineStringの距離
+        /// </summary>
         public static float GetTotalDistance([DisallowNull] this RnDataLineString linestring, RoadNetworkDataGetter getter)
         {
             List<Vector3> points = linestring.GetChildPointsVector(getter);
@@ -111,6 +124,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return distance;
         }
 
+        /// <summary>
+        /// RnDataLineStringからRnDataRoad取得
+        /// </summary>
         public static List<RnDataRoad> GetRoad([DisallowNull] this RnDataLineString linestring, RoadNetworkDataGetter getter)
         {
             List<RnDataRoad> outRoads = new();
@@ -128,6 +144,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return outRoads;
         }
 
+        /// <summary>
+        /// RnDataLineStringからRnDataPoint取得
+        /// </summary>
         public static List<RnDataPoint> GetChildPoints([DisallowNull] this RnDataLineString linestring, RoadNetworkDataGetter getter)
         {
             List<RnDataPoint> points = new();
@@ -142,6 +161,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return points;
         }
 
+        /// <summary>
+        /// RnDataLineStringからRnDataPointのVector3座標取得
+        /// </summary>
         public static List<Vector3> GetChildPointsVector([DisallowNull] this RnDataLineString linestring, RoadNetworkDataGetter getter)
         {
             if (linestring?.Points == null)
@@ -167,6 +189,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             List<RnDataWay> ways = getter.GetWays() as List<RnDataWay>;
             return ways.FindIndex(x => x == way);
         }
+
+        /// <summary>
+        /// RnDataWayからRnDataLane取得
+        /// </summary>
         public static List<RnDataLane> GetParentLanes([DisallowNull] this RnDataWay way, RoadNetworkDataGetter getter)
         {
             int index = way.GetId(getter);
@@ -174,6 +200,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return lanes.Where(x => x.LeftWay.ID == index || x.RightWay.ID == index || x.CenterWay.ID == index).ToList<RnDataLane>();
         }
 
+        /// <summary>
+        /// RnDataWayからRnDataLineString取得
+        /// </summary>
         public static RnDataLineString GetChildLineString([DisallowNull] this RnDataWay way, RoadNetworkDataGetter getter)
         {
             if (way?.LineString.IsValid == true)
@@ -181,6 +210,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// RnDataWayがRnDataWayのリストに含まれるか
+        /// </summary>
         public static bool ContainsSameLine([DisallowNull] this RnDataWay way, List<RnDataWay> ways)
         {
             return ways.Any(x => x.IsSameLine(way));
@@ -196,6 +228,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return ways.FindIndex(x => x == lane);
         }
 
+        /// <summary>
+        /// RnDataLaneからRnDataRoad取得
+        /// </summary>
         public static List<RnDataRoad> GetParentRoads([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter)
         {
             int index = lane.GetId(getter);
@@ -204,7 +239,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return roads.Where(x => x.MainLanes.Any(y => y.ID == index)).ToList<RnDataRoad>();
         }
 
-        public static RnDataWay GetChildWay([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter, LanePosition position)
+        /// <summary>
+        /// RnDataLaneからRnDataWay取得
+        /// </summary>
+        public static RnDataWay GetChildWay([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter, LanePosition position = LanePosition.Center)
         {
             RnID<RnDataWay> wayId = lane.CenterWay;
             switch (position)
@@ -228,6 +266,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// RnDataLaneからRnDataLineString取得
+        /// </summary>
         public static RnDataLineString GetChildLineString([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter, LanePosition position = LanePosition.Center)
         {
             RnDataWay way = lane.GetChildWay(getter, position);
@@ -237,11 +278,17 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// RnDataLaneからNextBorder(RnDataLineString)取得
+        /// </summary>
         public static RnDataWay GetNextBorder([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter)
         {
             return getter.GetWays().TryGet(lane.NextBorder);
         }
 
+        /// <summary>
+        /// RnDataLaneからPrevBorder(RnDataLineString)取得
+        /// </summary>
         public static RnDataWay GetPrevBorder([DisallowNull] this RnDataLane lane, RoadNetworkDataGetter getter)
         {
             return getter.GetWays().TryGet(lane.PrevBorder);
@@ -257,6 +304,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return roads.FindIndex(x => x == road);
         }
 
+        /// <summary>
+        /// RnDataRoadからMainLanes(RnDataLane)取得
+        /// </summary>
         public static List<RnDataLane> GetMainLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             if (getter == null)
@@ -275,6 +325,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return lanes;
         }
 
+        /// <summary>
+        /// RnDataRoadからMedianLane(RnDataLane)取得
+        /// </summary>
         public static RnDataLane GetMedianLane([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             List<RnDataLane> lanes = new();
@@ -283,12 +336,18 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// RnDataRoadのMainLane(RnDataLane)のIndex取得
+        /// </summary>
         public static int GetLaneIndexOfMainLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataLane lane)
         {
             return road.GetMainLanes(getter).IndexOf(lane);
         }
 
-        //lane は IDではなくMainLaneのindex
+        /// <summary>
+        /// RnDataRoadから指定した位置のRnDataLane取得
+        /// </summary>
+        /// <param name="laneIndex">laneIndex は IDではなくMainLaneのindex</param>
         public static RnDataLane GetChildLane([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex = -1, bool isMainLane = true)
         {
             if (isMainLane)
@@ -311,7 +370,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
-        public static RnDataWay GetChildWay([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex , bool isMainLane = true, LanePosition laneposition = LanePosition.Center)
+        /// <summary>
+        /// RnDataRoadから指定した位置のRnDataWay取得
+        /// </summary>
+        /// <param name="laneIndex">laneIndex は IDではなくMainLaneのindex</param>
+        public static RnDataWay GetChildWay([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex, bool isMainLane = true, LanePosition laneposition = LanePosition.Center)
         {
             if (isMainLane)
             {
@@ -333,12 +396,24 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// RnDataRoadから指定した位置のRnDataLineString取得
+        /// </summary>
+        /// <param name="laneIndex">laneIndex は IDではなくMainLaneのindex</param>
         public static RnDataLineString GetChildLineString([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, int laneIndex, bool isMainLane = true, LanePosition laneposition = LanePosition.Center)
         {
             RnDataWay way = road.GetChildWay(getter, laneIndex, isMainLane, laneposition);
             return way.GetChildLineString(getter);
         }
 
+        /// <summary>
+        /// RnDataRoadから指定したRnDataWayの各種情報取得
+        /// </summary>
+        /// <returns>
+        /// bool : MainLaneかどうかのフラグ
+        /// int : List上のLane index
+        /// LanePosition : Center , Left , Right
+        /// </returns>
         public static (bool, int, LanePosition) GetWayPosition([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay way)
         {
             bool isMainLane = false;
@@ -379,6 +454,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return (isMainLane, laneIndex, lanePosition);
         }
 
+        /// <summary>
+        /// RnDataRoadのNextRoad(RnDataRoadBase)取得
+        /// </summary>
         public static RnDataRoadBase GetNextRoad([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             if (road?.Next.IsValid ?? false)
@@ -386,6 +464,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// RnDataRoadのPrevRoad(RnDataRoadBase)取得
+        /// </summary>
         public static RnDataRoadBase GetPrevRoad([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             if (road?.Prev.IsValid ?? false)
@@ -393,17 +474,28 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// RnDataRoadの全NextBorder(RnDataWay)取得
+        /// </summary>
         public static List<RnDataWay> GetAllNextBorders([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             var borders = road.GetMainLanes(getter).Select(x => x.NextBorder).ToList();
             return borders.Select(x => getter.GetWays().TryGet(x)).ToList();
         }
+
+        /// <summary>
+        /// RnDataRoadの全PrevBorder(RnDataWay)取得
+        /// </summary>
         public static List<RnDataWay> GetAllPrevBorders([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             var borders = road.GetMainLanes(getter).Select(x => x.PrevBorder).ToList();
             return borders.Select(x => getter.GetWays().TryGet(x)).ToList();
         }
 
+        /// <summary>
+        /// RnDataRoadのPrevBorderからLanes(RnDataLane)取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetLanesFromPrevBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border, bool ignoreReversedLane)
         {
             if(!ignoreReversedLane)
@@ -413,6 +505,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return mainLanes.FindAll(x => x.GetPrevBorder(getter)?.IsSameLine(border) == true);
         }
 
+        /// <summary>
+        /// RnDataRoadのNextBorderからLanes(RnDataLane)取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetLanesFromNextBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border, bool ignoreReversedLane)
         {
             if (!ignoreReversedLane)
@@ -422,6 +518,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return mainLanes.FindAll(x => x.GetNextBorder(getter)?.IsSameLine(border) == true);
         }
 
+        /// <summary>
+        /// RnDataRoadのPrevBorderからLanes(RnDataLane)取得
+        /// </summary>
         public static List<RnDataLane> GetLanesFromPrevBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
         {
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
@@ -433,6 +532,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return mainLanes.FindAll(x => x.IsReverse && x.GetNextBorder(getter)?.IsSameLine(border) == true);
         }
 
+        /// <summary>
+        /// RnDataRoadのNextBorderからLanes(RnDataLane)取得
+        /// </summary>
         public static List<RnDataLane> GetLanesFromNextBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
         {
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
@@ -444,37 +546,57 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return mainLanes.FindAll(x => x.IsReverse && x.GetPrevBorder(getter)?.IsSameLine(border) == true);
         }
 
-        //Next/Prev両方から取得
+        /// <summary>
+        /// RnDataRoadのNext/PrevBorderからLanes(RnDataLane)取得
+        /// Next/Prev両方から取得
+        /// </summary>
         public static List<RnDataLane> GetLanesFromAllBorders([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border)
         {
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
             return mainLanes.FindAll(x => x.GetNextBorder(getter)?.IsSameLine(border) == true || x.GetPrevBorder(getter)?.IsSameLine(border) == true);
         }
 
+        /// <summary>
+        /// RnDataRoadのPrevRoadのRnDataTrackと接続するRnDataLane取得
+        /// </summary>
         public static List<RnDataLane> GetLanesFromPrevTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track)
         {
             var toBorder = track.GetToBorder(getter);
             return road.GetLanesFromPrevBorder(getter, toBorder);
         }
 
+        /// <summary>
+        /// RnDataRoadのNextRoadのRnDataTrackと接続するRnDataLane取得
+        /// </summary>
         public static List<RnDataLane> GetLanesFromNextTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track)
         {
             var fromBorder = track.GetFromBorder(getter);
             return road.GetLanesFromNextBorder(getter, fromBorder);
         }
 
+        /// <summary>
+        /// RnDataRoadのPrevRoadのRnDataTrackと接続するRnDataLane取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetLanesFromPrevTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track, bool ignoreReversedLane)
         {
             var toBorder = track.GetToBorder(getter);
             return road.GetLanesFromPrevBorder(getter, toBorder, ignoreReversedLane);
         }
 
+        /// <summary>
+        /// RnDataRoadのNextRoadのRnDataTrackと接続するRnDataLane取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetLanesFromNextTrack([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataTrack track, bool ignoreReversedLane)
         {
             var fromBorder = track.GetFromBorder(getter);
             return road.GetLanesFromNextBorder(getter, fromBorder, ignoreReversedLane);
         }
 
+        /// <summary>
+        /// RnDataRoadの全Border(RnDataLineString)取得
+        /// </summary>
         public static List<RnDataLineString> GetLAllBordersFromMainLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
@@ -484,6 +606,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return borders;
         }
 
+        /// <summary>
+        /// RnDataRoadの全Border(RnDataWay)取得
+        /// </summary>
         public static List<RnDataWay> GetLAllBorderWaysFromMainLanes([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter)
         {
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
@@ -503,31 +628,49 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return roads.FindIndex(x => x == intersection);
         }
 
+        /// <summary>
+        /// RnDataIntersectionのfrom Border(RnDataLane)に接続するRnDataTrackを取得
+        /// </summary>
         public static List<RnDataTrack> GetFromTracksFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLane from)
         {
             return intersection.Tracks.FindAll(x => x.GetFromBorder(getter)?.IsSameLine(from.GetNextBorder(getter)) == true).ToList();
         }
 
+        /// <summary>
+        /// RnDataIntersectionのto Border(RnDataLane)に接続するRnDataTrackを取得
+        /// </summary>
         public static List<RnDataTrack> GetToTracksFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataLane to)
         {
             return intersection.Tracks.FindAll(x => x.GetToBorder(getter)?.IsSameLine(to.GetPrevBorder(getter)) == true).ToList();
         }
 
+        /// <summary>
+        /// RnDataIntersectionのto Border(RnDataWay)に接続するRnDataTrackを取得
+        /// </summary>
         public static List<RnDataTrack> GetToTracksFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay border)
         {
             return intersection.Tracks.FindAll(x => x.GetToBorder(getter)?.IsSameLine(border) == true);
         }
 
+        /// <summary>
+        /// RnDataIntersectionのfrom Border(RnDataWay)に接続するRnDataTrackを取得
+        /// </summary>
         public static List<RnDataTrack> GetFromTracksFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay border)
         {
             return intersection.Tracks.FindAll(x => x.GetFromBorder(getter)?.IsSameLine(border) == true);
         }
 
+        /// <summary>
+        /// RnDataIntersectionのBorder(RnDataWay)に接続する全Edge(RnDataNeighbor)を取得
+        /// </summary>
         public static List<RnDataNeighbor> GetEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
         {
             return intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
         }
 
+        /// <summary>
+        /// RnDataIntersectionのRnDataTrackから接続する次のRoadのRnDataLaneを取得
+        /// </summary>
         public static List<RnDataLane> GetNextLanesFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
         {
             var nextEdge = intersection.GetEdgesFromBorder(getter, track.GetToBorder(getter)).FirstOrDefault();
@@ -535,6 +678,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return nextRoad.GetLanesFromPrevTrack(getter, track);
         }
 
+        /// <summary>
+        /// RnDataIntersectionのRnDataTrackから接続する前のRoadのRnDataLaneを取得
+        /// </summary>
         public static List<RnDataLane> GetPrevLanesFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
         {
             var prevEdge = intersection.GetEdgesFromBorder(getter, track.GetFromBorder(getter)).FirstOrDefault();
@@ -542,6 +688,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return prevRoad.GetLanesFromNextTrack(getter, track);
         }
 
+        /// <summary>
+        /// RnDataIntersectionのRnDataTrackから接続する次のRoadのRnDataLaneを取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetNextLanesFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track, bool ignoreReversedLane)
         {
             var nextEdge = intersection.GetEdgesFromBorder(getter, track.GetToBorder(getter)).FirstOrDefault();
@@ -549,6 +699,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return nextRoad.GetLanesFromPrevTrack(getter, track, ignoreReversedLane);
         }
 
+        /// <summary>
+        /// RnDataIntersectionのRnDataTrackから接続する前のRoadのRnDataLaneを取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetPrevLanesFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track, bool ignoreReversedLane)
         {
             var prevEdge = intersection.GetEdgesFromBorder(getter, track.GetFromBorder(getter)).FirstOrDefault();
@@ -556,6 +710,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return prevRoad.GetLanesFromNextTrack(getter, track, ignoreReversedLane);
         }
 
+        /// <summary>
+        /// RnDataIntersectionの指定と反対側の道路のEdgeを取得
+        /// Empty Intersection用
+        /// </summary>
         public static List<RnDataNeighbor> GetOppositeSideEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, int roadId)
         {
             var edges = new List<RnDataNeighbor>(intersection.Edges);
@@ -564,6 +722,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         //Empty Intersectionの場合
+        /// <summary>
+        /// Empty Intersectionをはさんだ手間の道路の接続するRnDataLane取得
+        /// </summary>
         public static List<RnDataLane> GetPrevLanesFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad currentRoad, RnDataLane currentLane)
         {
             var edge = intersection.GetOppositeSideEdgesFromRoad(currentRoad.GetId(getter)).FirstOrDefault();
@@ -575,6 +736,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// Empty Intersectionをはさんだ次の道路の接続するRnDataLane取得
+        /// </summary>
         public static List<RnDataLane> GetNextLanesFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad currentRoad, RnDataLane currentLane)
         {
             var edge = intersection.GetOppositeSideEdgesFromRoad(currentRoad.GetId(getter)).FirstOrDefault();
@@ -586,6 +750,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// Empty Intersectionをはさんだ手間の道路の接続するRnDataLane取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetPrevLanesFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad currentRoad, RnDataLane currentLane, bool ignoreReversedLane)
         {
             var edge = intersection.GetOppositeSideEdgesFromRoad(currentRoad.GetId(getter)).FirstOrDefault();
@@ -597,6 +765,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
+        /// <summary>
+        /// Empty Intersectionをはさんだ次の道路の接続するRnDataLane取得
+        /// Reverse無視フラグ対応
+        /// </summary>
         public static List<RnDataLane> GetNextLanesFromLane([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad currentRoad, RnDataLane currentLane, bool ignoreReversedLane)
         {
             var edge = intersection.GetOppositeSideEdgesFromRoad(currentRoad.GetId(getter)).FirstOrDefault();
@@ -608,7 +780,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return null;
         }
 
-        //同一線状のEdge
+        /// <summary>
+        /// RnDataIntersectionのBorderと同一ライン上にあるEdge(RnDataNeighbor)を取得
+        /// </summary>
         public static List<RnDataNeighbor> GetStraightLineEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
         {
             var edges = intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
@@ -621,17 +795,26 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return outEdges;
         }
 
+        /// <summary>
+        /// RnDataIntersectionと隣接する道路に接するEdge(RnDataNeighbor)取得
+        /// </summary>
         public static List<RnDataNeighbor> GetEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
         {
             return intersection.Edges.FindAll(x => x.Road.ID == road.GetId(getter));
         }
 
+        /// <summary>
+        /// RnDataIntersectionと隣接する道路を全て取得
+        /// </summary>
         public static List<RnDataRoadBase> GetAllConnectedRoads([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
         {
             return intersection.Edges?.FindAll(x => x.Road.IsValid).Select(x => x.GetRoad(getter)).Distinct()?.ToList();
         }
 
-        //TurnType : Straightのtrackを渡す
+        /// <summary>
+        /// RnDataIntersectionのRnDataTrackに対して交差するTrackを取得
+        /// TurnType : Straightのtrackを渡す
+        /// </summary>
         public static List<RnDataTrack> GetCrossingTracks([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
         {
             var fromBorders = intersection.GetStraightLineEdgesFromBorder(getter, track.GetFromBorder(getter)).Select(x => x.GetBorder(getter)).ToList();
@@ -648,6 +831,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return outTracks;
         }
 
+        /// <summary>
+        /// RnDataIntersectionのRnDataTrackに対して対向車線となるTrackを取得
+        /// TurnType : Straightのtrackを渡す
+        /// </summary>
         public static List<RnDataTrack> GetOncomingTracks([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
         {
             var fromBorders = intersection.GetStraightLineEdgesFromBorder(getter, track.GetFromBorder(getter)).Select(x => x.GetBorder(getter)).ToList();
@@ -655,6 +842,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return intersection.Tracks.FindAll(x => x.GetToBorder(getter).ContainsSameLine(fromBorders) && x.GetFromBorder(getter).ContainsSameLine(toBorders));
         }
 
+        /// <summary>
+        /// RnDataIntersectionのRnDataTrackと同一のFromBorderを持つTrackを取得
+        /// TurnType : StraightのTrack取得用
+        /// </summary>
         public static List<RnDataTrack> GetTraksOfSameOriginByType([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track, RnTurnType turnType)
         {
             var fromBorder = track.GetFromBorder(getter);
