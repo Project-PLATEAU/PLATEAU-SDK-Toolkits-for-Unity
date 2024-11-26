@@ -10,6 +10,7 @@ namespace PlateauToolkit.Sandbox
     public class PlateauSandboxVehicle :
         PlateauSandboxPlaceableHandler,
         IPlateauSandboxMovingObject,
+        IPlateauSandboxTrafficObject,
         IPlateauSandboxCameraTarget
     {
         [SerializeField] Transform[] m_BackWheels;
@@ -31,6 +32,14 @@ namespace PlateauToolkit.Sandbox
         [SerializeField] PlateauSandboxCameraTargetSettings m_CameraTargetSettings;
 
         Transform[] m_AllWheels;
+
+        float m_CurrentWheelRotation = 0;
+        static readonly float k_GizmoSize = 0.15f;
+
+        //NPCVehicle
+        const float k_MaxSteerSpeed = 60f;                    // deg/s
+        float m_WheelPitchAngle = 0;
+        float m_LastSteerAngle = 0;
 
         public Vector3 TransformUp => transform.up;
 
@@ -54,6 +63,11 @@ namespace PlateauToolkit.Sandbox
         public override void SetPosition(in Vector3 position)
         {
             transform.position = position - (m_BackWheelAxisTransform.position - transform.position);
+        }
+
+        public float GetWheelBase()
+        {
+            return m_Wheelbase;
         }
 
         float IPlateauSandboxMovingObject.GetVelocityRatio(float lookaheadAngle)
@@ -105,9 +119,29 @@ namespace PlateauToolkit.Sandbox
             }
         }
 
-        float m_CurrentWheelRotation = 0;
+        public void UpdateVisual(float speed, float steerAngle)
+        {
+            // wheel forward rotation(pitch).
+            var additionalPitchAngle = (speed * Time.deltaTime / m_WheelRadius) * Mathf.Rad2Deg;
+            m_WheelPitchAngle += additionalPitchAngle;
+            m_WheelPitchAngle %= 360;
 
-        static readonly float k_GizmoSize = 0.15f;
+            foreach (Transform wheelTransform in m_AllWheels)
+            {
+                wheelTransform.Rotate(new Vector3(m_WheelPitchAngle, 0, 0));
+            }
+
+            // steer angle.
+            var fixedSteerAngle = Mathf.MoveTowardsAngle(m_LastSteerAngle, steerAngle, Time.deltaTime * k_MaxSteerSpeed);
+
+            // Apply rotations to visual wheel object.
+            foreach (Transform frontWheel in m_FrontWheels)
+            {
+                frontWheel.localEulerAngles = new Vector3(m_WheelPitchAngle, fixedSteerAngle, 0);
+            }
+            // Cache steer angle value for next update.
+            m_LastSteerAngle = fixedSteerAngle;
+        }
 
         void OnDrawGizmos()
         {

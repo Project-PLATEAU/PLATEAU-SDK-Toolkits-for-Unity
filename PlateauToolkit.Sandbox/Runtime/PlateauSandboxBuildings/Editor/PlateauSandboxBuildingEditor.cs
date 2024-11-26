@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
 
@@ -46,8 +45,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_HotelVertexColorPalette;
         private SerializedProperty m_HotelVertexColorMaterialPalette;
         private SerializedProperty m_HotelMaterialPalette;
-
-        private SerializedProperty m_BuildingName;
 
         private GUIStyle m_SaveMeshBtnTextColorStyle;
 
@@ -330,7 +327,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_Generator.facadeConstructor = (FacadeConstructor)EditorGUILayout.ObjectField("FacadeConstructor", m_Generator.facadeConstructor, typeof(ScriptableObject), allowSceneObjects: true);
             m_Generator.roofPlanner = (RoofPlanner)EditorGUILayout.ObjectField("RoofPlanner", m_Generator.roofPlanner, typeof(ScriptableObject), allowSceneObjects: true);
             m_Generator.roofConstructor = (RoofConstructor)EditorGUILayout.ObjectField("RoofConstructor", m_Generator.roofConstructor, typeof(ScriptableObject), allowSceneObjects: true);
-            m_Generator.buildingName = EditorGUILayout.TextField("Building Name", m_Generator.buildingName);
         }
 
         private bool BuildingDynamicGUI()
@@ -426,62 +422,40 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             return false;
         }
 
+        /// <summary>
+        /// インスペクタ上のプレハブ保存ボタン押下時にコール
+        /// </summary>
         private void SavePrefab()
         {
             if (!PrefabUtility.IsPartOfPrefabInstance(m_Generator.gameObject))
             {
-                EditorUtility.DisplayDialog("建築物を新規プレハブとして保存", "プレハブインスタンスに対してのみ実行可能です。", "はい");
+                EditorUtility.DisplayDialog("建築物を新規プレハブとして保存に失敗", "プレハブインスタンスに対してのみ実行可能です。", "はい");
                 return;
             }
 
-            string meshAssetsFolderPath = BuildingMeshUtility.GetMeshAssetsFolderPath();
-            if (!Directory.Exists(meshAssetsFolderPath))
-            {
-                Directory.CreateDirectory(meshAssetsFolderPath);
-            }
-
-            string prefabAssetsFolderPath = BuildingMeshUtility.GetPrefabAssetsFolderPath();
-            if (!Directory.Exists(prefabAssetsFolderPath))
-            {
-                Directory.CreateDirectory(prefabAssetsFolderPath);
-            }
-
-            Match matchRes = Regex.Match(m_Generator.buildingName, "[0-9]+$");
-            string newPrefabName;
-            if (matchRes.Success)
-            {
-                int count = 0;
-                m_Generator.buildingName = m_Generator.buildingName.Remove(matchRes.Index, matchRes.Length);
-
-                do
-                {
-                    count++;
-                    newPrefabName = m_Generator.buildingName + $"{int.Parse(matchRes.Value) + count:D2}";
-                }
-                while (File.Exists(Path.Combine(prefabAssetsFolderPath, newPrefabName + ".prefab").Replace("\\", "/")));
-
-                m_Generator.buildingName += $"{int.Parse(matchRes.Value) + count:D2}";
-            }
-            else
-            {
-                m_Generator.buildingName += "_01";
-                newPrefabName = m_Generator.buildingName;
-            }
-
+            Runtime.PlateauSandboxBuilding prefab = PrefabUtility.GetCorrespondingObjectFromSource(m_Generator);
+            string prefabPath = AssetDatabase.GetAssetPath(prefab);
             var lsFacadeMeshFilter = m_Generator.transform.GetComponentsInChildren<MeshFilter>().ToList();
-            if (!BuildingMeshUtility.SaveMesh(lsFacadeMeshFilter, newPrefabName))
+            if (!BuildingMeshUtility.SaveMesh(prefabPath, m_Generator.GetBuildingName(), lsFacadeMeshFilter, true))
             {
-                EditorUtility.DisplayDialog("建築物のメッシュを保存", "建築物の保存に失敗しました。建築物を再生成して下さい。", "はい");
+                EditorUtility.DisplayDialog("建築物のメッシュ保存に失敗", "建築物の保存に失敗しました。建築物を再生成して下さい。", "はい");
                 return;
             }
 
-            m_Generator.gameObject.name = m_Generator.buildingName;
-            string prefabPath = Path.Combine(prefabAssetsFolderPath, newPrefabName + ".prefab").Replace("\\", "/");
+            string prefabFolderPath = Path.GetDirectoryName(prefabPath);
+            if (prefabFolderPath == null)
+            {
+                EditorUtility.DisplayDialog("建築物のメッシュ保存に失敗", "保存パスが不正です。", "はい");
+                return;
+            }
+            string newPrefabName = BuildingMeshUtility.GetMeshNamePrefix(prefabFolderPath, m_Generator.GetBuildingName(), true);
+            m_Generator.gameObject.name = newPrefabName;
+            string prefabFullPath = Path.Combine(prefabFolderPath, newPrefabName + ".prefab").Replace("\\", "/");
             PrefabUtility.UnpackPrefabInstance(m_Generator.gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            OnPrefabInstanceUpdatedParameter.instance.canUpdate = false;
-            PrefabUtility.SaveAsPrefabAssetAndConnect(m_Generator.gameObject, prefabPath, InteractionMode.AutomatedAction);
-            OnPrefabInstanceUpdatedParameter.instance.canUpdate = true;
-            EditorUtility.DisplayDialog("建築物を新規プレハブとして保存", "建築物のプレハブが正常に保存されました。", "はい");
+            OnPrefabInstanceUpdatedParameter.instance.canUpdatePrefabInstance = false;
+            PrefabUtility.SaveAsPrefabAssetAndConnect(m_Generator.gameObject, prefabFullPath, InteractionMode.AutomatedAction);
+            OnPrefabInstanceUpdatedParameter.instance.canUpdatePrefabInstance = true;
+            EditorUtility.DisplayDialog("建築物を新規プレハブとして保存に成功", "建築物のプレハブが正常に保存されました。", "はい");
         }
     }
 }
