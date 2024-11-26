@@ -51,6 +51,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_HotelVertexColorMaterialPalette;
         private SerializedProperty m_HotelMaterialPalette;
 
+        private SerializedProperty m_FactoryParams;
+        private SerializedProperty m_FactoryVertexColorPalette;
+        private SerializedProperty m_FactoryVertexColorMaterialPalette;
+        private SerializedProperty m_FactoryMaterialPalette;
+
         private GUIStyle m_SaveMeshBtnTextColorStyle;
 
         private void OnEnable()
@@ -98,6 +103,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_HotelVertexColorPalette = serializedObject.FindProperty("hotelVertexColorPalette");
             m_HotelVertexColorMaterialPalette = serializedObject.FindProperty("hotelVertexColorMaterialPalette");
             m_HotelMaterialPalette = serializedObject.FindProperty("hotelMaterialPalette");
+
+            m_FactoryParams = serializedObject.FindProperty("factoryParams");
+            m_FactoryVertexColorPalette = serializedObject.FindProperty("factoryVertexColorPalette");
+            m_FactoryVertexColorMaterialPalette = serializedObject.FindProperty("factoryVertexColorMaterialPalette");
+            m_FactoryMaterialPalette = serializedObject.FindProperty("factoryMaterialPalette");
 
             m_SaveMeshBtnTextColorStyle = null;
 
@@ -292,6 +302,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             }
                         }
                         break;
+                    case (int)BuildingType.k_Factory:
+                        if (DrawDynamicPropertyOnly(m_FactoryMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
+                        break;
                 }
             }
             else
@@ -330,6 +346,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                         break;
                     case (int)BuildingType.k_Hotel:
                         if (DrawDynamicPropertyOnly(m_HotelVertexColorPalette) || DrawDynamicPropertyOnly(m_HotelVertexColorMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
+                        break;
+                    case (int)BuildingType.k_Factory:
+                        if (DrawDynamicPropertyOnly(m_FactoryVertexColorPalette) || DrawDynamicPropertyOnly(m_FactoryVertexColorMaterialPalette))
                         {
                             changedValue = true;
                         }
@@ -426,6 +448,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 case (int)BuildingType.k_OfficeBuilding:
                 case (int)BuildingType.k_CommercialBuilding:
                 case (int)BuildingType.k_Hotel:
+                case (int)BuildingType.k_Factory:
                     buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 5.0f, 100.0f);
                     break;
             }
@@ -488,7 +511,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     return DrawDynamicPropertyOnly(m_HotelParams, new Dictionary<string, Tuple<string, float, float>>
                     {
                         {"roofThickness", new Tuple<string, float, float>("屋根の暑さ", 0f, 5f)}
-                    }, isUpdateShaderParams:true);
+                    }, isUpdateShaderParams:true);                    
+                case (int)BuildingType.k_Factory:
+                    EditorGUILayout.LabelField("工場設定", EditorStyles.boldLabel);
+                    return DrawDynamicPropertyOnly(m_FactoryParams);
             }
             return false;
         }

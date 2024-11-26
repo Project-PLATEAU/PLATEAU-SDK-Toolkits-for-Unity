@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 {
-    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Planner/Hotel", order = 0)]
+    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Planner/Hotel", order = 5)]
     public class ProceduralFacadeHotelPlanner : FacadePlanner
     {
         private const float k_MaxBuildingHeight = 100f;

@@ -62,6 +62,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         public HotelConfig.VertexColorMaterialPalette hotelVertexColorMaterialPalette = new();
         public HotelConfig.MaterialPalette hotelMaterialPalette = new();
 
+        public FactoryConfig.Params factoryParams = new();
+        public FactoryConfig.VertexColorPalette factoryVertexColorPalette = new();
+        public FactoryConfig.VertexColorMaterialPalette factoryVertexColorMaterialPalette = new();
+        public FactoryConfig.MaterialPalette factoryMaterialPalette = new();
+
         public FacadePlanner facadePlanner;
         public FacadeConstructor facadeConstructor;
         public RoofPlanner roofPlanner;
@@ -77,6 +82,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 BuildingType.k_ConvenienceStore => "ConvenienceStore",
                 BuildingType.k_CommercialBuilding => "CommercialBuilding",
                 BuildingType.k_Hotel => "Hotel",
+                BuildingType.k_Factory => "Factory",
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -116,6 +122,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             m_Config.hotelVertexColorPalette = hotelVertexColorPalette;
             m_Config.hotelVertexColorMaterialPalette = hotelVertexColorMaterialPalette;
             m_Config.hotelMaterialPalette = hotelMaterialPalette;
+
+            m_Config.factoryParams = factoryParams;
+            m_Config.factoryVertexColorPalette = factoryVertexColorPalette;
+            m_Config.factoryVertexColorMaterialPalette = factoryVertexColorMaterialPalette;
+            m_Config.factoryMaterialPalette = factoryMaterialPalette;
 
             m_Config.lodNum = inLodNum;
 

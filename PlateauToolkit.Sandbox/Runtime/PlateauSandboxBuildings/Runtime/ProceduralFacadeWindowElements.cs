@@ -15,10 +15,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public Color m_WindowPaneGlassColor;
             public Material m_VertexWallMat;
             public Material m_VertexWindowPaneMat;
-
             public bool m_HasWindowsill;
             public bool m_IsRectangleWindow;
             public bool m_IsChangeBothSidesWallColor;
+            public float m_RectangleWindowOffsetScale = 0.2f;
         }
 
         public class WindowTexturedData
@@ -29,10 +29,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public Material m_WindowTopAndBottomWallMat;
             public Material m_WindowGlassMat;
             public Material m_WindowPaneMat;
-
             public bool m_HasWindowsill;
             public bool m_IsRectangleWindow;
             public bool m_IsChangeBothSidesWallColor;
+            public float m_RectangleWindowOffsetScale = 0.2f;
         }
 
         protected static CompoundMeshDraft Window(
@@ -65,19 +65,19 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 if (width < height)
                 {
-                    windowWidthOffset = width * 0.2f;
-                    windowBottomOffset = (height - width) * 0.5f + windowWidthOffset;
+                    widthOffset = width * windowColorData.m_RectangleWindowOffsetScale;
+                    heightOffset = (height - width) * 0.5f + widthOffset;
                 }
                 else
                 {
-                    windowBottomOffset = height * 0.2f;
-                    windowWidthOffset = (width - height) * 0.5f + windowBottomOffset;
+                    heightOffset = height * windowColorData.m_RectangleWindowOffsetScale;
+                    widthOffset = (width - height) * 0.5f + heightOffset;
                 }
 
-                frameMin = min + Vector3.right * windowWidthOffset + Vector3.up * windowBottomOffset;
-                frameMax = max - Vector3.right * windowWidthOffset - Vector3.up * windowBottomOffset;
-                frameWidth = Vector3.right * (width - windowWidthOffset * 2);
-                frameHeight = Vector3.up * (height - windowBottomOffset * 2);
+                frameMin = min + Vector3.right * widthOffset + Vector3.up * heightOffset + Vector3.up * windowBottomOffset;
+                frameMax = max - Vector3.right * widthOffset - Vector3.up * heightOffset - Vector3.up * windowTopOffset;
+                frameWidth = Vector3.right * (width - widthOffset * 2);
+                frameHeight = Vector3.up * (height - heightOffset * 2);
                 frameSize = frameMax - frameMin;
             }
 
@@ -158,19 +158,19 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 if (width < height)
                 {
-                    windowWidthOffset = width * 0.2f;
-                    windowBottomOffset = (height - width) * 0.5f + windowWidthOffset;
+                    widthOffset = width * windowTexturedData.m_RectangleWindowOffsetScale;
+                    heightOffset = (height - width) * 0.5f + widthOffset;
                 }
                 else
                 {
-                    windowBottomOffset = height * 0.2f;
-                    windowWidthOffset = (width - height) * 0.5f + windowBottomOffset;
+                    heightOffset = height * windowTexturedData.m_RectangleWindowOffsetScale;
+                    widthOffset = (width - height) * 0.5f + heightOffset;
                 }
 
-                frameMin = min + Vector3.right * windowWidthOffset + Vector3.up * windowBottomOffset;
-                frameMax = max - Vector3.right * windowWidthOffset - Vector3.up * windowBottomOffset;
-                frameWidth = Vector3.right * (width - windowWidthOffset * 2);
-                frameHeight = Vector3.up * (height - windowBottomOffset * 2);
+                frameMin = min + Vector3.right * widthOffset + Vector3.up * heightOffset + Vector3.up * windowBottomOffset;
+                frameMax = max - Vector3.right * widthOffset - Vector3.up * heightOffset - Vector3.up * windowTopOffset;
+                frameWidth = Vector3.right * (width - widthOffset * 2);
+                frameHeight = Vector3.up * (height - heightOffset * 2);
                 frameSize = frameMax - frameMin;
             }
 

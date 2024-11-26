@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 {
-    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Planner/Skyscraper Condominium", order = 0)]
+    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Planner/Apartment", order = 0)]
     public class ProceduralFacadeSkyscraperCondominiumPlanner : FacadePlanner
     {
         private const float k_MaxBuildingHeight = 100f;
@@ -135,8 +135,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
                 {
-                    m_WindowBottomOffset = k_WindowBottomOffset,
-                    m_WindowTopOffset = k_WindowTopOffset,
+                    m_WindowBottomOffset = 0,
+                    m_WindowTopOffset = 0,
                     m_WindowFrameRodHeight = k_WindowFrameRodHeight,
                     m_NumCenterRods = 1,
                     m_WindowFrameRodType = ProceduralFacadeElement.WindowFrameRodType.k_Vertical,
