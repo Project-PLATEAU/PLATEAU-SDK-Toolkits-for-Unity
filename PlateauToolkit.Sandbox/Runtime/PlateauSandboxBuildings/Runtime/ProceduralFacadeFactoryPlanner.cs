@@ -121,7 +121,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 {
                     m_NumCenterRods = 0,
                     m_HasWindowsill = false,
-                    m_RectangleWindow = true,
+                    m_IsRectangleWindow = true,
                     m_RectangleWindowOffsetScale = 0.33f,
                     m_WindowTopOffset = k_WindowTopOffset,
                     m_WindowBottomOffset = -k_WindowBottomOffset
