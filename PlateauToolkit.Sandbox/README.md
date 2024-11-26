@@ -148,9 +148,10 @@ Sandboxアセットは次の8種類に分類されます。
 > カーソルがコライダーの設定されていない場所を指している場合や、指定した場所にオブジェクトを配置すると他のオブジェクトと重なってしまう場合、カーソルは赤色に変わり、クリックしてもオブジェクトを配置することができません。<br>
 > <img width="300" alt="objects_overlapping" src="../Documentation~/Sandbox Images/objects_overlapping.png"><br>
 
-> [!TIP]
-> 建築物Sandboxアセットの表面には他のアセットを配置することができます。<br>
-> <img width="300" alt="asset_cannot_be_placed_to_building" src="../Documentation~/Sandbox Images/asset_placed_to_building.png">
+> [!WARNING]
+> v2.0.0-alphaのToolkitでは、建築物Sandboxアセットの表面に他のアセットを配置する機能は提供されていません。この場合、カーソルが赤色に変わり、クリックしてもオブジェクトを配置することができません。<br>
+> PLATEAUの都市モデルの表面にはアセットを配置可能です。<br>
+> <img width="300" alt="asset_cannot_be_placed_to_building" src="../Documentation~/Sandbox Images/asset_cannot_be_placed_to_building.png">
 
 ## 5-2. 配置オプション
 配置ツールを起動すると、シーンビューの右下に次のような配置ツール設定ウィンドウが表示されます。<br>
@@ -331,24 +332,12 @@ CSVファイルに入力された高さ情報はそのままUnity上でのY座�
 
 <img width="1200" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_asset_place.gif">
 
+> [!NOTE]
+> 指定した緯度、経度にコライダーが無いために配置が実行できなかった場合、コンソールログにてwarningが表示されます。
+> <img width="600" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_collider_warning.png">
+
 読み込んでいるシェープファイル、CSVファイルの変更や、属性列の変更を行う場合は `戻る` ボタンより前の画面に戻り、変更を行ってください。
 
-#### 配置の結果
-
-アセットの一括配置が完了すると、ダイアログにて結果が表示されます。また、コンソールログを確認することで詳細を確認できます。
-
-- 全てのアセットの配置に成功<br>
-<img width="300" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_result_all_success.png">
-
-- 一部のアセットの配置に失敗<br>
-<img width="300" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_result_failed.png">
-
-- 全てのアセットの配置に失敗<br>
-<img width="300" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_result_all_failed.png">
-
-> [!TIP]
-> 「地面に配置」を選択している場合、配置する緯度・経度にSandboxアセットや3D都市モデルが存在しても、モデルを無視して地面に配置されます。<br>
-> <img width="400" alt="sandbox_bulk_place" src="../Documentation~/Sandbox Images/bulk_place_ground_place.png">
 
 # 7. トラック機能
 
@@ -585,17 +574,8 @@ v2.0.0-alpha時点では以下の5種類の建築物アセットを提供して�
 ##### マンション
 <img width="400" alt="building_settings_apartment" src="../Documentation~/Sandbox Images/building_settings_apartment.png">
 
-- バルコニーを外壁にせり出す(1m)：バルコニーを壁から1mせり出すことができます。
-
-<img width="600" alt="building_settings_apartment" src="../Documentation~/Sandbox Images/sandbox_buildings_apartment_out_balcony.gif">
-
 - 窓ガラスバルコニーに切り替え：バルコニーの見た目を壁から窓ガラスに切り替えることができます。
-
-<img width="600" alt="building_settings_apartment" src="../Documentation~/Sandbox Images/sandbox_buildings_apartment_window_glass.gif">
-
 - 左側にバルコニーを作成：建物の左側面にバルコニーを追加します。
-
-<img width="600" alt="building_settings_apartment" src="../Documentation~/Sandbox Images/sandbox_buildings_apartment_left_balcony.gif">
 
 ##### 商業ビル
 個別のパラメータはありません。

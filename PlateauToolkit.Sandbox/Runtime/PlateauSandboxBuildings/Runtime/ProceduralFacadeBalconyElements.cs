@@ -10,7 +10,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
     {
         public class BalconyColorData
         {
-            public bool m_ConvexBalcony;
             public bool m_HasGlassWall;
             public Directions m_BalconyOuterFrameDirections;
             public Color m_WallColor;
@@ -19,7 +18,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         public class BalconyTexturedData
         {
-            public bool m_ConvexBalcony;
             public bool m_HasGlassWall;
             public Directions m_BalconyOuterFrameDirections;
             public Vector2 m_UVScale;
@@ -41,7 +39,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 windowWidth = Vector3.right*(width - k_WindowWidthOffset*2);
             Vector3 windowHeight = Vector3.up*(height - k_WindowBottomOffset - k_WindowTopOffset);
             Vector3 windowDepth = Vector3.forward*k_WindowDepth;
-            Vector3 balconyDepthOffset = balconyColorData.m_ConvexBalcony ? Vector3.zero : Vector3.forward * k_BalconyConcaveDepth;
+            Vector3 balconyDepthOffset = Vector3.forward * k_BalconyDepth;
 
             int rodCount = Mathf.FloorToInt(windowWidth.magnitude/k_WindowSegmentMinWidth);
             Vector3 doorWidth = Vector3.right*windowWidth.magnitude/(rodCount + 1);
@@ -89,7 +87,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 windowWidth = Vector3.right * (width - k_WindowWidthOffset * 2);
             Vector3 windowHeight = Vector3.up * (height - k_WindowBottomOffset - k_WindowTopOffset);
             Vector3 windowDepth = Vector3.forward * k_WindowDepth;
-            Vector3 balconyDepthOffset = balconyTexturedData.m_ConvexBalcony ? Vector3.zero : Vector3.forward * k_BalconyConcaveDepth;
+            Vector3 balconyDepthOffset = Vector3.forward * k_BalconyDepth;
 
             int rodCount = Mathf.FloorToInt(windowWidth.magnitude/k_WindowSegmentMinWidth);
             Vector3 doorWidth = Vector3.right*windowWidth.magnitude/(rodCount + 1);
@@ -127,7 +125,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 widthVector = Vector3.right * width;
             Vector3 heightVector = Vector3.up*height;
             Vector3 innerHeightOffset = Vector3.up * k_BalconyThickness;
-            Vector3 balconyDepth = balconyColorData.m_ConvexBalcony ? Vector3.forward * k_BalconyConvexDepth : Vector3.forward * k_BalconyConcaveDepth;
+            Vector3 balconyDepth = Vector3.forward * k_BalconyDepth;
 
             var compoundMeshDraft = new CompoundMeshDraft();
             var balconyMeshDraft = new MeshDraft { name = k_WallDraftName };
@@ -168,14 +166,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 widthVector = Vector3.right * width;
             Vector3 heightVector = Vector3.up*height;
             Vector3 innerHeightOffset = Vector3.up * k_BalconyThickness;
-            Vector3 balconyDepth = balconyTexturedData.m_ConvexBalcony ? Vector3.forward * k_BalconyConvexDepth : Vector3.forward * k_BalconyConcaveDepth;
+            Vector3 balconyDepth = Vector3.forward * k_BalconyDepth;
 
             var compoundMeshDraft = new CompoundMeshDraft();
             var balconyMeshDraft = new MeshDraft { name = k_WallTexturedDraftName };
-            // バルコニー外側部分作成
             MeshDraft balconyOuter = BalconyOuterTextured(origin, widthVector, heightVector, balconyDepth, balconyTexturedData, out Vector3 balconyCenter);
             balconyMeshDraft.Add(balconyOuter);
-            // バルコニー内側部分作成
             MeshDraft balconyInner = BalconyInnerTextured(widthVector, heightVector, balconyDepth, balconyCenter, balconyTexturedData, out Vector3 innerWidthOffset, out Vector3 innerWidth, out Vector3 innerDepth);
             balconyMeshDraft.Add(balconyInner);
             Vector3 min = origin - balconyDepth;
@@ -218,6 +214,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private static MeshDraft BalconyOuterTextured(Vector3 origin, Vector3 widthVector, Vector3 heightVector, Vector3 balconyDepth, BalconyTexturedData balconyTexturedData, out Vector3 balconyCenter)
         {
             balconyCenter = origin + widthVector / 2 - balconyDepth / 2 + heightVector / 2;
+
             return MeshDraft.PartialBox(widthVector, balconyDepth, heightVector, balconyTexturedData.m_BalconyOuterFrameDirections, true)
                 .Move(balconyCenter)
                 .Paint(balconyTexturedData.m_WallMat);
@@ -250,6 +247,32 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .Move(balconyCenter)
                 .Paint(balconyTexturedData.m_WallMat);
         }
+
+        // private static MeshDraft BalconyBorder(Vector3 origin, Vector3 widthVector, Vector3 balconyHeight, Vector3 balconyDepth, Vector3 innerWidthOffset, Vector3 innerWidth, Vector3 innerDepth, BalconyColorData balconyColorData)
+        // {
+        //     Vector3 borderOrigin = origin + balconyHeight;
+        //     Vector3 borderInnerOrigin = borderOrigin + innerWidthOffset;
+        //     Vector3 innerHeightOffset = Vector3.up * k_BalconyThickness;
+        //
+        //     return new MeshDraft().AddTriangleStrip(new List<Vector3>
+        //         {
+        //             // borderOrigin,
+        //             // borderInnerOrigin,
+        //             borderOrigin - balconyDepth,
+        //             borderInnerOrigin - innerDepth,
+        //             borderOrigin - balconyDepth - balconyHeight,
+        //             borderOrigin - balconyDepth - balconyHeight + innerHeightOffset + innerWidthOffset,
+        //             borderOrigin - balconyDepth - balconyHeight + widthVector,
+        //             borderOrigin - balconyDepth - balconyHeight + innerHeightOffset + widthVector - innerWidthOffset,
+        //             // borderOrigin + widthVector  - balconyDepth,
+        //             // borderOrigin + widthVector - innerWidthOffset - balconyDepth,
+        //             // borderOrigin - balconyHeight + innerHeightOffset - balconyDepth + widthVector,
+        //             // borderInnerOrigin - innerDepth + innerWidth,
+        //             // borderOrigin + widthVector,
+        //             // borderInnerOrigin + innerWidth
+        //         })
+        //         .Paint(balconyColorData.m_WallColor, balconyColorData.m_VertexWallMat);
+        // }
 
         private static MeshDraft BalconyWallPanel(Vector3 origin, Vector3 widthVector, Vector3 heightVector, Vector3 windowDepth, List<Vector3> outerFrame, BalconyColorData balconyColorData)
         {
@@ -317,6 +340,60 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             compoundDraft.Add(balconyWindowFrame);
 
             return compoundDraft;
+        }
+
+        protected static CompoundMeshDraft BalconyGlazed(
+            Vector3 origin,
+            float width,
+            float height,
+            Color windowpaneGlassColor,
+            Color windowpaneFrameRodsColor,
+            Color windowpaneOuterFrameColor,
+            Material vertexWindowpaneMat)
+        {
+            Vector3 widthVector = Vector3.right*width;
+            Vector3 heightVector = Vector3.up*height;
+
+            Vector3 balconyHeight = Vector3.up*k_BalconyGlassHeight;
+            Vector3 balconyDepth = Vector3.forward*k_BalconyDepth;
+
+            var compoundDraft = new CompoundMeshDraft();
+
+            // MeshDraft balcony = BalconyOuter(origin, widthVector, balconyHeight, balconyDepth, vertexColorPalette, materialPalette, false, out Vector3 balconyCenter)
+            //     .Paint(vertexColorPalette.wallColor);
+            // balcony.name = k_WallDraftName;
+            // compoundDraft.Add(balcony);
+            //
+            // MeshDraft roof = BalconyGlazedRoof(origin, widthVector, heightVector, balconyDepth, vertexColorPalette.roofColor);
+            // compoundDraft.Add(roof);
+            //
+            // var glassHeight = new Vector3(0, height - k_BalconyHeight, 0);
+            // Vector3 glass0 = origin + balconyHeight;
+            // Vector3 glass1 = glass0 - balconyDepth;
+            // Vector3 glass2 = glass1 + widthVector;
+            //
+            // compoundDraft.Add(Windowpane(glass0, glass1 + glassHeight, vertexColorPalette, materialPalette));
+            // compoundDraft.Add(Windowpane(glass1, glass2 + glassHeight, vertexColorPalette, materialPalette));
+            // compoundDraft.Add(Windowpane(glass2, glass2 + balconyDepth + glassHeight, vertexColorPalette, materialPalette));
+
+            return compoundDraft;
+        }
+
+        private static MeshDraft BalconyGlazedRoof(
+            Vector3 origin,
+            Vector3 widthVector,
+            Vector3 heightVector,
+            Vector3 balconyDepth,
+            Color roofColor)
+        {
+            Vector3 roof0 = origin + heightVector;
+            Vector3 roof1 = roof0 + widthVector;
+            Vector3 roof2 = roof1 - balconyDepth;
+            Vector3 roof3 = roof0 - balconyDepth;
+            var roof = new MeshDraft {name = k_WallDraftName}
+                .AddQuad(roof0, roof1, roof2, roof3, Vector3.up)
+                .Paint(roofColor);
+            return roof;
         }
     }
 }

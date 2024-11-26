@@ -39,9 +39,7 @@ namespace PlateauToolkit.Sandbox.Editor
         PlateauSandboxWindow m_Window;
         IPlateauSandboxWindowView m_CurrentView;
 
-        //PlateauSandboxWindowTrackView m_TrackView = new();
-        PlateauSandboxWindowTrackSelectView m_TrackView = new();
-
+        PlateauSandboxWindowTrackView m_TrackView = new();
         PlateauSandboxWindowAssetPlaceView m_AssetPlaceView = new();
         PlateauSandboxWindowBulkPlaceView m_BulkPlaceView = new();
 

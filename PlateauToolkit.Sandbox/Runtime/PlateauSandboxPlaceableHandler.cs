@@ -24,10 +24,5 @@ namespace PlateauToolkit.Sandbox
         {
             return groundPlacementDirection == GroundPlacementDirection.Vertical;
         }
-
-        public virtual bool CanPlaceOnOtherSandboxObject()
-        {
-            return false;
-        }
     }
 }

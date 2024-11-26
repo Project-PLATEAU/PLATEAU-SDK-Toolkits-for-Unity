@@ -1,45 +1,47 @@
+using PlateauToolkit.Sandbox.Editor;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
+using UnityEditor.PackageManager.UI;
 using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 {
     public static class BuildingMeshUtility
     {
-        private static string GetMeshAssetsFolderPath(string prefabPath)
+        public static string GetMeshAssetsFolderPath()
         {
-            // ルートパスの場合はnull
-            string prefabFolderPath = Path.GetDirectoryName(prefabPath);
-            if (prefabFolderPath == null)
+            return GetAssetsFolderPath("Meshes");
+        }
+
+        public static string GetPrefabAssetsFolderPath()
+        {
+            return GetAssetsFolderPath("Prefabs");
+        }
+
+        private static string GetAssetsFolderPath(string folderName)
+        {
+            bool res = PlateauSandboxAssetUtility.GetSample(out Sample sample);
+            if (res == false)
             {
-                 return Path.Combine(prefabPath, "Meshes");
+                Debug.LogError($"{folderName} assets folder directory is not exist.");
+                return Path.Combine("Assets/Samples/PLATEAU SDK-Toolkits for Unity/0.0.0/Sample Assets", folderName).Replace("\\", "/");
             }
+
 #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
-            int lastSlashIndex = prefabFolderPath.LastIndexOf('/');
+            string assetsFolderPath = Path.Combine("Assets", sample.importPath.Split(@"/Assets/")[1], $"Buildings/{folderName}").Replace("\\", "/");
 #elif UNITY_EDITOR_WIN || UNITY_STANDALONE_WIN
-            int lastSlashIndex = prefabFolderPath.LastIndexOf('\\');
+            string assetsFolderPath = Path.Combine("Assets", sample.importPath.Split(@"\Assets\")[1], $"Buildings/{folderName}").Replace("\\", "/");
 #endif
-            string parentDirectoryName = prefabFolderPath.Substring(0, lastSlashIndex);
-            string meshAssetsFolderPath = Path.Combine(parentDirectoryName, "Meshes");
-            if (!Directory.Exists(meshAssetsFolderPath))
+            if (!Directory.Exists(assetsFolderPath))
             {
-                Directory.CreateDirectory(meshAssetsFolderPath);
+                Directory.CreateDirectory(assetsFolderPath);
             }
-
-            return meshAssetsFolderPath;
+            return assetsFolderPath;
         }
 
-        public static string GetMeshNamePrefix(string prefabFolderPath, string prefixBuildingName, bool isIncrementAssetName)
-        {
-            string[] files = Directory.GetFiles(prefabFolderPath, prefixBuildingName + "*.prefab", SearchOption.TopDirectoryOnly);
-            int count = isIncrementAssetName ? 1 + files.Length : files.Length;
-
-            return $"{prefixBuildingName}_{count:D2}";
-        }
-
-        public static bool SaveMesh(string prefabPath, string prefixBuildingName, List<MeshFilter> inLsMeshFilter, bool isIncrementAssetName = false)
+        public static bool SaveMesh(List<MeshFilter> inLsMeshFilter, string inMeshNamePrefix)
         {
             if (inLsMeshFilter.Select(meshFilter => meshFilter.sharedMesh).Any(sharedMesh => sharedMesh == null))
             {
@@ -47,7 +49,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 return false;
             }
 
-            string meshAssetsFolderPath = GetMeshAssetsFolderPath(prefabPath);
+            string meshAssetsFolderPath = GetMeshAssetsFolderPath();
+            if (!Directory.Exists(meshAssetsFolderPath))
+            {
+                Directory.CreateDirectory(meshAssetsFolderPath);
+            }
+
             foreach (MeshFilter meshFilter in inLsMeshFilter)
             {
                 Transform lodObject = meshFilter.transform.parent;
@@ -62,8 +69,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 boxCollider.center = sharedMesh.bounds.center;
                 boxCollider.size = sharedMesh.bounds.size;
 
-                string prefabFolderPath = Path.GetDirectoryName(prefabPath);
-                string newMeshAssetName = GetMeshNamePrefix(prefabFolderPath, prefixBuildingName, isIncrementAssetName) + "_" + meshFilter.name + "Mesh_" + lodNum;
+                string newMeshAssetName = inMeshNamePrefix + "_" + meshFilter.name + "Mesh_" + lodNum;
                 string newMeshAssetPath = Path.Combine(meshAssetsFolderPath, newMeshAssetName + ".asset").Replace("\\", "/");
                 Mesh newMeshAsset = AssetDatabase.LoadAssetAtPath<Mesh>(newMeshAssetPath);
                 string oldMeshAssetPath = Path.Combine(meshAssetsFolderPath, sharedMesh.name + ".asset").Replace("\\", "/");
