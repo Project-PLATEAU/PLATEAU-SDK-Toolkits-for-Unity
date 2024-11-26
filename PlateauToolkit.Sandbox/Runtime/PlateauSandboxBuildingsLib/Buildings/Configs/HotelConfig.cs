@@ -1,6 +1,7 @@
 using ProceduralToolkit;
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Configs
 {
@@ -9,20 +10,34 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         [Serializable]
         public class Params
         {
-            [CustomLabel("左側にバルコニーを作成")]
-            public bool hasBalconyLeft;
-            [CustomLabel("右側にバルコニーを作成")]
-            public bool hasBalconyRight;
+            [CustomLabel("左側に窓を付ける")]
+            public bool hasWindowLeft;
+            [CustomLabel("右側に窓を付ける")]
+            public bool hasWindowRight;
+            [CustomLabel("屋根の暑さ")]
+            public float roofThickness;
+        }
+
+        [Serializable]
+        public class ShaderParams
+        {
+            [CustomLabel("横のオフセット")]
+            public float textureOffsetX;
+            [CustomLabel("縦のオフセット")]
+            public float textureOffsetY;
         }
 
         [Serializable]
         public class VertexColorPalette
         {
             public Color wallColor = ColorE.white;
+            [FormerlySerializedAs("windowWallColor")]
+            public Color windowTopAndBottomWallColor = ColorE.white;
             public Color windowPaneColor = ColorE.gray;
             public Color windowPaneGlassColor = ColorE.white;
             public Color roofColor = (ColorE.gray/4).WithA(1);
             public Color roofSideColor = (ColorE.gray/4).WithA(1);
+            public Color roofSideFrontColor = (ColorE.gray/4).WithA(1);
         }
 
         [Serializable]
@@ -34,9 +49,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
 
             public void LoadMaterial()
             {
-                vertexWall = Resources.Load<Material>("SkyscraperCondominium/Wall");
-                vertexWindowPane = Resources.Load<Material>("SkyscraperCondominium/WindowPane");
-                vertexRoof = Resources.Load<Material>("SkyscraperCondominium/Roof");
+                vertexWall = Resources.Load<Material>("Hotel/Wall");
+                vertexWindowPane = Resources.Load<Material>("Hotel/WindowPane");
+                vertexRoof = Resources.Load<Material>("Hotel/Roof");
             }
         }
 
@@ -44,18 +59,24 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         public class MaterialPalette
         {
             public Material wall;
+            [FormerlySerializedAs("windowTopAndBottomWallTextured")]
+            [FormerlySerializedAs("windowWallTextured")]
+            public Material windowTopAndBottomWall;
             public Material windowPane;
             public Material windowGlass;
             public Material roof;
             public Material roofSide;
+            public Material roofSideFront;
 
             public void LoadMaterial()
             {
-                wall = Resources.Load<Material>("SkyscraperCondominium/WallTextured");
-                windowPane = Resources.Load<Material>("SkyscraperCondominium/WindowPaneTextured");
-                windowGlass = Resources.Load<Material>("SkyscraperCondominium/WindowGlassTextured");
-                roof = Resources.Load<Material>("SkyscraperCondominium/RoofTextured");
-                roofSide = Resources.Load<Material>("SkyscraperCondominium/RoofSideTextured");
+                wall = Resources.Load<Material>("Hotel/WallTextured");
+                windowTopAndBottomWall = Resources.Load<Material>("Hotel/WindowTopAndBottomWallTextured");
+                windowPane = Resources.Load<Material>("Hotel/WindowPaneTextured");
+                windowGlass = Resources.Load<Material>("Hotel/WindowGlassTextured");
+                roof = Resources.Load<Material>("Hotel/RoofTextured");
+                roofSide = Resources.Load<Material>("Hotel/RoofSideTextured");
+                roofSideFront = Resources.Load<Material>("Hotel/FixedTexture");
             }
         }
     }

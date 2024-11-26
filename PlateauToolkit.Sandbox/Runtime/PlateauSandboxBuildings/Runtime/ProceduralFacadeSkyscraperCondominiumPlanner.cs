@@ -141,7 +141,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     m_NumCenterRods = 1,
                     m_WindowFrameRodType = ProceduralFacadeElement.WindowFrameRodType.k_Vertical,
                     m_HasWindowsill = false,
-                    m_RectangleWindow = true
+                    m_IsRectangleWindow = true
                 }
             };
             m_Constructors[PanelType.k_FullWindow] = new List<Func<ILayoutElement>>
