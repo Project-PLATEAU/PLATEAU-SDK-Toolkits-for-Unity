@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 /// <summary>
-/// TrafficLaneの前後の接続確認用
+/// TrafficLane縺ｮ蜑榊ｾ後�ｮ謗･邯夂｢ｺ隱咲畑
 /// </summary>
 public class DebugTool_TrafficLane_AllConnected : MonoBehaviour
 {
