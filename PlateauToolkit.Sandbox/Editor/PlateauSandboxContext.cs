@@ -14,6 +14,11 @@ namespace PlateauToolkit.Sandbox.Editor
         readonly List<PlateauSandboxTrack> m_Tracks = new();
         readonly PlacementSettings m_PlacementSettings = new();
         GameObject m_SelectedObject;
+
+        //複数選択
+        List<GameObject> m_SelectedObjects;
+        public List<GameObject> SelectedObjectsMultiple { get =>  m_SelectedObjects; }
+
         public UnityEvent<GameObject> OnSelectedObjectChanged { get; } = new UnityEvent<GameObject>();
 
         public IReadOnlyList<PlateauSandboxTrack> Tracks
@@ -69,6 +74,43 @@ namespace PlateauToolkit.Sandbox.Editor
         public bool IsSelectedObject(GameObject other)
         {
             return m_SelectedObject == other;
+        }
+
+        //複数選択用処理
+        public void SelectPlaceableObjectMultiple(GameObject placeableObject)
+        {
+            if (m_SelectedObjects == null)
+            {
+                m_SelectedObjects = new();
+            }
+            if (IsSelectedObjectMultiple(placeableObject)) //選択中の場合は非選択に
+            {
+                m_SelectedObjects.Remove(placeableObject);
+            }
+            else
+            {
+                m_SelectedObjects.Add(placeableObject);
+            }
+            OnSelectedObjectChanged.Invoke(placeableObject);
+        }
+
+        public bool IsSelectedObjectMultiple(GameObject other)
+        {
+            if (m_SelectedObjects == null)
+            {
+                return false;
+            }
+            return m_SelectedObjects.Contains(other);
+        }
+
+        public void RemoveSelectedObjectMultiple(GameObject placeableObject)
+        {
+            if (m_SelectedObjects == null)
+            {
+                return;
+            }
+            m_SelectedObjects.Remove(placeableObject);
+            OnSelectedObjectChanged.Invoke(placeableObject);
         }
 
         public bool IsSelectedObjectMoveable()
