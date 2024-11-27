@@ -629,7 +629,7 @@ namespace PlateauToolkit.Rendering
                 Math.Cos(elipticalLongitude));
             double declination = Math.Asin(
                 Math.Sin(rightAscension) * Math.Sin(obliquity));
-            double hourAngle = NormalizeAngle(siderealTime * Math.PI / 180.0) - rightAscension;
+            double hourAngle = rightAscension - NormalizeAngle(siderealTime * Math.PI / 180.0);
 
             if (hourAngle > Math.PI)
             {
