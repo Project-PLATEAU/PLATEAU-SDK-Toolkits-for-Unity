@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 {
-    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Roof Constructor", order = 1)]
+    // [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Roof Constructor", order = 1)]
     public class ProceduralRoofConstructor : RoofConstructor
     {
         [SerializeField]

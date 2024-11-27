@@ -1,4 +1,3 @@
-using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib;
 using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings;
 using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Interfaces;
 using ProceduralToolkit;
@@ -9,20 +8,24 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 {
-    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Planner/Hotel", order = 0)]
+    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Facade Planner/Hotel", order = 5)]
     public class ProceduralFacadeHotelPlanner : FacadePlanner
     {
         private const float k_MaxBuildingHeight = 100f;
-        private const float k_FloorHeight = 3.5f;
+        private const float k_MinFloorHeight = 2.75f;
+        private const float k_MaxFloorHeight = 3.25f;
         private const float k_BufferWidth = 2;
         private const float k_WindowBottomOffset = 1;
-        private const float k_WindowTopOffset = 0.2f;
+        private const float k_WindowTopOffset = 0.3f;
         private const float k_WindowFrameRodHeight = 0.05f;
+        private const float k_NarrowPanelSize = 2.5f;
+        private const float k_EntranceWindowHeight = 2.5f;
+        private const float k_ShadowWallOffset = 0.3f;
 
         private readonly Dictionary<PanelType, List<Func<ILayoutElement>>> m_Constructors = new();
         private readonly Dictionary<PanelSize, float> m_SizeValues = new()
         {
-            {PanelSize.k_Narrow, 2.5f}
+            {PanelSize.k_Narrow, k_NarrowPanelSize}
         };
 
         public override List<ILayout> Plan(List<Vector2> foundationPolygon, BuildingGenerator.Config config)
@@ -46,25 +49,42 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 bool leftIsConvex = Geometry.GetAngle(b, a, aNext) <= 180;
                 bool rightIsConvex = Geometry.GetAngle(bPrevious, b, a) <= 180;
 
+                // 小数点が最も小さい（フロア数を求めた時に最も正確に割り切れるかを表す）フロア数から最大のフロア高を求める
+                float floorHeight = 0;
+                float floorHeightRemaining = 1f;
+                for (float tempFloorHeight = k_MinFloorHeight; tempFloorHeight < k_MaxFloorHeight;)
+                {
+                    float numFloor = config.buildingHeight / tempFloorHeight;
+                    if (numFloor - Mathf.Floor(numFloor) < floorHeightRemaining)
+                    {
+                        floorHeight = tempFloorHeight;
+                        floorHeightRemaining = numFloor - Mathf.Floor(numFloor);
+                    }
+                    tempFloorHeight += 0.05f;
+                }
+
+                var vertical = new VerticalLayout();
+                vertical.AddElement(Construct(m_Constructors[PanelType.k_ShadowWall], width - k_ShadowWallOffset, config.buildingHeight - k_ShadowWallOffset));
                 switch (i)
                 {
                     case 0:
-                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Front;
-                        layouts.Add(PlanEntranceFacade(width, config, leftIsConvex, rightIsConvex));
+                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Back;
+                        vertical.Add(PlanNormalFacade(width, floorHeight, config, leftIsConvex, rightIsConvex));
                         break;
                     case 1:
-                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Left;
-                        layouts.Add(PlanNormalFacade(width, config, leftIsConvex, rightIsConvex));
+                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Right;
+                        vertical.Add(PlanNormalFacade(width, floorHeight, config, leftIsConvex, rightIsConvex));
                         break;
                     case 2:
-                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Back;
-                        layouts.Add(PlanNormalFacade(width, config, leftIsConvex, rightIsConvex));
+                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Front;
+                        vertical.Add(PlanEntranceFacade(width, floorHeight, config, leftIsConvex, rightIsConvex));
                         break;
                     case 3:
-                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Right;
-                        layouts.Add(PlanNormalFacade(width, config, leftIsConvex, rightIsConvex));
+                        config.faceDirection = BuildingGenerator.Config.FaceDirection.k_Left;
+                        vertical.Add(PlanNormalFacade(width, floorHeight, config, leftIsConvex, rightIsConvex));
                         break;
                 }
+                layouts.Add(vertical);
             }
 
             return layouts;
@@ -72,155 +92,105 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private void SetupConstructors(BuildingGenerator.Config config)
         {
-            m_Constructors[PanelType.k_Entrance] = new List<Func<ILayoutElement>>
-            {
-                () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
-                {
-                    m_WindowBottomOffset = 0,
-                    m_WindowWidthOffset = 0.3f,
-                    m_WindowDepthOffset = 0,
-                    m_WindowTopOffset = 1.2f,
-                    m_WindowFrameRodHeight = k_WindowFrameRodHeight,
-                    m_NumCenterRods = 1,
-                    m_HasWindowsill = false
-                }
-            };
             m_Constructors[PanelType.k_Wall] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
             };
-            m_Constructors[PanelType.k_Window] = new List<Func<ILayoutElement>>
+            m_Constructors[PanelType.k_ShadowWall] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
+                () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
                 {
-                    m_WindowBottomOffset = k_WindowBottomOffset,
-                    m_WindowTopOffset = k_WindowTopOffset,
-                    m_WindowFrameRodHeight = k_WindowFrameRodHeight,
-                    m_NumCenterRods = 0,
-                    m_HasWindowsill = false,
-                    m_RectangleWindow = true
+                    m_IsShadowWall = true,
+                    m_MoveShadowWallDepth = 0.2f,
+                    m_ShadowWallWidthOffset = k_ShadowWallOffset,
+                    m_ShadowWallHeightOffset = 0
                 }
             };
         }
 
-        private ILayout PlanNormalFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
+        private ILayout PlanNormalFacade(float facadeWidth, float floorHeight, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
         {
             List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainderWidth);
-            return CreateNormalFacadeVertical(panelSizes, remainderWidth, 0, panelSizes.Count, config);
-        }
+            int numFloorWithoutEntrance = (int)Mathf.Floor(config.buildingHeight / floorHeight) - 1;
+            float entranceHeight = config.buildingHeight - numFloorWithoutEntrance * floorHeight;
+            float floorWidthOffset = remainderWidth / panelSizes.Count;
 
-        private ILayout PlanEntranceFacade(float facadeWidth, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
-        {
-            List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainder);
-
-            var horizontal = new HorizontalLayout();
-
-            float remainingHeight = config.buildingHeight - k_FloorHeight;
-            int numFloor = (int)(remainingHeight / 2f);
-            float floorHeight = remainingHeight / numFloor;
-
-            bool hasRemainder = remainder > Geometry.Epsilon;
-            if (hasRemainder)
+            var vertical = new VerticalLayout { CreateHorizontal(panelSizes, 0, panelSizes.Count, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_Wall]) };
+            float remainingHeight = config.buildingHeight - entranceHeight;
+            if (0 < remainingHeight)
             {
-                horizontal.Add(CreateBufferWallVertical(remainder/2, floorHeight, numFloor, config));
+                vertical.Add(CreateNormalFacadeVertical(panelSizes, remainderWidth, floorHeight, 0, panelSizes.Count, config));
             }
 
+            return vertical;
+        }
+
+        private ILayout PlanEntranceFacade(float facadeWidth, float floorHeight, BuildingGenerator.Config config, bool leftIsConvex, bool rightIsConvex)
+        {
+            List<PanelSize> panelSizes = DivideFacade(facadeWidth, leftIsConvex, rightIsConvex, out float remainderWidth);
             const int entranceCount = 1;
+            int numFloorWithoutEntrance = (int)Mathf.Floor(config.buildingHeight / floorHeight) - 1;
             int entranceIndexInterval = (panelSizes.Count - entranceCount)/(entranceCount + 1);
-            const int lastEntranceIndex = -1;
-            horizontal.Add(CreateEntranceNormalFacadeVertical(panelSizes, lastEntranceIndex + 1, entranceIndexInterval, config));
-            horizontal.Add(CreateEntranceVertical(m_SizeValues[panelSizes[entranceIndexInterval]], config));
-            horizontal.Add(CreateEntranceNormalFacadeVertical(panelSizes, entranceIndexInterval + 1, panelSizes.Count, config));
+            float entranceHeight = config.buildingHeight - numFloorWithoutEntrance * floorHeight;
+            float floorWidthOffset = remainderWidth / panelSizes.Count;
 
-            if (hasRemainder)
+            // 1階部分
+            var vertical = new VerticalLayout();
+            var horizontal = new HorizontalLayout
             {
-                horizontal.Add(CreateBufferWallVertical(remainder/2, floorHeight, numFloor, config));
-            }
-
-            return horizontal;
-        }
-
-        private VerticalLayout CreateBufferWallVertical(float width, float height, int numFloor, BuildingGenerator.Config config)
-        {
-            var vertical = new VerticalLayout
-            {
-                Construct(m_Constructors[PanelType.k_Wall], width, k_FloorHeight),
-                CreateVertical(width, height, numFloor, () => new ProceduralFacadeCompoundElements.ProceduralWall(config))
-            };
-
-            return vertical;
-        }
-
-        private VerticalLayout CreateNormalFacadeVertical(List<PanelSize> panelSizes, float remainderWidth, int from, int to, BuildingGenerator.Config config)
-        {
-            float remainingHeight = config.buildingHeight - k_FloorHeight;
-            int numFloor = (int)(remainingHeight / 2f);
-            float floorHeight = remainingHeight / numFloor;
-            float floorWidthOffset = remainderWidth / (to - from);
-
-            var vertical = new VerticalLayout { CreateHorizontal(panelSizes, from, to, k_FloorHeight, floorWidthOffset, m_Constructors[PanelType.k_Wall]) };
-            bool hasBalcony = config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Left && config.hotelParams.hasBalconyLeft ||
-                              config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Right && config.hotelParams.hasBalconyRight;
-
-            {
-                Directions directions = Directions.Down;
-                if (numFloor == 1)
+                CreateHorizontal(panelSizes, 0, entranceIndexInterval, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_Wall]),
+                Construct(new List<Func<ILayoutElement>>
                 {
-                    directions |= Directions.Up;
-                }
-
-                vertical.Add(hasBalcony
-                    ? CreateHorizontalBalcony(panelSizes, from, to, floorHeight, floorWidthOffset, config, directions)
-                    : CreateHorizontal(panelSizes, from, to, floorHeight, floorWidthOffset, m_Constructors[PanelType.k_Window]));
-            }
-
-            for (int i = 1; i < numFloor; i++)
-            {
-                if (hasBalcony)
-                {
-                    Directions directions = Directions.None;
-                    if (numFloor == i + 1)
+                    () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
                     {
-                        directions = Directions.Up;
+                        m_WindowBottomOffset = 0,
+                        m_WindowWidthOffset = 0.3f,
+                        m_WindowDepthOffset = 0,
+                        m_WindowTopOffset = 0 < entranceHeight - k_EntranceWindowHeight ? entranceHeight - k_EntranceWindowHeight : Math.Abs(entranceHeight - k_EntranceWindowHeight),
+                        m_WindowFrameRodHeight = k_WindowFrameRodHeight,
+                        m_NumCenterRods = 1,
+                        m_HasWindowsill = false
                     }
-                    vertical.Add(CreateHorizontalBalcony(panelSizes, from, to, floorHeight, floorWidthOffset, config, directions));
-                }
-                else
+                }, m_SizeValues[panelSizes[entranceIndexInterval]] + floorWidthOffset, entranceHeight),
+                CreateHorizontal(panelSizes, entranceIndexInterval + 1, panelSizes.Count, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_Wall]),
+            };
+            vertical.Add(horizontal);
+
+            // 2階以降
+            float remainingHeight = config.buildingHeight - entranceHeight;
+            if (0 < remainingHeight)
+            {
+                vertical.Add(CreateNormalFacadeVertical(panelSizes, remainderWidth, floorHeight, 0, panelSizes.Count, config));
+            }
+
+            return vertical;
+        }
+
+        private VerticalLayout CreateNormalFacadeVertical(List<PanelSize> panelSizes, float remainderWidth, float floorHeight, int from, int to, BuildingGenerator.Config config)
+        {
+            int numFloorWithoutEntrance = (int)Mathf.Floor(config.buildingHeight / floorHeight) - 1;
+            float floorWidthOffset = remainderWidth / (to - from);
+            var vertical = new VerticalLayout();
+            for (int i = 0; i < numFloorWithoutEntrance; i++)
+            {
+                switch (config.faceDirection)
                 {
-                    vertical.Add(CreateHorizontal(panelSizes, from, to, floorHeight, floorWidthOffset, m_Constructors[PanelType.k_Window]));
+                    case BuildingGenerator.Config.FaceDirection.k_Front:
+                    case BuildingGenerator.Config.FaceDirection.k_Back:
+                        vertical.Add(new HorizontalLayout { CreateHorizontalWindow(panelSizes, from, to, floorHeight, floorWidthOffset, config) });
+                        break;
+                    default:
+                        if (config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Left && config.hotelParams.hasWindowLeft ||
+                            config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Right && config.hotelParams.hasWindowRight)
+                        {
+                            vertical.Add(new HorizontalLayout { CreateHorizontalWindow(panelSizes, from, to, floorHeight, floorWidthOffset, config) });
+                        }
+                        else
+                        {
+                            vertical.Add(new HorizontalLayout { CreateHorizontal(panelSizes, from, to, floorHeight, floorWidthOffset, m_Constructors[PanelType.k_Wall]) });
+                        }
+                        break;
                 }
-            }
-
-            return vertical;
-        }
-
-        private VerticalLayout CreateEntranceNormalFacadeVertical(List<PanelSize> panelSizes, int from, int to, BuildingGenerator.Config config)
-        {
-            var vertical = new VerticalLayout { CreateHorizontal(panelSizes, from, to, k_FloorHeight, 0, m_Constructors[PanelType.k_Wall]) };
-            float remainingHeight = config.buildingHeight - k_FloorHeight;
-            int numFloor = (int)(remainingHeight / 2f);
-            float floorHeight = remainingHeight / numFloor;
-            vertical.Add(CreateHorizontal(panelSizes, from, to, floorHeight, 0, m_Constructors[PanelType.k_Window]));
-
-            for (int i = 1; i < numFloor; i++)
-            {
-                vertical.Add(CreateHorizontal(panelSizes, from, to, floorHeight, 0, m_Constructors[PanelType.k_Window]));
-            }
-
-            return vertical;
-        }
-
-        private VerticalLayout CreateEntranceVertical(float width, BuildingGenerator.Config config)
-        {
-            var vertical = new VerticalLayout { Construct(m_Constructors[PanelType.k_Entrance], width, k_FloorHeight) };
-            float remainingHeight = config.buildingHeight - k_FloorHeight;
-            int numFloor = (int)(remainingHeight / 2f);
-            float floorHeight = remainingHeight / numFloor;
-            vertical.Add(Construct(m_Constructors[PanelType.k_Window], width, floorHeight));
-
-            for (int i = 1; i < numFloor; i++)
-            {
-                vertical.Add(Construct(m_Constructors[PanelType.k_Window], width, floorHeight));
             }
 
             return vertical;
@@ -274,31 +244,26 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return horizontal;
         }
 
-        private HorizontalLayout CreateHorizontalBalcony(List<PanelSize> panelSizes, int from, int to, float height, float widthOffset, BuildingGenerator.Config config, Directions directions)
+        private HorizontalLayout CreateHorizontalWindow(List<PanelSize> panelSizes, int from, int to, float height, float floorWidthOffset, BuildingGenerator.Config config)
         {
             var horizontal = new HorizontalLayout();
             for (int i = from; i < to; i++)
             {
-                float panelWidth = m_SizeValues[panelSizes[i]] + widthOffset;
-                if (i == 0)
+                float panelWidth = m_SizeValues[panelSizes[i]] + floorWidthOffset;
+                var window = new List<Func<ILayoutElement>>
                 {
-                    directions |= Directions.Left;
-                }
-                else if (i == panelSizes.Count - 1)
-                {
-                    directions |= Directions.Right;
-                }
-                else
-                {
-                    directions &= ~Directions.Left;
-                }
-
-                Directions directionsLocalScope = directions;
-                var balcony = new List<Func<ILayoutElement>>
-                {
-                    () => new ProceduralFacadeCompoundElements.ProceduralBalcony(config, directionsLocalScope)
+                    () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
+                    {
+                        m_WindowBottomOffset = k_WindowBottomOffset,
+                        m_WindowTopOffset = k_WindowTopOffset,
+                        m_WindowFrameRodHeight = k_WindowFrameRodHeight,
+                        m_NumCenterRods = 0,
+                        m_HasWindowsill = false,
+                        m_IsRectangleWindow = true,
+                        m_IsChangeBothSidesWallColor = true
+                    }
                 };
-                horizontal.Add(Construct(balcony, panelWidth, height));
+                horizontal.Add(Construct(window, panelWidth, height));
             }
             return horizontal;
         }
@@ -329,9 +294,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private enum PanelType : byte
         {
-            k_Entrance,
             k_Wall,
-            k_Window,
+            k_ShadowWall
         }
     }
 }

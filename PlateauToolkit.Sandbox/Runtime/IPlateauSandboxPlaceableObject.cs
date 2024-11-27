@@ -19,5 +19,11 @@ namespace PlateauToolkit.Sandbox
         /// Whether installed vertically when placed on the ground
         /// </summary>
         bool IsGroundPlacementVertical();
+
+        /// <summary>
+        /// Whether the object can be placed on other sandbox objects.
+        /// </summary>
+        /// <returns></returns>
+        bool CanPlaceOnOtherSandboxObject();
     }
 }
