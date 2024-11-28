@@ -57,15 +57,35 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         public CommercialBuildingConfig.MaterialPalette commercialFacilityMaterialPalette = new();
 
         public HotelConfig.Params hotelParams = new();
+        public HotelConfig.ShaderParams hotelShaderParams = new();
         public HotelConfig.VertexColorPalette hotelVertexColorPalette = new();
         public HotelConfig.VertexColorMaterialPalette hotelVertexColorMaterialPalette = new();
         public HotelConfig.MaterialPalette hotelMaterialPalette = new();
 
-        public string buildingName = "Building_Name";
+        public FactoryConfig.Params factoryParams = new();
+        public FactoryConfig.VertexColorPalette factoryVertexColorPalette = new();
+        public FactoryConfig.VertexColorMaterialPalette factoryVertexColorMaterialPalette = new();
+        public FactoryConfig.MaterialPalette factoryMaterialPalette = new();
+
         public FacadePlanner facadePlanner;
         public FacadeConstructor facadeConstructor;
         public RoofPlanner roofPlanner;
         public RoofConstructor roofConstructor;
+
+        public string GetBuildingName()
+        {
+            return buildingType switch
+            {
+                BuildingType.k_Apartment => "Apartment",
+                BuildingType.k_OfficeBuilding => "OfficeBuilding",
+                BuildingType.k_House => "House",
+                BuildingType.k_ConvenienceStore => "ConvenienceStore",
+                BuildingType.k_CommercialBuilding => "CommercialBuilding",
+                BuildingType.k_Hotel => "Hotel",
+                BuildingType.k_Factory => "Factory",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
         public void GenerateMesh(int inLodNum, float inBuildingWidth, float inBuildingDepth)
         {
@@ -102,6 +122,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             m_Config.hotelVertexColorPalette = hotelVertexColorPalette;
             m_Config.hotelVertexColorMaterialPalette = hotelVertexColorMaterialPalette;
             m_Config.hotelMaterialPalette = hotelMaterialPalette;
+
+            m_Config.factoryParams = factoryParams;
+            m_Config.factoryVertexColorPalette = factoryVertexColorPalette;
+            m_Config.factoryVertexColorMaterialPalette = factoryVertexColorMaterialPalette;
+            m_Config.factoryMaterialPalette = factoryMaterialPalette;
 
             m_Config.lodNum = inLodNum;
 
@@ -192,6 +217,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 Debug.LogException(e);
             }
+        }
+
+        public override bool CanPlaceOnOtherSandboxObject()
+        {
+            // 建物であれば他のオブジェクトを配置することができる
+            return true;
         }
     }
 }

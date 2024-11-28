@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 {
-    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Roof Planner/Residence", order = 2)]
+    [CreateAssetMenu(menuName = "ProceduralToolkit/Buildings/Procedural Roof Planner/House", order = 2)]
     public class ProceduralRoofResidencePlanner : RoofPlanner
     {
         public override IConstructible<CompoundMeshDraft> Plan(List<Vector2> foundationPolygon, BuildingGenerator.Config config)

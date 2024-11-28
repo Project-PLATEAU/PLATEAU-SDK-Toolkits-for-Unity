@@ -10,10 +10,15 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         public class WindowColorData
         {
             public Color m_WallColor;
+            public Color m_WindowTopAndBottomWallColor;
             public Color m_WindowPaneColor;
             public Color m_WindowPaneGlassColor;
             public Material m_VertexWallMat;
             public Material m_VertexWindowPaneMat;
+            public bool m_HasWindowsill;
+            public bool m_IsRectangleWindow;
+            public bool m_IsChangeBothSidesWallColor;
+            public float m_RectangleWindowOffsetScale = 0.2f;
         }
 
         public class WindowTexturedData
@@ -21,8 +26,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public string m_WindowpaneGlassName = k_WindowPaneTexturedDraftName;
             public Vector2 m_UVScale;
             public Material m_WallMat;
+            public Material m_WindowTopAndBottomWallMat;
             public Material m_WindowGlassMat;
             public Material m_WindowPaneMat;
+            public bool m_HasWindowsill;
+            public bool m_IsRectangleWindow;
+            public bool m_IsChangeBothSidesWallColor;
+            public float m_RectangleWindowOffsetScale = 0.2f;
         }
 
         protected static CompoundMeshDraft Window(
@@ -38,9 +48,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             float windowFrameRodDepth,
             int numCenterRod,
             WindowFrameRodType windowFrameRodType,
-            WindowColorData windowColorData,
-            bool hasWindowsill,
-            bool isRectangleWindow
+            WindowColorData windowColorData
             )
         {
             Vector3 widthVector = Vector3.right * width;
@@ -53,18 +61,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 frameDepth = Vector3.forward * windowDepthOffset;
             Vector3 frameSize = frameMax - frameMin;
 
-            if (isRectangleWindow)
+            if (windowColorData.m_IsRectangleWindow)
             {
                 float widthOffset;
                 float heightOffset;
                 if (width < height)
                 {
-                    widthOffset = width * 0.2f;
+                    widthOffset = width * windowColorData.m_RectangleWindowOffsetScale;
                     heightOffset = (height - width) * 0.5f + widthOffset;
                 }
                 else
                 {
-                    heightOffset = height * 0.2f;
+                    heightOffset = height * windowColorData.m_RectangleWindowOffsetScale;
                     widthOffset = (width - height) * 0.5f + heightOffset;
                 }
 
@@ -81,14 +89,33 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .Paint(windowColorData.m_WindowPaneColor, windowColorData.m_VertexWindowPaneMat);
             frame.name = k_WindowPaneDraftName;
 
-            MeshDraft wall = PerforatedQuad(min, max, frameMin, frameMax, Vector2.zero)
-                .Paint(windowColorData.m_WallColor, windowColorData.m_VertexWallMat);
-            wall.name = k_WallDraftName;
+            MeshDraft wallMain;
+            if (windowColorData.m_IsChangeBothSidesWallColor)
+            {
+                Vector3 windowWallWidth = Vector3.right * windowWidthOffset;
+                wallMain = PerforatedQuad(min + windowWallWidth, max - windowWallWidth, frameMin, frameMax, Vector2.zero).Paint(windowColorData.m_WindowTopAndBottomWallColor, windowColorData.m_VertexWallMat);
+                wallMain.name = k_WallDraftName;
+            }
+            else
+            {
+                wallMain = PerforatedQuad(min, max, frameMin, frameMax, Vector2.zero).Paint(windowColorData.m_WallColor, windowColorData.m_VertexWallMat);
+                wallMain.name = k_WallDraftName;
+            }
 
             CompoundMeshDraft windowpane = WindowPane(frameMin + frameDepth, frameMax + frameDepth, windowColorData, windowFrameRodWidth, windowFrameRodHeight, windowFrameRodDepth, numCenterRod, windowFrameRodType);
-            CompoundMeshDraft compoundDraft = new CompoundMeshDraft().Add(frame).Add(wall).Add(windowpane);
+            CompoundMeshDraft compoundDraft = new CompoundMeshDraft().Add(frame).Add(wallMain).Add(windowpane);
 
-            if (hasWindowsill)
+            if (windowColorData.m_IsChangeBothSidesWallColor)
+            {
+                Vector3 windowWallWidth = Vector3.right * windowWidthOffset;
+                MeshDraft wallLeft = new MeshDraft().AddQuad(min, windowWallWidth, heightVector, calculateNormal:true).Paint(windowColorData.m_WallColor, windowColorData.m_VertexWallMat);
+                wallLeft.name = k_WallDraftName;
+                MeshDraft wallRight = new MeshDraft().AddQuad(min + windowWallWidth + frameWidth, windowWallWidth, heightVector, calculateNormal:true).Paint(windowColorData.m_WallColor, windowColorData.m_VertexWallMat);
+                wallRight.name = k_WallDraftName;
+                compoundDraft.Add(wallLeft).Add(wallRight);
+            }
+
+            if (windowColorData.m_HasWindowsill)
             {
                 Vector3 windowsillWidth = frameWidth + Vector3.right * k_WindowsillWidthOffset;
                 Vector3 windowsillDepth = Vector3.forward * k_WindowsillDepth;
@@ -116,9 +143,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             float windowFrameRodDepth,
             int numCenterRod,
             WindowFrameRodType windowFrameRodType,
-            WindowTexturedData windowTexturedData,
-            bool hasWindowsill,
-            bool isRectangleWindow
+            WindowTexturedData windowTexturedData
             )
         {
             Vector3 widthVector = Vector3.right * width;
@@ -131,18 +156,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 frameDepth = Vector3.forward * windowDepthOffset;
             Vector3 frameSize = frameMax - frameMin;
 
-            if (isRectangleWindow)
+            if (windowTexturedData.m_IsRectangleWindow)
             {
                 float widthOffset;
                 float heightOffset;
                 if (width < height)
                 {
-                    widthOffset = width * 0.2f;
+                    widthOffset = width * windowTexturedData.m_RectangleWindowOffsetScale;
                     heightOffset = (height - width) * 0.5f + widthOffset;
                 }
                 else
                 {
-                    heightOffset = height * 0.2f;
+                    heightOffset = height * windowTexturedData.m_RectangleWindowOffsetScale;
                     widthOffset = (width - height) * 0.5f + heightOffset;
                 }
 
@@ -159,14 +184,33 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .Paint(windowTexturedData.m_WindowPaneMat);
             frame.name = k_WindowPaneTexturedDraftName;
 
-            MeshDraft wall = PerforatedQuad(min, max, frameMin, frameMax, windowTexturedData.m_UVScale, true)
-                .Paint(windowTexturedData.m_WallMat);
-            wall.name = k_WallTexturedDraftName;
+            MeshDraft wallMain;
+            if (windowTexturedData.m_IsChangeBothSidesWallColor)
+            {
+                Vector3 windowWallWidth = Vector3.right * windowWidthOffset;
+                wallMain = PerforatedQuad(min + windowWallWidth, max - windowWallWidth, frameMin, frameMax, windowTexturedData.m_UVScale, true).Paint(windowTexturedData.m_WindowTopAndBottomWallMat);
+                wallMain.name = "windowTopAndBottomWallTexturedDraft";
+            }
+            else
+            {
+                wallMain = PerforatedQuad(min, max, frameMin, frameMax, windowTexturedData.m_UVScale, true).Paint(windowTexturedData.m_WallMat);
+                wallMain.name = k_WallTexturedDraftName;
+            }
 
             CompoundMeshDraft windowpane = WindowPaneTextured(frameMin + frameDepth, frameMax + frameDepth, windowTexturedData, windowFrameRodWidth, windowFrameRodHeight, windowFrameRodDepth, numCenterRod, windowFrameRodType);
-            CompoundMeshDraft compoundDraft = new CompoundMeshDraft().Add(frame).Add(wall).Add(windowpane);
+            CompoundMeshDraft compoundDraft = new CompoundMeshDraft().Add(frame).Add(wallMain).Add(windowpane);
 
-            if (hasWindowsill)
+            if (windowTexturedData.m_IsChangeBothSidesWallColor)
+            {
+                Vector3 windowWallWidth = Vector3.right * windowWidthOffset;
+                MeshDraft wallLeft = new MeshDraft().AddQuad(min, windowWallWidth, heightVector, windowTexturedData.m_UVScale, true, true).Paint(windowTexturedData.m_WallMat);
+                wallLeft.name = k_WallTexturedDraftName;
+                MeshDraft wallRight = new MeshDraft().AddQuad(min + windowWallWidth + frameWidth, windowWallWidth, heightVector, windowTexturedData.m_UVScale, true, true).Paint(windowTexturedData.m_WallMat);
+                wallRight.name = k_WallTexturedDraftName;
+                compoundDraft.Add(wallLeft).Add(wallRight);
+            }
+
+            if (windowTexturedData.m_HasWindowsill)
             {
                 Vector3 windowsillWidth = frameWidth + Vector3.right*k_WindowsillWidthOffset;
                 Vector3 windowsillDepth = Vector3.forward*k_WindowsillDepth;

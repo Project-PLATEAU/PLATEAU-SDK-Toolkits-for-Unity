@@ -131,6 +131,24 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                             };
                         }
                         break;
+                    case BuildingType.k_Factory:
+                        if (UseTexture)
+                        {
+                            m_WallTexturedData = new WallTexturedData
+                            {
+                                m_UVScale = config.textureScale,
+                                m_WallMat = config.factoryMaterialPalette.wall
+                            };
+                        }
+                        else
+                        {
+                            m_WallColorData = new WallColorData
+                            {
+                                m_WallColor = config.factoryVertexColorPalette.wallColor,
+                                m_VertexColorWallMat = config.factoryVertexColorMaterialPalette.vertexWall
+                            };
+                        }
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -265,7 +283,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public int m_NumCenterRods;
             public WindowFrameRodType m_WindowFrameRodType;
             public bool m_HasWindowsill;
-            public bool m_RectangleWindow;
+            public bool m_IsRectangleWindow;
+            public bool m_IsChangeBothSidesWallColor;
+            public float m_RectangleWindowOffsetScale = 0.2f;
 
             public ProceduralWindow(BuildingGenerator.Config config)
             {
@@ -280,7 +300,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 m_NumCenterRods = -1;
                 m_WindowFrameRodType = WindowFrameRodType.k_Vertical;
                 m_HasWindowsill = true;
-                m_RectangleWindow = false;
+                m_IsRectangleWindow = false;
+                m_IsChangeBothSidesWallColor = false;
 
                 switch (config.buildingType)
                 {
@@ -412,6 +433,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                 m_WindowpaneGlassName = k_WindowGlassTexturedDraftName,
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.hotelMaterialPalette.wall,
+                                m_WindowTopAndBottomWallMat = config.hotelMaterialPalette.windowTopAndBottomWall,
                                 m_WindowPaneMat = config.hotelMaterialPalette.windowPane,
                                 m_WindowGlassMat = config.hotelMaterialPalette.windowGlass,
                             };
@@ -421,10 +443,35 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                             m_WindowColorData = new WindowColorData
                             {
                                 m_WallColor = config.hotelVertexColorPalette.wallColor,
+                                m_WindowTopAndBottomWallColor = config.hotelVertexColorPalette.windowTopAndBottomWallColor,
                                 m_VertexWallMat = config.hotelVertexColorMaterialPalette.vertexWall,
                                 m_WindowPaneColor = config.hotelVertexColorPalette.windowPaneColor,
                                 m_WindowPaneGlassColor = config.hotelVertexColorPalette.windowPaneGlassColor,
                                 m_VertexWindowPaneMat = config.hotelVertexColorMaterialPalette.vertexWindowPane,
+                            };
+                        }
+                        break;
+                    case BuildingType.k_Factory:
+                        if (UseTexture)
+                        {
+                            m_WindowTexturedData = new WindowTexturedData
+                            {
+                                m_WindowpaneGlassName = k_WindowGlassTexturedDraftName,
+                                m_UVScale = config.textureScale,
+                                m_WallMat = config.factoryMaterialPalette.wall,
+                                m_WindowPaneMat = config.factoryMaterialPalette.windowFrame,
+                                m_WindowGlassMat = config.factoryMaterialPalette.windowGlass,
+                            };
+                        }
+                        else
+                        {
+                            m_WindowColorData = new WindowColorData
+                            {
+                                m_WallColor = config.factoryVertexColorPalette.wallColor,
+                                m_VertexWallMat = config.factoryVertexColorMaterialPalette.vertexWall,
+                                m_WindowPaneColor = config.factoryVertexColorPalette.windowFrameColor,
+                                m_WindowPaneGlassColor = config.factoryVertexColorPalette.windowGlassColor,
+                                m_VertexWindowPaneMat = config.factoryVertexColorMaterialPalette.vertexWindow,
                             };
                         }
                         break;
@@ -435,9 +482,24 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             public override CompoundMeshDraft Construct(Vector2 parentLayoutOrigin)
             {
+                if (UseTexture)
+                {
+                    m_WindowTexturedData.m_HasWindowsill = m_HasWindowsill;
+                    m_WindowTexturedData.m_IsRectangleWindow = m_IsRectangleWindow;
+                    m_WindowTexturedData.m_IsChangeBothSidesWallColor = m_IsChangeBothSidesWallColor;
+                    m_WindowTexturedData.m_RectangleWindowOffsetScale = m_RectangleWindowOffsetScale;
+                }
+                else
+                {
+                    m_WindowColorData.m_HasWindowsill = m_HasWindowsill;
+                    m_WindowColorData.m_IsRectangleWindow = m_IsRectangleWindow;
+                    m_WindowColorData.m_IsChangeBothSidesWallColor = m_IsChangeBothSidesWallColor;                  
+                    m_WindowColorData.m_RectangleWindowOffsetScale = m_RectangleWindowOffsetScale;
+                }
+
                 return UseTexture
-                    ? WindowTextured(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowTexturedData, m_HasWindowsill, m_RectangleWindow)
-                    : Window(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowColorData, m_HasWindowsill, m_RectangleWindow);
+                    ? WindowTextured(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowTexturedData)
+                    : Window(parentLayoutOrigin + origin, width, height * heightScale, m_WindowWidthOffset, m_WindowBottomOffset, m_WindowTopOffset, m_WindowDepthOffset, m_WindowFrameRodWidth, m_WindowFrameRodHeight, m_WindowFrameRodDepth, m_NumCenterRods, m_WindowFrameRodType, m_WindowColorData);
             }
         }
 
@@ -520,6 +582,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyTexturedData = new BalconyTexturedData
                             {
+                                m_ConvexBalcony = config.skyscraperCondominiumParams.convexBalcony,
                                 m_HasGlassWall = config.skyscraperCondominiumParams.hasBalconyGlass,
                                 m_UVScale = config.textureScale,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
@@ -539,6 +602,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyColorData = new BalconyColorData
                             {
+                                m_ConvexBalcony = config.skyscraperCondominiumParams.convexBalcony,
                                 m_HasGlassWall = config.skyscraperCondominiumParams.hasBalconyGlass,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
                                 m_WallColor = config.skyscraperCondominiumVertexColorPalette.wallColor,
@@ -560,6 +624,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyTexturedData = new BalconyTexturedData
                             {
+                                m_ConvexBalcony = false,
                                 m_HasGlassWall = false,
                                 m_UVScale = config.textureScale,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
@@ -579,6 +644,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_BalconyColorData = new BalconyColorData
                             {
+                                m_ConvexBalcony = false,
                                 m_HasGlassWall = false,
                                 m_BalconyOuterFrameDirections = balconyOuterFrameDirections,
                                 m_WallColor = config.hotelVertexColorPalette.wallColor,
@@ -629,6 +695,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             protected readonly EntranceColorData m_EntranceColorData;
             protected readonly EntranceTexturedData m_EntranceTexturedData;
             private readonly BuildingType m_BuildingType;
+            public float m_EntranceTopOffset = 0;
 
             public ProceduralEntrance(BuildingGenerator.Config config)
             {
@@ -642,13 +709,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_EntranceTexturedData = new EntranceTexturedData
                             {
-
                                 m_HasRoof = config.residenceParams.hasEntranceRoof,
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.residenceMaterialPalette.wall,
                                 m_EntranceDoorMat = config.residenceMaterialPalette.entranceDoor,
                                 m_EntranceDoorFrameMat = config.residenceMaterialPalette.entranceDoorFrame,
-                                m_EntranceDoorRoofMat = config.residenceMaterialPalette.entranceDoorRoof
+                                m_EntranceDoorRoofMat = config.residenceMaterialPalette.entranceDoorRoof,
                             };
                         }
                         else
@@ -664,6 +730,32 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                             };
                         }
                         break;
+                    case BuildingType.k_Factory:
+                        if (UseTexture)
+                        {
+                            m_EntranceTexturedData = new EntranceTexturedData
+                            {
+                                m_HasRoof = config.factoryParams.hasEntranceRoof,
+                                m_UVScale = config.textureScale,
+                                m_WallMat = config.factoryMaterialPalette.wall,
+                                m_EntranceDoorMat = config.factoryMaterialPalette.entranceShutter,
+                                m_EntranceDoorFrameMat = config.factoryMaterialPalette.entranceShutterFrame,
+                                m_EntranceDoorRoofMat = config.factoryMaterialPalette.entranceShutterRoof,
+                            };
+                        }
+                        else
+                        {
+                            m_EntranceColorData = new EntranceColorData
+                            {
+                                m_HasRoof = config.factoryParams.hasEntranceRoof,
+                                m_WallColor = config.factoryVertexColorPalette.wallColor,
+                                m_EntranceDoorColor = config.factoryVertexColorPalette.entranceShutter,
+                                m_EntranceDoorFrameColor = config.factoryVertexColorPalette.entranceShutterFrame,
+                                m_EntranceRoofColor = config.factoryVertexColorPalette.entranceShutterRoof,
+                                m_VertexWallMaterial = config.factoryVertexColorMaterialPalette.vertexWall,
+                            };
+                        }
+                        break;
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -671,35 +763,24 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             public override CompoundMeshDraft Construct(Vector2 parentLayoutOrigin)
             {
-                if (BuildingType.k_House == m_BuildingType)
+                switch (m_BuildingType)
                 {
-                    return UseTexture
-                        ? ResidenceEntranceTextured(parentLayoutOrigin + origin, width, height, m_EntranceTexturedData)
-                        : new CompoundMeshDraft().Add(ResidenceEntrance(parentLayoutOrigin + origin, width, height, m_EntranceColorData));
+                    case BuildingType.k_House:
+                        return UseTexture
+                            ? ResidenceEntranceTextured(parentLayoutOrigin + origin, width, height, m_EntranceTexturedData)
+                            : new CompoundMeshDraft().Add(ResidenceEntrance(parentLayoutOrigin + origin, width, height, m_EntranceColorData));
+                    case BuildingType.k_Factory:
+                        if (UseTexture)
+                        {
+                            m_EntranceTexturedData.m_EntranceTopOffset = m_EntranceTopOffset;
+                            return FactoryEntranceTextured(parentLayoutOrigin + origin, width, height, m_EntranceTexturedData);
+                        }
+
+                        m_EntranceColorData.m_EntranceTopOffset = m_EntranceTopOffset;
+                        return new CompoundMeshDraft().Add(FactoryEntrance(parentLayoutOrigin + origin, width, height, m_EntranceColorData));
+                    default:
+                        return new CompoundMeshDraft();
                 }
-
-                return UseTexture
-                    ? EntranceTextured(parentLayoutOrigin + origin, width, height, m_EntranceTexturedData)
-                    : new CompoundMeshDraft().Add(Entrance(parentLayoutOrigin + origin, width, height, m_EntranceColorData));
-            }
-        }
-
-        public class ProceduralEntranceWindow : ProceduralFacadeEntranceElement
-        {
-            private Color wallColor;
-            private Color frameColor;
-            private Color glassColor;
-
-            public ProceduralEntranceWindow(Color wallColor, Color frameColor, Color glassColor)
-            {
-                this.wallColor = wallColor;
-                this.frameColor = frameColor;
-                this.glassColor = glassColor;
-            }
-
-            public override CompoundMeshDraft Construct(Vector2 parentLayoutOrigin)
-            {
-                return EntranceWindow(parentLayoutOrigin + origin, width, height, wallColor, frameColor, glassColor);
             }
         }
 
@@ -745,6 +826,17 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         else
                         {
                             m_WallColorData.m_WallColor = config.conveniVertexColorPalette.socleColor;
+                        }
+                        break;
+                    case BuildingType.k_Factory:
+                        if (UseTexture)
+                        {
+                            m_WallTexturedData.m_WallName = socleName;
+                            m_WallTexturedData.m_WallMat = socleMat ? socleMat : config.factoryMaterialPalette.socle;
+                        }
+                        else
+                        {
+                            m_WallColorData.m_WallColor = socleColor;
                         }
                         break;
                     default:
