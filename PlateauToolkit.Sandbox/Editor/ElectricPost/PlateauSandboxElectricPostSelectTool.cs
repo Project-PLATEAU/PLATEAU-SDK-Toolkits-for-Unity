@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.ElectricPost;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -8,8 +9,7 @@ namespace PlateauToolkit.Sandbox.Editor
     public class PlateauSandboxElectricPostSelectTool : EditorTool
     {
         private PlateauSandboxElectricPostContext m_Context;
-
-        private IPlateauSandboxPlaceableObject m_SelectedObject;
+        private PlateauSandboxElectricPost m_SelectedObject;
 
         public override void OnActivated()
         {
@@ -51,6 +51,18 @@ namespace PlateauToolkit.Sandbox.Editor
                 GUIUtility.hotControl = 0;
                 Event.current.Use();
 
+                if (m_Context.IsFrontNodeSelecting)
+                {
+                    m_Context.OnCancel.Invoke(true);
+                    m_Context.SetSelecting(true, false);
+                }
+
+                if (m_Context.IsBackNodeSelecting)
+                {
+                    m_Context.OnCancel.Invoke(false);
+                    m_Context.SetSelecting(false, false);
+                }
+
                 ToolManager.RestorePreviousPersistentTool();
             }
         }
@@ -61,13 +73,32 @@ namespace PlateauToolkit.Sandbox.Editor
             var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycastHit))
             {
-                if (m_Context.Target != null)
+                if (m_Context.IsFrontNodeSelecting)
                 {
-                    m_Context.Target.SetElectricNodePosition(raycastHit.point);
+                    m_Context.OnMoseMove.Invoke(raycastHit.point, true);
                 }
 
-                PlateauSandboxObjectFinder
-                    .TryGetSandboxObject(raycastHit.collider, out m_SelectedObject);
+                if (m_Context.IsBackNodeSelecting)
+                {
+                    m_Context.OnMoseMove.Invoke(raycastHit.point, false);
+                }
+
+                if (PlateauSandboxObjectFinder
+                    .TryGetSandboxObject(raycastHit.collider, out var selectedObject))
+                {
+                    if (selectedObject.gameObject.TryGetComponent(out PlateauSandboxElectricPost electricPost))
+                    {
+                        m_SelectedObject = electricPost;
+                        m_SelectedObject.SetSelecting(true);
+                        return;
+                    }
+                }
+            }
+
+            if (m_SelectedObject)
+            {
+                m_SelectedObject.SetSelecting(false);
+                m_SelectedObject = null;
             }
         }
 
@@ -75,14 +106,14 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             if (m_SelectedObject != null)
             {
-                m_SelectedObject.gameObject.TryGetComponent(out PlateauSandboxElectricPost electricPost);
-                if (electricPost != null)
+                if (m_Context.IsFrontNodeSelecting)
                 {
-                    if (m_Context.Target != electricPost)
-                    {
-                        m_Context.Target.SetElectricNode(electricPost.gameObject);
-                        m_Context.OnSelected.Invoke();
-                    }
+                    m_Context.OnSelected.Invoke(m_SelectedObject, true);
+                }
+
+                if (m_Context.IsBackNodeSelecting)
+                {
+                    m_Context.OnSelected.Invoke(m_SelectedObject, false);
                 }
             }
         }

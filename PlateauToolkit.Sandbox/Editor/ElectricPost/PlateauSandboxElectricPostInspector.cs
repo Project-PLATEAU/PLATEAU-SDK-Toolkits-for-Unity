@@ -1,5 +1,6 @@
 using PlateauToolkit.Editor;
 using PlateauToolkit.Sandbox.Runtime;
+using PlateauToolkit.Sandbox.Runtime.ElectricPost;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -9,19 +10,15 @@ namespace PlateauToolkit.Sandbox.Editor
     [CustomEditor(typeof(PlateauSandboxElectricPost))]
     public class PlateauSandboxElectricPostInspector : UnityEditor.Editor
     {
-        private PlateauSandboxElectricPost m_Target;
         private PlateauSandboxElectricPostContext m_Context;
 
-        private bool m_IsNode01Selected;
-        private bool m_IsNode02Selected;
+        private const string k_FrontTargetNodeName = "Front Connected Target Node";
+        private const string k_BackTargetNodeName = "Back Connected Target Node";
 
         private void OnEnable()
         {
             m_Context = PlateauSandboxElectricPostContext.GetCurrent();
-            m_Target = target as PlateauSandboxElectricPost;
-
-            m_Context.SetTarget(m_Target);
-            m_Context.OnSelected.AddListener(() =>
+            m_Context.OnSelected.AddListener((targetPost, isFront) =>
             {
                 ResetSelect();
             });
@@ -32,29 +29,44 @@ namespace PlateauToolkit.Sandbox.Editor
             serializedObject.Update();
             base.OnInspectorGUI();
 
-            m_Target.electricNode01 = EditorGUILayout.ObjectField("Electric Node 01", m_Target.electricNode01, typeof(GameObject), true) as GameObject;
-
             GUILayout.Space(5);
+
+            var frontTarget = EditorGUILayout.ObjectField(
+                k_FrontTargetNodeName,
+                m_Context.FrontConnectedPost.target,
+                typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
+
+            if (frontTarget != null && m_Context.FrontConnectedPost.target == null)
+            {
+                m_Context.OnSelected.Invoke(frontTarget, true);
+            }
+
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.FlexibleSpace();
-
                 if (new PlateauToolkitImageButtonGUI(
                         100,
                         20,
-                        m_IsNode01Selected ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
+                        m_Context.IsFrontNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
                         false)
                     .Button("選択する"))
                 {
-                    m_IsNode01Selected = !m_IsNode01Selected;
-                    m_Target.SetSelectingElectricNode01(m_IsNode01Selected);
+                    m_Context.SetSelecting(true, !m_Context.IsFrontNodeSelecting);
                     SetActiveTool();
                 }
             }
 
             GUILayout.Space(10);
 
-            m_Target.electricNode02 = EditorGUILayout.ObjectField("Electric Node 02", m_Target.electricNode02, typeof(GameObject), true) as GameObject;
+            var backTarget = EditorGUILayout.ObjectField(
+                k_BackTargetNodeName,
+                  m_Context.BackConnectedPost.target,
+                  typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
+
+            if (backTarget != null && m_Context.BackConnectedPost.target == null)
+            {
+                m_Context.OnSelected.Invoke(backTarget, false);
+            }
 
             GUILayout.Space(5);
 
@@ -64,12 +76,11 @@ namespace PlateauToolkit.Sandbox.Editor
                 if (new PlateauToolkitImageButtonGUI(
                         100,
                         20,
-                        m_IsNode02Selected ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
+                        m_Context.IsBackNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
                         false)
                     .Button("選択する"))
                 {
-                    m_IsNode02Selected = !m_IsNode02Selected;
-                    m_Target.SetSelectingElectricNode02(m_IsNode02Selected);
+                    m_Context.SetSelecting(false, !m_Context.IsBackNodeSelecting);
                     SetActiveTool();
                 }
             }
@@ -89,10 +100,8 @@ namespace PlateauToolkit.Sandbox.Editor
 
             ToolManager.RestorePreviousPersistentTool();
 
-            m_IsNode01Selected = false;
-            m_IsNode02Selected = false;
-            m_Target.SetSelectingElectricNode01(m_IsNode01Selected);
-            m_Target.SetSelectingElectricNode02(m_IsNode02Selected);
+            m_Context.SetSelecting(true, false);
+            m_Context.SetSelecting(false, false);
         }
 
         private void SetActiveTool()
