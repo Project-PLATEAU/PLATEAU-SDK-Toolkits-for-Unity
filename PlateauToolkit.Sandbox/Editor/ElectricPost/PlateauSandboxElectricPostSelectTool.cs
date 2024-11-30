@@ -29,41 +29,18 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 switch (Event.current.GetTypeForControl(controlId))
                 {
-                    case EventType.MouseLeaveWindow:
-                        break;
                     case EventType.MouseMove:
                         MouseMove(window);
-                        break;
-                    case EventType.Repaint:
                         break;
                     case EventType.MouseDown:
                         MouseDown(window);
                         break;
+                    case EventType.MouseLeaveWindow:
+                    case EventType.Repaint:
                     case EventType.MouseDrag:
-                        break;
                     case EventType.MouseUp:
                         break;
                 }
-            }
-
-            if (Event.current.keyCode == KeyCode.Escape)
-            {
-                GUIUtility.hotControl = 0;
-                Event.current.Use();
-
-                if (m_Context.IsFrontNodeSelecting)
-                {
-                    m_Context.OnCancel.Invoke(true);
-                    m_Context.SetSelecting(true, false);
-                }
-
-                if (m_Context.IsBackNodeSelecting)
-                {
-                    m_Context.OnCancel.Invoke(false);
-                    m_Context.SetSelecting(false, false);
-                }
-
-                ToolManager.RestorePreviousPersistentTool();
             }
         }
 
@@ -73,23 +50,23 @@ namespace PlateauToolkit.Sandbox.Editor
             var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycastHit))
             {
-                if (m_Context.IsFrontNodeSelecting)
-                {
-                    m_Context.OnMoseMove.Invoke(raycastHit.point, true);
-                }
-
-                if (m_Context.IsBackNodeSelecting)
-                {
-                    m_Context.OnMoseMove.Invoke(raycastHit.point, false);
-                }
-
                 if (PlateauSandboxObjectFinder
                     .TryGetSandboxObject(raycastHit.collider, out var selectedObject))
                 {
                     if (selectedObject.gameObject.TryGetComponent(out PlateauSandboxElectricPost electricPost))
                     {
+                        if (m_Context.IsFrontNodeSelecting)
+                        {
+                            m_Context.SetConnect(true, electricPost);
+                        }
+
+                        if (m_Context.IsBackNodeSelecting)
+                        {
+                            m_Context.SetConnect(false, electricPost);
+                        }
+
+                        electricPost.SetHighLight(true);
                         m_SelectedObject = electricPost;
-                        m_SelectedObject.SetSelecting(true);
                         return;
                     }
                 }
@@ -97,7 +74,16 @@ namespace PlateauToolkit.Sandbox.Editor
 
             if (m_SelectedObject)
             {
-                m_SelectedObject.SetSelecting(false);
+                if (m_Context.IsFrontNodeSelecting)
+                {
+                    m_Context.SetConnect(true, null);
+                }
+
+                if (m_Context.IsBackNodeSelecting)
+                {
+                    m_Context.SetConnect(false, null);
+                }
+                m_SelectedObject.SetHighLight(false);
                 m_SelectedObject = null;
             }
         }
@@ -106,15 +92,9 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             if (m_SelectedObject != null)
             {
-                if (m_Context.IsFrontNodeSelecting)
-                {
-                    m_Context.OnSelected.Invoke(m_SelectedObject, true);
-                }
-
-                if (m_Context.IsBackNodeSelecting)
-                {
-                    m_Context.OnSelected.Invoke(m_SelectedObject, false);
-                }
+                m_Context.OnSelected.Invoke();
+                m_SelectedObject.SetHighLight(false);
+                m_SelectedObject = null;
             }
         }
     }

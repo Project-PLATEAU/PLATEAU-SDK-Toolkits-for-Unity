@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 {
@@ -34,6 +35,31 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
                 default:
                     return string.Empty;
             }
+        }
+
+        public static PlateauSandboxElectricPostWireType GetWireType(GameObject target)
+        {
+            if (target.name.Contains(PlateauSandboxElectricPostWireType.k_TopA.GetObjectName()))
+            {
+                return PlateauSandboxElectricPostWireType.k_TopA;
+            }
+            else if (target.name.Contains(PlateauSandboxElectricPostWireType.k_TopB.GetObjectName()))
+            {
+                return PlateauSandboxElectricPostWireType.k_TopB;
+            }
+            else if (target.name.Contains(PlateauSandboxElectricPostWireType.k_TopC.GetObjectName()))
+            {
+                return PlateauSandboxElectricPostWireType.k_TopC;
+            }
+            else if (target.name.Contains(PlateauSandboxElectricPostWireType.k_BottomA.GetObjectName()))
+            {
+                return PlateauSandboxElectricPostWireType.k_BottomA;
+            }
+            else if (target.name.Contains(PlateauSandboxElectricPostWireType.k_BottomB.GetObjectName()))
+            {
+                return PlateauSandboxElectricPostWireType.k_BottomB;
+            }
+            return PlateauSandboxElectricPostWireType.k_InValid;
         }
     }
 }

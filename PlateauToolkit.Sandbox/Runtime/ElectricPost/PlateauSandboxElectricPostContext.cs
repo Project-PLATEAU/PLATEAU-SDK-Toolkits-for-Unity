@@ -7,11 +7,8 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
     {
         static PlateauSandboxElectricPostContext s_Current = new();
 
-        private (PlateauSandboxElectricPost target, bool isTargetFront) m_FrontConnectedPost = (null, false);
-        public (PlateauSandboxElectricPost target, bool isTargetFront) FrontConnectedPost => m_FrontConnectedPost;
-
-        private (PlateauSandboxElectricPost target, bool isTargetFront) m_BackConnectedPost = (null, false);
-        public (PlateauSandboxElectricPost target, bool isTargetFront) BackConnectedPost => m_BackConnectedPost;
+        private PlateauSandboxElectricPost m_TargetPost;
+        public PlateauSandboxElectricPost TargetPost => m_TargetPost;
 
         private bool m_IsFrontNodeSelecting;
         public bool IsFrontNodeSelecting => m_IsFrontNodeSelecting;
@@ -19,35 +16,31 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         private bool m_IsBackNodeSelecting;
         public bool IsBackNodeSelecting => m_IsBackNodeSelecting;
 
-        // 選択した電柱、Front / Back
-        public UnityEvent<PlateauSandboxElectricPost, bool> OnSelected { get; } = new();
-
-        // マウスの位置、Front / Back
-        public UnityEvent<Vector3, bool> OnMoseMove { get; } = new();
-
-        // Front / Back の選択をキャンセル
-        public UnityEvent<bool> OnCancel { get; } = new();
+        public UnityEvent OnSelected { get; } = new();
+        public UnityEvent OnCancel { get; } = new();
 
         public static PlateauSandboxElectricPostContext GetCurrent()
         {
             return s_Current;
         }
 
-        public void SetFrontConnect(PlateauSandboxElectricPost target, bool isTargetFront)
+        public void SetTarget(PlateauSandboxElectricPost target)
         {
-            m_FrontConnectedPost = (target, isTargetFront);
+            m_TargetPost = target;
         }
 
-        public void SetBackConnect(PlateauSandboxElectricPost target, bool isTargetFront)
+        public void SetConnect(bool isFront, PlateauSandboxElectricPost target)
         {
-            m_BackConnectedPost = (target, isTargetFront);
+            if (m_TargetPost == null)
+            {
+                return;
+            }
+
+            m_TargetPost.SetConnectToPost(target, isFront);
         }
 
-        public void SetSelecting(bool isFront, bool isSelecting)
+        public void SetSelect(bool isFront, bool isSelecting)
         {
-            m_IsFrontNodeSelecting = false;
-            m_IsBackNodeSelecting = false;
-
             if (isFront)
             {
                 m_IsFrontNodeSelecting = isSelecting;

@@ -19,7 +19,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         public PlateauSandboxElectricPostWire(GameObject wire)
         {
             m_ElectricWire = wire;
-            SetWireType();
+            m_WireType = PlateauSandboxElectricPostWireTypeExtensions.GetWireType(wire);
 
             if (m_WireType == PlateauSandboxElectricPostWireType.k_InValid)
             {
@@ -31,30 +31,6 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             if (wire.TryGetComponent<MeshRenderer>(out var meshRenderer))
             {
                 m_WireScaleSize = meshRenderer.bounds.size.magnitude;
-            }
-        }
-
-        private void SetWireType()
-        {
-            if (m_ElectricWire.name.Contains(PlateauSandboxElectricPostWireType.k_TopA.GetObjectName()))
-            {
-                m_WireType = PlateauSandboxElectricPostWireType.k_TopA;
-            }
-            else if (m_ElectricWire.name.Contains(PlateauSandboxElectricPostWireType.k_TopB.GetObjectName()))
-            {
-                m_WireType = PlateauSandboxElectricPostWireType.k_TopB;
-            }
-            else if (m_ElectricWire.name.Contains(PlateauSandboxElectricPostWireType.k_TopC.GetObjectName()))
-            {
-                m_WireType = PlateauSandboxElectricPostWireType.k_TopC;
-            }
-            else if (m_ElectricWire.name.Contains(PlateauSandboxElectricPostWireType.k_BottomA.GetObjectName()))
-            {
-                m_WireType = PlateauSandboxElectricPostWireType.k_BottomA;
-            }
-            else if (m_ElectricWire.name.Contains(PlateauSandboxElectricPostWireType.k_BottomB.GetObjectName()))
-            {
-                m_WireType = PlateauSandboxElectricPostWireType.k_BottomB;
             }
         }
 
@@ -83,7 +59,6 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         {
             // 2点間の距離を求める
             float distance = Vector3.Distance(m_ElectricWire.transform.position, position);
-
             if (distance <= 0 || m_WireScaleSize <= 0)
             {
                 return;
@@ -94,7 +69,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
                 new Vector3(m_ElectricWire.transform.localScale.x, distance / m_WireScaleSize, m_ElectricWire.transform.localScale.z);
         }
 
-        public void Cancel()
+        public void Hide()
         {
             m_ElectricWire.transform.localScale = new Vector3(1, 0, 1);
             Show(false);
