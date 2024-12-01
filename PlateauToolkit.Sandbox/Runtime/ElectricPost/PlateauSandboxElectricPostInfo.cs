@@ -13,8 +13,11 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         private (PlateauSandboxElectricPost target, bool isFront) m_BackConnectedPost = (null, false);
         public (PlateauSandboxElectricPost target, bool isFront) BackConnectedPost => m_BackConnectedPost;
 
+        private PlateauSandboxElectricPostContext m_Context;
+
         public PlateauSandboxElectricPostInfo(PlateauSandboxElectricPost ownPost)
         {
+            m_Context = PlateauSandboxElectricPostContext.GetCurrent();
             m_OwnPost = ownPost;
         }
 
@@ -85,39 +88,5 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             }
             return false;
         }
-
-        // public void SetConnect(PlateauSandboxElectricPost target, bool isOwnFront)
-        // {
-        //     if (target == null)
-        //     {
-        //         if (isOwnFront)
-        //         {
-        //             m_FrontConnectedPost = (null, false);
-        //         }
-        //         else
-        //         {
-        //             m_BackConnectedPost = (null, false);
-        //         }
-        //         return;
-        //     }
-        //
-        //     bool isTargetFront = target.IsTargetFacingForward(m_OwnPost.transform.position);
-        //     if (isOwnFront)
-        //     {
-        //         m_FrontConnectedPost = (target, isTargetFront);
-        //     }
-        //     else
-        //     {
-        //         m_BackConnectedPost = (target, isTargetFront);
-        //     }
-        //
-        //     if (target.CanConnect(isTargetFront))
-        //     {
-        //
-        //     }
-        //
-        //     // 選択中の電柱側を設定
-        //     target.SetConnectToPost(m_OwnPost, isTargetFront);
-        // }
     }
 }

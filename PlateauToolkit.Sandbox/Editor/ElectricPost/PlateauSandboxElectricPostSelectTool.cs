@@ -60,7 +60,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
             if (m_SelectedObject)
             {
-                m_SelectedObject.OnMoveLeave(m_Context.SelectingPost.target);
+                m_SelectedObject.OnMoveLeave(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
                 m_SelectedObject = null;
             }
         }
@@ -69,6 +69,7 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             if (m_SelectedObject != null)
             {
+                m_SelectedObject.OnSelect(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
                 m_Context.OnSelected.Invoke();
                 m_SelectedObject = null;
             }

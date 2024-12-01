@@ -22,5 +22,10 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         {
             m_SelectingPost = (post, isSelectFront);
         }
+
+        public bool IsSelectingPost(PlateauSandboxElectricPost post, bool isFront)
+        {
+            return m_SelectingPost.target == post && m_SelectingPost.isFront == isFront;
+        }
     }
 }
