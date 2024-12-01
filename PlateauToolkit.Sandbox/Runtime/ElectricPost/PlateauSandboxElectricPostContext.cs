@@ -7,48 +7,20 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
     {
         static PlateauSandboxElectricPostContext s_Current = new();
 
-        private PlateauSandboxElectricPost m_TargetPost;
-        public PlateauSandboxElectricPost TargetPost => m_TargetPost;
-
-        private bool m_IsFrontNodeSelecting;
-        public bool IsFrontNodeSelecting => m_IsFrontNodeSelecting;
-
-        private bool m_IsBackNodeSelecting;
-        public bool IsBackNodeSelecting => m_IsBackNodeSelecting;
-
         public UnityEvent OnSelected { get; } = new();
         public UnityEvent OnCancel { get; } = new();
+
+        private (PlateauSandboxElectricPost target, bool isFront) m_SelectingPost;
+        public (PlateauSandboxElectricPost target, bool isFront) SelectingPost => m_SelectingPost;
 
         public static PlateauSandboxElectricPostContext GetCurrent()
         {
             return s_Current;
         }
 
-        public void SetTarget(PlateauSandboxElectricPost target)
+        public void SetSelectingPost(PlateauSandboxElectricPost post, bool isSelectFront)
         {
-            m_TargetPost = target;
-        }
-
-        public void SetConnect(bool isFront, PlateauSandboxElectricPost target)
-        {
-            if (m_TargetPost == null)
-            {
-                return;
-            }
-
-            m_TargetPost.SetConnectToPost(target, isFront);
-        }
-
-        public void SetSelect(bool isFront, bool isSelecting)
-        {
-            if (isFront)
-            {
-                m_IsFrontNodeSelecting = isSelecting;
-            }
-            else
-            {
-                m_IsBackNodeSelecting = isSelecting;
-            }
+            m_SelectingPost = (post, isSelectFront);
         }
     }
 }

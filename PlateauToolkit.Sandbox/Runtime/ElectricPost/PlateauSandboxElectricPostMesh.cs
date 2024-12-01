@@ -11,7 +11,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         private const string k_PostMeshName = "Electric_Post";
         private readonly List<MeshRenderer> m_MeshRenderers = new();
 
-        private Color m_HighlightColor = Color.yellow;
+        private Color m_HighlightColor = new Color(1f, 190f / 255f, 0f, 1f);
 
         public PlateauSandboxElectricPostMesh(GameObject root)
         {

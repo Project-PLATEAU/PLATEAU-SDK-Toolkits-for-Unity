@@ -9,7 +9,7 @@ namespace PlateauToolkit.Sandbox.Editor
     public class PlateauSandboxElectricPostSelectTool : EditorTool
     {
         private PlateauSandboxElectricPostContext m_Context;
-        private PlateauSandboxElectricPost m_SelectedObject;
+        private PlateauSandboxElectricPostConnectCollider m_SelectedObject;
 
         public override void OnActivated()
         {
@@ -50,40 +50,17 @@ namespace PlateauToolkit.Sandbox.Editor
             var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycastHit))
             {
-                if (PlateauSandboxObjectFinder
-                    .TryGetSandboxObject(raycastHit.collider, out var selectedObject))
+                if (raycastHit.collider.gameObject.TryGetComponent<PlateauSandboxElectricPostConnectCollider>(out var connectCollider))
                 {
-                    if (selectedObject.gameObject.TryGetComponent(out PlateauSandboxElectricPost electricPost))
-                    {
-                        if (m_Context.IsFrontNodeSelecting)
-                        {
-                            m_Context.SetConnect(true, electricPost);
-                        }
-
-                        if (m_Context.IsBackNodeSelecting)
-                        {
-                            m_Context.SetConnect(false, electricPost);
-                        }
-
-                        electricPost.SetHighLight(true);
-                        m_SelectedObject = electricPost;
-                        return;
-                    }
+                    connectCollider.OnMouseHover(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
+                    m_SelectedObject = connectCollider;
+                    return;
                 }
             }
 
             if (m_SelectedObject)
             {
-                if (m_Context.IsFrontNodeSelecting)
-                {
-                    m_Context.SetConnect(true, null);
-                }
-
-                if (m_Context.IsBackNodeSelecting)
-                {
-                    m_Context.SetConnect(false, null);
-                }
-                m_SelectedObject.SetHighLight(false);
+                m_SelectedObject.OnMoveLeave(m_Context.SelectingPost.target);
                 m_SelectedObject = null;
             }
         }
@@ -93,7 +70,6 @@ namespace PlateauToolkit.Sandbox.Editor
             if (m_SelectedObject != null)
             {
                 m_Context.OnSelected.Invoke();
-                m_SelectedObject.SetHighLight(false);
                 m_SelectedObject = null;
             }
         }

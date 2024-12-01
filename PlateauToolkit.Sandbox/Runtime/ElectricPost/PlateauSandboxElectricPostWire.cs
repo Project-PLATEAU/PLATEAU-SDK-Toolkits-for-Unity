@@ -7,8 +7,11 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
     /// </summary>
     public class PlateauSandboxElectricPostWire
     {
-        private PlateauSandboxElectricPostWireType m_WireType = PlateauSandboxElectricPostWireType.k_InValid;
+        private PlateauSandboxElectricPostWireType m_WireType;
         public PlateauSandboxElectricPostWireType WireType => m_WireType;
+
+        private bool m_IsFrontWire;
+        public bool IsFrontWire => m_IsFrontWire;
 
         private GameObject m_ElectricWire;
         public Vector3 WirePosition => m_ElectricWire.transform.position;
@@ -20,6 +23,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         {
             m_ElectricWire = wire;
             m_WireType = PlateauSandboxElectricPostWireTypeExtensions.GetWireType(wire);
+            m_IsFrontWire = PlateauSandboxElectricPostWireTypeExtensions.IsFrontWire(wire);
 
             if (m_WireType == PlateauSandboxElectricPostWireType.k_InValid)
             {
@@ -71,7 +75,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 
         public void Hide()
         {
-            m_ElectricWire.transform.localScale = new Vector3(1, 0, 1);
+            m_ElectricWire.transform.localScale = new Vector3(1, 1, 1);
             Show(false);
         }
     }

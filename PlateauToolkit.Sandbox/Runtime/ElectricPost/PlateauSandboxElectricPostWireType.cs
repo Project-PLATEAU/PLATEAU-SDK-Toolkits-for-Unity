@@ -61,5 +61,10 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             }
             return PlateauSandboxElectricPostWireType.k_InValid;
         }
+
+        public static bool IsFrontWire(GameObject target)
+        {
+            return target.name.Contains("Front_");
+        }
     }
 }

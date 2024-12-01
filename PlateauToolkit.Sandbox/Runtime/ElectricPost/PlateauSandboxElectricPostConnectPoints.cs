@@ -10,7 +10,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
     {
         private const string k_ElectricConnectPointRootName = "ReceiveConnectPoints";
 
-        private List<(PlateauSandboxElectricPostWireType wireType, GameObject target)> m_ConnectPoints = new();
+        private List<(PlateauSandboxElectricPostWireType wireType, GameObject target, bool isFront)> m_ConnectPoints = new();
 
         public PlateauSandboxElectricPostConnectPoints(GameObject post)
         {
@@ -23,19 +23,20 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             foreach (Transform child in connectPointRoot)
             {
                 var wireType = PlateauSandboxElectricPostWireTypeExtensions.GetWireType(child.gameObject);
+                bool isFront = PlateauSandboxElectricPostWireTypeExtensions.IsFrontWire(child.gameObject);
                 if (wireType == PlateauSandboxElectricPostWireType.k_InValid)
                 {
                     continue;
                 }
-                m_ConnectPoints.Add((wireType, child.gameObject));
+                m_ConnectPoints.Add((wireType, child.gameObject, isFront));
             }
         }
 
-        public Vector3 GetConnectPoint(PlateauSandboxElectricPostWireType wireType)
+        public Vector3 GetConnectPoint(PlateauSandboxElectricPostWireType wireType, bool isFront)
         {
             foreach (var connectPoint in m_ConnectPoints)
             {
-                if (connectPoint.wireType == wireType)
+                if (connectPoint.wireType == wireType && connectPoint.isFront == isFront)
                 {
                     return connectPoint.target.transform.position;
                 }

@@ -14,6 +14,13 @@ namespace PlateauToolkit.Sandbox.Runtime
         private const string k_ElectricWireRootName = "Wires";
 
         private readonly List<PlateauSandboxElectricPostWire> m_PostWires = new();
+            public List<PlateauSandboxElectricPostWire> PostWires => m_PostWires;
+
+        private bool m_IsFrontShowing = false;
+        public bool IsFrontShowing => m_IsFrontShowing;
+
+        private bool m_IsBackShowing = false;
+        public bool IsBackShowing => m_IsBackShowing;
 
         public PlateauSandboxElectricPostWireHandler(GameObject post)
         {
@@ -36,20 +43,45 @@ namespace PlateauToolkit.Sandbox.Runtime
             }
         }
 
-        public void ShowToTarget(PlateauSandboxElectricPost targetPost)
+        public void ShowToTarget(bool isOwnFront, PlateauSandboxElectricPost targetPost, bool isTargetFront)
         {
             foreach (var postWire in m_PostWires)
             {
-                var targetConnectPosition = targetPost.GetConnectPoint(postWire.WireType);
+                if (postWire.IsFrontWire != isOwnFront)
+                {
+                    continue;
+                }
+
+                var targetConnectPosition = targetPost.GetConnectPoint(postWire.WireType, isTargetFront);
                 postWire.SetElectricNode(targetConnectPosition);
+            }
+
+            if (isOwnFront)
+            {
+                m_IsFrontShowing = true;
+            }
+            else
+            {
+                m_IsBackShowing = true;
             }
         }
 
-        public void Hide()
+        public void Hide(bool isFront)
         {
             foreach (var postWire in m_PostWires)
             {
-                postWire.Hide();
+                if (postWire.IsFrontWire == isFront)
+                {
+                    postWire.Hide();
+                }
+            }
+            if (isFront)
+            {
+                m_IsFrontShowing = false;
+            }
+            else
+            {
+                m_IsBackShowing = false;
             }
         }
     }

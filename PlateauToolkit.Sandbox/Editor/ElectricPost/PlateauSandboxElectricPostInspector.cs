@@ -15,18 +15,22 @@ namespace PlateauToolkit.Sandbox.Editor
         private const string k_FrontTargetNodeName = "Front Connected Target Node";
         private const string k_BackTargetNodeName = "Back Connected Target Node";
 
-        // 選択中キャンセル用にキャッシュした電柱
-        private PlateauSandboxElectricPost m_CachedConnectedPost;
+        private PlateauSandboxElectricPost m_Target;
+
+        private bool m_IsFrontNodeSelecting;
+        private bool m_IsBackNodeSelecting;
 
         private void OnEnable()
         {
+            m_Target = target as PlateauSandboxElectricPost;
+
             m_Context = PlateauSandboxElectricPostContext.GetCurrent();
             m_Context.OnSelected.AddListener(ResetSelect);
         }
 
         public override void OnInspectorGUI()
         {
-            if (m_Context == null || m_Context.TargetPost == null)
+            if (m_Context == null || m_Target == null)
             {
                 return;
             }
@@ -38,54 +42,17 @@ namespace PlateauToolkit.Sandbox.Editor
 
             var frontTarget = EditorGUILayout.ObjectField(
                  k_FrontTargetNodeName,
-                 m_Context.TargetPost.FrontConnectedPost,
+                 m_Target.FrontConnectedPost.target,
                  typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
 
-            if (frontTarget != null && m_Context.TargetPost.FrontConnectedPost == null)
+            if (frontTarget != null && m_Target.FrontConnectedPost.target == null)
             {
-                m_Context.SetConnect(true, frontTarget);
+                m_Target.SetFrontConnectPointToFacing(frontTarget);
             }
 
-            using (new EditorGUILayout.HorizontalScope())
-            {
-                GUILayout.FlexibleSpace();
-                if (new PlateauToolkitImageButtonGUI(
-                        100,
-                        20,
-                        m_Context.IsFrontNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
-                        false)
-                    .Button("選択する"))
-                {
-                    if (!m_Context.IsFrontNodeSelecting)
-                    {
-                        if (m_Context.TargetPost.FrontConnectedPost != null)
-                        {
-                            // 選択時にキャッシュする
-                            m_CachedConnectedPost = m_Context.TargetPost.FrontConnectedPost;
-                        }
-                        m_Context.SetConnect(true, null);
-                        m_Context.SetSelect(true, !m_Context.IsFrontNodeSelecting);
-                        SetActiveTool();
-                    }
-                    else
-                    {
-                        SetConnectFromCache();
-                        ResetSelect();
-                    }
-                }
-            }
-
-            GUILayout.Space(10);
-
-            var backTarget = EditorGUILayout.ObjectField(
-                k_BackTargetNodeName,
-                  m_Context.TargetPost.BackConnectedPost,
-                  typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
-
-            if (backTarget != null && m_Context.TargetPost.BackConnectedPost == null)
-            {
-                m_Context.SetConnect(false, backTarget);
-            }
+            GUI.enabled = false;
+            EditorGUILayout.Toggle("Is Connected Front", m_Target.FrontConnectedPost.isFront);
+            GUI.enabled = true;
 
             GUILayout.Space(5);
 
@@ -95,26 +62,69 @@ namespace PlateauToolkit.Sandbox.Editor
                 if (new PlateauToolkitImageButtonGUI(
                         100,
                         20,
-                        m_Context.IsBackNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
+                        m_IsFrontNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
                         false)
                     .Button("選択する"))
                 {
-                    if (!m_Context.IsBackNodeSelecting)
+                    ResetSelect();
+                    if (!m_IsFrontNodeSelecting)
                     {
-                        if (m_Context.TargetPost.BackConnectedPost != null)
+                        if (m_Target.FrontConnectedPost.target != null)
                         {
-                            // 選択時にキャッシュする
-                            m_CachedConnectedPost = m_Context.TargetPost.BackConnectedPost;
+                            // 選択中を外す
+                            m_Target.FrontConnectedPost.target.RemoveConnectedPost(m_Target);
+                            m_Target.RemoveConnectedPost(m_Target.FrontConnectedPost.target);
                         }
-                        m_Context.SetConnect( false, null);
-                        m_Context.SetSelect(false, !m_Context.IsBackNodeSelecting);
 
+                        m_IsFrontNodeSelecting = !m_IsFrontNodeSelecting;
+                        m_Context.SetSelectingPost(m_Target, true);
                         SetActiveTool();
                     }
-                    else
+                }
+            }
+
+            GUILayout.Space(10);
+
+            var backTarget = EditorGUILayout.ObjectField(
+                k_BackTargetNodeName,
+                m_Target.BackConnectedPost.target,
+                  typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
+
+            if (backTarget != null && m_Target.BackConnectedPost.target == null)
+            {
+                m_Target.SetBackConnectPointToFacing(backTarget);
+            }
+
+            GUI.enabled = false;
+            EditorGUILayout.Toggle("Is Connected Front", m_Target.BackConnectedPost.isFront);
+            GUI.enabled = true;
+
+
+            GUILayout.Space(5);
+
+            using (new EditorGUILayout.HorizontalScope())
+            {
+                GUILayout.FlexibleSpace();
+                if (new PlateauToolkitImageButtonGUI(
+                        100,
+                        20,
+                        m_IsBackNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
+                        false)
+                    .Button("選択する"))
+                {
+                    ResetSelect();
+                    if (!m_IsBackNodeSelecting)
                     {
-                        SetConnectFromCache();
-                        ResetSelect();
+                        if (m_Target.BackConnectedPost.target != null)
+                        {
+                            // 選択中を外す
+                            m_Target.BackConnectedPost.target.RemoveConnectedPost(m_Target);
+                            m_Target.RemoveConnectedPost(m_Target.BackConnectedPost.target);
+                        }
+
+                        SetActiveTool();
+                        m_IsBackNodeSelecting = !m_IsBackNodeSelecting;
+                        m_Context.SetSelectingPost(m_Target, false);
                     }
                 }
             }
@@ -134,24 +144,17 @@ namespace PlateauToolkit.Sandbox.Editor
 
             ToolManager.RestorePreviousPersistentTool();
 
-            m_Context.SetSelect(true, false);
-            m_Context.SetSelect(false, false);
+            m_Context.SetSelectingPost(null, false);
+
+            m_IsBackNodeSelecting = false;
+            m_IsFrontNodeSelecting = false;
+
+            m_Context.OnCancel.Invoke();
         }
 
-        private void SetConnectFromCache()
+        private void SelectedPost(PlateauSandboxElectricPost targetPost)
         {
-            if (m_CachedConnectedPost != null)
-            {
-                // 解除時にキャッシュされた電柱を再設定
-                if (m_Context.IsFrontNodeSelecting)
-                {
-                    m_Context.SetConnect( true, m_CachedConnectedPost);
-                }
-                else if (m_Context.IsBackNodeSelecting)
-                {
-                    m_Context.SetConnect(false, m_CachedConnectedPost);
-                }
-            }
+            ResetSelect();
         }
 
         private void SetActiveTool()

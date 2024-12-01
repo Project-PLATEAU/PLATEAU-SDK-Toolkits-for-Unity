@@ -14,6 +14,8 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
     {
         // ワイヤー
         private PlateauSandboxElectricPostWireHandler m_ElectricPostWireHandler;
+        public bool IsShowingFrontWire => m_ElectricPostWireHandler.IsFrontShowing;
+        public bool IsShowingBackWire => m_ElectricPostWireHandler.IsBackShowing;
 
         // 接続部分
         private PlateauSandboxElectricPostConnectPoints m_ElectricPostConnectPoints;
@@ -26,31 +28,31 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         // メッシュ操作
         private PlateauSandboxElectricPostMesh m_Mesh;
 
-        public PlateauSandboxElectricPostInfo Info { get; private set; }
-        public PlateauSandboxElectricPost FrontConnectedPost => Info.FrontConnectedPost;
-        public PlateauSandboxElectricPost BackConnectedPost => Info.BackConnectedPost;
+        private PlateauSandboxElectricPostInfo m_Info;
+        public (PlateauSandboxElectricPost target, bool isFront) FrontConnectedPost => m_Info?.FrontConnectedPost ?? (null, false);
+        public (PlateauSandboxElectricPost target, bool isFront) BackConnectedPost => m_Info?.BackConnectedPost ?? (null, false);
 
         private void Start()
         {
             m_Context = PlateauSandboxElectricPostContext.GetCurrent();
-            m_Context.SetTarget(this);
-            Info = new PlateauSandboxElectricPostInfo(this);
+            m_Context.OnCancel.AddListener(() => SetHighLight(false));
 
             m_ElectricPostWireHandler = new PlateauSandboxElectricPostWireHandler(gameObject);
             m_ElectricPostConnectPoints = new PlateauSandboxElectricPostConnectPoints(gameObject);
             m_Mesh = new PlateauSandboxElectricPostMesh(gameObject);
+
+            m_Info = new PlateauSandboxElectricPostInfo(this);
         }
 
         public override void SetPosition(in Vector3 position)
         {
             base.SetPosition(in position);
-
             SearchPost();
         }
 
         private void SearchPost()
         {
-            if (Info == null)
+            if (m_Info == null)
             {
                 return;
             }
@@ -60,25 +62,63 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             if (nearestPost != null)
             {
                 bool isOwnFront = IsTargetFacingForward(nearestPost.transform.position);
-                SetConnectToPost(nearestPost, isOwnFront);
+
+                // 接続できる方を取得
+                bool isOtherFront = nearestPost.CanConnect(true);
+                if (!isOwnFront)
+                {
+                    isOtherFront = !isOtherFront;
+                }
+
+                if (isOwnFront)
+                {
+                    SetFrontConnectPoint(nearestPost, isOtherFront);
+                }
+                else
+                {
+                    SetBackConnectPoint(nearestPost, isOtherFront);
+                }
             }
         }
 
         private void Update()
         {
-            if (Info == null)
+            if (m_Info == null)
             {
                 return;
             }
 
-            // 線を表示させるのは前方のみ
-            if (Info.FrontConnectedPost != null)
+            TryShowFrontWire();
+            TryShowBackWire();
+        }
+
+        private void TryShowFrontWire()
+        {
+            if (m_Info.CanShowFrontWire())
             {
-                m_ElectricPostWireHandler.ShowToTarget(Info.FrontConnectedPost);
+                m_ElectricPostWireHandler.ShowToTarget(
+                    true,
+                    m_Info.FrontConnectedPost.target,
+                    m_Info.FrontConnectedPost.isFront);
             }
             else
             {
-                m_ElectricPostWireHandler.Hide();
+                m_ElectricPostWireHandler.Hide(true);
+            }
+        }
+
+        private void TryShowBackWire()
+        {
+            if (m_Info.CanShowBackWire())
+            {
+                m_ElectricPostWireHandler.ShowToTarget(
+                    false,
+                    m_Info.BackConnectedPost.target,
+                    m_Info.BackConnectedPost.isFront);
+            }
+            else
+            {
+                m_ElectricPostWireHandler.Hide(false);
             }
         }
 
@@ -94,17 +134,9 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
                     continue;
                 }
 
-                Debug.Log($"target : {electricPost.gameObject.hideFlags} : {electricPost.gameObject.name}");
-                if (electricPost.gameObject.hideFlags == HideFlags.HideAndDontSave)
+                // すでに別の電柱と接続されている場合はスキップ
+                if (!electricPost.CanConnect(true) && !electricPost.CanConnect(false))
                 {
-                    continue;
-                }
-
-                // 相手が向いている方向を判定
-                bool isTargetFront = electricPost.IsTargetFacingForward(gameObject.transform.position);
-                if (!electricPost.CanConnect(isTargetFront))
-                {
-                    // すでに別の電柱と接続されている場合はスキップ
                     continue;
                 }
 
@@ -140,10 +172,10 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             return angle < 90f;
         }
 
-        private bool CanConnect(bool isFront)
+        public bool CanConnect(bool isFront)
         {
-            return (isFront && Info.FrontConnectedPost == null) ||
-                   (!isFront && Info.BackConnectedPost == null);
+            return (isFront && m_Info.FrontConnectedPost.target == null) ||
+                   (!isFront && m_Info.BackConnectedPost.target == null);
         }
 
         private bool TryIsObstacleBetween(GameObject target)
@@ -153,46 +185,88 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             return false;
         }
 
-        public void SetConnectToPost(PlateauSandboxElectricPost targetPost, bool isOwnFront)
+        public void SetFrontConnectPointToFacing(PlateauSandboxElectricPost other)
         {
-            if (isOwnFront && Info.FrontConnectedPost == targetPost)
-            {
-                return;
-            }
-            else if (!isOwnFront && Info.BackConnectedPost == targetPost)
-            {
-                return;
-            }
-
-            // すでに別の方に設定されていればnullに
-            if (isOwnFront && Info.BackConnectedPost == targetPost)
-            {
-                Info.SetConnect(null, false);
-            }
-            else if (!isOwnFront && Info.FrontConnectedPost == targetPost)
-            {
-                Info.SetConnect(null,  true);
-            }
-
-            // セット
-            Info.SetConnect(targetPost, isOwnFront);
+            // 向いている方で設定
+            bool isOtherFront = other.IsTargetFacingForward(transform.position);
+            SetFrontConnectPoint(other, isOtherFront);
         }
 
-        public Vector3 GetConnectPoint(PlateauSandboxElectricPostWireType wireType)
+        public void SetFrontConnectPoint(PlateauSandboxElectricPost other, bool isOtherFront)
         {
-            // 受け側は位置を反転させる
+            if (!m_Info.CanConnect(true, other))
+            {
+                return;
+            }
+
+            m_Info.SetFrontConnect(other, isOtherFront);
+
+            // 他の電柱にも接続を通知
+            if (isOtherFront)
+            {
+                other.SetFrontConnectPoint(this, true);
+            }
+            else
+            {
+                other.SetBackConnectPoint(this, true);
+            }
+        }
+
+        public void SetBackConnectPointToFacing(PlateauSandboxElectricPost other)
+        {
+            // 向いている方で設定
+            bool isOtherFront = other.IsTargetFacingForward(transform.position);
+            SetBackConnectPoint(other, isOtherFront);
+        }
+
+        public void SetBackConnectPoint(PlateauSandboxElectricPost other, bool isOtherFront)
+        {
+            if (!m_Info.CanConnect(false, other))
+            {
+                return;
+            }
+
+            m_Info.SetBackConnect(other, isOtherFront);
+
+            // 他の電柱にも接続を通知
+            if (isOtherFront)
+            {
+                other.SetFrontConnectPoint(this, false);
+            }
+            else
+            {
+                other.SetBackConnectPoint(this, false);
+            }
+        }
+
+        public void RemoveConnectedPost(PlateauSandboxElectricPost targetPost)
+        {
+            if (m_Info.FrontConnectedPost.target == targetPost)
+            {
+                m_Info.SetFrontConnect(null, true);
+                targetPost?.RemoveConnectedPost(this);
+            }
+            else if (m_Info.BackConnectedPost.target == targetPost)
+            {
+                m_Info.SetBackConnect(null, false);
+                targetPost?.RemoveConnectedPost(this);
+            }
+        }
+
+        public Vector3 GetConnectPoint(PlateauSandboxElectricPostWireType wireType, bool isFront)
+        {
             switch (wireType)
             {
                 case PlateauSandboxElectricPostWireType.k_TopA:
-                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_TopC);
+                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_TopA, isFront);
                 case PlateauSandboxElectricPostWireType.k_TopB:
-                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_TopB);
+                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_TopB, isFront);
                 case PlateauSandboxElectricPostWireType.k_TopC:
-                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_TopA);
+                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_TopC, isFront);
                 case PlateauSandboxElectricPostWireType.k_BottomA:
-                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_BottomB);
+                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_BottomA, isFront);
                 case PlateauSandboxElectricPostWireType.k_BottomB:
-                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_BottomA);
+                    return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_BottomB, isFront);
             }
             return Vector3.zero;
         }
@@ -201,5 +275,19 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         {
             m_Mesh.SetHighLight(isSelecting);
         }
+
+        //
+        // Vector3 _point = Vector3.zero;
+        // void OnDrawGizmos()
+        // {
+        //     foreach (PlateauSandboxElectricPostWire postWire in m_ElectricPostWireHandler.PostWires)
+        //     {
+        //         var point = Info.FrontConnectedPost.GetConnectPoint(postWire.WireType);
+        //         Gizmos.color = Color.yellow;
+        //         Gizmos.DrawSphere(point, 0.2f);
+        //         Gizmos.color = Color.red;
+        //         Gizmos.DrawSphere(postWire.WirePosition, 0.2f);
+        //     }
+        // }
     }
 }
