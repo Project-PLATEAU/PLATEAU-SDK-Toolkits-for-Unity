@@ -66,7 +66,6 @@ namespace PlateauToolkit.Sandbox.Editor
                         false)
                     .Button("選択する"))
                 {
-                    ResetSelect();
                     if (!m_IsFrontNodeSelecting)
                     {
                         if (m_Target.FrontConnectedPost.target != null)
@@ -76,10 +75,15 @@ namespace PlateauToolkit.Sandbox.Editor
                             m_Target.RemoveConnectedPost(m_Target.FrontConnectedPost.target);
                         }
 
-                        m_IsFrontNodeSelecting = !m_IsFrontNodeSelecting;
                         m_Context.SetSelectingPost(m_Target, true);
                         SetActiveTool();
                     }
+                    else
+                    {
+                        ResetSelect();
+                    }
+
+                    m_IsFrontNodeSelecting = !m_IsFrontNodeSelecting;
                 }
             }
 
@@ -112,7 +116,6 @@ namespace PlateauToolkit.Sandbox.Editor
                         false)
                     .Button("選択する"))
                 {
-                    ResetSelect();
                     if (!m_IsBackNodeSelecting)
                     {
                         if (m_Target.BackConnectedPost.target != null)
@@ -123,9 +126,13 @@ namespace PlateauToolkit.Sandbox.Editor
                         }
 
                         SetActiveTool();
-                        m_IsBackNodeSelecting = !m_IsBackNodeSelecting;
                         m_Context.SetSelectingPost(m_Target, false);
                     }
+                    else
+                    {
+                        ResetSelect();
+                    }
+                    m_IsBackNodeSelecting = !m_IsBackNodeSelecting;
                 }
             }
 

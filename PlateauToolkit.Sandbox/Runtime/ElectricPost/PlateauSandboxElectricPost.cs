@@ -40,23 +40,34 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             m_ElectricPostWireHandler = new PlateauSandboxElectricPostWireHandler(gameObject);
             m_ElectricPostConnectPoints = new PlateauSandboxElectricPostConnectPoints(gameObject);
             m_Mesh = new PlateauSandboxElectricPostMesh(gameObject);
-
             m_Info = new PlateauSandboxElectricPostInfo(this);
+
+            if (hideFlags == HideFlags.None)
+            {
+                // 配置完了したら実行
+                SearchPost();
+            }
         }
 
-        public override void SetPosition(in Vector3 position)
-        {
-            base.SetPosition(in position);
-            SearchPost();
-        }
-
-        private void SearchPost()
+        private void OnDestroy()
         {
             if (m_Info == null)
             {
                 return;
             }
 
+            if (m_Info.FrontConnectedPost.target != null)
+            {
+                m_Info.FrontConnectedPost.target.RemoveConnectedPost(this);
+            }
+            if (m_Info.BackConnectedPost.target != null)
+            {
+                m_Info.BackConnectedPost.target.RemoveConnectedPost(this);
+            }
+        }
+
+        private void SearchPost()
+        {
             // 他の配置されている一番近い電柱を取得
             var nearestPost = GetNearestPost();
             if (nearestPost != null)
@@ -72,10 +83,12 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 
                 if (isOwnFront)
                 {
+                    RemoveConnectedPost(false);
                     SetFrontConnectPoint(nearestPost, isOtherFront);
                 }
                 else
                 {
+                    RemoveConnectedPost(true);
                     SetBackConnectPoint(nearestPost, isOtherFront);
                 }
             }
@@ -236,6 +249,18 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             else
             {
                 other.SetBackConnectPoint(this, false);
+            }
+        }
+
+        private void RemoveConnectedPost(bool isFront)
+        {
+            if (isFront)
+            {
+                m_Info.SetFrontConnect(null, false);
+            }
+            else
+            {
+                m_Info.SetBackConnect(null, false);
             }
         }
 
