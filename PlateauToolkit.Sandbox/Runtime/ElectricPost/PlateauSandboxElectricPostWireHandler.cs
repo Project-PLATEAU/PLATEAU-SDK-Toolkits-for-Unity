@@ -68,7 +68,6 @@ namespace PlateauToolkit.Sandbox.Runtime
 
         public void Hide(bool isFront)
         {
-            Debug.Log($"================ Hide {m_WireRoot.name}");
             foreach (var postWire in m_PostWires)
             {
                 if (postWire.IsFrontWire == isFront)

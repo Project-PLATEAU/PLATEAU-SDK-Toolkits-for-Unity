@@ -71,9 +71,6 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         {
             // 他の配置されている一番近い電柱を取得
             var nearestPost = GetNearestPost();
-
-            Debug.Log($"{gameObject.name} to nearestPost: {nearestPost}");
-
             if (nearestPost != null)
             {
                 bool isOwnFront = IsTargetFacingForward(nearestPost.transform.position);
@@ -212,10 +209,6 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             // レイキャストを行い、障害物があるかどうかを確認
             if (Physics.Raycast(startPoint, direction, out RaycastHit hit, distance))
             {
-                // レイキャストの線をデバッグ表示
-                Debug.DrawRay(startPoint, direction * distance, Color.red, 1.0f);
-
-
                 // 障害物がターゲットではない場合、障害物があると判断
                 if (hit.collider.gameObject != target.gameObject)
                 {
