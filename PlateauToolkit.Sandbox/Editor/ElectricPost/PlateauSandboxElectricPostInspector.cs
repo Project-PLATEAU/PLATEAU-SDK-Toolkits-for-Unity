@@ -77,13 +77,13 @@ namespace PlateauToolkit.Sandbox.Editor
 
                         m_Context.SetSelectingPost(m_Target, true);
                         SetActiveTool();
+                        m_IsFrontNodeSelecting = !m_IsFrontNodeSelecting;
                     }
                     else
                     {
                         ResetSelect();
                     }
 
-                    m_IsFrontNodeSelecting = !m_IsFrontNodeSelecting;
                 }
             }
 
@@ -127,12 +127,12 @@ namespace PlateauToolkit.Sandbox.Editor
 
                         SetActiveTool();
                         m_Context.SetSelectingPost(m_Target, false);
+                        m_IsBackNodeSelecting = !m_IsBackNodeSelecting;
                     }
                     else
                     {
                         ResetSelect();
                     }
-                    m_IsBackNodeSelecting = !m_IsBackNodeSelecting;
                 }
             }
 
@@ -150,7 +150,6 @@ namespace PlateauToolkit.Sandbox.Editor
             Event.current.Use();
 
             ToolManager.RestorePreviousPersistentTool();
-
             m_Context.SetSelectingPost(null, false);
 
             m_IsBackNodeSelecting = false;
