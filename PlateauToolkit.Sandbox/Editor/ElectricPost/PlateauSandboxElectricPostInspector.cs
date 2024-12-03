@@ -15,6 +15,9 @@ namespace PlateauToolkit.Sandbox.Editor
         private const string k_FrontTargetNodeName = "Front Connected Target Node";
         private const string k_BackTargetNodeName = "Back Connected Target Node";
 
+        // 接続先が正面かどうか
+        private const string k_IsDestinationFrontName = "Is Destination Front";
+
         private PlateauSandboxElectricPost m_Target;
 
         private bool m_IsFrontNodeSelecting;
@@ -51,7 +54,7 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             GUI.enabled = false;
-            EditorGUILayout.Toggle("Is Connected Front", m_Target.FrontConnectedPost.isFront);
+            EditorGUILayout.Toggle(k_IsDestinationFrontName, m_Target.FrontConnectedPost.isFront);
             GUI.enabled = true;
 
             GUILayout.Space(5);
@@ -100,7 +103,7 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             GUI.enabled = false;
-            EditorGUILayout.Toggle("Is Connected Front", m_Target.BackConnectedPost.isFront);
+            EditorGUILayout.Toggle(k_IsDestinationFrontName, m_Target.BackConnectedPost.isFront);
             GUI.enabled = true;
 
 
