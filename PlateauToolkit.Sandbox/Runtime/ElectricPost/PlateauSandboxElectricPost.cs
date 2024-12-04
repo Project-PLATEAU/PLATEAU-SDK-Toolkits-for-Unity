@@ -70,8 +70,6 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 
                 // 接続できる方を取得
                 bool isOtherFront = nearestPost.CanConnect(true);
-                Debug.Log($"SearchPost isOwnFront: {isOwnFront}, isOtherFront: {isOtherFront}");
-
                 if (isOwnFront)
                 {
                     RemoveConnectedPost(true);
@@ -217,7 +215,6 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
                 }
 
                 // 障害物と判定
-                Debug.Log("障害物あり！ : " + rayCastHit.collider.gameObject.name);
                 return true;
             }
             return false;
