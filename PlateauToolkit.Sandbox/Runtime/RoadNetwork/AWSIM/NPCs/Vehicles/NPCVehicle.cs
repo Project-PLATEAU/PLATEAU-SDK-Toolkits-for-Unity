@@ -21,10 +21,14 @@ namespace AWSIM
             public TrafficLane followingLane;
             public TrafficLane prevLane;
 
+            public TrafficLightPassability trafficLightPassability;
+
+            public int followingLanesCount;
+
             public void SetStatus(NPCVehicleInternalState state)
             {
                 speedMode = state.SpeedMode;
-                if (speedMode != NPCVehicleSpeedMode.NORMAL && speedMode != NPCVehicleSpeedMode.SLOW)
+                if (speedMode != NPCVehicleSpeedMode.NORMAL && speedMode != NPCVehicleSpeedMode.SLOW && state.SpeedModeStopStartTime != 0f)
                     timeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{RoadNetworkConstants.MAX_IDLE_TIME}";
                 else
                     timeRemains = "-";
@@ -34,6 +38,10 @@ namespace AWSIM
                     prevLane = followingLane;
                     followingLane = state.CurrentFollowingLane;
                 }
+
+                trafficLightPassability = state.TrafficLightPassability;
+
+                followingLanesCount = state.FollowingLanes.Count;
             }
         }
 

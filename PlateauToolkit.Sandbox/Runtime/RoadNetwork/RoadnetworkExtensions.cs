@@ -811,6 +811,97 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return intersection.Edges?.FindAll(x => x.Road.IsValid).Select(x => x.GetRoad(getter)).Distinct()?.ToList();
         }
 
+        public static List<RnDataTrack> GetAllFromTracksFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoadBase road)
+        {
+            HashSet<RnDataTrack> outTracks = new HashSet<RnDataTrack>();
+            List<RnDataNeighbor> edges = intersection.Edges?.FindAll(x => x.GetRoad(getter) == road);
+            foreach(var edge in edges)
+            {
+                var tracks = intersection.Tracks.FindAll(x => x.GetFromBorder(getter).IsSameLine(edge.GetBorder(getter)));
+                foreach(var track in tracks)
+                {
+                    outTracks.Add(track);
+                }
+            }
+            return outTracks.ToList();
+        }
+
+        /// <summary>
+        /// 対向車線を同一グループとした道路リスト取得
+        /// </summary>
+        public static List<List<RnDataRoadBase>> GetRoadGroupsByOncomingRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
+        {
+            List<List<RnDataRoadBase>> outRoadGroups = new();
+            List<RnDataRoadBase> roads = intersection.GetAllConnectedRoads(getter);
+            foreach(RnDataRoad road in roads)
+            {
+                var straightFromTrack = intersection.GetAllFromTracksFromRoad(getter, road).Find(x => x.TurnType == RnTurnType.Straight);
+                var toBorder = straightFromTrack?.GetToBorder(getter);
+                if(toBorder != null)
+                {
+                    var oncomingRoad = intersection.GetEdgeByBorder(getter, toBorder).GetRoad(getter);
+                    outRoadGroups.Add(new List<RnDataRoadBase>() { road, oncomingRoad });
+                }
+            }
+            return outRoadGroups;
+        }
+
+        /// <summary>
+        /// 交差しない車線を同一グループとした道路リスト取得
+        /// </summary>
+        public static List<List<RnDataRoadBase>> GetRoadGroupsByCrossingRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
+        {
+            List<List<RnDataRoadBase>> outRoadGroups = new();
+            List<RnDataRoadBase> roads = intersection.GetAllConnectedRoads(getter);
+            foreach (RnDataRoad road in roads)
+            {
+                var straightFromTrack = intersection.GetAllFromTracksFromRoad(getter, road).Find(x => x.TurnType == RnTurnType.Straight);
+                if (straightFromTrack == null)
+                {
+                    continue;
+                }
+
+                var crossingTracks = intersection.GetCrossingTracks(getter, straightFromTrack);
+                foreach(var crossingTrack in crossingTracks)
+                {
+                    var fromRoad = intersection.GetFromRoadFromTrack(getter, crossingTrack);
+                    var toRoad = intersection.GetToRoadFromTrack(getter, crossingTrack);
+
+                    bool isAdded = false;
+                    foreach (var item in outRoadGroups)
+                    {
+                        if (!item.Contains(fromRoad) && !item.Contains(toRoad))
+                        {
+                            item.Add(road);
+                            isAdded = true;
+                            break;
+                        }
+                    }
+                    if (!isAdded)
+                    {
+                        outRoadGroups.Add(new List<RnDataRoadBase> { road });
+                    }
+                }
+            }
+            return outRoadGroups;
+        }
+
+        /// <summary>
+        /// TrackのToBorderに繋がるRoad取得
+        /// </summary>
+        public static RnDataRoadBase GetToRoadFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            return intersection.GetEdgeByBorder(getter, track.GetToBorder(getter)).GetRoad(getter);
+        }
+
+        /// <summary>
+        /// TrackのFromBorderに繋がるRoad取得
+        /// </summary>
+        public static RnDataRoadBase GetFromRoadFromTrack([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataTrack track)
+        {
+            return intersection.GetEdgeByBorder(getter, track.GetFromBorder(getter)).GetRoad(getter);
+        }
+
         /// <summary>
         /// RnDataIntersectionのRnDataTrackに対して交差するTrackを取得
         /// TurnType : Straightのtrackを渡す
@@ -852,6 +943,21 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (fromBorder != null)
                 return intersection.GetFromTracksFromBorder(getter, fromBorder)?.FindAll(x => x.TurnType == turnType)?.ToList() ?? null;
             return null;
+        }
+
+        /// <summary>
+        /// 信号機配置borderから停止線位置border取得
+        /// </summary>
+        public static List<RnDataWay> GetStoplineFromTrafficLightBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, List<RnDataWay> borders)
+        {
+            List<RnDataWay> fromBorders = new();
+            foreach (RnDataWay border in borders)
+            {
+                RnDataTrack toTrack = intersection.GetToTracksFromBorder(getter, border)?.Find(x => x.TurnType == RnTurnType.Straight);
+                if (toTrack != null)
+                    fromBorders.Add(toTrack.GetFromBorder(getter));
+            }
+            return fromBorders;
         }
 
         /// <summary>
@@ -931,6 +1037,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static List<RnDataTrack> FilterAvailableFromTracks([DisallowNull] this RnDataIntersection self, RoadNetworkDataGetter getter, List<RnDataTrack> tracks)
         {
             return tracks.FindAll(x => self.IsAvailableFromTrack(getter, x));
+        }
+
+        /// <summary>
+        /// TrafficLightController取得
+        /// </summary>
+        public static RnDataTrafficLightController GetTrafficLightController([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
+        {
+            return getter.GetTrafficLightController().TryGet(intersection.SignalController);
         }
 
         #endregion Intersection
@@ -1024,5 +1138,51 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return self.GetLanes().TryGet(id);
         }
         #endregion RoadNetworkStorage
+
+        #region TrafficLightController
+
+        public static RnDataRoadBase GetParentRoad([DisallowNull] this RnDataTrafficLightController controller, RoadNetworkDataGetter getter)
+        {
+            return getter.GetRoadBases().TryGet(controller.Parent);
+        }
+
+        public static List<RnDataTrafficLight> GetTrafficLights([DisallowNull] this RnDataTrafficLightController controller, RoadNetworkDataGetter getter)
+        {
+            List<RnDataTrafficLight> trafficLights = new();
+            foreach (RnID<RnDataTrafficLight> trafficLight in controller.TrafficLights)
+            {
+                if (trafficLight.IsValid)
+                {
+                    trafficLights.Add(getter.GetTrafficLights().TryGet(trafficLight));
+                }
+            }
+            return trafficLights;
+        }
+        #endregion TrafficLightController
+
+        #region TrafficLight
+
+        public static List<RnDataWay> GetEdges([DisallowNull] this RnDataTrafficLight trafficLight, RoadNetworkDataGetter getter)
+        {
+            List<RnDataWay> edges = new();
+            foreach (RnID<RnDataWay> neighbor in trafficLight.Neighbor)
+            {
+                edges.Add( getter.GetWays().TryGet(neighbor));
+            }
+            return edges;
+        }
+
+        public static RnDataTrafficLightController GetParentController([DisallowNull] this RnDataTrafficLight trafficLight, RoadNetworkDataGetter getter)
+        {
+            return getter.GetTrafficLightController().TryGet(trafficLight.Parent);
+        }
+
+        public static RnDataRoad GetRoad([DisallowNull] this RnDataTrafficLight trafficLight, RoadNetworkDataGetter getter)
+        {
+            return getter.GetRoadBases().TryGet(trafficLight.RoadId) as RnDataRoad;
+        }
+
+        #endregion TrafficLight
+
     }
 }

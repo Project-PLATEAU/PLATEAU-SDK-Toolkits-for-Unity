@@ -41,6 +41,11 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 GameObject.DestroyImmediate(stoplines);
             }
+            var intersection = GameObject.Find(RoadNetworkConstants.TRAFFIC_INTERSECTION_ROOT_NAME);
+            if (intersection != null)
+            {
+                GameObject.DestroyImmediate(intersection);
+            }
         }
 
         //AWSIM用

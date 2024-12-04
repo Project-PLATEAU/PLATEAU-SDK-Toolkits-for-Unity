@@ -1,9 +1,10 @@
 using System;
 using System.Linq;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Timers;
+using PLATEAU.RoadNetwork.Data;
+using PLATEAU.RoadNetwork.Structure;
+using PlateauToolkit.Sandbox.RoadNetwork;
 
 namespace AWSIM
 {
@@ -94,12 +95,13 @@ namespace AWSIM
             }
 
             public BulbType BulbType => bulbType;
+
             public BulbStatus BulbStatus => status;
             public BulbColor BulbColor => color;
 
-            [SerializeField] BulbType bulbType;
+            [SerializeField] public BulbType bulbType;
             [SerializeField, Tooltip("Specifies the index of the material to be used for the bulb.")] 
-            int materialIndex;
+            public int materialIndex;
 
             // const parameters.
             const string EmissiveColor = "_EmissiveColor";
@@ -128,12 +130,15 @@ namespace AWSIM
                 // bulb color config.
                 bulbColorConfigPairs = bulbEmissionConfigs.ToDictionary(x => x.BulbColor);
 
-                // set material.
-                material = renderer.materials[materialIndex];
+                if(renderer != null)
+                {
+                    // set material.
+                    material = renderer.materials[materialIndex];
 
-                // cache default material parameters.
-                defaultEmissiveColor = material.GetColor(EmissiveColor);
-                defaultEmissiveExposureWeight = material.GetFloat(EmissiveExposureWeight);
+                    // cache default material parameters.
+                    defaultEmissiveColor = material.GetColor(EmissiveColor);
+                    defaultEmissiveExposureWeight = material.GetFloat(EmissiveExposureWeight);
+                }
 
                 initialized = true;
             }
@@ -196,7 +201,8 @@ namespace AWSIM
             /// </summary>
             public void Destroy()
             {
-                UnityEngine.Object.Destroy(material);
+                if (material != null)
+                    UnityEngine.Object.Destroy(material);
                 initialized = false;
             }
 
@@ -209,26 +215,41 @@ namespace AWSIM
                 if (isLightOn)
                 {
                     var config = bulbColorConfigPairs[color];
-                    material.SetColor(EmissiveColor, config.Color * config.Intensity);
-                    material.SetFloat(EmissiveExposureWeight, config.ExposureWeight);
-                    if(material.HasProperty(LightOnFlag))
+                    if(material != null)
                     {
-                        material.SetInt(LightOnFlag, 1);
+                        material.SetColor(EmissiveColor, config.Color * config.Intensity);
+                        material.SetFloat(EmissiveExposureWeight, config.ExposureWeight);
+                        if (material.HasProperty(LightOnFlag))
+                        {
+                            material.SetInt(LightOnFlag, 1);
+                        }
                     }
                     this.isLightOn = true;
                     timer = 0;
                 }
                 else
                 {
-                    material.SetColor(EmissiveColor, defaultEmissiveColor);
-                    material.SetFloat(EmissiveExposureWeight, defaultEmissiveExposureWeight);
-                    if(material.HasProperty(LightOnFlag))
+                    if (material != null)
                     {
-                        material.SetInt(LightOnFlag, 0);
+                        material.SetColor(EmissiveColor, defaultEmissiveColor);
+                        material.SetFloat(EmissiveExposureWeight, defaultEmissiveExposureWeight);
+                        if (material.HasProperty(LightOnFlag))
+                        {
+                            material.SetInt(LightOnFlag, 0);
+                        }
                     }
                     this.isLightOn = false;
                     timer = 0;
                 }
+            }
+
+            /// <summary>
+            /// ColorŽæ“¾
+            /// </summary>
+            /// <returns></returns>
+            public Color GetColor()
+            {
+                return bulbColorConfigPairs[BulbColor].Color;
             }
         }
 
@@ -263,13 +284,13 @@ namespace AWSIM
                 Intensity = 14,
                 ExposureWeight = 0.8f,
             },
-            new Bulb.EmissionConfig()
-            {
-                BulbColor = BulbColor.WHITE,
-                Color = Color.white,
-                Intensity = 14,
-                ExposureWeight = 0.8f,
-            },
+            //new Bulb.EmissionConfig()
+            //{
+            //    BulbColor = BulbColor.WHITE,
+            //    Color = Color.white,
+            //    Intensity = 14,
+            //    ExposureWeight = 0.8f,
+            //},
         };
 
         [Header("Bulb material config"), Tooltip("Link the material of the bulb to the type.")]
@@ -279,9 +300,13 @@ namespace AWSIM
         int bulbCount;
         BulbData[] bulbDataArray;
 
+        [SerializeField, Tooltip("RoadNetwork")]
+        public RnDataTrafficLight rnTrafficLight;
+
         void Reset()
         {
-            renderer = GetComponent<Renderer>();
+            //renderer = GetComponent<Renderer>();
+            CreateDefaultBulbs();
         }
 
         void Awake()
@@ -308,7 +333,7 @@ namespace AWSIM
 
         public void TurnOffAllBulbs()
         {
-            foreach(var e in bulbs)
+            foreach (var e in bulbs)
             {
                 e.SetBulbLighting(TrafficLight.BulbStatus.SOLID_OFF, BulbColor.WHITE);
             }
@@ -360,6 +385,105 @@ namespace AWSIM
             {
                 e.Destroy();
             }
+        }
+
+        void CreateDefaultBulbs()
+        {
+            bulbs = new Bulb[]
+            {
+                new Bulb()
+                {
+                    bulbType = BulbType.GREEN_BULB,
+                    materialIndex = 1,
+                },
+                new Bulb()
+                {
+                    bulbType = BulbType.YELLOW_BULB,
+                    materialIndex = 2,
+                },
+                new Bulb()
+                {
+                    bulbType = BulbType.RED_BULB,
+                    materialIndex = 3,
+                },
+            };
+        }
+
+        Color GetBulbColor()
+        {
+            Color color = Color.black;
+            foreach (var e in bulbs)
+            {
+                if (e.BulbStatus != BulbStatus.SOLID_OFF)
+                {
+                    color = e.GetColor();
+                }
+            }
+            return color;
+        }
+
+        (bool, Vector3, Vector3) GetFirstLastPoints()
+        {
+            var borders = rnTrafficLight.Neighbor;
+            var firstVectors = RnGetter.GetWays().TryGet(borders.FirstOrDefault())?.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
+            var lastVectors = RnGetter.GetWays().TryGet(borders.LastOrDefault())?.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
+
+            Vector3 firstPoint, lastPoint;
+            if (Mathf.Abs(Vector3.Distance(firstVectors.FirstOrDefault(), lastVectors.LastOrDefault())) > Mathf.Abs(Vector3.Distance(firstVectors.LastOrDefault(), lastVectors.FirstOrDefault())))
+            {
+                firstPoint = firstVectors.FirstOrDefault();
+                lastPoint = lastVectors.LastOrDefault();
+            }
+            else
+            {
+                firstPoint = firstVectors.LastOrDefault();
+                lastPoint = lastVectors.FirstOrDefault();
+            }
+
+            if (firstVectors != null && lastVectors != null)
+                return (true, firstPoint, lastPoint);
+            return (false, Vector3.zero, Vector3.zero);
+        }
+
+        RoadNetworkDataGetter m_RoadNetworkGetter;
+        public RoadNetworkDataGetter RnGetter
+        {
+            get
+            {
+                if (m_RoadNetworkGetter == null)
+                {
+                    PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
+                    m_RoadNetworkGetter = roadNetwork?.GetRoadNetworkDataGetter();
+                    if (m_RoadNetworkGetter == null)
+                    {
+                        Debug.LogError($"RoadNetworkDataGetter is null");
+                    }
+                }
+                return m_RoadNetworkGetter;
+            }
+        }
+
+        void OnDrawGizmos()
+        {
+            if (!Application.isPlaying)
+                return;
+            if (!RoadNetworkConstants.SHOW_DEBUG_INFO)
+                return;
+
+            var (success, firstPoint, lastPoint) = GetFirstLastPoints();
+            Gizmos.color = GetBulbColor();
+            if (success)
+                Gizmos.DrawLine(firstPoint, lastPoint);
+            else
+                Gizmos.DrawSphere(transform.position, 0.5f);
+        }
+
+        void OnDrawGizmosSelected()
+        {
+            var (success, firstPoint, lastPoint) = GetFirstLastPoints();
+            Gizmos.color = Color.white;
+            if (success)
+                Gizmos.DrawLine(firstPoint, lastPoint);
         }
     }
 }

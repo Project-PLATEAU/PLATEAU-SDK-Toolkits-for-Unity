@@ -64,9 +64,13 @@ namespace AWSIM.TrafficSimulation
             get => _SpeedMode;
             set
             {
-                if (_SpeedMode == NPCVehicleSpeedMode.NORMAL && IsStopped(value)) //Slowは無視 (Stop -> Slowを繰り返すため判定できない場合がある）
+                if (!IsStopped(_SpeedMode) && IsStopped(value))　//Slowは無視 (Stop -> Slowを繰り返すため判定できない場合がある）
                 {
                     _SpeedModeStopStartTime = Time.time;
+                }
+                else if (value == NPCVehicleSpeedMode.NORMAL)
+                {
+                    _SpeedModeStopStartTime = 0f;
                 }
                 _SpeedMode = value;
             }
@@ -74,7 +78,7 @@ namespace AWSIM.TrafficSimulation
         public float SpeedModeStopStartTime => _SpeedModeStopStartTime;
 
         private NPCVehicleSpeedMode _SpeedMode;
-        private float _SpeedModeStopStartTime;
+        private float _SpeedModeStopStartTime = 0f;
 
         private bool IsStopped(NPCVehicleSpeedMode mode)
         {
@@ -84,7 +88,10 @@ namespace AWSIM.TrafficSimulation
         public bool CheckMaxIdleTimeExceeded()
         {
             //停車時間が長すぎる場合は消す
-            return SpeedMode != NPCVehicleSpeedMode.NORMAL && SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME;
+            if (SpeedModeStopStartTime == 0f)
+                return false;
+            return SpeedMode != NPCVehicleSpeedMode.NORMAL && SpeedMode != NPCVehicleSpeedMode.SLOW
+                && Time.time - SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME;
         }
 
         // Output from Control

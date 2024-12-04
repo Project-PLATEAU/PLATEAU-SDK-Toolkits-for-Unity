@@ -1,3 +1,5 @@
+using PLATEAU.RoadNetwork.Data;
+using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using UnityEngine;
 
@@ -14,6 +16,11 @@ namespace AWSIM.TrafficSimulation
         private bool hasStopSign = false;
         [SerializeField, Tooltip("Traffic light ")]
         private TrafficLight trafficLight;
+
+        [SerializeField, Tooltip("RoadNetwork")]
+        public RnDataRoad rnRoad;
+        public RnDataIntersection rnIntersection;
+        public RnDataWay rnBorder;
 
         /// <summary>
         /// Get line data consists of 2 points.
@@ -52,6 +59,13 @@ namespace AWSIM.TrafficSimulation
             stopLine.points[0] = p1;
             stopLine.points[1] = p2;
             return stopLine;
+        }
+
+        public void SetRoadNetworkData(RnDataRoad road, RnDataIntersection intersection, RnDataWay border)
+        {
+            rnRoad = road;
+            rnIntersection = intersection;
+            rnBorder = border;
         }
     }
 }

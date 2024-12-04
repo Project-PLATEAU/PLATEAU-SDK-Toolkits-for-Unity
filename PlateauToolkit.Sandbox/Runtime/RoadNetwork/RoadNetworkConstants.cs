@@ -11,9 +11,11 @@
         /// 各レーンの最大速度
         /// </summary>
         public static readonly float SPEED_LIMIT = 15f;
+        public static readonly float SPEED_LIMIT_INTERSECTION = 12f;
 
         /// <summary>
         /// 停止してから消すまでの時間(秒）
+        /// 赤信号の設定秒数以上に設定
         /// </summary>
         public static readonly float MAX_IDLE_TIME = 20f;
 
@@ -35,6 +37,7 @@
         public static readonly string TRAFFIC_MANAGER_NAME = "TrafficManager";
         public static readonly string VEHICLE_ROOT_NAME = "Vehicles";
         public static readonly string TRAFFIC_LANE_ROOT_NAME = "TrafficLanes";
+        public static readonly string TRAFFIC_INTERSECTION_ROOT_NAME = "TrafficIntersections";
         public static readonly string STOPLINE_ROOT_NAME = "StopLines";
 
         /// <summary>
@@ -76,10 +79,13 @@
         public static readonly bool USE_SIMPLE_LINESTRINGS = false;
 
         /// <summary>
-        /// StopLine を生成
-        /// 信号がない場合は無意味
+        /// TrafficIntersection, TrafficLight, StopLine を生成
         /// </summary>
-        public static readonly bool ADD_STOPLINES = false;
+        public static readonly bool ADD_TRAFFIC_LIGHTS = true;
 
+        /// <summary>
+        /// DefaultでGizomoを表示
+        /// </summary>
+        public static readonly bool SHOW_DEBUG_INFO = true;
     }
 }
