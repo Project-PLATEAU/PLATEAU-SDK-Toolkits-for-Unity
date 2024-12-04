@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 1844534760795088708}
   - component: {fileID: 4844416099675251133}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_01_c_LOD001
+  m_Name: Back_Prop_Wire_01_c_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -328,7 +328,7 @@ GameObject:
   - component: {fileID: 9217147591612484005}
   - component: {fileID: 5348915715534564418}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_01_a_LOD002
+  m_Name: Front_Prop_Wire_01_a_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -411,7 +411,7 @@ GameObject:
   - component: {fileID: 7506835993704240357}
   - component: {fileID: 3157991745540866843}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_01_b_LOD001
+  m_Name: Front_Prop_Wire_01_b_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -525,7 +525,7 @@ GameObject:
   - component: {fileID: 5660942391679753423}
   - component: {fileID: 7574345675180894797}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_01_a_LOD001
+  m_Name: Front_Prop_Wire_01_a_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -793,7 +793,7 @@ GameObject:
   - component: {fileID: 3259998791098454386}
   - component: {fileID: 2453094941164862425}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_02_b_LOD002
+  m_Name: Back_Prop_Wire_02_b_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -955,10 +955,6 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 8014002465957136847}
-  - screenRelativeHeight: 0.125
-    fadeTransitionWidth: 0
-    renderers:
-    - renderer: {fileID: 6947013533983780536}
     - renderer: {fileID: 7574345675180894797}
     - renderer: {fileID: 3157991745540866843}
     - renderer: {fileID: 2673714898497406050}
@@ -969,10 +965,10 @@ LODGroup:
     - renderer: {fileID: 4844416099675251133}
     - renderer: {fileID: 7420693538544815919}
     - renderer: {fileID: 2325909085554271538}
-  - screenRelativeHeight: 0.01
+  - screenRelativeHeight: 0.125
     fadeTransitionWidth: 0
     renderers:
-    - renderer: {fileID: 2153326931074789247}
+    - renderer: {fileID: 6947013533983780536}
     - renderer: {fileID: 5348915715534564418}
     - renderer: {fileID: 165047347331216571}
     - renderer: {fileID: 4845371389562171942}
@@ -983,6 +979,10 @@ LODGroup:
     - renderer: {fileID: 4635430949412636593}
     - renderer: {fileID: 2371596815864423917}
     - renderer: {fileID: 2453094941164862425}
+  - screenRelativeHeight: 0.01
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 2153326931074789247}
   m_Enabled: 1
 --- !u!114 &6488790534169226200
 MonoBehaviour:
@@ -1051,7 +1051,7 @@ GameObject:
   - component: {fileID: 5688962209039968642}
   - component: {fileID: 2325909085554271538}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_02_b_LOD001
+  m_Name: Back_Prop_Wire_02_b_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1134,7 +1134,7 @@ GameObject:
   - component: {fileID: 7383407573801688950}
   - component: {fileID: 5044664525025628980}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_01_a_LOD001
+  m_Name: Back_Prop_Wire_01_a_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1315,7 +1315,7 @@ GameObject:
   - component: {fileID: 2773448391345598650}
   - component: {fileID: 4326376407059948928}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_02_b_LOD002
+  m_Name: Front_Prop_Wire_02_b_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1398,7 +1398,7 @@ GameObject:
   - component: {fileID: 5352690384897655035}
   - component: {fileID: 2371596815864423917}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_02_a_LOD002
+  m_Name: Back_Prop_Wire_02_a_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1481,7 +1481,7 @@ GameObject:
   - component: {fileID: 3661142204873523889}
   - component: {fileID: 2382356567397856275}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_01_a_LOD002
+  m_Name: Back_Prop_Wire_01_a_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1626,7 +1626,7 @@ GameObject:
   - component: {fileID: 2783460168166852677}
   - component: {fileID: 5849209710781505055}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_01_b_LOD001
+  m_Name: Back_Prop_Wire_01_b_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1709,7 +1709,7 @@ GameObject:
   - component: {fileID: 2305633884574833006}
   - component: {fileID: 4635430949412636593}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_01_c_LOD002
+  m_Name: Back_Prop_Wire_01_c_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1792,7 +1792,7 @@ GameObject:
   - component: {fileID: 2470639669168357801}
   - component: {fileID: 4845371389562171942}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_01_c_LOD002
+  m_Name: Front_Prop_Wire_01_c_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1875,7 +1875,7 @@ GameObject:
   - component: {fileID: 7881387464514091542}
   - component: {fileID: 1338172147799068532}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_02_a_LOD001
+  m_Name: Front_Prop_Wire_02_a_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1989,7 +1989,7 @@ GameObject:
   - component: {fileID: 1881809655588526676}
   - component: {fileID: 2673714898497406050}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_01_c_LOD001
+  m_Name: Front_Prop_Wire_01_c_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2072,7 +2072,7 @@ GameObject:
   - component: {fileID: 5457934914716993959}
   - component: {fileID: 3255311619274623713}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_02_b_LOD001
+  m_Name: Front_Prop_Wire_02_b_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2155,7 +2155,7 @@ GameObject:
   - component: {fileID: 4445697822694709267}
   - component: {fileID: 1030262874169481615}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_01_b_LOD002
+  m_Name: Back_Prop_Wire_01_b_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2238,7 +2238,7 @@ GameObject:
   - component: {fileID: 5372926176215660687}
   - component: {fileID: 7420693538544815919}
   m_Layer: 0
-  m_Name: Back_Prop_Wire_02_a_LOD001
+  m_Name: Back_Prop_Wire_02_a_LOD000
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2321,7 +2321,7 @@ GameObject:
   - component: {fileID: 8837817463473621201}
   - component: {fileID: 165047347331216571}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_01_b_LOD002
+  m_Name: Front_Prop_Wire_01_b_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2518,7 +2518,7 @@ GameObject:
   - component: {fileID: 4000211046258798149}
   - component: {fileID: 2594294109833236875}
   m_Layer: 0
-  m_Name: Front_Prop_Wire_02_a_LOD002
+  m_Name: Front_Prop_Wire_02_a_LOD001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
