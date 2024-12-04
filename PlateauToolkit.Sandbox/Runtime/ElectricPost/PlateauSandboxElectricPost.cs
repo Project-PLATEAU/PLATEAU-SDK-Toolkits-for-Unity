@@ -70,14 +70,16 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 
                 // 接続できる方を取得
                 bool isOtherFront = nearestPost.CanConnect(true);
+                Debug.Log($"SearchPost isOwnFront: {isOwnFront}, isOtherFront: {isOtherFront}");
+
                 if (isOwnFront)
                 {
-                    RemoveConnectedPost(false);
+                    RemoveConnectedPost(true);
                     SetFrontConnectPoint(nearestPost, isOtherFront);
                 }
                 else
                 {
-                    RemoveConnectedPost(true);
+                    RemoveConnectedPost(false);
                     SetBackConnectPoint(nearestPost, isOtherFront);
                 }
             }
@@ -195,20 +197,29 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         private bool TryIsObstacleBetween(PlateauSandboxElectricPost target)
         {
             var startPoint = GetTopCenterPoint();
-            Vector3 direction = startPoint - target.GetTopCenterPoint();
+            Vector3 direction = target.GetTopCenterPoint() - startPoint;
             float distance = direction.magnitude;
             direction.Normalize();
 
-            // レイキャストを行い、障害物があるかどうかを確認
-            if (Physics.Raycast(startPoint, direction, out RaycastHit hit, distance))
+            var ray = new Ray(startPoint, direction);
+            var results = Physics.RaycastAll(new Ray(startPoint, direction), distance);
+            foreach (RaycastHit rayCastHit in results)
             {
-                // 障害物がターゲットではない場合、障害物があると判断
-                if (hit.collider.gameObject != target.gameObject)
-                {
-                    return true;
-                }
-            }
+                bool isOwn = rayCastHit.collider.gameObject == gameObject ||
+                             rayCastHit.collider.transform.parent?.gameObject == gameObject;
+                bool isTarget = rayCastHit.collider.gameObject == target.gameObject ||
+                                rayCastHit.collider.transform.parent?.gameObject == target.gameObject;
 
+                if (isOwn || isTarget)
+                {
+                    // ヒットが自分か、相手の電柱の場合判定しない
+                    continue;
+                }
+
+                // 障害物と判定
+                Debug.Log("障害物あり！ : " + rayCastHit.collider.gameObject.name);
+                return true;
+            }
             return false;
         }
 
