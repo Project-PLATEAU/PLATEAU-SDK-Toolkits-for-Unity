@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.ElectricPost;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -8,8 +9,7 @@ namespace PlateauToolkit.Sandbox.Editor
     public class PlateauSandboxElectricPostSelectTool : EditorTool
     {
         private PlateauSandboxElectricPostContext m_Context;
-
-        private IPlateauSandboxPlaceableObject m_SelectedObject;
+        private PlateauSandboxElectricPostConnectCollider m_SelectedObject;
 
         public override void OnActivated()
         {
@@ -29,29 +29,18 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 switch (Event.current.GetTypeForControl(controlId))
                 {
-                    case EventType.MouseLeaveWindow:
-                        break;
                     case EventType.MouseMove:
                         MouseMove(window);
-                        break;
-                    case EventType.Repaint:
                         break;
                     case EventType.MouseDown:
                         MouseDown(window);
                         break;
+                    case EventType.MouseLeaveWindow:
+                    case EventType.Repaint:
                     case EventType.MouseDrag:
-                        break;
                     case EventType.MouseUp:
                         break;
                 }
-            }
-
-            if (Event.current.keyCode == KeyCode.Escape)
-            {
-                GUIUtility.hotControl = 0;
-                Event.current.Use();
-
-                ToolManager.RestorePreviousPersistentTool();
             }
         }
 
@@ -61,13 +50,18 @@ namespace PlateauToolkit.Sandbox.Editor
             var ray = HandleUtility.GUIPointToWorldRay(Event.current.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycastHit))
             {
-                if (m_Context.Target != null)
+                if (raycastHit.collider.gameObject.TryGetComponent<PlateauSandboxElectricPostConnectCollider>(out var connectCollider))
                 {
-                    m_Context.Target.SetElectricNodePosition(raycastHit.point);
+                    connectCollider.OnMouseHover(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
+                    m_SelectedObject = connectCollider;
+                    return;
                 }
+            }
 
-                PlateauSandboxObjectFinder
-                    .TryGetSandboxObject(raycastHit.collider, out m_SelectedObject);
+            if (m_SelectedObject)
+            {
+                m_SelectedObject.OnMoveLeave(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
+                m_SelectedObject = null;
             }
         }
 
@@ -75,15 +69,9 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             if (m_SelectedObject != null)
             {
-                m_SelectedObject.gameObject.TryGetComponent(out PlateauSandboxElectricPost electricPost);
-                if (electricPost != null)
-                {
-                    if (m_Context.Target != electricPost)
-                    {
-                        m_Context.Target.SetElectricNode(electricPost.gameObject);
-                        m_Context.OnSelected.Invoke();
-                    }
-                }
+                m_SelectedObject.OnSelect(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
+                m_Context.OnSelected.Invoke();
+                m_SelectedObject = null;
             }
         }
     }

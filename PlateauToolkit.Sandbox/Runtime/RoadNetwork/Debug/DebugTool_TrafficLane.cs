@@ -9,7 +9,7 @@ using UnityEngine;
 
 
 /// <summary>
-/// TrafficLaneのルート接続確認用
+/// TrafficLane縺ｮ繝ｫ繝ｼ繝域磁邯夂｢ｺ隱咲畑
 /// </summary>
 [ExecuteAlways]
 public class DebugTool_TrafficLane : MonoBehaviour
