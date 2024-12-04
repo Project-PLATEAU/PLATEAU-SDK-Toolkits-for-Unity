@@ -1428,6 +1428,7 @@ GameObject:
   - component: {fileID: 7762812679200588337}
   - component: {fileID: 4941441382702236655}
   - component: {fileID: 396610534896395877}
+  - component: {fileID: 2679768360606010738}
   m_Layer: 0
   m_Name: StreetFurniture_ElectricPost_03
   m_TagString: Untagged
@@ -1567,6 +1568,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.48802662, y: 0.35902214, z: 0.21082997}
   m_Center: {x: -0.4008401, y: 5.461134, z: -0.0056202114}
+--- !u!114 &2679768360606010738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5912084027611310933}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10a7e7ca8d7d4daf919c350ad9d06b3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundPlacementDirection: 0
 --- !u!1 &6034038923797346150
 GameObject:
   m_ObjectHideFlags: 0
