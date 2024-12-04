@@ -1,6 +1,7 @@
 using PlateauToolkit.Editor;
 using PlateauToolkit.Sandbox.Runtime;
 using PlateauToolkit.Sandbox.Runtime.ElectricPost;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEngine;
@@ -44,101 +45,50 @@ namespace PlateauToolkit.Sandbox.Editor
             GUILayout.Space(5);
 
             var frontTarget = EditorGUILayout.ObjectField(
-                 k_FrontTargetNodeName,
-                 m_Target.FrontConnectedPost.target,
-                 typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
+                                  k_FrontTargetNodeName,
+                                  m_Target.FrontConnectedPost.target,
+                                  typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
 
-            if (frontTarget != null && m_Target.FrontConnectedPost.target == null)
+            if (frontTarget != null && frontTarget != m_Target)
             {
                 m_Target.SetFrontConnectPointToFacing(frontTarget);
             }
 
-            GUI.enabled = false;
-            EditorGUILayout.Toggle(k_IsDestinationFrontName, m_Target.FrontConnectedPost.isFront);
-            GUI.enabled = true;
-
+            CreateDestinationCheckbox(true);
             GUILayout.Space(5);
 
+            // ボタン作成
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.FlexibleSpace();
-                if (new PlateauToolkitImageButtonGUI(
-                        100,
-                        20,
-                        m_IsFrontNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
-                        false)
-                    .Button("選択する"))
-                {
-                    if (!m_IsFrontNodeSelecting)
-                    {
-                        if (m_Target.FrontConnectedPost.target != null)
-                        {
-                            // 選択中を外す
-                            m_Target.FrontConnectedPost.target.RemoveConnectedPost(m_Target);
-                            m_Target.RemoveConnectedPost(m_Target.FrontConnectedPost.target);
-                        }
-
-                        m_Context.SetSelectingPost(m_Target, true);
-                        SetActiveTool();
-                        m_IsFrontNodeSelecting = !m_IsFrontNodeSelecting;
-                    }
-                    else
-                    {
-                        ResetSelect();
-                    }
-
-                }
+                CreateSelectButton(true);
+                GUILayout.Space(5);
+                CreateReleaseButton(true);
             }
-
             GUILayout.Space(10);
 
+            // 後ろの電線の設定
             var backTarget = EditorGUILayout.ObjectField(
-                k_BackTargetNodeName,
-                m_Target.BackConnectedPost.target,
-                  typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
+                                 k_BackTargetNodeName,
+                                 m_Target.BackConnectedPost.target,
+                                 typeof(PlateauSandboxElectricPost), true) as PlateauSandboxElectricPost;
 
-            if (backTarget != null && m_Target.BackConnectedPost.target == null)
+            if (backTarget != null && backTarget != m_Target)
             {
                 m_Target.SetBackConnectPointToFacing(backTarget);
             }
 
-            GUI.enabled = false;
-            EditorGUILayout.Toggle(k_IsDestinationFrontName, m_Target.BackConnectedPost.isFront);
-            GUI.enabled = true;
-
-
+            CreateDestinationCheckbox(false);
             GUILayout.Space(5);
 
+            // ボタン作成
             using (new EditorGUILayout.HorizontalScope())
             {
                 GUILayout.FlexibleSpace();
-                if (new PlateauToolkitImageButtonGUI(
-                        100,
-                        20,
-                        m_IsBackNodeSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
-                        false)
-                    .Button("選択する"))
-                {
-                    if (!m_IsBackNodeSelecting)
-                    {
-                        if (m_Target.BackConnectedPost.target != null)
-                        {
-                            // 選択中を外す
-                            m_Target.BackConnectedPost.target.RemoveConnectedPost(m_Target);
-                            m_Target.RemoveConnectedPost(m_Target.BackConnectedPost.target);
-                        }
-
-                        SetActiveTool();
-                        m_Context.SetSelectingPost(m_Target, false);
-                        m_IsBackNodeSelecting = !m_IsBackNodeSelecting;
-                    }
-                    else
-                    {
-                        ResetSelect();
-                    }
-                }
+                CreateSelectButton(false);
+                GUILayout.Space(5);
+                CreateReleaseButton(false);
             }
-
             GUILayout.Space(10);
 
             if (Event.current.keyCode == KeyCode.Escape)
@@ -176,6 +126,108 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 ToolManager.RestorePreviousPersistentTool();
             }
+        }
+
+        private void CreateSelectButton(bool isFront)
+        {
+            bool isSelecting = isFront ? m_IsFrontNodeSelecting : m_IsBackNodeSelecting;
+
+            if (new PlateauToolkitImageButtonGUI(
+                    100,
+                    20,
+                    isSelecting ? PlateauToolkitGUIStyles.k_ButtonCancelColor : PlateauToolkitGUIStyles.k_ButtonNormalColor,
+                    false)
+                .Button("選択する"))
+            {
+                // 選択時
+                if (!isSelecting)
+                {
+                    // ワイヤーを外す
+                    TryReleaseWire(isFront);
+                    SetActiveTool();
+
+                    // 選択中の状態にする
+                    m_Context.SetSelectingPost(m_Target, isFront);
+
+                    if (isFront)
+                    {
+                        m_IsFrontNodeSelecting = true;
+                    }
+                    else
+                    {
+                        m_IsBackNodeSelecting = true;
+                    }
+                }
+                else
+                {
+                    ResetSelect();
+                }
+            }
+        }
+
+        private void CreateReleaseButton(bool isFront)
+        {
+            bool isConnected = isFront ? m_Target.FrontConnectedPost.target != null : m_Target.BackConnectedPost.target != null;
+
+            if (new PlateauToolkitImageButtonGUI(
+                    100,
+                    20,
+                    isConnected ? PlateauToolkitGUIStyles.k_ButtonPrimaryColor : PlateauToolkitGUIStyles.k_ButtonDisableColor,
+                    false)
+                .Button("解除する"))
+            {
+                if (!isConnected)
+                {
+                    return;
+                }
+                TryReleaseWire(isFront);
+                ResetSelect();
+            }
+        }
+
+        private void TryReleaseWire(bool isFront)
+        {
+            if (isFront)
+            {
+                if (m_Target.FrontConnectedPost.target != null)
+                {
+                    m_Target.FrontConnectedPost.target.RemoveConnectedPost(m_Target);
+                    m_Target.RemoveConnectedPost(m_Target.FrontConnectedPost.target);
+                }
+            }
+            else
+            {
+                if (m_Target.BackConnectedPost.target != null)
+                {
+                    m_Target.BackConnectedPost.target.RemoveConnectedPost(m_Target);
+                    m_Target.RemoveConnectedPost(m_Target.BackConnectedPost.target);
+                }
+            }
+        }
+
+        private void CreateDestinationCheckbox(bool isFront)
+        {
+            bool isFrontActive = false;
+            if (isFront)
+            {
+                if (m_Target.FrontConnectedPost.target == null)
+                {
+                    return;
+                }
+                isFrontActive = m_Target.FrontConnectedPost.isFront;
+            }
+            else
+            {
+                if (m_Target.BackConnectedPost.target == null)
+                {
+                    return;
+                }
+                isFrontActive = m_Target.BackConnectedPost.isFront;
+            }
+
+            GUI.enabled = false;
+            EditorGUILayout.Toggle(k_IsDestinationFrontName, isFrontActive);
+            GUI.enabled = true;
         }
     }
 }
