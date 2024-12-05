@@ -284,13 +284,6 @@ namespace AWSIM
                 Intensity = 14,
                 ExposureWeight = 0.8f,
             },
-            //new Bulb.EmissionConfig()
-            //{
-            //    BulbColor = BulbColor.WHITE,
-            //    Color = Color.white,
-            //    Intensity = 14,
-            //    ExposureWeight = 0.8f,
-            //},
         };
 
         [Header("Bulb material config"), Tooltip("Link the material of the bulb to the type.")]

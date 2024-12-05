@@ -87,6 +87,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         void CreateTrafficIntersection(RnDataIntersection intersection, RoadNetworkDataGetter getter, Transform parent)
         {
             RnDataTrafficLightController trafficLightController = intersection.GetTrafficLightController(getter);
+            if (trafficLightController == null)
+                return;
+
             List<RnDataTrafficLight> trafficLights = trafficLightController.GetTrafficLights(getter);
 
             var intersectionName = $"TrafficIntersection_{intersection.GetId(getter)}";
@@ -97,16 +100,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 intersectionGameObject.transform.position = renderer.bounds.center;
                 var collider = intersectionGameObject.GetComponent<BoxCollider>();
                 collider.center = Vector3.zero;
-                //collider.size = renderer.gameObject.GetComponent<MeshCollider>().bounds.size;
                 collider.size = renderer.bounds.size;
             }
             intersectionGameObject.transform.SetParent(parent, true);
             TrafficIntersection trafficIntersection = intersectionGameObject.GetComponent<TrafficIntersection>();
+            trafficIntersection.rnTrafficLightController = trafficLightController;
 
             Dictionary<int, List<TrafficLight>> lightGroups = new();
-            //TrafficLight Groupを対向車線ごとにグループ化
-            List<List<RnDataRoadBase>> groups = intersection.GetRoadGroupsByOncomingRoad(getter);
 
+            //TrafficLightを対向車線含む道路ごとにグループ化
+            List<List<RnDataRoadBase>> groups = intersection.GetRoadGroupsByOncomingRoad(getter);
             foreach (RnDataTrafficLight trafficLight in trafficLights)
             {
                 var trafficLightName = $"TrafficLight_{intersection.GetId(getter)}";

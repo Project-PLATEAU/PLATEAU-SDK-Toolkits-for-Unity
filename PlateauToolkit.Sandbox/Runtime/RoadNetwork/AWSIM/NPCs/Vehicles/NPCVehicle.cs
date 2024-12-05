@@ -29,7 +29,7 @@ namespace AWSIM
             {
                 speedMode = state.SpeedMode;
                 if (speedMode != NPCVehicleSpeedMode.NORMAL && speedMode != NPCVehicleSpeedMode.SLOW && state.SpeedModeStopStartTime != 0f)
-                    timeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{RoadNetworkConstants.MAX_IDLE_TIME}";
+                    timeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{state.GetMaxIdleTime()}";
                 else
                     timeRemains = "-";
 

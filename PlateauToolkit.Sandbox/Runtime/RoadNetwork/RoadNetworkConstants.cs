@@ -15,9 +15,13 @@
 
         /// <summary>
         /// 停止してから消すまでの時間(秒）
-        /// 赤信号の設定秒数以上に設定
         /// </summary>
         public static readonly float MAX_IDLE_TIME = 20f;
+
+        //信号の切替秒数
+        public static readonly float TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS = 10f;
+        public static readonly float TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS = 3f;
+        public static readonly float TRAFFIC_LIGHT_RED_INTERVAL_SECONDS = 1f;
 
         /// <summary>
         /// Goundからの距離判定を行うか (Groundから一定距離離れた車輛は削除)

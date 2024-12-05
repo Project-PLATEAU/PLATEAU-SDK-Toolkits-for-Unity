@@ -6,6 +6,7 @@ using UnityEngine;
 using AWSIM;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using static AWSIM.TrafficSimulation.TrafficIntersection;
+using PLATEAU.RoadNetwork.Data;
 
 namespace AWSIM.TrafficSimulation
 {
@@ -107,6 +108,9 @@ namespace AWSIM.TrafficSimulation
         [SerializeField] List<TrafficLightGroup> trafficLightGroups;
         [SerializeField] LightingSequence[] lightingSequences;
 
+        [SerializeField, Tooltip("RoadNetwork")]
+        public RnDataTrafficLightController rnTrafficLightController;
+
         public void AddTrafficLightGroup(int group, List<TrafficLight> trafficLights)
         {
             if(trafficLightGroups == null)
@@ -143,7 +147,7 @@ namespace AWSIM.TrafficSimulation
             boxCollider.center = new Vector3(0, 1.1f, 0);
 
             // default sequence
-            var defaultSequences = TrafficLightingSequences.LightingSequences1Group();
+            var defaultSequences = TrafficLightingSequences.LightingSequencesSingleGroup();
             lightingSequences = defaultSequences;
 
             // layer and collider mask
@@ -180,7 +184,7 @@ namespace AWSIM.TrafficSimulation
                 {
                     if (!trafficLightGroupPairs.ContainsKey(groupCommand.Group))
                     {
-                        Debug.LogError($"trafficLightGroupPairs key not found {gameObject.name} {lightingSequences.Length} {groupCommand.Group}");
+                        Debug.LogError($"trafficLightGroupPairs key not found {gameObject.name} Keys:{string.Join(",", trafficLightGroupPairs.Keys)} Grp:{groupCommand.Group}");
                     }
 
                     var trafficLightGroup = trafficLightGroupPairs[groupCommand.Group];
