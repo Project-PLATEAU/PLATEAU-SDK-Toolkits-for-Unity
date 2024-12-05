@@ -104,15 +104,21 @@ namespace AWSIM
             public int materialIndex;
 
             // const parameters.
-            const string EmissiveColor = "_EmissiveColor";
+
+            // HDRP
+            //const string EmissiveColor = "_EmissiveColor";
+            //const string EmissiveExposureWeight = "_EmissiveExposureWeight";
+
+            // URP
+            const string EmissiveColor = "_EmissionColor";
             const string EmissiveIntensity = "_EmissiveIntensity";
-            const string EmissiveExposureWeight = "_EmissiveExposureWeight";
+            
             const string LightOnFlag = "_LightOn";
             const float flashIntervalSec = 0.5f;                // flash bulb lighting interval(sec).
 
             float timer = 0;                            // used for flashing status.     NOTE: Might as well make it static and refer to the same time. 
             Color defaultEmissiveColor;                 // default bulb material emissive color.
-            float defaultEmissiveExposureWeight;        // default bulb mateiral emissive exposure weight
+            //float defaultEmissiveExposureWeight;        // default bulb mateiral emissive exposure weight
             Dictionary<BulbColor, EmissionConfig> bulbColorConfigPairs;
             Material material = null;                   // bulb mateiral(instance).
             bool initialized = false;
@@ -136,8 +142,10 @@ namespace AWSIM
                     material = renderer.materials[materialIndex];
 
                     // cache default material parameters.
-                    defaultEmissiveColor = material.GetColor(EmissiveColor);
-                    defaultEmissiveExposureWeight = material.GetFloat(EmissiveExposureWeight);
+                    //defaultEmissiveColor = material.GetColor(EmissiveColor);
+                    //defaultEmissiveExposureWeight = material.GetFloat(EmissiveExposureWeight);
+
+                    defaultEmissiveColor = Color.black;
                 }
 
                 initialized = true;
@@ -218,7 +226,7 @@ namespace AWSIM
                     if(material != null)
                     {
                         material.SetColor(EmissiveColor, config.Color * config.Intensity);
-                        material.SetFloat(EmissiveExposureWeight, config.ExposureWeight);
+                        //material.SetFloat(EmissiveExposureWeight, config.ExposureWeight);
                         if (material.HasProperty(LightOnFlag))
                         {
                             material.SetInt(LightOnFlag, 1);
@@ -232,7 +240,7 @@ namespace AWSIM
                     if (material != null)
                     {
                         material.SetColor(EmissiveColor, defaultEmissiveColor);
-                        material.SetFloat(EmissiveExposureWeight, defaultEmissiveExposureWeight);
+                        //material.SetFloat(EmissiveExposureWeight, defaultEmissiveExposureWeight);
                         if (material.HasProperty(LightOnFlag))
                         {
                             material.SetInt(LightOnFlag, 0);

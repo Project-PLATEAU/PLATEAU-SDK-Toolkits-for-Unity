@@ -110,6 +110,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             //TrafficLightを対向車線含む道路ごとにグループ化
             List<List<RnDataRoadBase>> groups = intersection.GetRoadGroupsByOncomingRoad(getter);
+
             foreach (RnDataTrafficLight trafficLight in trafficLights)
             {
                 var trafficLightName = $"TrafficLight_{intersection.GetId(getter)}";
@@ -123,12 +124,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 //接する道路のグループごとにDictionary lightGroupsに格納
                 var road = trafficLight.GetRoad(getter);
-                int groupIndex = 0;
+                int groupIndex = -1;
                 foreach (List<RnDataRoadBase> list in groups)
                 {
                     if (list.Contains(road))
                     {
                         groupIndex = groups.IndexOf(list);
+                        break;
                     }
                 }
 

@@ -498,7 +498,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         /// </summary>
         public static List<RnDataLane> GetLanesFromPrevBorder([DisallowNull] this RnDataRoad road, RoadNetworkDataGetter getter, RnDataWay border, bool ignoreReversedLane)
         {
-            if(!ignoreReversedLane)
+            if (!ignoreReversedLane)
                 return GetLanesFromAllBorders(road, getter, border);
 
             List<RnDataLane> mainLanes = road.GetMainLanes(getter);
@@ -833,14 +833,18 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             List<List<RnDataRoadBase>> outRoadGroups = new();
             List<RnDataRoadBase> roads = intersection.GetAllConnectedRoads(getter);
-            foreach(RnDataRoad road in roads)
+            foreach (RnDataRoad road in roads)
             {
                 var straightFromTrack = intersection.GetAllFromTracksFromRoad(getter, road).Find(x => x.TurnType == RnTurnType.Straight);
                 var toBorder = straightFromTrack?.GetToBorder(getter);
-                if(toBorder != null)
+                if (toBorder != null)
                 {
                     var oncomingRoad = intersection.GetEdgeByBorder(getter, toBorder).GetRoad(getter);
                     outRoadGroups.Add(new List<RnDataRoadBase>() { road, oncomingRoad });
+                }
+                else
+                {
+                    outRoadGroups.Add(new List<RnDataRoadBase>() { road });
                 }
             }
             return outRoadGroups;
