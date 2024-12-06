@@ -118,18 +118,17 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             {
                 var trafficLightName = GameObjectUtility.GetUniqueNameForSibling(intersectionGameObject.transform, $"TrafficLight_{intersection.GetId(getter)}");
                 var trafficLightGameObject = new GameObject(trafficLightName, typeof(TrafficLight));
-
-                var edges = trafficLight.GetEdges(getter);
+                //var edges = trafficLight.GetEdges(getter);
                 trafficLightGameObject.transform.SetParent(intersectionGameObject.transform, true);
-
                 var trafficLightComp = trafficLightGameObject.GetComponent<TrafficLight>();
                 trafficLightComp.rnTrafficLight = trafficLight;
+                trafficLightGameObject.transform.position = trafficLightComp.GetAssetPosition();
 
-                var (firstPoint, lastPoint) = trafficLightComp.GetFirstLastBorderPoints();
-                if (lastPoint != Vector3.zero)
-                    trafficLightGameObject.transform.position = lastPoint;
-                else
-                    trafficLightGameObject.transform.position = edges.FirstOrDefault().GetChildLineString(getter).GetChildPointsVector(getter).FirstOrDefault();
+                //var (firstPoint, lastPoint) = trafficLightComp.GetFirstLastBorderPoints();
+                //if (lastPoint != Vector3.zero)
+                //    trafficLightGameObject.transform.position = lastPoint;
+                //else
+                //    trafficLightGameObject.transform.position = edges.FirstOrDefault().GetChildLineString(getter).GetChildPointsVector(getter).FirstOrDefault();
 
                 //接する道路のグループごとにDictionary lightGroupsに格納
                 var road = trafficLight.GetRoad(getter);

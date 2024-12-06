@@ -434,6 +434,16 @@ namespace AWSIM
             return SplineTool.GetLongestLine(points);
         }
 
+        public Vector3 GetAssetPosition()
+        {
+            var (firstPoint, lastPoint) = GetFirstLastBorderPoints();
+            if (lastPoint != Vector3.zero)
+                return lastPoint;
+
+            var edges = rnTrafficLight.GetEdges(RnGetter);
+            return edges.FirstOrDefault().GetChildLineString(RnGetter).GetChildPointsVector(RnGetter).FirstOrDefault();
+        }
+
         public List<Vector3> GetAllBorderPoints()
         {
             var points = new List<Vector3>();
