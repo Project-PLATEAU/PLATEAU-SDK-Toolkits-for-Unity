@@ -1,6 +1,7 @@
 using AWSIM.TrafficSimulation;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
+using PLATEAU.Util;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -63,11 +64,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             GameObject vehicles = GameObject.Find(RoadNetworkConstants.VEHICLE_ROOT_NAME);
             if (vehicles == null)
+            {
                 vehicles = new GameObject(RoadNetworkConstants.VEHICLE_ROOT_NAME);
+                vehicles.transform.SetParent(SimTrafficManager.transform, false);
+            }
 
             SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), GetNumMaxVehicles(), vehicles, RoadNetworkConstants.SHOW_DEBUG_INFO);
 
-            List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter); //全て変換 (TrafficLane)
+            List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter, SimTrafficManager.transform); //全て変換 (TrafficLane)
 
             //初期Spawn可能なTrafficLanes
             List<TrafficLane> spawnableLanes = allLanes.FindAll(x => !x.intersectionLane); //交差点以外

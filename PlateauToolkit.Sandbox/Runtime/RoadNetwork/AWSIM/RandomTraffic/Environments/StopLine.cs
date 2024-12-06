@@ -44,14 +44,8 @@ namespace AWSIM.TrafficSimulation
             set => hasStopSign = value;
         }
 
-        public static StopLine Create(Vector3 p1, Vector3 p2)
+        public static StopLine Create(Vector3 p1, Vector3 p2, Transform parent)
         {
-            var parent = GameObject.Find(RoadNetworkConstants.STOPLINE_ROOT_NAME);
-            if (parent == null)
-            {
-                parent = new GameObject(RoadNetworkConstants.STOPLINE_ROOT_NAME);
-            }
-
             var gameObject = new GameObject("StopLine", typeof(StopLine));
             gameObject.transform.SetParent(parent.transform, false);
             gameObject.transform.position = p1;

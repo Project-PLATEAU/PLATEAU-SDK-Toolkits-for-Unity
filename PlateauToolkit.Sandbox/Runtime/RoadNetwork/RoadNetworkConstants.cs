@@ -43,6 +43,7 @@
         public static readonly string TRAFFIC_LANE_ROOT_NAME = "TrafficLanes";
         public static readonly string TRAFFIC_INTERSECTION_ROOT_NAME = "TrafficIntersections";
         public static readonly string STOPLINE_ROOT_NAME = "StopLines";
+        public static readonly string TRAFFIC_LIGHT_ASSETS_ROOT_NAME = "TrafficLights";
 
         /// <summary>
         /// 実行後にRightOfWaysを自動生成

@@ -136,7 +136,7 @@ namespace AWSIM
                 // bulb color config.
                 bulbColorConfigPairs = bulbEmissionConfigs.ToDictionary(x => x.BulbColor);
 
-                if(renderer != null)
+                if (renderer != null && renderer.materials.Length > materialIndex)
                 {
                     // set material.
                     material = renderer.materials[materialIndex];
@@ -259,6 +259,11 @@ namespace AWSIM
             {
                 return bulbColorConfigPairs[BulbColor].Color;
             }
+        }
+
+        public void SetRenderer(Renderer _renderer_)
+        {
+            renderer = _renderer_;
         }
 
         [SerializeField, Tooltip("Set the Renderer containing the bulb material.")] 
@@ -423,27 +428,22 @@ namespace AWSIM
             return color;
         }
 
-        (bool, Vector3, Vector3) GetFirstLastPoints()
+        public (Vector3, Vector3) GetFirstLastBorderPoints()
         {
+            var points = GetAllBorderPoints();
+            return SplineTool.GetLongestLine(points);
+        }
+
+        public List<Vector3> GetAllBorderPoints()
+        {
+            var points = new List<Vector3>();
             var borders = rnTrafficLight.Neighbor;
-            var firstVectors = RnGetter.GetWays().TryGet(borders.FirstOrDefault())?.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-            var lastVectors = RnGetter.GetWays().TryGet(borders.LastOrDefault())?.GetChildLineString(RnGetter).GetChildPointsVector(RnGetter);
-
-            Vector3 firstPoint, lastPoint;
-            if (Mathf.Abs(Vector3.Distance(firstVectors.FirstOrDefault(), lastVectors.LastOrDefault())) > Mathf.Abs(Vector3.Distance(firstVectors.LastOrDefault(), lastVectors.FirstOrDefault())))
+            foreach (var b in borders)
             {
-                firstPoint = firstVectors.FirstOrDefault();
-                lastPoint = lastVectors.LastOrDefault();
+                var vectors = RnGetter.GetWays().TryGet(b)?.GetChildLineString(RnGetter)?.GetChildPointsVector(RnGetter);
+                points.AddRange(vectors);
             }
-            else
-            {
-                firstPoint = firstVectors.LastOrDefault();
-                lastPoint = lastVectors.FirstOrDefault();
-            }
-
-            if (firstVectors != null && lastVectors != null)
-                return (true, firstPoint, lastPoint);
-            return (false, Vector3.zero, Vector3.zero);
+            return points;
         }
 
         RoadNetworkDataGetter m_RoadNetworkGetter;
@@ -471,20 +471,26 @@ namespace AWSIM
             if (!RoadNetworkConstants.SHOW_DEBUG_INFO)
                 return;
 
-            var (success, firstPoint, lastPoint) = GetFirstLastPoints();
+            var (firstPoint, lastPoint) = GetFirstLastBorderPoints();
             Gizmos.color = GetBulbColor();
-            if (success)
+            if (firstPoint != Vector3.zero && lastPoint != Vector3.zero)
+            {
                 Gizmos.DrawLine(firstPoint, lastPoint);
+                Gizmos.DrawSphere(lastPoint, 0.2f);
+            }
             else
                 Gizmos.DrawSphere(transform.position, 0.5f);
         }
 
         void OnDrawGizmosSelected()
         {
-            var (success, firstPoint, lastPoint) = GetFirstLastPoints();
+            var (firstPoint, lastPoint) = GetFirstLastBorderPoints();
             Gizmos.color = Color.white;
-            if (success)
+            if (firstPoint != Vector3.zero && lastPoint != Vector3.zero)
+            {
                 Gizmos.DrawLine(firstPoint, lastPoint);
+                Gizmos.DrawSphere(lastPoint, 0.2f);
+            }
         }
     }
 }

@@ -118,9 +118,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 var edges = trafficLight.GetEdges(getter);
                 trafficLightGameObject.transform.SetParent(intersectionGameObject.transform, true);
-                trafficLightGameObject.transform.position = edges.FirstOrDefault().GetChildLineString(getter).GetChildPointsVector(getter).FirstOrDefault();
+                
                 var trafficLightComp = trafficLightGameObject.GetComponent<TrafficLight>();
                 trafficLightComp.rnTrafficLight = trafficLight;
+
+                var (firstPoint, lastPoint) = trafficLightComp.GetFirstLastBorderPoints();
+                if (lastPoint != Vector3.zero)
+                    trafficLightGameObject.transform.position = lastPoint;
+                else
+                    trafficLightGameObject.transform.position = edges.FirstOrDefault().GetChildLineString(getter).GetChildPointsVector(getter).FirstOrDefault();
 
                 //接する道路のグループごとにDictionary lightGroupsに格納
                 var road = trafficLight.GetRoad(getter);
@@ -144,7 +150,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 }
             }
 
-            int index = 0;
+            int index = 0; //正規化
             foreach (int key in lightGroups.Keys)
             {
                 if (lightGroups[key].Count > 0)
@@ -199,18 +205,27 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return TrafficLane.TurnDirectionType.STRAIGHT;
         }
 
-        public List<TrafficLane> Create(RoadNetworkDataGetter getter)
+        public List<TrafficLane> Create(RoadNetworkDataGetter getter, Transform parent)
         {
-            var parent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
-            if (parent == null)
+            var laneParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+            if (laneParent == null)
             {
-                parent = new GameObject(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+                laneParent = new GameObject(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+                laneParent.transform.SetParent(parent, false);
             }
 
             var intersectionParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_INTERSECTION_ROOT_NAME);
             if (intersectionParent == null)
             {
                 intersectionParent = new GameObject(RoadNetworkConstants.TRAFFIC_INTERSECTION_ROOT_NAME);
+                intersectionParent.transform.SetParent(parent, false);
+            }
+
+            var stoplineParent = GameObject.Find(RoadNetworkConstants.STOPLINE_ROOT_NAME);
+            if (stoplineParent == null)
+            {
+                stoplineParent = new GameObject(RoadNetworkConstants.STOPLINE_ROOT_NAME);
+                stoplineParent.transform.SetParent(parent, false);
             }
 
             List<TrafficLane> allLanes = new();
@@ -250,7 +265,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         if (RoadNetworkConstants.USE_SIMPLE_LINESTRINGS && points.Count > 3)
                             points = ConvertToSplinePoints(points, RoadNetworkConstants.SPLINE_POINTS); //平滑化
 
-                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, RoadNetworkConstants.SPEED_LIMIT);
+                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Road_{rb.GetId(getter)}_{index++}", laneParent.transform, points.ToArray(), TrafficLane.TurnDirectionType.STRAIGHT, RoadNetworkConstants.SPEED_LIMIT);
                         trafficLane.enabled = true;
                         laneDict.Add(lane, trafficLane);
 
@@ -279,7 +294,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                                 {
                                     var border = lane.GetNextBorder(getter);
                                     List<Vector3> borderPoints = border.GetChildLineString(getter).GetChildPointsVector(getter);
-                                    info.stopline = AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault());
+                                    info.stopline = AWSIM.TrafficSimulation.StopLine.Create(borderPoints.FirstOrDefault(), borderPoints.LastOrDefault(), stoplineParent.transform);
                                     info.stopline.SetRoadNetworkData(road, nextIntersection, border);
                                 }
                             }
@@ -323,7 +338,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         List<Vector3> points = RoadNetworkConstants.USE_SIMPLE_SPLINE_POINTS ? GetSimplePoints(track.Spline) : ConvertToSplinePoints(track.Spline, RoadNetworkConstants.SPLINE_POINTS);
 
                         TrafficLane.TurnDirectionType turnDirType = ConvertTurnType(track.TurnType);
-                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Intersection_{rb.GetId(getter)}_{index++}", parent.transform, points.ToArray(), turnDirType, RoadNetworkConstants.SPEED_LIMIT_INTERSECTION);
+                        TrafficLane trafficLane = TrafficLane.Create($"TrafficLane_Intersection_{rb.GetId(getter)}_{index++}", laneParent.transform, points.ToArray(), turnDirType, RoadNetworkConstants.SPEED_LIMIT_INTERSECTION);
                         trafficLane.intersectionLane = true;
                         trafficLane.enabled = true;
                         trackDict.Add(track, trafficLane);

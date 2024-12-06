@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -81,6 +82,33 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             // 計算が範囲外の場合、最後の点を返す（通常は起こらない）
             return points.Last();
+        }
+
+        // 最も長い線の始点、終点
+        public static (Vector3, Vector3) GetLongestLine(List<Vector3> points)
+        {
+            if (points == null || points.Count < 2)
+                return (Vector3.zero, Vector3.zero);
+
+            Vector3 longestStart = Vector3.zero;
+            Vector3 longestEnd = Vector3.zero;
+            float maxDistance = 0;
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                for (int j = i + 1; j < points.Count; j++)
+                {
+                    float distance = Vector3.Distance(points[i], points[j]);
+                    if (distance > maxDistance)
+                    {
+                        maxDistance = distance;
+                        longestStart = points[i];
+                        longestEnd = points[j];
+                    }
+                }
+            }
+
+            return (longestStart, longestEnd);
         }
     }
 }

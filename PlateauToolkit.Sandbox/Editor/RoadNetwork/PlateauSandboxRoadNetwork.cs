@@ -6,6 +6,7 @@ using PlateauToolkit.Sandbox.RoadNetwork;
 using AWSIM.TrafficSimulation;
 using UnityEditor;
 using PLATEAU.CityInfo;
+using AWSIM;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -25,26 +26,6 @@ namespace PlateauToolkit.Sandbox.Editor
             if (manager != null)
             {
                 GameObject.DestroyImmediate(manager);
-            }
-            var vehicles = GameObject.Find(RoadNetworkConstants.VEHICLE_ROOT_NAME);
-            if (vehicles != null)
-            {
-                GameObject.DestroyImmediate(vehicles);
-            }
-            var trafficLanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
-            if (trafficLanes != null)
-            {
-                GameObject.DestroyImmediate(trafficLanes);
-            }
-            var stoplines = GameObject.Find(RoadNetworkConstants.STOPLINE_ROOT_NAME);
-            if (stoplines != null)
-            {
-                GameObject.DestroyImmediate(stoplines);
-            }
-            var intersection = GameObject.Find(RoadNetworkConstants.TRAFFIC_INTERSECTION_ROOT_NAME);
-            if (intersection != null)
-            {
-                GameObject.DestroyImmediate(intersection);
             }
         }
 
@@ -69,7 +50,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 m_RnTrafficManager.CreateSimulator();
                 PostCreateSimulator();
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 Debug.LogException(ex);
                 EditorUtility.DisplayDialog("アセットの配置に失敗しました。", ex.Message, "OK");
@@ -78,6 +59,38 @@ namespace PlateauToolkit.Sandbox.Editor
 
             EditorUtility.DisplayDialog("アセットの配置に成功しました。", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
             return true;
+        }
+
+        public void PlaceTrafficLights()
+        {
+            var trafficLightParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+            if (trafficLightParent == null)
+            {
+                trafficLightParent = new GameObject(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+                trafficLightParent.transform.SetParent(m_TrafficManager.transform, false);
+            }
+
+            (PlateauSandboxStreetFurniture, SandboxAssetType)[] assets = PlateauSandboxAssetUtility.FindAllAssets<PlateauSandboxStreetFurniture>();
+            List<(PlateauSandboxStreetFurniture, SandboxAssetType)> assetsList = new List<(PlateauSandboxStreetFurniture, SandboxAssetType)>(assets);
+            var trafficLightPrefab = assetsList.Find(x => x.Item1.name == "StreetFurniture_TrafficLight_02").Item1.gameObject;
+            //var trafficLightPrefab = Resources.Load("TrafficLightSample");
+
+            var trafficLights = new List<TrafficLight>(GameObject.FindObjectsOfType<TrafficLight>());
+            foreach (var trafficLight in trafficLights)
+            {
+                string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null, trafficLightPrefab.name);
+
+                var gameObject = (GameObject)PrefabUtility.InstantiatePrefab(trafficLightPrefab);
+                gameObject.name = gameObjectName;
+                gameObject.transform.position = trafficLight.transform.position;
+
+                var (first, last) = trafficLight.GetFirstLastBorderPoints();
+                var vector = (last - first).normalized;
+                vector.y = 0;
+                gameObject.transform.right = vector;
+                gameObject.transform.SetParent(trafficLightParent.transform, false);
+                trafficLight.SetRenderer(gameObject.GetComponentInChildren<Renderer>());
+            }
         }
 
         //名前を含むCityObjectGroupをground Layerに
@@ -129,6 +142,8 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
             }
+
+            PlaceTrafficLights();
         }
 
         // 交通シミュレータ配置　実行時に呼ばれる
