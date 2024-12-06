@@ -1,7 +1,6 @@
 using AWSIM.TrafficSimulation;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
-using PLATEAU.Util;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -14,8 +13,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     public class RoadNetworkTrafficManager : MonoBehaviour
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
-        [SerializeField]
-        List<GameObject> m_VehiclePrefabs;
 
         public TrafficManager SimTrafficManager
         {
@@ -49,18 +46,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
         }
 
-        public void SetPrefabs(List<GameObject> prefabs)
-        {
-            m_VehiclePrefabs = prefabs;
-        }
-
         public int GetNumMaxVehicles()
         {
             int numRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().Count();
             return (int)Mathf.Min(numRoads / 2, RoadNetworkConstants.NUM_MAX_VEHICLES); // 交差点以外の道路数の半分 or 最大車輛数
         }
 
-        public void CreateSimulator()
+        public void CreateSimulator(List<GameObject> prefabs)
         {
             GameObject vehicles = GameObject.Find(RoadNetworkConstants.VEHICLE_ROOT_NAME);
             if (vehicles == null)
@@ -84,13 +76,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             //初期Spawn
             RandomTrafficSimulatorConfiguration randomTrafficSimConfigInitial = new RandomTrafficSimulatorConfiguration();
             randomTrafficSimConfigInitial.maximumSpawns = GetNumMaxVehicles(); // 初回用　Respawn禁止
-            randomTrafficSimConfigInitial.npcPrefabs = m_VehiclePrefabs.ToArray();
+            randomTrafficSimConfigInitial.npcPrefabs = prefabs.ToArray();
             randomTrafficSimConfigInitial.spawnableLanes = spawnableLanes.ToArray();
             randomTrafficSimConfigInitial.enabled = true;
 
             RandomTrafficSimulatorConfiguration randomTrafficSimConfig = new RandomTrafficSimulatorConfiguration();
             randomTrafficSimConfig.maximumSpawns = 0; //0:Respawn可能
-            randomTrafficSimConfig.npcPrefabs = m_VehiclePrefabs.ToArray();
+            randomTrafficSimConfig.npcPrefabs = prefabs.ToArray();
             randomTrafficSimConfig.spawnableLanes = respawnableLanes.ToArray();
             randomTrafficSimConfig.enabled = true;
             SimTrafficManager.randomTrafficSims = new RandomTrafficSimulatorConfiguration[] { randomTrafficSimConfigInitial, randomTrafficSimConfig };

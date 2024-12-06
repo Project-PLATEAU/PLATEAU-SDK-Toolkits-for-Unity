@@ -829,7 +829,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         /// <summary>
         /// 対向車線を同一グループとした道路リスト取得
         /// </summary>
-        public static List<List<RnDataRoadBase>> GetRoadGroupsByOncomingRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
+        public static List<List<RnDataRoadBase>> GetRoadGroupsWithOncomingRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
         {
             List<List<RnDataRoadBase>> outRoadGroups = new();
             List<RnDataRoadBase> roads = intersection.GetAllConnectedRoads(getter);
@@ -845,46 +845,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 else
                 {
                     outRoadGroups.Add(new List<RnDataRoadBase>() { road });
-                }
-            }
-            return outRoadGroups;
-        }
-
-        /// <summary>
-        /// 交差しない車線を同一グループとした道路リスト取得
-        /// </summary>
-        public static List<List<RnDataRoadBase>> GetRoadGroupsByCrossingRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter)
-        {
-            List<List<RnDataRoadBase>> outRoadGroups = new();
-            List<RnDataRoadBase> roads = intersection.GetAllConnectedRoads(getter);
-            foreach (RnDataRoad road in roads)
-            {
-                var straightFromTrack = intersection.GetAllFromTracksFromRoad(getter, road).Find(x => x.TurnType == RnTurnType.Straight);
-                if (straightFromTrack == null)
-                {
-                    continue;
-                }
-
-                var crossingTracks = intersection.GetCrossingTracks(getter, straightFromTrack);
-                foreach(var crossingTrack in crossingTracks)
-                {
-                    var fromRoad = intersection.GetFromRoadFromTrack(getter, crossingTrack);
-                    var toRoad = intersection.GetToRoadFromTrack(getter, crossingTrack);
-
-                    bool isAdded = false;
-                    foreach (var item in outRoadGroups)
-                    {
-                        if (!item.Contains(fromRoad) && !item.Contains(toRoad))
-                        {
-                            item.Add(road);
-                            isAdded = true;
-                            break;
-                        }
-                    }
-                    if (!isAdded)
-                    {
-                        outRoadGroups.Add(new List<RnDataRoadBase> { road });
-                    }
                 }
             }
             return outRoadGroups;
@@ -947,21 +907,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             if (fromBorder != null)
                 return intersection.GetFromTracksFromBorder(getter, fromBorder)?.FindAll(x => x.TurnType == turnType)?.ToList() ?? null;
             return null;
-        }
-
-        /// <summary>
-        /// 信号機配置borderから停止線位置border取得
-        /// </summary>
-        public static List<RnDataWay> GetStoplineFromTrafficLightBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, List<RnDataWay> borders)
-        {
-            List<RnDataWay> fromBorders = new();
-            foreach (RnDataWay border in borders)
-            {
-                RnDataTrack toTrack = intersection.GetToTracksFromBorder(getter, border)?.Find(x => x.TurnType == RnTurnType.Straight);
-                if (toTrack != null)
-                    fromBorders.Add(toTrack.GetFromBorder(getter));
-            }
-            return fromBorders;
         }
 
         /// <summary>

@@ -46,8 +46,7 @@ namespace PlateauToolkit.Sandbox.Editor
             try
             {
                 Initialize();
-                m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
-                m_RnTrafficManager.CreateSimulator();
+                m_RnTrafficManager.CreateSimulator(vehiclePrefabs);
                 PostCreateSimulator();
             }
             catch (System.Exception ex)
@@ -70,16 +69,13 @@ namespace PlateauToolkit.Sandbox.Editor
                 trafficLightParent.transform.SetParent(m_TrafficManager.transform, false);
             }
 
-            (PlateauSandboxStreetFurniture, SandboxAssetType)[] assets = PlateauSandboxAssetUtility.FindAllAssets<PlateauSandboxStreetFurniture>();
-            List<(PlateauSandboxStreetFurniture, SandboxAssetType)> assetsList = new List<(PlateauSandboxStreetFurniture, SandboxAssetType)>(assets);
-            var trafficLightPrefab = assetsList.Find(x => x.Item1.name == "StreetFurniture_TrafficLight_02").Item1.gameObject;
+            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_02")?.gameObject;
             //var trafficLightPrefab = Resources.Load("TrafficLightSample");
 
             var trafficLights = new List<TrafficLight>(GameObject.FindObjectsOfType<TrafficLight>());
             foreach (var trafficLight in trafficLights)
             {
-                string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null, trafficLightPrefab.name);
-
+                string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(trafficLightParent.transform, trafficLightPrefab.name);
                 var gameObject = (GameObject)PrefabUtility.InstantiatePrefab(trafficLightPrefab);
                 gameObject.name = gameObjectName;
                 gameObject.transform.position = trafficLight.transform.position;

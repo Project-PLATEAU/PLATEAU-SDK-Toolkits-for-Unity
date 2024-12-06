@@ -112,7 +112,7 @@ namespace AWSIM
             // URP
             const string EmissiveColor = "_EmissionColor";
             const string EmissiveIntensity = "_EmissiveIntensity";
-            
+
             const string LightOnFlag = "_LightOn";
             const float flashIntervalSec = 0.5f;                // flash bulb lighting interval(sec).
 
