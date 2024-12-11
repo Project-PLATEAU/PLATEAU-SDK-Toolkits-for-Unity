@@ -2,12 +2,13 @@
 using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Linq;
 using UnityEngine;
+using PlateauToolkit.Sandbox;
 
 namespace AWSIM.TrafficSimulation
 {
     [CanEditMultipleObjects]
-    [CustomEditor(typeof(TrafficLight))]
-    public class TrafficLightEditor : Editor
+    [CustomEditor(typeof(PlateauSandboxTrafficMovement))]
+    public class PlateauSandboxTrafficMovementEditor : Editor
     {
         public override void OnInspectorGUI()
         {
@@ -19,7 +20,7 @@ namespace AWSIM.TrafficSimulation
             }
             else
             {
-                DrawPropertiesExcluding(serializedObject, "rnTrafficLight");
+                DrawPropertiesExcluding(serializedObject, "status");
             }
         }
     }

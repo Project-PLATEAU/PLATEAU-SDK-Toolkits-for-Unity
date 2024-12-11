@@ -1,6 +1,7 @@
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ namespace AWSIM.TrafficSimulation
         [SerializeField, Tooltip("Traffic light ")]
         private TrafficLight trafficLight;
 
-        [SerializeField, Tooltip("RoadNetwork")]
+        [Header("RoadNetwork")]
         public RnDataRoad rnRoad;
         public RnDataIntersection rnIntersection;
         public RnDataWay rnBorder;
@@ -36,7 +37,12 @@ namespace AWSIM.TrafficSimulation
         public TrafficLight TrafficLight
         {
             get => trafficLight;
-            set => trafficLight = value;
+            //set => trafficLight = value;
+            set
+            {
+                trafficLight = value;
+                trafficLight.AddStopLine(this);
+            }
         }
 
         public bool HasStopSign

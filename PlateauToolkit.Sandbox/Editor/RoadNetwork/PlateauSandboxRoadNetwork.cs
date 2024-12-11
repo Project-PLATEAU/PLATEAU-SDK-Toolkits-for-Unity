@@ -62,31 +62,18 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void PlaceTrafficLights()
         {
-            var trafficLightParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
-            if (trafficLightParent == null)
-            {
-                trafficLightParent = new GameObject(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
-                trafficLightParent.transform.SetParent(m_TrafficManager.transform, false);
-            }
-
-            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_02")?.gameObject;
+            //var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_02")?.gameObject;
+            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_Interactive_01")?.gameObject;
             //var trafficLightPrefab = Resources.Load("TrafficLightSample");
+            //var trafficLightPrefab = Resources.Load("StreetFurniture_TrafficLight_Interactive_01");
 
-            var trafficLights = new List<TrafficLight>(GameObject.FindObjectsOfType<TrafficLight>());
-            foreach (var trafficLight in trafficLights)
+            if (trafficLightPrefab == null)
             {
-                string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(trafficLightParent.transform, trafficLightPrefab.name);
-                var gameObject = (GameObject)PrefabUtility.InstantiatePrefab(trafficLightPrefab);
-                gameObject.name = gameObjectName;
-                gameObject.transform.position = trafficLight.transform.position;
-
-                var (first, last) = trafficLight.GetFirstLastBorderPoints();
-                var vector = (last - first).normalized;
-                vector.y = 0;
-                gameObject.transform.right = vector;
-                gameObject.transform.SetParent(trafficLightParent.transform, false);
-                trafficLight.SetRenderer(gameObject.GetComponentInChildren<Renderer>());
+                EditorUtility.DisplayDialog("信号機アセットの配置に失敗しました。", "信号機アセットが見つかりませんでした。", "OK");
+                return;
             }
+
+            m_RnTrafficManager.SetTrafficLightAsset(trafficLightPrefab);
         }
 
         //名前を含むCityObjectGroupをground Layerに
@@ -133,7 +120,6 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            //SetCityObjectAsGroundLayer("_tran_"); //Tranをground Layerに
             if (RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
             {
                 SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
@@ -142,7 +128,7 @@ namespace PlateauToolkit.Sandbox.Editor
             PlaceTrafficLights();
         }
 
-        // 交通シミュレータ配置　実行時に呼ばれる
+        // 交通シミュレータ配置　実行ボタン押下時に呼ばれる
         public void Initialize()
         {
             ClearTrafficManager();

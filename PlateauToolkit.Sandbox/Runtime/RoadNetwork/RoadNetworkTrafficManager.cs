@@ -1,9 +1,14 @@
+using AWSIM;
 using AWSIM.TrafficSimulation;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -12,6 +17,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     /// </summary>
     public class RoadNetworkTrafficManager : MonoBehaviour
     {
+
+        [SerializeField, Tooltip("Traffic light prefab")]
+        GameObject m_TrafficLightPrefab;
+
+        [SerializeField][HideInInspector]
+        GameObject m_CurrentTrafficLightPrefab;
+
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
         public TrafficManager SimTrafficManager
@@ -61,7 +73,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 vehicles.transform.SetParent(SimTrafficManager.transform, false);
             }
 
-            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), GetNumMaxVehicles(), vehicles, RoadNetworkConstants.SHOW_DEBUG_INFO);
+            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), GetNumMaxVehicles(), vehicles, RoadNetworkConstants.SHOW_DEBUG_GIZMOS);
 
             List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter, SimTrafficManager.transform); //全て変換 (TrafficLane)
 
@@ -89,5 +101,59 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             SimTrafficManager.Initialize();
         }
+
+        public void SetTrafficLightAsset(GameObject trafficLightPrefab)
+        {
+            m_TrafficLightPrefab = m_CurrentTrafficLightPrefab = trafficLightPrefab;
+
+            var trafficLightParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+            if (trafficLightParent == null)
+            {
+                trafficLightParent = new GameObject(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+                trafficLightParent.transform.SetParent(transform, false);
+            }
+
+            var trafficLights = new List<TrafficLight>(GameObject.FindObjectsOfType<TrafficLight>());
+            foreach (TrafficLight trafficLight in trafficLights)
+            {
+                string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(trafficLightParent.transform, trafficLightPrefab.name);
+                var gameObject = (GameObject)PrefabUtility.InstantiatePrefab(trafficLightPrefab);
+                gameObject.name = gameObjectName;
+                gameObject.transform.position = trafficLight.GetAssetPosition();
+                //gameObject.transform.position = trafficLight.transform.position;
+                gameObject.transform.right = trafficLight.GetRightVector();
+
+                gameObject.transform.SetParent(trafficLightParent.transform, false);
+                trafficLight.SetRenderer(gameObject.GetComponentInChildren<Renderer>());
+                //gameObject.GetComponentsInChildren<Renderer>();
+            }
+        }
+
+#if UNITY_EDITOR
+        void ClearCurrentAssetsAndSetTrafficLightAsset()
+        {
+            EditorApplication.delayCall -= ClearCurrentAssetsAndSetTrafficLightAsset;
+            GameObject trafficLightParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+            if (trafficLightParent != null)
+            {
+                DestroyImmediate(trafficLightParent);
+            }
+
+            SetTrafficLightAsset(m_TrafficLightPrefab);
+        }
+
+        void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
+            if (m_TrafficLightPrefab != m_CurrentTrafficLightPrefab && m_TrafficLightPrefab != null)
+            {
+                EditorApplication.delayCall += ClearCurrentAssetsAndSetTrafficLightAsset;
+            }
+        }
+#endif
     }
 }

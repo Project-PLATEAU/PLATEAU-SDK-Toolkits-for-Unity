@@ -89,8 +89,13 @@
         public static readonly bool ADD_TRAFFIC_LIGHTS = true;
 
         /// <summary>
-        /// DefaultでGizomoを表示
+        /// DefaultでGizmoを表示
         /// </summary>
-        public static readonly bool SHOW_DEBUG_INFO = true;
+        public static readonly bool SHOW_DEBUG_GIZMOS = true;
+
+        /// <summary>
+        /// インスペクタにRoadNetwork参照等のDebug情報を表示
+        /// </summary>
+        public static readonly bool SHOW_DEBUG_ROADNETWORK_INFO = true;
     }
 }

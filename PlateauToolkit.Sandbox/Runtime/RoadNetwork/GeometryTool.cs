@@ -7,7 +7,7 @@ using UnityEngine.Splines;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
-    public class SplineTool
+    public class GeometryTool
     {
         // Unity Spline 動的生成
         public static Spline CreateSplineFromPoints(List<Vector3> points)
@@ -109,6 +109,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
 
             return (longestStart, longestEnd);
+        }
+
+        // point1, point2を比較してtargetに対して左側に位置しているかの判定
+        public static bool IsFacingLeft(Vector3 point1, Vector3 point2, Vector3 target)
+        {
+            Vector3 direction = point2 - point1;
+            Vector3 planeNormal = Vector3.Cross(Vector3.up, direction);
+            float dot = Vector3.Dot(planeNormal, target - point1);
+            return dot < 0;
         }
     }
 }

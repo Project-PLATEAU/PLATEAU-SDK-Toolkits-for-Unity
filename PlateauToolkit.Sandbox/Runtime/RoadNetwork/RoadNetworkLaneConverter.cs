@@ -42,11 +42,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public List<Vector3> ConvertToSplinePoints(List<Vector3> points, int numPoints = 10)
         {
             List<Vector3> outPoints = new List<Vector3>();
-            var spline = SplineTool.CreateSplineFromPoints(points);
+            var spline = GeometryTool.CreateSplineFromPoints(points);
             for (int i = 0; i < numPoints; i++)
             {
                 float percent = (float)i * ((float)numPoints / 1f);
-                outPoints.Add(SplineTool.GetPointOnSpline(spline, percent));
+                outPoints.Add(GeometryTool.GetPointOnSpline(spline, percent));
             }
             return outPoints;
         }
@@ -57,7 +57,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             for (int i = 0; i < numPoints; i++)
             {
                 float percent = (float)i / ((float)numPoints);
-                outPoints.Add(SplineTool.GetPointOnSpline(spline, percent));
+                outPoints.Add(GeometryTool.GetPointOnSpline(spline, percent));
             }
             return outPoints;
         }
@@ -182,7 +182,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         //停止位置をずらす
                         float totalDistance = stopline.rnRoad.GetChildLineString(getter, 0).GetTotalDistance(getter);
                         float distancePercent = trafficLight.rnTrafficLight.Distance / totalDistance;
-                        Vector3 position = SplineTool.GetPointOnLine(stopline.rnRoad.GetChildLineString(getter, 0).GetChildPointsVector(getter), distancePercent);
+                        Vector3 position = GeometryTool.GetPointOnLine(stopline.rnRoad.GetChildLineString(getter, 0).GetChildPointsVector(getter), distancePercent);
                         stopline.transform.position = position;
                         break;
                     }

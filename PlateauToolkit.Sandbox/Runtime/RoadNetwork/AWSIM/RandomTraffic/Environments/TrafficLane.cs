@@ -39,9 +39,13 @@ namespace AWSIM.TrafficSimulation
         [SerializeField, Tooltip("Is intersection lane")]
         public bool intersectionLane;
 
-        [SerializeField, Tooltip("RoadNetwork")]
+        [Header("RoadNetwork")]
+        [SerializeField]
         public RnDataRoad rnRoad;
         public RnDataLane rnLane;
+
+        [Header("RoadNetwork")]
+        [SerializeField]
         public RnDataIntersection rnIntersection;
         public RnDataTrack rnTrack;
 

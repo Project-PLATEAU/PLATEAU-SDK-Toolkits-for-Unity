@@ -12,6 +12,17 @@ namespace AWSIM
     /// </summary>
     public class NPCVehicle : MonoBehaviour
     {
+        public enum TurnSignalState
+        {
+            OFF,
+            LEFT,
+            RIGHT,
+            HAZARD,
+        }
+
+        [SerializeField]
+        GameObject visualObjectRoot;
+
         //Debug情報 NPCVehicleInternalState
         [Serializable]
         public class VehicleParameters
@@ -45,18 +56,8 @@ namespace AWSIM
             }
         }
 
-        public enum TurnSignalState
-        {
-            OFF,
-            LEFT,
-            RIGHT,
-            HAZARD,
-        }
-
-        [SerializeField]
-        GameObject visualObjectRoot;
-
-        //debug
+        //debug情報
+        [Header("InternalStateInfo")]
         [SerializeField]
         public VehicleParameters status = new VehicleParameters();
 
@@ -110,7 +111,6 @@ namespace AWSIM
 
         [Header("Bounding box Settngs")]
         [SerializeField] Bounds bounds;
-
 
         TurnSignalState turnSignalState = TurnSignalState.OFF;
         float turnSignalTimer = 0;

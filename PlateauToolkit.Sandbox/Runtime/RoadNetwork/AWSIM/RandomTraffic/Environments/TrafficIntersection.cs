@@ -108,7 +108,8 @@ namespace AWSIM.TrafficSimulation
         [SerializeField] List<TrafficLightGroup> trafficLightGroups;
         [SerializeField] LightingSequence[] lightingSequences;
 
-        [SerializeField, Tooltip("RoadNetwork")]
+        [Header("RoadNetwork")]
+        [SerializeField]
         public RnDataTrafficLightController rnTrafficLightController;
 
         public void AddTrafficLightGroup(int group, List<TrafficLight> trafficLights)
@@ -176,7 +177,6 @@ namespace AWSIM.TrafficSimulation
 
         IEnumerator StartLightingSequences()
         {
-
             int i = 0;
             while (true)
             {

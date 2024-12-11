@@ -5,6 +5,8 @@ using UnityEngine;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
+using UnityEditor.Experimental;
+using AWSIM.TrafficSimulation;
 
 namespace AWSIM
 {
@@ -106,11 +108,11 @@ namespace AWSIM
             // const parameters.
 
             // HDRP
-            //const string EmissiveColor = "_EmissiveColor";
-            //const string EmissiveExposureWeight = "_EmissiveExposureWeight";
+            const string EmissiveColorHDRP = "_EmissiveColor";
+            const string EmissiveExposureWeightHDRP = "_EmissiveExposureWeight";
 
             // URP
-            const string EmissiveColor = "_EmissionColor";
+            const string EmissiveColorURP = "_EmissionColor";
             const string EmissiveIntensity = "_EmissiveIntensity";
 
             const string LightOnFlag = "_LightOn";
@@ -118,7 +120,7 @@ namespace AWSIM
 
             float timer = 0;                            // used for flashing status.     NOTE: Might as well make it static and refer to the same time. 
             Color defaultEmissiveColor;                 // default bulb material emissive color.
-            //float defaultEmissiveExposureWeight;        // default bulb mateiral emissive exposure weight
+            float defaultEmissiveExposureWeightHDRP;        // default bulb mateiral emissive exposure weight
             Dictionary<BulbColor, EmissionConfig> bulbColorConfigPairs;
             Material material = null;                   // bulb mateiral(instance).
             bool initialized = false;
@@ -141,11 +143,14 @@ namespace AWSIM
                     // set material.
                     material = renderer.materials[materialIndex];
 
-                    // cache default material parameters.
-                    //defaultEmissiveColor = material.GetColor(EmissiveColor);
-                    //defaultEmissiveExposureWeight = material.GetFloat(EmissiveExposureWeight);
-
                     defaultEmissiveColor = Color.black;
+
+                    // cache default material parameters.
+                    if (material.HasColor(EmissiveColorHDRP))
+                    {
+                        defaultEmissiveColor = material.GetColor(EmissiveColorHDRP);
+                        defaultEmissiveExposureWeightHDRP = material.GetFloat(EmissiveExposureWeightHDRP);
+                    }
                 }
 
                 initialized = true;
@@ -223,10 +228,18 @@ namespace AWSIM
                 if (isLightOn)
                 {
                     var config = bulbColorConfigPairs[color];
-                    if(material != null)
+                    if (material != null)
                     {
-                        material.SetColor(EmissiveColor, config.Color * config.Intensity);
-                        //material.SetFloat(EmissiveExposureWeight, config.ExposureWeight);
+                        if (material.HasColor(EmissiveColorURP))
+                        {
+                            material.SetColor(EmissiveColorURP, config.Color * config.Intensity);
+                        }
+                        else if (material.HasColor(EmissiveColorHDRP))
+                        {
+                            material.SetColor(EmissiveColorHDRP, config.Color * config.Intensity);
+                            material.SetFloat(EmissiveExposureWeightHDRP, config.ExposureWeight);
+                        }
+
                         if (material.HasProperty(LightOnFlag))
                         {
                             material.SetInt(LightOnFlag, 1);
@@ -239,8 +252,16 @@ namespace AWSIM
                 {
                     if (material != null)
                     {
-                        material.SetColor(EmissiveColor, defaultEmissiveColor);
-                        //material.SetFloat(EmissiveExposureWeight, defaultEmissiveExposureWeight);
+                        if (material.HasColor(EmissiveColorURP))
+                        {
+                            material.SetColor(EmissiveColorURP, defaultEmissiveColor);
+                        }
+                        else if (material.HasColor(EmissiveColorHDRP))
+                        {
+                            material.SetColor(EmissiveColorHDRP, defaultEmissiveColor);
+                            material.SetFloat(EmissiveExposureWeightHDRP, defaultEmissiveExposureWeightHDRP);
+                        }
+
                         if (material.HasProperty(LightOnFlag))
                         {
                             material.SetInt(LightOnFlag, 0);
@@ -252,7 +273,7 @@ namespace AWSIM
             }
 
             /// <summary>
-            /// Color�擾
+            /// Color取得
             /// </summary>
             /// <returns></returns>
             public Color GetColor()
@@ -306,7 +327,11 @@ namespace AWSIM
         int bulbCount;
         BulbData[] bulbDataArray;
 
-        [SerializeField, Tooltip("RoadNetwork")]
+        [SerializeField]
+        List<AWSIM.TrafficSimulation.StopLine> stoplines = new();
+
+        [Header("RoadNetwork")]
+        [SerializeField]
         public RnDataTrafficLight rnTrafficLight;
 
         void Reset()
@@ -415,7 +440,7 @@ namespace AWSIM
             };
         }
 
-        Color GetBulbColor()
+        public Color GetBulbColor()
         {
             Color color = Color.black;
             foreach (var e in bulbs)
@@ -428,22 +453,12 @@ namespace AWSIM
             return color;
         }
 
-        public (Vector3, Vector3) GetFirstLastBorderPoints()
+        public void AddStopLine(AWSIM.TrafficSimulation.StopLine stopline)
         {
-            var points = GetAllBorderPoints();
-            return SplineTool.GetLongestLine(points);
+            stoplines.Add(stopline);
         }
 
-        public Vector3 GetAssetPosition()
-        {
-            var (firstPoint, lastPoint) = GetFirstLastBorderPoints();
-            if (lastPoint != Vector3.zero)
-                return lastPoint;
-
-            var edges = rnTrafficLight.GetEdges(RnGetter);
-            return edges.FirstOrDefault().GetChildLineString(RnGetter).GetChildPointsVector(RnGetter).FirstOrDefault();
-        }
-
+        //NeighborのLinestring point取得
         public List<Vector3> GetAllBorderPoints()
         {
             var points = new List<Vector3>();
@@ -454,6 +469,94 @@ namespace AWSIM
                 points.AddRange(vectors);
             }
             return points;
+        }
+
+        // NeighborのLinestringを一本の線とした場合の始点、終点
+        public (Vector3, Vector3) GetFirstLastBorderPoints()
+        {
+            List<Vector3> points = GetAllBorderPoints();
+            (Vector3 first, Vector3 last) = GeometryTool.GetLongestLine(points);
+            return (first, last);
+        }
+
+
+        //全StopLineを一本の線とした場合の始点、終点
+        public (Vector3, Vector3) GetFirstLastStopLinePoints()
+        {
+            var stoplinePoints = new List<Vector3>();
+            foreach (var item in stoplines)
+            {
+                stoplinePoints.Add(item.Points[0]);
+                stoplinePoints.Add(item.Points[1]);
+            }
+            return GeometryTool.GetLongestLine(stoplinePoints);
+        }
+
+        // 停止線を考慮して開始、終了位置を取得( 最初のポイントが信号位置 ）
+        public (Vector3, Vector3) GetFirstLastBorderPointsNormalized()
+        {
+            (Vector3 first, Vector3 last) = GetFirstLastBorderPoints();
+            var intersectionCenter = transform.parent.position;
+
+            bool isLeft = GeometryTool.IsFacingLeft(first, last, intersectionCenter);
+            return isLeft ? (first, last) : (last, first);
+
+
+            //(Vector3 firstSp, Vector3 lastSp) = GetFirstLastStopLinePoints();
+            //(Vector3 firstBp, Vector3 lastBp) = GetFirstLastBorderPoints();
+            //if ((firstSp, lastSp) == (firstBp, lastBp))
+            //{
+            //    //if (rnTrafficLight.GetEdges(RnGetter).FirstOrDefault().IsReverseNormal)
+            //    //    return (firstBp, lastBp);
+
+            //    //var forward = (lastBp - firstBp).normalized;
+            //    //var points = SplineTool.SortPointsByAngle(new List<Vector3>() { firstBp, lastBp }, forward, rnTrafficLight.GetParentController(RnGetter).GetParentRoad(RnGetter).TargetTrans.FirstOrDefault().transform.position);
+            //    //return (points.FirstOrDefault(), points.LastOrDefault());
+
+            //    //return (lastBp, firstBp);
+
+            //    bool isLeft = SplineTool.IsLeft(firstBp, lastBp, Vector3.up, rnTrafficLight.GetParentController(RnGetter).GetParentRoad(RnGetter).TargetTrans.FirstOrDefault().transform.position);
+            //    if (isLeft)
+            //    {
+            //        return (firstBp, lastBp);
+            //    }
+            //    else
+            //    {
+            //        return (lastBp, firstBp);
+            //    }
+            //}
+
+            //if (firstBp == firstSp || firstBp == lastSp)
+            //{
+            //    return (firstBp, lastBp);
+            //}
+
+            //return (lastBp, firstBp);
+
+            //(Vector3 firstBp, Vector3 lastBp) = GetFirstLastBorderPoints();
+            //var forward = (firstBp - rnTrafficLight.GetParentController(RnGetter).GetParentRoad(RnGetter).TargetTrans.FirstOrDefault().transform.position).normalized;
+            //var points = SplineTool.SortPointsByAngle(new List<Vector3>() { firstBp, lastBp }, forward, firstBp);
+            //return SplineTool.GetLongestLine(points);
+        }
+
+        //　信号機アセット配置時のRight Vector取得
+        public Vector3 GetRightVector()
+        {
+            (Vector3 first, Vector3 last) = GetFirstLastBorderPointsNormalized();
+            Vector3 vector = (first - last).normalized;
+            vector.y = 0;
+            return vector;
+        }
+
+        //　信号機アセットの配置位置
+        public Vector3 GetAssetPosition()
+        {
+            var (firstPoint, lastPoint) = GetFirstLastBorderPointsNormalized();
+            if (firstPoint != Vector3.zero)
+                return firstPoint;
+
+            var edges = rnTrafficLight.GetEdges(RnGetter);
+            return edges.LastOrDefault().GetChildLineString(RnGetter).GetChildPointsVector(RnGetter).LastOrDefault();
         }
 
         RoadNetworkDataGetter m_RoadNetworkGetter;
@@ -478,29 +581,34 @@ namespace AWSIM
         {
             if (!Application.isPlaying)
                 return;
-            if (!RoadNetworkConstants.SHOW_DEBUG_INFO)
+            if (!RoadNetworkConstants.SHOW_DEBUG_GIZMOS)
                 return;
 
-            var (firstPoint, lastPoint) = GetFirstLastBorderPoints();
+            var (firstPoint, lastPoint) = GetFirstLastBorderPointsNormalized();
             Gizmos.color = GetBulbColor();
-            if (firstPoint != Vector3.zero && lastPoint != Vector3.zero)
+            Gizmos.DrawSphere(GetAssetPosition(), 0.5f);
+
+            var (firstPointSp, lastPointSp) = GetFirstLastStopLinePoints();
+            if (firstPointSp != Vector3.zero && lastPointSp != Vector3.zero)
             {
-                Gizmos.DrawLine(firstPoint, lastPoint);
-                Gizmos.DrawSphere(lastPoint, 0.2f);
+                Gizmos.DrawLine(firstPointSp, lastPointSp);
             }
-            else
-                Gizmos.DrawSphere(transform.position, 0.5f);
         }
 
         void OnDrawGizmosSelected()
         {
-            var (firstPoint, lastPoint) = GetFirstLastBorderPoints();
+            var (firstPoint, lastPoint) = GetFirstLastBorderPointsNormalized();
             Gizmos.color = Color.white;
             if (firstPoint != Vector3.zero && lastPoint != Vector3.zero)
             {
                 Gizmos.DrawLine(firstPoint, lastPoint);
-                Gizmos.DrawSphere(lastPoint, 0.2f);
+                Gizmos.DrawSphere(GetAssetPosition(), 0.2f);
             }
+
+            //debug
+            //Gizmos.color = Color.red;
+            //Gizmos.DrawLine(firstPoint, transform.parent.position);
+
         }
     }
 }
