@@ -1528,6 +1528,16 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 7536862467445339434}
+    - renderer: {fileID: 4558027191652333079}
+    - renderer: {fileID: 5593714523715368629}
+    - renderer: {fileID: 5808199255768726870}
+    - renderer: {fileID: 5808199255768726870}
+    - renderer: {fileID: 3910321361154910323}
+    - renderer: {fileID: 7799887804256019111}
+    - renderer: {fileID: 5871215806960667614}
+    - renderer: {fileID: 7967612136719252411}
+    - renderer: {fileID: 5291755399568130005}
+    - renderer: {fileID: 9051507377578805074}
   m_Enabled: 1
 --- !u!65 &3743598396944793605
 BoxCollider:

@@ -52,7 +52,7 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 if (raycastHit.collider.gameObject.TryGetComponent<PlateauSandboxElectricPostConnectCollider>(out var connectCollider))
                 {
-                    connectCollider.OnMouseHover(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
+                    connectCollider.OnMouseHover(m_Context.SelectingPost);
                     m_SelectedObject = connectCollider;
                     return;
                 }
@@ -60,7 +60,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
             if (m_SelectedObject)
             {
-                m_SelectedObject.OnMoveLeave(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
+                m_SelectedObject.OnMoveLeave(m_Context.SelectingPost);
                 m_SelectedObject = null;
             }
         }
@@ -69,7 +69,7 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             if (m_SelectedObject != null)
             {
-                m_SelectedObject.OnSelect(m_Context.SelectingPost.target, m_Context.SelectingPost.isFront);
+                m_SelectedObject.OnSelect(m_Context.SelectingPost);
                 m_Context.OnSelected.Invoke();
                 m_SelectedObject = null;
             }

@@ -1,92 +1,150 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
 namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 {
+    public class PlateauSandboxElectricConnectInfo
+    {
+        public PlateauSandboxElectricPost m_Target;
+        public bool m_IsTargetFront;
+        public int m_OwnIndex;
+        public int m_TargetIndex;
+    }
+
     /// <summary>
     /// 電柱の情報
     /// </summary>
     public class PlateauSandboxElectricPostInfo
     {
-        private PlateauSandboxElectricPost m_OwnPost;
+        private List<PlateauSandboxElectricConnectInfo> m_FrontConnectedPosts = new();
+        public List<PlateauSandboxElectricConnectInfo> FrontConnectedPosts => m_FrontConnectedPosts;
 
-        private (PlateauSandboxElectricPost target, bool isFront) m_FrontConnectedPost = (null, false);
-        public (PlateauSandboxElectricPost target, bool isFront) FrontConnectedPost => m_FrontConnectedPost;
+        private List<PlateauSandboxElectricConnectInfo> m_BackConnectedPosts = new();
+        public List<PlateauSandboxElectricConnectInfo> BackConnectedPosts => m_BackConnectedPosts;
 
-        private (PlateauSandboxElectricPost target, bool isFront) m_BackConnectedPost = (null, false);
-        public (PlateauSandboxElectricPost target, bool isFront) BackConnectedPost => m_BackConnectedPost;
-
-        private PlateauSandboxElectricPostContext m_Context;
-
-        public PlateauSandboxElectricPostInfo(PlateauSandboxElectricPost ownPost)
-        {
-            m_Context = PlateauSandboxElectricPostContext.GetCurrent();
-            m_OwnPost = ownPost;
-        }
-
-        public bool CanConnect(bool isFront, PlateauSandboxElectricPost target)
+        public int AddConnectionSpace(bool isFront)
         {
             if (isFront)
             {
-                return m_FrontConnectedPost.target != target;
+                int index = m_FrontConnectedPosts.Count;
+                var info = new PlateauSandboxElectricConnectInfo()
+                {
+                    m_OwnIndex = index
+                };
+                m_FrontConnectedPosts.Add(info);
+                return index;
             }
             else
             {
-                return m_BackConnectedPost.target != target;
+                int index = m_BackConnectedPosts.Count;
+                var info = new PlateauSandboxElectricConnectInfo()
+                {
+                    m_OwnIndex = index
+                };
+                m_BackConnectedPosts.Add(info);
+                return index;
             }
         }
 
-        public void SetFrontConnect(PlateauSandboxElectricPost other, bool isOtherFront)
+        public void ResetConnection(bool isFront, int index)
         {
-            if (other == m_FrontConnectedPost.target)
+            if (isFront)
             {
-                return;
+                foreach (var plateauSandboxElectricConnectInfo in m_FrontConnectedPosts)
+                {
+                    if (plateauSandboxElectricConnectInfo.m_OwnIndex == index)
+                    {
+                        plateauSandboxElectricConnectInfo.m_IsTargetFront = false;
+                        plateauSandboxElectricConnectInfo.m_Target = null;
+                        plateauSandboxElectricConnectInfo.m_TargetIndex = -1;
+                        return;
+                    }
+                }
             }
-            m_FrontConnectedPost = (other, isOtherFront);
+            else
+            {
+                foreach (var plateauSandboxElectricConnectInfo in m_BackConnectedPosts)
+                {
+                    if (plateauSandboxElectricConnectInfo.m_OwnIndex == index)
+                    {
+                        plateauSandboxElectricConnectInfo.m_IsTargetFront = false;
+                        plateauSandboxElectricConnectInfo.m_Target = null;
+                        plateauSandboxElectricConnectInfo.m_TargetIndex = -1;
+                        return;
+                    }
+                }
+            }
         }
 
-        public void SetBackConnect(PlateauSandboxElectricPost other, bool isOtherFront)
+        public void RemoveConnection(bool isFront, int index)
         {
-            if (other == m_BackConnectedPost.target)
+            if (isFront)
             {
-                return;
+                m_FrontConnectedPosts.RemoveAll(x => x.m_OwnIndex == index);
             }
-            m_BackConnectedPost = (other, isOtherFront);
+            else
+            {
+                m_BackConnectedPosts.RemoveAll(x => x.m_OwnIndex == index);
+            }
         }
 
-        public bool CanShowFrontWire()
+        public void SetFrontConnect(PlateauSandboxElectricPost other, bool isOtherFront, int index, int otherIndex)
         {
-            if (FrontConnectedPost.target == null)
+            foreach (var plateauSandboxElectricConnectInfo in m_FrontConnectedPosts)
             {
-                return false;
+                if (plateauSandboxElectricConnectInfo.m_OwnIndex == index)
+                {
+                    plateauSandboxElectricConnectInfo.m_IsTargetFront = isOtherFront;
+                    plateauSandboxElectricConnectInfo.m_Target = other;
+                    plateauSandboxElectricConnectInfo.m_TargetIndex = otherIndex;
+                    return;
+                }
             }
-
-            // 相手が表示されてなければ表示
-            if (FrontConnectedPost.isFront && !FrontConnectedPost.target.IsShowingFrontWire)
-            {
-                return true;
-            }
-            else if (!FrontConnectedPost.isFront && !FrontConnectedPost.target.IsShowingBackWire)
-            {
-                return true;
-            }
-            return false;
         }
 
-        public bool CanShowBackWire()
+        public void SetBackConnect(PlateauSandboxElectricPost other, bool isOtherFront, int index, int otherIndex)
         {
-            if (BackConnectedPost.target == null)
+            foreach (var plateauSandboxElectricConnectInfo in m_BackConnectedPosts)
             {
-                return false;
+                if (plateauSandboxElectricConnectInfo.m_OwnIndex == index)
+                {
+                    plateauSandboxElectricConnectInfo.m_IsTargetFront = isOtherFront;
+                    plateauSandboxElectricConnectInfo.m_Target = other;
+                    plateauSandboxElectricConnectInfo.m_TargetIndex = otherIndex;
+                    return;
+                }
             }
+        }
 
-            // 相手が表示されてなければ表示
-            if (BackConnectedPost.isFront && !BackConnectedPost.target.IsShowingFrontWire)
+        public PlateauSandboxElectricConnectInfo GetConnectedPost(bool isFront, int index)
+        {
+            if (isFront)
             {
-                return true;
+                foreach (var plateauSandboxElectricConnectInfo in m_FrontConnectedPosts)
+                {
+                    if (plateauSandboxElectricConnectInfo.m_OwnIndex == index)
+                    {
+                        return plateauSandboxElectricConnectInfo;
+                    }
+                }
             }
-            else if (!BackConnectedPost.isFront && !BackConnectedPost.target.IsShowingBackWire)
+            else
             {
-                return true;
+                foreach (var plateauSandboxElectricConnectInfo in m_BackConnectedPosts)
+                {
+                    if (plateauSandboxElectricConnectInfo.m_OwnIndex == index)
+                    {
+                        return plateauSandboxElectricConnectInfo;
+                    }
+                }
             }
-            return false;
+            return new PlateauSandboxElectricConnectInfo();
+        }
+
+        public string GetNextWireID()
+        {
+            return Guid.NewGuid().ToString();
         }
     }
 }

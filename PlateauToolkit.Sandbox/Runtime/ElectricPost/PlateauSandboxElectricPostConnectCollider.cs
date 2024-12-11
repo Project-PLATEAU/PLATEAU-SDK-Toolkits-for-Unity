@@ -19,46 +19,55 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             m_ParentPost = transform.parent.GetComponent<PlateauSandboxElectricPost>();
         }
 
-        public void OnMouseHover(PlateauSandboxElectricPost otherPost, bool isOtherFront)
+        public void OnMouseHover(PlateauSandboxElectricPostSelectingInfo info)
         {
-            if (otherPost == null)
+            if (info.post == null)
             {
                 return;
             }
 
-            if (otherPost == m_ParentPost)
+            if (info.post == m_ParentPost)
             {
                 return;
             }
 
             m_ParentPost.SetHighLight(true);
 
-            // 他の電柱から電線を表示してもらう
-            otherPost.OnHoverConnectionPoint(isOtherFront, m_ParentPost, isFront);
+            // 選択中の電柱から電線を表示してもらう
+            info.post.SetWire(info.isFront, info.index);
+            info.post.TryShowWire(info.isFront, info.index, m_ParentPost, isFront);
         }
 
-        public void OnMoveLeave(PlateauSandboxElectricPost otherPost, bool isOtherFront)
+        public void OnMoveLeave(PlateauSandboxElectricPostSelectingInfo info)
         {
-            if (otherPost == null)
+            if (info.post == null)
             {
                 return;
             }
 
-            otherPost.OnLeaveConnectionPoint(isOtherFront);
+            // 電線非表示
+            info.post.RemoveWireID(info.isFront, info.index);
+            info.post.TryShowWire(info.isFront, info.index, m_ParentPost, isFront);
+
             m_ParentPost.SetHighLight(false);
         }
 
-        public void OnSelect(PlateauSandboxElectricPost otherPost, bool isOtherFront)
+        public void OnSelect(PlateauSandboxElectricPostSelectingInfo info)
         {
-            // 接続完了
-            if (isFront)
+            if (info.post == null)
             {
-                m_ParentPost.SetFrontConnectPoint(otherPost, isOtherFront);
+                return;
             }
-            else
-            {
-                m_ParentPost.SetBackConnectPoint(otherPost, isOtherFront);
-            }
+
+            // 自身の接続情報を設定
+            int ownIndex = m_ParentPost.AddConnectionAndWires(isFront);
+
+            // 接続
+            string wireID = m_ParentPost.GetWireID();
+            m_ParentPost.SetConnectPoint(info.post, isFront, info.isFront, ownIndex, wireID, info.index);
+            info.post.SetConnectPoint(m_ParentPost, info.isFront, isFront, info.index, wireID, ownIndex);
+
+            // ハイライト解除
             m_ParentPost.SetHighLight(false);
         }
     }

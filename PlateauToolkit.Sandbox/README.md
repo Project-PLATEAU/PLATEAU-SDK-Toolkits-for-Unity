@@ -72,6 +72,13 @@ PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミ�
         - [オフィスビル](#オフィスビル)
       - [色設定](#色設定)
       - [Prefab保存](#prefab保存)
+  - [8-3. 電柱の結線機能](#8-3-電柱の結線機能)
+    - [電柱の種類](#電柱の種類)
+    - [電線の自動結線](#電線の自動結線)
+    - [電線の手動結線](#電線の手動結線)
+      - [電線の手動結線 - 電柱の選択](#電線の手動結線---電柱の選択)
+      - [電線の手動結線 - 電柱の削除](#電線の手動結線---電柱の削除)
+      - [電線の手動結線 - 電柱の移動と回転](#電線の手動結線---電柱の移動と回転)
 - [9. カメラインタラクション機能](#9-カメラインタラクション機能)
   - [9-1. 操作方法](#9-1-操作方法)
     - [共通](#共通)
@@ -684,6 +691,70 @@ v2.0.0-alpha時点では以下の5種類の建築物アセットを提供して�
 
 > [!WARNING]
 > 現在のバージョンではヒエラルキーからのドラッグ＆ドロップによるPrefab保存、およびプレハブモードでのPrefabの編集はサポートされていません。
+
+## 8.3 電柱の結線機能
+
+配置可能アセットの中には、電柱アセットを配置して電柱同士を結線することができる電柱コンポーネント ( `PlateauSandboxElectricPost` ) がアタッチされているものがあります。
+
+電線は配置時に自動で他の電柱に結線されます。また、配置後インスペクタより手動で解除、接続が可能です。
+
+電柱には前と後ろの２箇所の結線位置があり、電線はこの２箇所に結線します。
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost.png">
+
+### 電柱の種類
+
+電柱には以下の３種類の電柱アセットが用意されています。
+
+- StreetFurniture_ElectricPost_01
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_type01.png">
+
+- StreetFurniture_ElectricPost_02
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_type02.png">
+
+- StreetFurniture_ElectricPost_03
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_type03.png">
+
+### 電線の自動結線
+
+電柱を配置することで、電柱同士に自動で電線が結線されます。
+
+ただし、結線されるのは配置された電柱が50m以内、かつ間に障害物がない場合となります。 
+
+電柱の前と後ろの結線位置のどちらに結線されるかは、配置位置関係として近い方に結線されます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_auto_connect.gif">
+
+### 電線の手動結線
+
+電柱を配置後、インスペクタより電線を接続、削除が可能です。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_edit.png">
+
+#### 電線の手動結線 - 電柱の選択
+
+`前方接続部`、もしくは`後方接続部`の「追加する」ボタンを押下することで、他の電柱に結線できる枠を追加できます。
+
+枠を追加後、「選択する」を選択することで、別の電柱に結線が可能です。
+
+電柱の結線位置は前と後ろの２箇所あり、マウスでホバーしている位置に結線されます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_edit.gif">
+
+#### 電線の手動結線 - 電柱の削除
+
+「削除する」を選択することで、結線されている電線が削除されます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_delete.gif">
+
+#### 電線の手動結線 - 電柱の移動と回転
+
+結線状態にてシーン上で電柱を移動または回転すると、結線状態は維持されたまま、電線が引き延ばされます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_move.gif">
 
 # 9. カメラインタラクション機能
 

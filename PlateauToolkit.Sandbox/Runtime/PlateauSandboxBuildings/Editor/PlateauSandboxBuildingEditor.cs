@@ -511,7 +511,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     return DrawDynamicPropertyOnly(m_HotelParams, new Dictionary<string, Tuple<string, float, float>>
                     {
                         {"roofThickness", new Tuple<string, float, float>("屋根の暑さ", 0f, 5f)}
-                    }, isUpdateShaderParams:true);                    
+                    }, isUpdateShaderParams:true);
                 case (int)BuildingType.k_Factory:
                     EditorGUILayout.LabelField("工場設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_FactoryParams);

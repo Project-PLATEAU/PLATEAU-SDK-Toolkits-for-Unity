@@ -202,6 +202,16 @@ LODGroup:
     fadeTransitionWidth: 0
     renderers:
     - renderer: {fileID: 3681943393189298326}
+    - renderer: {fileID: 5068841041096004793}
+    - renderer: {fileID: 8434704622584275003}
+    - renderer: {fileID: 7525833549658742651}
+    - renderer: {fileID: 8101790306573412617}
+    - renderer: {fileID: 1206809331065279750}
+    - renderer: {fileID: 3426414701431135709}
+    - renderer: {fileID: 2120794803786050040}
+    - renderer: {fileID: 6879392235412301430}
+    - renderer: {fileID: 6399227269187296949}
+    - renderer: {fileID: 7525833549658742651}
   m_Enabled: 1
 --- !u!114 &1805194509564428366
 MonoBehaviour:
