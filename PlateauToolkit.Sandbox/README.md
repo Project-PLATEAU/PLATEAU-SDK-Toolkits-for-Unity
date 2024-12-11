@@ -681,16 +681,32 @@ v2.0.0-alpha時点では以下の5種類の建築物アセットを提供して�
 - 1階を窓に変更：建物の1階部分を壁から窓に変更できます。
 - 壁パネルの高さ：上下の窓ガラスに挟まれた壁パネルの高さを指定できます。
 
+##### ホテル
+<img width="400" alt="building_settings_hotel" src="../Documentation~/Sandbox Images/building_settings_hotel.png">
+
+- 左側に窓を付ける：建物の正面から左側の壁を窓に変更できます。
+- 右側に窓を付ける：建物の正面から右側の壁を窓に変更できます。
+- 屋根の厚さ：屋根の厚さを指定できます。
+
+<img width="400" alt="building_settings_hotel" src="../Documentation~/Sandbox Images/building_settings_hotel2.png">
+
+- RoofSideFrontマテリアルに割当てたテクスチャ位置を変更できます。
+  - 横のオフセット：テクスチャのX位置を変更できます。
+  - 縦のオフセット：テクスチャのY位置を変更できます。
+
+
+##### 工場
+<img width="400" alt="building_settings_factory" src="../Documentation~/Sandbox Images/building_settings_factory.png">
+
+- シャッターに庇を追加：シャッターに庇を追加できます。
+
 #### 色設定
 
 建物の色をテクスチャやカラー情報を利用して変更できます。テクスチャを利用する場合は、マテリアルで利用しているテクスチャを編集します。カラー情報を利用する場合は、「テクスチャ利用」チェックボックスをオフにすることでカラー編集項目が表示されます。
 
 #### Prefab保存
 
-建物アセットのPrefab保存では [インスタンスのオーバーライド](https://docs.unity3d.com/ja/2019.4/Manual/PrefabInstanceOverrides.html) に加えて、「建造物を新規プレハブとして保存」ボタンにより、カスタマイズしたパラメータを名前が連番の別のPrefabとして保存できます。Prefabと同時に利用しているメッシュも併せてサンプルフォルダ内のBuildingsフォルダ内に保存されます。
-
-> [!WARNING]
-> 現在のバージョンではヒエラルキーからのドラッグ＆ドロップによるPrefab保存、およびプレハブモードでのPrefabの編集はサポートされていません。
+建物アセットのPrefab保存では [インスタンスのオーバーライド](https://docs.unity3d.com/ja/2019.4/Manual/PrefabInstanceOverrides.html) に加えて、「建造物を新規プレハブとして保存」ボタンにより、カスタマイズしたパラメータを名前が連番の別のPrefabとして保存できます。Prefabと同時に利用しているメッシュも併せてサンプルフォルダ内のBuildingsフォルダ内に保存されます。 ヒエラルキーからのドラッグ＆ドロップによるPrefab保存、およびプレハブモードでのPrefabの編集についてもサポートしています。
 
 ## 8.3 電柱の結線機能
 
