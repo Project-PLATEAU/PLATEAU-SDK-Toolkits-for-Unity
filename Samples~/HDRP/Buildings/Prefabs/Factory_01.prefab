@@ -168,9 +168,9 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 644c1a7b4fd9ad34ba7646aede2aaf68, type: 2}
-  - {fileID: 2100000, guid: 77a58d7aac420114e994f8e85a5f6395, type: 2}
-  - {fileID: 2100000, guid: 9bfa7a47cac055d4e8f10deac5b552d2, type: 2}
+  - {fileID: 2100000, guid: ec8eba52ca141f64e80de3f56c4d1a96, type: 2}
+  - {fileID: 2100000, guid: 41566ea851facf5428435de7327fa5d7, type: 2}
+  - {fileID: 2100000, guid: 54a7641d4924ba6409398594019f8032, type: 2}
   - {fileID: 2100000, guid: c44f543525914eb4985072a1e3cbe8a7, type: 2}
   - {fileID: 2100000, guid: 6a95457485795ae4fa71112d061885ca, type: 2}
   - {fileID: 2100000, guid: 0e5639004f557ce4599fc42f71832e77, type: 2}
@@ -410,24 +410,32 @@ MonoBehaviour:
     roof: {fileID: 0}
     roofSide: {fileID: 0}
   hotelParams:
-    hasBalconyLeft: 0
-    hasBalconyRight: 0
+    hasWindowLeft: 0
+    hasWindowRight: 0
+    roofThickness: 0
+  hotelShaderParams:
+    textureOffsetX: 0
+    textureOffsetY: 0
   hotelVertexColorPalette:
     wallColor: {r: 1, g: 1, b: 1, a: 1}
+    windowTopAndBottomWallColor: {r: 1, g: 1, b: 1, a: 1}
     windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
     roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideFrontColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
   hotelVertexColorMaterialPalette:
     vertexWall: {fileID: 0}
     vertexWindowPane: {fileID: 0}
     vertexRoof: {fileID: 0}
   hotelMaterialPalette:
     wall: {fileID: 0}
+    windowTopAndBottomWall: {fileID: 0}
     windowPane: {fileID: 0}
     windowGlass: {fileID: 0}
     roof: {fileID: 0}
     roofSide: {fileID: 0}
+    roofSideFront: {fileID: 0}
   factoryParams:
     hasEntranceRoof: 1
   factoryVertexColorPalette:
@@ -449,9 +457,9 @@ MonoBehaviour:
     socle: {fileID: 2100000, guid: c44f543525914eb4985072a1e3cbe8a7, type: 2}
     socleTop: {fileID: 2100000, guid: 6a95457485795ae4fa71112d061885ca, type: 2}
     wall: {fileID: 2100000, guid: 0e5639004f557ce4599fc42f71832e77, type: 2}
-    entranceShutter: {fileID: 2100000, guid: 77a58d7aac420114e994f8e85a5f6395, type: 2}
-    entranceShutterFrame: {fileID: 2100000, guid: 644c1a7b4fd9ad34ba7646aede2aaf68, type: 2}
-    entranceShutterRoof: {fileID: 2100000, guid: 9bfa7a47cac055d4e8f10deac5b552d2, type: 2}
+    entranceShutter: {fileID: 2100000, guid: 41566ea851facf5428435de7327fa5d7, type: 2}
+    entranceShutterFrame: {fileID: 2100000, guid: ec8eba52ca141f64e80de3f56c4d1a96, type: 2}
+    entranceShutterRoof: {fileID: 2100000, guid: 54a7641d4924ba6409398594019f8032, type: 2}
     windowFrame: {fileID: 2100000, guid: b8a6a8db63fd6a24e95f0a608435ab55, type: 2}
     windowGlass: {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
     roof: {fileID: 2100000, guid: 1fecb9eab6eb26a4b8a183b2d99fef61, type: 2}
