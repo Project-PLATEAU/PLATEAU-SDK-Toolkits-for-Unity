@@ -7,6 +7,7 @@ using AWSIM.TrafficSimulation;
 using UnityEditor;
 using PLATEAU.CityInfo;
 using AWSIM;
+using PLATEAU.RoadAdjust.RoadNetworkToMesh;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -98,6 +99,18 @@ namespace PlateauToolkit.Sandbox.Editor
                 ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
             }
         }
+        void SetReproducedRoadsAsGroundLayer()
+        {
+            PLATEAUReproducedRoad[] reproducedRoads = GameObject.FindObjectsOfType<PLATEAUReproducedRoad>();
+            if (reproducedRoads != null)
+            {
+                for (int i = 0; i < reproducedRoads.Length; i++)
+                {
+                    ChangeLayersIncludeChildren(reproducedRoads[i].transform, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
+                }
+            }
+        }
+
 
         void ChangeLayersIncludeChildren(Transform trans, LayerMask layer)
         {
@@ -120,12 +133,14 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
+            SetReproducedRoadsAsGroundLayer();
+
             if (RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
             {
                 SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
             }
 
-            PlaceTrafficLights();
+            //PlaceTrafficLights();
         }
 
         // 交通シミュレータ配置　実行ボタン押下時に呼ばれる
