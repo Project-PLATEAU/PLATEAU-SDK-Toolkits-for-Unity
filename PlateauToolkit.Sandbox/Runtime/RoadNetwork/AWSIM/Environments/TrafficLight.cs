@@ -500,43 +500,6 @@ namespace AWSIM
 
             bool isLeft = GeometryTool.IsFacingLeft(first, last, intersectionCenter);
             return isLeft ? (first, last) : (last, first);
-
-
-            //(Vector3 firstSp, Vector3 lastSp) = GetFirstLastStopLinePoints();
-            //(Vector3 firstBp, Vector3 lastBp) = GetFirstLastBorderPoints();
-            //if ((firstSp, lastSp) == (firstBp, lastBp))
-            //{
-            //    //if (rnTrafficLight.GetEdges(RnGetter).FirstOrDefault().IsReverseNormal)
-            //    //    return (firstBp, lastBp);
-
-            //    //var forward = (lastBp - firstBp).normalized;
-            //    //var points = SplineTool.SortPointsByAngle(new List<Vector3>() { firstBp, lastBp }, forward, rnTrafficLight.GetParentController(RnGetter).GetParentRoad(RnGetter).TargetTrans.FirstOrDefault().transform.position);
-            //    //return (points.FirstOrDefault(), points.LastOrDefault());
-
-            //    //return (lastBp, firstBp);
-
-            //    bool isLeft = SplineTool.IsLeft(firstBp, lastBp, Vector3.up, rnTrafficLight.GetParentController(RnGetter).GetParentRoad(RnGetter).TargetTrans.FirstOrDefault().transform.position);
-            //    if (isLeft)
-            //    {
-            //        return (firstBp, lastBp);
-            //    }
-            //    else
-            //    {
-            //        return (lastBp, firstBp);
-            //    }
-            //}
-
-            //if (firstBp == firstSp || firstBp == lastSp)
-            //{
-            //    return (firstBp, lastBp);
-            //}
-
-            //return (lastBp, firstBp);
-
-            //(Vector3 firstBp, Vector3 lastBp) = GetFirstLastBorderPoints();
-            //var forward = (firstBp - rnTrafficLight.GetParentController(RnGetter).GetParentRoad(RnGetter).TargetTrans.FirstOrDefault().transform.position).normalized;
-            //var points = SplineTool.SortPointsByAngle(new List<Vector3>() { firstBp, lastBp }, forward, firstBp);
-            //return SplineTool.GetLongestLine(points);
         }
 
         //　信号機アセット配置時のRight Vector取得
@@ -604,11 +567,6 @@ namespace AWSIM
                 Gizmos.DrawLine(firstPoint, lastPoint);
                 Gizmos.DrawSphere(GetAssetPosition(), 0.2f);
             }
-
-            //debug
-            //Gizmos.color = Color.red;
-            //Gizmos.DrawLine(firstPoint, transform.parent.position);
-
         }
     }
 }
