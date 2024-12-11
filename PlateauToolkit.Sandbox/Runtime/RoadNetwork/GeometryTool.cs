@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Unity.Mathematics;
 using UnityEngine;
@@ -6,7 +7,7 @@ using UnityEngine.Splines;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
-    public class SplineTool
+    public class GeometryTool
     {
         // Unity Spline 動的生成
         public static Spline CreateSplineFromPoints(List<Vector3> points)
@@ -81,6 +82,42 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             // 計算が範囲外の場合、最後の点を返す（通常は起こらない）
             return points.Last();
+        }
+
+        // 最も長い線の始点、終点
+        public static (Vector3, Vector3) GetLongestLine(List<Vector3> points)
+        {
+            if (points == null || points.Count < 2)
+                return (Vector3.zero, Vector3.zero);
+
+            Vector3 longestStart = Vector3.zero;
+            Vector3 longestEnd = Vector3.zero;
+            float maxDistance = 0;
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                for (int j = i + 1; j < points.Count; j++)
+                {
+                    float distance = Vector3.Distance(points[i], points[j]);
+                    if (distance > maxDistance)
+                    {
+                        maxDistance = distance;
+                        longestStart = points[i];
+                        longestEnd = points[j];
+                    }
+                }
+            }
+
+            return (longestStart, longestEnd);
+        }
+
+        // point1, point2を比較してtargetに対して左側に位置しているかの判定
+        public static bool IsFacingLeft(Vector3 point1, Vector3 point2, Vector3 target)
+        {
+            Vector3 direction = point2 - point1;
+            Vector3 planeNormal = Vector3.Cross(Vector3.up, direction);
+            float dot = Vector3.Dot(planeNormal, target - point1);
+            return dot < 0;
         }
     }
 }

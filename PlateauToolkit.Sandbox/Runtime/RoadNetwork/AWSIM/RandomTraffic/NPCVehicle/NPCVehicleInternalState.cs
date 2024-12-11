@@ -64,9 +64,14 @@ namespace AWSIM.TrafficSimulation
             get => _SpeedMode;
             set
             {
-                if (_SpeedMode == NPCVehicleSpeedMode.NORMAL && IsStopped(value)) //Slowは無視 (Stop -> Slowを繰り返すため判定できない場合がある）
+                //停止からの時間測定
+                if (!IsStopped(_SpeedMode) && IsStopped(value))
                 {
                     _SpeedModeStopStartTime = Time.time;
+                }
+                else if (value == NPCVehicleSpeedMode.NORMAL)　//Slowは無視 (Stop -> Slowを繰り返すため判定できない場合がある）
+                {
+                    _SpeedModeStopStartTime = 0f;
                 }
                 _SpeedMode = value;
             }
@@ -74,17 +79,36 @@ namespace AWSIM.TrafficSimulation
         public float SpeedModeStopStartTime => _SpeedModeStopStartTime;
 
         private NPCVehicleSpeedMode _SpeedMode;
-        private float _SpeedModeStopStartTime;
+        private float _SpeedModeStopStartTime = 0f;
 
         private bool IsStopped(NPCVehicleSpeedMode mode)
         {
             return (mode != NPCVehicleSpeedMode.NORMAL && mode != NPCVehicleSpeedMode.SLOW);
         }
 
+        //消去までの最大停車時間
+        public float GetMaxIdleTime()
+        {
+            //赤信号の場合はIDLE TIME + Green + Red
+            if (TrafficLightPassability == TrafficLightPassability.RED)
+            {
+                return RoadNetworkConstants.MAX_IDLE_TIME
+                    + RoadNetworkConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS
+                    + RoadNetworkConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
+            }
+            return RoadNetworkConstants.MAX_IDLE_TIME;
+        }
+
         public bool CheckMaxIdleTimeExceeded()
         {
             //停車時間が長すぎる場合は消す
-            return SpeedMode != NPCVehicleSpeedMode.NORMAL && SpeedMode != NPCVehicleSpeedMode.SLOW && Time.time - SpeedModeStopStartTime > RoadNetworkConstants.MAX_IDLE_TIME;
+            if (SpeedModeStopStartTime == 0f)
+                return false;
+
+            if (SpeedMode == NPCVehicleSpeedMode.NORMAL || SpeedMode == NPCVehicleSpeedMode.SLOW)
+                return false;
+
+            return Time.time - SpeedModeStopStartTime > GetMaxIdleTime();
         }
 
         // Output from Control

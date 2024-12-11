@@ -1,3 +1,5 @@
+using PLATEAU.RoadNetwork.Data;
+using PlateauToolkit.Sandbox.RoadNetwork;
 using UnityEditor;
 using UnityEngine;
 
@@ -11,6 +13,20 @@ namespace AWSIM.TrafficSimulation
         {
             // var stopLine = target as StopLine;
             // TODO: Handle implementation
+        }
+
+        public override void OnInspectorGUI()
+        {
+            serializedObject.Update();
+
+            if (RoadNetworkConstants.SHOW_DEBUG_ROADNETWORK_INFO)
+            {
+                base.OnInspectorGUI();
+            }
+            else
+            {
+                DrawPropertiesExcluding(serializedObject, "rnRoad", "rnIntersection", "rnBorder");
+            }
         }
 
         [DrawGizmo(GizmoType.InSelectionHierarchy | GizmoType.Pickable)]

@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -69,19 +70,29 @@ namespace AWSIM.TrafficSimulation
         }
 
         SerializedProperty rnRoad;
+
         public override void OnInspectorGUI()
         {
             //base.OnInspectorGUI();
             TrafficLane trafficLane = target as TrafficLane;
             serializedObject.Update();
-            if (trafficLane.intersectionLane)
+
+            if (RoadNetworkConstants.SHOW_DEBUG_ROADNETWORK_INFO)
             {
-                DrawPropertiesExcluding(serializedObject, "rnRoad", "rnLane");
+                if (trafficLane.intersectionLane)
+                {
+                    DrawPropertiesExcluding(serializedObject, "rnRoad", "rnLane");
+                }
+                else
+                {
+                    DrawPropertiesExcluding(serializedObject, "rnIntersection", "rnTrack");
+                }
             }
             else
             {
-                DrawPropertiesExcluding(serializedObject, "rnIntersection", "rnTrack");
+                DrawPropertiesExcluding(serializedObject, "rnRoad", "rnLane", "rnIntersection", "rnTrack");
             }
+
             serializedObject.ApplyModifiedProperties();
 
 

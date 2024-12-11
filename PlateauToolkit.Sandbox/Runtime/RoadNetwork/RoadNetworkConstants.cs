@@ -11,11 +11,17 @@
         /// 各レーンの最大速度
         /// </summary>
         public static readonly float SPEED_LIMIT = 15f;
+        public static readonly float SPEED_LIMIT_INTERSECTION = 12f;
 
         /// <summary>
         /// 停止してから消すまでの時間(秒）
         /// </summary>
         public static readonly float MAX_IDLE_TIME = 20f;
+
+        //信号の切替秒数
+        public static readonly float TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS = 10f;
+        public static readonly float TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS = 3f;
+        public static readonly float TRAFFIC_LIGHT_RED_INTERVAL_SECONDS = 1f;
 
         /// <summary>
         /// Goundからの距離判定を行うか (Groundから一定距離離れた車輛は削除)
@@ -35,7 +41,9 @@
         public static readonly string TRAFFIC_MANAGER_NAME = "TrafficManager";
         public static readonly string VEHICLE_ROOT_NAME = "Vehicles";
         public static readonly string TRAFFIC_LANE_ROOT_NAME = "TrafficLanes";
+        public static readonly string TRAFFIC_INTERSECTION_ROOT_NAME = "TrafficIntersections";
         public static readonly string STOPLINE_ROOT_NAME = "StopLines";
+        public static readonly string TRAFFIC_LIGHT_ASSETS_ROOT_NAME = "TrafficLights";
 
         /// <summary>
         /// 実行後にRightOfWaysを自動生成
@@ -76,10 +84,18 @@
         public static readonly bool USE_SIMPLE_LINESTRINGS = false;
 
         /// <summary>
-        /// StopLine を生成
-        /// 信号がない場合は無意味
+        /// TrafficIntersection, TrafficLight, StopLine を生成
         /// </summary>
-        public static readonly bool ADD_STOPLINES = false;
+        public static readonly bool ADD_TRAFFIC_LIGHTS = true;
 
+        /// <summary>
+        /// DefaultでGizmoを表示
+        /// </summary>
+        public static readonly bool SHOW_DEBUG_GIZMOS = true;
+
+        /// <summary>
+        /// インスペクタにRoadNetwork参照等のDebug情報を表示
+        /// </summary>
+        public static readonly bool SHOW_DEBUG_ROADNETWORK_INFO = true;
     }
 }

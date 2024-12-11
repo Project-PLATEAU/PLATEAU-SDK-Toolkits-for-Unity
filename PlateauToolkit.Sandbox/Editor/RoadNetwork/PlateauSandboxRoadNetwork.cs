@@ -6,6 +6,8 @@ using PlateauToolkit.Sandbox.RoadNetwork;
 using AWSIM.TrafficSimulation;
 using UnityEditor;
 using PLATEAU.CityInfo;
+using AWSIM;
+using PLATEAU.RoadAdjust.RoadNetworkToMesh;
 
 namespace PlateauToolkit.Sandbox.Editor
 {
@@ -26,21 +28,6 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 GameObject.DestroyImmediate(manager);
             }
-            var vehicles = GameObject.Find(RoadNetworkConstants.VEHICLE_ROOT_NAME);
-            if (vehicles != null)
-            {
-                GameObject.DestroyImmediate(vehicles);
-            }
-            var trafficLanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
-            if (trafficLanes != null)
-            {
-                GameObject.DestroyImmediate(trafficLanes);
-            }
-            var stoplines = GameObject.Find(RoadNetworkConstants.STOPLINE_ROOT_NAME);
-            if (stoplines != null)
-            {
-                GameObject.DestroyImmediate(stoplines);
-            }
         }
 
         //AWSIM用
@@ -60,11 +47,10 @@ namespace PlateauToolkit.Sandbox.Editor
             try
             {
                 Initialize();
-                m_RnTrafficManager.SetPrefabs(vehiclePrefabs);
-                m_RnTrafficManager.CreateSimulator();
+                m_RnTrafficManager.CreateSimulator(vehiclePrefabs);
                 PostCreateSimulator();
             }
-            catch(System.Exception ex)
+            catch (System.Exception ex)
             {
                 Debug.LogException(ex);
                 EditorUtility.DisplayDialog("アセットの配置に失敗しました。", ex.Message, "OK");
@@ -73,6 +59,22 @@ namespace PlateauToolkit.Sandbox.Editor
 
             EditorUtility.DisplayDialog("アセットの配置に成功しました。", $"交通シミュレータが配置されました。\n{vehiclePrefabs.Count}種類のアセットが追加されました。", "OK");
             return true;
+        }
+
+        public void PlaceTrafficLights()
+        {
+            //var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_02")?.gameObject;
+            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_Interactive_01")?.gameObject;
+            //var trafficLightPrefab = Resources.Load("TrafficLightSample");
+            //var trafficLightPrefab = Resources.Load("StreetFurniture_TrafficLight_Interactive_01");
+
+            if (trafficLightPrefab == null)
+            {
+                EditorUtility.DisplayDialog("信号機アセットの配置に失敗しました。", "信号機アセットが見つかりませんでした。", "OK");
+                return;
+            }
+
+            m_RnTrafficManager.SetTrafficLightAsset(trafficLightPrefab);
         }
 
         //名前を含むCityObjectGroupをground Layerに
@@ -97,6 +99,18 @@ namespace PlateauToolkit.Sandbox.Editor
                 ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
             }
         }
+        void SetReproducedRoadsAsGroundLayer()
+        {
+            PLATEAUReproducedRoad[] reproducedRoads = GameObject.FindObjectsOfType<PLATEAUReproducedRoad>();
+            if (reproducedRoads != null)
+            {
+                for (int i = 0; i < reproducedRoads.Length; i++)
+                {
+                    ChangeLayersIncludeChildren(reproducedRoads[i].transform, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
+                }
+            }
+        }
+
 
         void ChangeLayersIncludeChildren(Transform trans, LayerMask layer)
         {
@@ -119,14 +133,17 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            //SetCityObjectAsGroundLayer("_tran_"); //Tranをground Layerに
+            SetReproducedRoadsAsGroundLayer();
+
             if (RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
             {
                 SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
             }
+
+            //PlaceTrafficLights();
         }
 
-        // 交通シミュレータ配置　実行時に呼ばれる
+        // 交通シミュレータ配置　実行ボタン押下時に呼ばれる
         public void Initialize()
         {
             ClearTrafficManager();

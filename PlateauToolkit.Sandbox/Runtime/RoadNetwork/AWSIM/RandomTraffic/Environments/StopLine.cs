@@ -1,4 +1,8 @@
+using PLATEAU.RoadNetwork.Data;
+using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
+using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace AWSIM.TrafficSimulation
@@ -15,6 +19,11 @@ namespace AWSIM.TrafficSimulation
         [SerializeField, Tooltip("Traffic light ")]
         private TrafficLight trafficLight;
 
+        [Header("RoadNetwork")]
+        public RnDataRoad rnRoad;
+        public RnDataIntersection rnIntersection;
+        public RnDataWay rnBorder;
+
         /// <summary>
         /// Get line data consists of 2 points.
         /// </summary>
@@ -28,7 +37,12 @@ namespace AWSIM.TrafficSimulation
         public TrafficLight TrafficLight
         {
             get => trafficLight;
-            set => trafficLight = value;
+            //set => trafficLight = value;
+            set
+            {
+                trafficLight = value;
+                trafficLight.AddStopLine(this);
+            }
         }
 
         public bool HasStopSign
@@ -37,21 +51,23 @@ namespace AWSIM.TrafficSimulation
             set => hasStopSign = value;
         }
 
-        public static StopLine Create(Vector3 p1, Vector3 p2)
+        public static StopLine Create(Vector3 p1, Vector3 p2, Transform parent)
         {
-            var parent = GameObject.Find(RoadNetworkConstants.STOPLINE_ROOT_NAME);
-            if (parent == null)
-            {
-                parent = new GameObject(RoadNetworkConstants.STOPLINE_ROOT_NAME);
-            }
-
-            var gameObject = new GameObject("StopLine", typeof(StopLine));
+            var gameObjectName = GameObjectUtility.GetUniqueNameForSibling(parent, "StopLine");
+            var gameObject = new GameObject(gameObjectName, typeof(StopLine));
             gameObject.transform.SetParent(parent.transform, false);
             gameObject.transform.position = p1;
             var stopLine = gameObject.GetComponent<StopLine>();
             stopLine.points[0] = p1;
             stopLine.points[1] = p2;
             return stopLine;
+        }
+
+        public void SetRoadNetworkData(RnDataRoad road, RnDataIntersection intersection, RnDataWay border)
+        {
+            rnRoad = road;
+            rnIntersection = intersection;
+            rnBorder = border;
         }
     }
 }

@@ -12,31 +12,6 @@ namespace AWSIM
     /// </summary>
     public class NPCVehicle : MonoBehaviour
     {
-        //Debug情報 NPCVehicleInternalState
-        [Serializable]
-        public class VehicleParameters
-        {
-            public NPCVehicleSpeedMode speedMode;
-            public string timeRemains;
-            public TrafficLane followingLane;
-            public TrafficLane prevLane;
-
-            public void SetStatus(NPCVehicleInternalState state)
-            {
-                speedMode = state.SpeedMode;
-                if (speedMode != NPCVehicleSpeedMode.NORMAL && speedMode != NPCVehicleSpeedMode.SLOW)
-                    timeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{RoadNetworkConstants.MAX_IDLE_TIME}";
-                else
-                    timeRemains = "-";
-
-                if(state.CurrentFollowingLane != followingLane)
-                {
-                    prevLane = followingLane;
-                    followingLane = state.CurrentFollowingLane;
-                }
-            }
-        }
-
         public enum TurnSignalState
         {
             OFF,
@@ -48,7 +23,41 @@ namespace AWSIM
         [SerializeField]
         GameObject visualObjectRoot;
 
-        //debug
+        //Debug情報 NPCVehicleInternalState
+        [Serializable]
+        public class VehicleParameters
+        {
+            public NPCVehicleSpeedMode speedMode;
+            public string timeRemains;
+            public TrafficLane followingLane;
+            public TrafficLane prevLane;
+
+            public TrafficLightPassability trafficLightPassability;
+
+            public int followingLanesCount;
+
+            public void SetStatus(NPCVehicleInternalState state)
+            {
+                speedMode = state.SpeedMode;
+                if (speedMode != NPCVehicleSpeedMode.NORMAL && speedMode != NPCVehicleSpeedMode.SLOW && state.SpeedModeStopStartTime != 0f)
+                    timeRemains = $"{Time.time - state.SpeedModeStopStartTime}/{state.GetMaxIdleTime()}";
+                else
+                    timeRemains = "-";
+
+                if(state.CurrentFollowingLane != followingLane)
+                {
+                    prevLane = followingLane;
+                    followingLane = state.CurrentFollowingLane;
+                }
+
+                trafficLightPassability = state.TrafficLightPassability;
+
+                followingLanesCount = state.FollowingLanes.Count;
+            }
+        }
+
+        //debug情報
+        [Header("InternalStateInfo")]
         [SerializeField]
         public VehicleParameters status = new VehicleParameters();
 
@@ -102,7 +111,6 @@ namespace AWSIM
 
         [Header("Bounding box Settngs")]
         [SerializeField] Bounds bounds;
-
 
         TurnSignalState turnSignalState = TurnSignalState.OFF;
         float turnSignalTimer = 0;
