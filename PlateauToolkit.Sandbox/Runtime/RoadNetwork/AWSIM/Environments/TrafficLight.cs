@@ -146,22 +146,16 @@ namespace AWSIM
                     // cache default material parameters.
                     if (material.HasColor(EmissiveColorURP))
                     {
-                        Debug.Log($"material is URP ");
-
                         defaultEmissiveColor = Color.black;
                     }
 
                     if (material.HasColor(EmissiveColorHDRP))
                     {
-                        Debug.Log($"material is HDRP ");
-
                         defaultEmissiveColor = material.GetColor(EmissiveColorHDRP);
                     }
 
                     if (material.HasFloat(EmissiveExposureWeightHDRP))
                     {
-                        Debug.Log($"material has ExposureWeight ");
-
                         defaultEmissiveExposureWeightHDRP = material.GetFloat(EmissiveExposureWeightHDRP);
                     }
                 }
