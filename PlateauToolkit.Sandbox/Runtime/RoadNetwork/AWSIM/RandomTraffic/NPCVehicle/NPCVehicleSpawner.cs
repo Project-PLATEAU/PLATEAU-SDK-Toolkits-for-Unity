@@ -155,7 +155,7 @@ namespace AWSIM.TrafficSimulation
         {
             var rotation = npcVehicleSpawnPoint.Forward == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(npcVehicleSpawnPoint.Forward);
             var center = rotation * localBounds.center + npcVehicleSpawnPoint.Position;
-            var ignoreGroundLayerMask = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND);
+            var ignoreGroundLayerMask = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND, "Default");
             return !Physics.CheckBox(
                 center,
                 localBounds.extents,

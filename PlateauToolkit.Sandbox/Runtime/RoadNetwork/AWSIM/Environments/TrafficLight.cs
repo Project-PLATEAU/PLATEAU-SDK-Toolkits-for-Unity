@@ -143,12 +143,25 @@ namespace AWSIM
                     // set material.
                     material = renderer.materials[materialIndex];
 
-                    defaultEmissiveColor = Color.black;
-
                     // cache default material parameters.
+                    if (material.HasColor(EmissiveColorURP))
+                    {
+                        Debug.Log($"material is URP ");
+
+                        defaultEmissiveColor = Color.black;
+                    }
+
                     if (material.HasColor(EmissiveColorHDRP))
                     {
+                        Debug.Log($"material is HDRP ");
+
                         defaultEmissiveColor = material.GetColor(EmissiveColorHDRP);
+                    }
+
+                    if (material.HasFloat(EmissiveExposureWeightHDRP))
+                    {
+                        Debug.Log($"material has ExposureWeight ");
+
                         defaultEmissiveExposureWeightHDRP = material.GetFloat(EmissiveExposureWeightHDRP);
                     }
                 }
@@ -234,9 +247,14 @@ namespace AWSIM
                         {
                             material.SetColor(EmissiveColorURP, config.Color * config.Intensity);
                         }
-                        else if (material.HasColor(EmissiveColorHDRP))
+
+                        if (material.HasColor(EmissiveColorHDRP))
                         {
                             material.SetColor(EmissiveColorHDRP, config.Color * config.Intensity);
+                        }
+
+                        if (material.HasFloat(EmissiveExposureWeightHDRP))
+                        {
                             material.SetFloat(EmissiveExposureWeightHDRP, config.ExposureWeight);
                         }
 
@@ -256,9 +274,14 @@ namespace AWSIM
                         {
                             material.SetColor(EmissiveColorURP, defaultEmissiveColor);
                         }
-                        else if (material.HasColor(EmissiveColorHDRP))
+
+                        if (material.HasColor(EmissiveColorHDRP))
                         {
                             material.SetColor(EmissiveColorHDRP, defaultEmissiveColor);
+                        }
+
+                        if (material.HasFloat(EmissiveExposureWeightHDRP))
+                        {
                             material.SetFloat(EmissiveExposureWeightHDRP, defaultEmissiveExposureWeightHDRP);
                         }
 
