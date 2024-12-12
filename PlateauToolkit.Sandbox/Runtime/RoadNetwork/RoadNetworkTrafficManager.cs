@@ -139,7 +139,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 DestroyImmediate(trafficLightParent);
             }
 
-            SetTrafficLightAsset(m_TrafficLightPrefab);
+            if (m_TrafficLightPrefab != null)
+            {
+                SetTrafficLightAsset(m_TrafficLightPrefab);
+            }
         }
 
         void OnValidate()
@@ -149,7 +152,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return;
             }
 
-            if (m_TrafficLightPrefab != m_CurrentTrafficLightPrefab && m_TrafficLightPrefab != null)
+            if (m_TrafficLightPrefab != m_CurrentTrafficLightPrefab)
             {
                 EditorApplication.delayCall += ClearCurrentAssetsAndSetTrafficLightAsset;
             }

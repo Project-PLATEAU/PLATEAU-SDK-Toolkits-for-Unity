@@ -140,7 +140,10 @@ namespace PlateauToolkit.Sandbox.Editor
                 SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
             }
 
-            //PlaceTrafficLights();
+            if (RoadNetworkConstants.ADD_TRAFFIC_LIGHTS)
+            {
+                PlaceTrafficLights();
+            }
         }
 
         // 交通シミュレータ配置　実行ボタン押下時に呼ばれる
