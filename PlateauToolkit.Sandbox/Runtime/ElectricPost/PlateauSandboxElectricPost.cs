@@ -26,8 +26,13 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         public List<PlateauSandboxElectricConnectInfo> FrontConnectedPosts => m_Info?.FrontConnectedPosts;
         public List<PlateauSandboxElectricConnectInfo> BackConnectedPosts => m_Info?.BackConnectedPosts;
 
-        private void Start()
+        public void Start()
         {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
             m_Context = PlateauSandboxElectricPostContext.GetCurrent();
             m_Context.OnCancel.AddListener(() => SetHighLight(false));
 

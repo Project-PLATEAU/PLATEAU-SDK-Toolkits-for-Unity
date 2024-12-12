@@ -833,7 +833,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             List<List<RnDataRoadBase>> outRoadGroups = new();
             List<RnDataRoadBase> roads = intersection.GetAllConnectedRoads(getter);
-            foreach (RnDataRoad road in roads)
+            foreach (var road in roads)
             {
                 var straightFromTrack = intersection.GetAllFromTracksFromRoad(getter, road).Find(x => x.TurnType == RnTurnType.Straight);
                 var toBorder = straightFromTrack?.GetToBorder(getter);
