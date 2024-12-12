@@ -315,6 +315,10 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 
         public Vector3 GetTopCenterPoint()
         {
+            if (m_ElectricPostConnectPoints == null)
+            {
+                return Vector3.zero;
+            }
             return m_ElectricPostConnectPoints.GetConnectPoint(PlateauSandboxElectricPostWireType.k_TopB, true);
         }
 
