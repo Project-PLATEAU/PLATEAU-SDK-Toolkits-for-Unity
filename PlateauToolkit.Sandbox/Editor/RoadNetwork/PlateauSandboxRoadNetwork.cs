@@ -63,14 +63,10 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void PlaceTrafficLights()
         {
-            //var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_02")?.gameObject;
-            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxStreetFurniture>("StreetFurniture_TrafficLight_Interactive_01")?.gameObject;
-            //var trafficLightPrefab = Resources.Load("TrafficLightSample");
-            //var trafficLightPrefab = Resources.Load("StreetFurniture_TrafficLight_Interactive_01");
-
+            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxInteractive>(RoadNetworkConstants.TRAFFIC_LIGHT_INTERACTIVE_ASSET_NAME)?.gameObject;
             if (trafficLightPrefab == null)
             {
-                EditorUtility.DisplayDialog("信号機アセットの配置に失敗しました。", "信号機アセットが見つかりませんでした。", "OK");
+                EditorUtility.DisplayDialog("信号機アセットの配置に失敗しました。", "信号機アセットが見つかりませんでした。「ビルトインアセットをインポート」を実行してください。", "OK");
                 return;
             }
 
@@ -99,18 +95,17 @@ namespace PlateauToolkit.Sandbox.Editor
                 ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
             }
         }
-        //void SetReproducedRoadsAsGroundLayer()
-        //{
-        //    PLATEAUReproducedRoad[] reproducedRoads = GameObject.FindObjectsOfType<PLATEAUReproducedRoad>();
-        //    if (reproducedRoads != null)
-        //    {
-        //        for (int i = 0; i < reproducedRoads.Length; i++)
-        //        {
-        //            ChangeLayersIncludeChildren(reproducedRoads[i].transform, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
-        //        }
-        //    }
-        //}
-
+        void SetReproducedRoadsAsGroundLayer()
+        {
+            PLATEAUReproducedRoad[] reproducedRoads = GameObject.FindObjectsOfType<PLATEAUReproducedRoad>();
+            if (reproducedRoads != null)
+            {
+                for (int i = 0; i < reproducedRoads.Length; i++)
+                {
+                    ChangeLayersIncludeChildren(reproducedRoads[i].transform, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
+                }
+            }
+        }
 
         void ChangeLayersIncludeChildren(Transform trans, LayerMask layer)
         {
@@ -133,7 +128,7 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
             }
 
-            //SetReproducedRoadsAsGroundLayer();
+            SetReproducedRoadsAsGroundLayer();
 
             if (RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
             {
