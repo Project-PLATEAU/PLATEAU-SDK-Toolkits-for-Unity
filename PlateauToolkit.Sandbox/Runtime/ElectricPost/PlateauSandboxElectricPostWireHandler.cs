@@ -30,6 +30,16 @@ namespace PlateauToolkit.Sandbox.Runtime
         {
             foreach (Transform child in m_WireRoot.transform)
             {
+                if (child.gameObject.name.Contains("(Clone)"))
+                {
+#if UNITY_EDITOR
+                    GameObject.DestroyImmediate(child.gameObject);
+#else
+                    GameObject.Destroy(child.gameObject);
+#endif
+                    continue;
+                }
+
                 var wire = new PlateauSandboxElectricPostWire(child.gameObject);
                 if (wire.WireType == PlateauSandboxElectricPostWireType.k_InValid)
                 {
@@ -133,13 +143,13 @@ namespace PlateauToolkit.Sandbox.Runtime
         {
             foreach (var postWire in isFront ? m_FrontPostWires : m_BackPostWires)
             {
-                if (postWire.WireID == string.Empty || target.m_Target == null)
+                if (postWire.WireID == string.Empty)
                 {
                     postWire.Show(false);
                     continue;
                 }
 
-                if (target.m_Target.IsShowingWire(postWire.WireID))
+                if (target.m_Target != null && target.m_Target.IsShowingWire(postWire.WireID))
                 {
                     // 既に相手側で表示されているワイヤーは表示しない
                     postWire.Show(false);
@@ -241,6 +251,18 @@ namespace PlateauToolkit.Sandbox.Runtime
                 }
             }
             return false;
+        }
+
+        public void OnDestroy()
+        {
+            foreach (var postWire in m_FrontPostWires)
+            {
+                postWire.Remove();
+            }
+            foreach (var postWire in m_BackPostWires)
+            {
+                postWire.Remove();
+            }
         }
     }
 }

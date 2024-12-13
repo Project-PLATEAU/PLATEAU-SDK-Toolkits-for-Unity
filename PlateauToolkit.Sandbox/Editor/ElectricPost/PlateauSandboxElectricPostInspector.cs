@@ -54,6 +54,12 @@ namespace PlateauToolkit.Sandbox.Editor
             m_FrontConnectionGUI.DrawLayout(m_Target.FrontConnectedPosts);
             m_BackConnectionGUI.DrawLayout(m_Target.BackConnectedPosts);
 
+            if (GUI.changed)
+            {
+                EditorUtility.SetDirty(m_Target);
+                serializedObject.ApplyModifiedProperties();
+            }
+
             // キーイベント
             if (Event.current.keyCode == KeyCode.Escape)
             {
