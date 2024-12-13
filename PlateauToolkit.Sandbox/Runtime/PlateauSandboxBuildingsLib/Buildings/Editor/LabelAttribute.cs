@@ -1,24 +1,23 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
+namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor
 {
-    public class CustomLabelAttribute : PropertyAttribute
+    public class LabelAttribute : PropertyAttribute
     {
         public readonly GUIContent m_Label;
-        public CustomLabelAttribute(string label)
+        public LabelAttribute(string label)
         {
             m_Label = new GUIContent(label);
         }
     }
 
-    #if UNITY_EDITOR
-    [CustomPropertyDrawer(typeof(CustomLabelAttribute))]
+    [CustomPropertyDrawer(typeof(LabelAttribute))]
     public class CustomLabelAttributeDrawer : PropertyDrawer
     {
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (attribute is not CustomLabelAttribute newLabel)
+            if (attribute is not LabelAttribute newLabel)
             {
                 return;
             }
@@ -32,5 +31,4 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             return EditorGUI.GetPropertyHeight(property, true);
         }
     }
-    #endif
 }

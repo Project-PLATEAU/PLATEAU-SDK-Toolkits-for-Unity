@@ -1,5 +1,6 @@
 using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Common;
 using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings;
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Configs;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -56,6 +57,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_FactoryVertexColorMaterialPalette;
         private SerializedProperty m_FactoryMaterialPalette;
 
+        private SerializedProperty m_ComplexBuildingParams;
+        private SerializedProperty m_ComplexSkyscraperCondominiumBuildingParams;
+        private SerializedProperty m_ComplexOfficeBuildingParams;
+        private SerializedProperty m_ComplexBuildingVertexColorPalette;
+        private SerializedProperty m_ComplexBuildingVertexColorMaterialPalette;
+        private SerializedProperty m_ComplexBuildingMaterialPalette;
+
         private GUIStyle m_SaveMeshBtnTextColorStyle;
 
         private void OnEnable()
@@ -108,6 +116,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_FactoryVertexColorPalette = serializedObject.FindProperty("factoryVertexColorPalette");
             m_FactoryVertexColorMaterialPalette = serializedObject.FindProperty("factoryVertexColorMaterialPalette");
             m_FactoryMaterialPalette = serializedObject.FindProperty("factoryMaterialPalette");
+
+            m_ComplexBuildingParams = serializedObject.FindProperty("complexBuildingParams");
+            m_ComplexSkyscraperCondominiumBuildingParams = serializedObject.FindProperty("complexSkyscraperCondominiumBuildingParams");
+            m_ComplexOfficeBuildingParams = serializedObject.FindProperty("complexOfficeBuildingParams");
+            m_ComplexBuildingVertexColorPalette = serializedObject.FindProperty("complexBuildingVertexColorPalette");
+            m_ComplexBuildingVertexColorMaterialPalette = serializedObject.FindProperty("complexBuildingVertexColorMaterialPalette");
+            m_ComplexBuildingMaterialPalette = serializedObject.FindProperty("complexBuildingMaterialPalette");
 
             m_SaveMeshBtnTextColorStyle = null;
 
@@ -308,6 +323,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             changedValue = true;
                         }
                         break;
+                    case (int)BuildingType.k_ComplexBuilding:
+                        if (DrawDynamicPropertyOnly(m_ComplexBuildingMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
+                        break;
                 }
             }
             else
@@ -352,6 +373,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                         break;
                     case (int)BuildingType.k_Factory:
                         if (DrawDynamicPropertyOnly(m_FactoryVertexColorPalette) || DrawDynamicPropertyOnly(m_FactoryVertexColorMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
+                        break;
+                    case (int)BuildingType.k_ComplexBuilding:
+                        if (DrawDynamicPropertyOnly(m_ComplexBuildingVertexColorPalette) || DrawDynamicPropertyOnly(m_ComplexBuildingVertexColorMaterialPalette))
                         {
                             changedValue = true;
                         }
@@ -449,6 +476,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 case (int)BuildingType.k_CommercialBuilding:
                 case (int)BuildingType.k_Hotel:
                 case (int)BuildingType.k_Factory:
+                case (int)BuildingType.k_ComplexBuilding:
                     buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 5.0f, 100.0f);
                     break;
             }
@@ -515,6 +543,38 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 case (int)BuildingType.k_Factory:
                     EditorGUILayout.LabelField("工場設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_FactoryParams);
+                case (int)BuildingType.k_ComplexBuilding:
+                    EditorGUILayout.LabelField("複合ビル設定", EditorStyles.boldLabel);
+                    bool changedComplexBuildingParam = DrawDynamicPropertyOnly(m_ComplexBuildingParams, new Dictionary<string, Tuple<string, float, float>>
+                    {
+                        {"buildingBoundaryHeight", new Tuple<string, float, float>("建物同士の境界線の高さ", 10f, 100f)},
+                    });
+
+                    SerializedProperty lowerFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("lowerFloorBuildingType");
+                    SerializedProperty higherFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("higherFloorBuildingType");
+                    bool changedComplexSkyscraperCondominiumBuildingParam = false;
+                    bool changedComplexOfficeBuildingParam = false;
+
+                    if (lowerFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Apartment ||
+                        higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Apartment)
+                    {
+                        EditorGUILayout.Space(10);
+                        EditorGUILayout.LabelField("マンション設定", EditorStyles.boldLabel);
+                        changedComplexSkyscraperCondominiumBuildingParam = DrawDynamicPropertyOnly(m_ComplexSkyscraperCondominiumBuildingParams);
+                    }
+
+                    if (lowerFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_OfficeBuilding ||
+                        higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_OfficeBuilding)
+                    {
+                        EditorGUILayout.Space(10);
+                        EditorGUILayout.LabelField("オフィスビル設定", EditorStyles.boldLabel);
+                        changedComplexOfficeBuildingParam = DrawDynamicPropertyOnly(m_ComplexOfficeBuildingParams, new Dictionary<string, Tuple<string, float, float>>
+                        {
+                            {"spandrelHeight", new Tuple<string, float, float>("壁パネルの高さ", 0.25f, 2.5f)}
+                        });
+                    }
+
+                    return changedComplexBuildingParam || changedComplexSkyscraperCondominiumBuildingParam || changedComplexOfficeBuildingParam;
             }
             return false;
         }

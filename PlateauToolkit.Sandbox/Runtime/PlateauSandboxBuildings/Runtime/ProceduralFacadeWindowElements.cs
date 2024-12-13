@@ -23,7 +23,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         public class WindowTexturedData
         {
-            public string m_WindowpaneGlassName = k_WindowPaneTexturedDraftName;
+            public string m_WindowpaneGlassName = k_WindowPaneGlassTexturedDraftName;
+            public string m_WindowpaneFrameName = k_WindowPaneFrameTexturedDraftName;
             public Vector2 m_UVScale;
             public Material m_WallMat;
             public Material m_WindowTopAndBottomWallMat;
@@ -182,7 +183,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .FlipFaces()
                 .Move(frameMin + frameSize/2 + frameDepth/2)
                 .Paint(windowTexturedData.m_WindowPaneMat);
-            frame.name = k_WindowPaneTexturedDraftName;
+            frame.name = k_WindowPaneFrameTexturedDraftName;
 
             MeshDraft wallMain;
             if (windowTexturedData.m_IsChangeBothSidesWallColor)
@@ -218,7 +219,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 MeshDraft windowsill = MeshDraft.PartialBox(windowsillWidth, windowsillDepth, windowsillHeight, Directions.All & ~Directions.Forward, true)
                     .Move(frameMin + frameWidth/2 + frameDepth - windowsillDepth/2)
                     .Paint(windowTexturedData.m_WindowPaneMat);
-                windowsill.name = k_WindowPaneTexturedDraftName;
+                windowsill.name = k_WindowSillTexturedDraftName;
                 compoundDraft.Add(windowsill);
             }
             return compoundDraft;
@@ -240,7 +241,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         {
             MeshDraft windowpaneFrame = WindowpaneFrameTextured(min, max, windowFrameRodWidth, windowFrameRodHeight, windowFrameRodDepth, numCenterRod, windowFrameRodType, out Vector3 frameDepth, out Vector3 windowMin, out Vector3 windowWidth, out Vector3 windowHeight);
             windowpaneFrame.Paint(windowTexturedData.m_WindowPaneMat);
-            windowpaneFrame.name = k_WindowPaneTexturedDraftName;
+            windowpaneFrame.name = windowTexturedData.m_WindowpaneFrameName;
 
             MeshDraft glass = WindowpaneGlassTextured(frameDepth, windowMin, windowWidth, windowHeight, windowTexturedData.m_UVScale);
             glass.Paint(windowTexturedData.m_WindowGlassMat);

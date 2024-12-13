@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor;
 using ProceduralToolkit;
 using System;
 using UnityEngine;
@@ -10,11 +11,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         public class Params
         {
             public int numFloor = 2;
-            [CustomLabel("エントランスに庇を追加")]
+            [Label("エントランスに庇を追加")]
             public bool hasEntranceRoof;
-            [CustomLabel("屋根タイプ")]
+            [Label("屋根タイプ")]
             public RoofType roofType = RoofType.flat;
-            [CustomLabel("屋根の厚さ")]
+            [Label("屋根の厚さ")]
             public float roofThickness = 0.2f;
         }
 

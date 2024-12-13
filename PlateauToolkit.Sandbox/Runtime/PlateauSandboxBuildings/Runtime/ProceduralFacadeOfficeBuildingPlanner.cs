@@ -21,7 +21,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private readonly Dictionary<PanelType, List<Func<ILayoutElement>>> m_Constructors = new();
         private readonly Dictionary<PanelSize, float> m_SizeValues = new()
         {
-            {PanelSize.k_Wide, 2},
+            {PanelSize.k_Narrow, 2.5f},
         };
 
         public override List<ILayout> Plan(List<Vector2> foundationPolygon, BuildingGenerator.Config config)
@@ -132,11 +132,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
                     config,
-                    "SmallFullWindowTextured",
-                    config.officeBuildingMaterialPalette.spandrel
-                    )
+                    config.officeBuildingMaterialPalette.spandrel,
+                    "GlassSpandrelTextured",
+                    "FrameSpandrelTextured")
                 {
-                    m_WindowFrameRodWidth = 0.2f,
+                    m_WindowFrameRodWidth = 0.2f
                 }
             };
             m_Constructors[PanelType.k_FullWindow] = new List<Func<ILayoutElement>>

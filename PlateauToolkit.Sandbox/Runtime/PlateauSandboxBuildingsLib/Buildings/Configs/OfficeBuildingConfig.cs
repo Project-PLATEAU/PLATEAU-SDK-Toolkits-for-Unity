@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor;
 using ProceduralToolkit;
 using System;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         [Serializable]
         public class Params
         {
-            [CustomLabel("１階を窓に変更")]
+            [Label("１階を窓に変更")]
             public bool useWindow = true;
             public float spandrelHeight = 1.25f;
         }
