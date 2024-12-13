@@ -121,20 +121,28 @@ namespace PlateauToolkit.Sandbox
 
         public void UpdateVisual(float speed, float steerAngle)
         {
-            // wheel forward rotation(pitch).
-            var additionalPitchAngle = (speed * Time.deltaTime / m_WheelRadius) * Mathf.Rad2Deg;
-            m_WheelPitchAngle += additionalPitchAngle;
-            m_WheelPitchAngle %= 360;
+            speed = Mathf.Max(0, speed);
+            var pitchAngle = 0f;
+
+            if (speed > 0)
+            {
+                // wheel forward rotation(pitch).
+                var additionalPitchAngle = (speed * Time.deltaTime / m_WheelRadius) * Mathf.Rad2Deg;
+                m_WheelPitchAngle += additionalPitchAngle;
+                m_WheelPitchAngle %= 360;
+                pitchAngle = additionalPitchAngle;
+            }
 
             foreach (Transform wheelTransform in m_AllWheels)
             {
-                wheelTransform.Rotate(new Vector3(m_WheelPitchAngle, 0, 0));
+                wheelTransform.Rotate(new Vector3(pitchAngle, 0, 0));
             }
 
             // steer angle.
             var fixedSteerAngle = Mathf.MoveTowardsAngle(m_LastSteerAngle, steerAngle, Time.deltaTime * k_MaxSteerSpeed);
 
             // Apply rotations to visual wheel object.
+
             foreach (Transform frontWheel in m_FrontWheels)
             {
                 frontWheel.localEulerAngles = new Vector3(m_WheelPitchAngle, fixedSteerAngle, 0);
