@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 {
     [ExecuteAlways]
@@ -53,12 +57,17 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             }
         }
 
+
         private bool InitializeWire()
         {
             bool isExitsWire = false;
             foreach (var info in FrontConnectedPosts)
             {
                 m_ElectricPostWireHandler.CreateWires(true, info.m_OwnIndex);
+                if (info.m_Target == null)
+                {
+                    continue;
+                }
                 m_ElectricPostWireHandler.SetTarget(true, info.m_OwnIndex, new PlateauSandboxElectricConnectInfo()
                 {
                     m_Target = info.m_Target,
@@ -72,21 +81,20 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             foreach (var info in BackConnectedPosts)
             {
                 m_ElectricPostWireHandler.CreateWires(false, info.m_OwnIndex);
-                m_ElectricPostWireHandler.SetTarget(true, info.m_OwnIndex, new PlateauSandboxElectricConnectInfo()
+                if (info.m_Target == null)
+                {
+                    continue;
+                }
+                m_ElectricPostWireHandler.SetTarget(false, info.m_OwnIndex, new PlateauSandboxElectricConnectInfo()
                 {
                     m_Target = info.m_Target,
                     m_IsTargetFront = info.m_IsTargetFront,
                     m_OwnIndex = info.m_OwnIndex
                 });
-                m_ElectricPostWireHandler.SetWireID(true, info.m_OwnIndex, info.m_WireID);
+                m_ElectricPostWireHandler.SetWireID(false, info.m_OwnIndex, info.m_WireID);
                 isExitsWire = true;
             }
             return isExitsWire;
-        }
-
-        private void OnDestroy()
-        {
-            m_ElectricPostWireHandler?.OnDestroy();
         }
 
         private void SearchPost()
@@ -244,7 +252,9 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
         public string RemoveConnection(bool isFront, int index)
         {
             m_Info.RemoveConnection(isFront, index);
-            return m_ElectricPostWireHandler.RemoveWires(isFront, index);
+            string wireName = m_ElectricPostWireHandler.RemoveWires(isFront, index);
+            Save();
+            return wireName;
         }
 
         public void SetConnectPoint(PlateauSandboxElectricPost other, bool isFront, bool isOtherFront, int index, string wireID, int otherIndex)
@@ -264,6 +274,21 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             {
                 m_Info.SetBackConnect(other, isOtherFront, index, otherIndex, wireID);
             }
+            Save();
+        }
+
+        private void Save()
+        {
+            try
+            {
+#if UNITY_EDITOR
+               EditorUtility.SetDirty(this);
+#endif
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Post Inspecter Save is Failed : {e}");
+            }
         }
 
         public void TryShowWire(bool isFront, int index, PlateauSandboxElectricPost target, bool isTargetFront)
@@ -274,7 +299,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
                 m_IsTargetFront = isTargetFront,
                 m_OwnIndex = index
             };
-            m_ElectricPostWireHandler.TryShowWires(isFront, info, true);
+            m_ElectricPostWireHandler.TryShowWiresNoTarget(isFront, info);
         }
 
         public void HideWire(bool isFront, int index)

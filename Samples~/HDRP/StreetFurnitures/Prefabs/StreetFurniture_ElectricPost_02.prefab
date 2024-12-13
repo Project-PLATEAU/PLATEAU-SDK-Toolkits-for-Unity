@@ -166,6 +166,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &714643996339081290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4442113015038283277}
+  m_Layer: 0
+  m_Name: Wires
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4442113015038283277
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 714643996339081290}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.21149802, y: 3.8489707, z: 0.0016359687}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5796288325935034848}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &986894115896460728
 GameObject:
   m_ObjectHideFlags: 0
@@ -1480,6 +1511,7 @@ Transform:
   - {fileID: 2930395156929123688}
   - {fileID: 789284063213550015}
   - {fileID: 2951952590241698681}
+  - {fileID: 4442113015038283277}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!205 &1597249739304683153
@@ -1594,6 +1626,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundPlacementDirection: 0
+  FrontConnectedPosts: []
+  BackConnectedPosts: []
 --- !u!1 &7069061306233312162
 GameObject:
   m_ObjectHideFlags: 0
@@ -1884,7 +1918,7 @@ GameObject:
   m_Component:
   - component: {fileID: 789284063213550015}
   m_Layer: 0
-  m_Name: Wires
+  m_Name: OriginalWires
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
