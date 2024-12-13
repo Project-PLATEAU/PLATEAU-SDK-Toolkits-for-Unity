@@ -106,6 +106,6 @@
         /// <summary>
         /// インスペクタにRoadNetwork参照等のDebug情報を表示
         /// </summary>
-        public static readonly bool SHOW_DEBUG_ROADNETWORK_INFO = true;
+        public static readonly bool SHOW_DEBUG_ROADNETWORK_INFO = false;
     }
 }

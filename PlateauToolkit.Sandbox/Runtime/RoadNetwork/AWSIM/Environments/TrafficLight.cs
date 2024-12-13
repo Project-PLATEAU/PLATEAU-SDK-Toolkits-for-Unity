@@ -344,12 +344,48 @@ namespace AWSIM
         int bulbCount;
         BulbData[] bulbDataArray;
 
-        [SerializeField]
+        [SerializeField][HideInInspector]
         List<AWSIM.TrafficSimulation.StopLine> stoplines = new();
 
         [Header("RoadNetwork")]
         [SerializeField]
         public RnDataTrafficLight rnTrafficLight;
+
+        RoadNetworkDataGetter m_RoadNetworkGetter;
+        public RoadNetworkDataGetter RnGetter
+        {
+            get
+            {
+                if (m_RoadNetworkGetter == null)
+                {
+                    PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
+                    m_RoadNetworkGetter = roadNetwork?.GetRoadNetworkDataGetter();
+                    if (m_RoadNetworkGetter == null)
+                    {
+                        Debug.LogError($"RoadNetworkDataGetter is null");
+                    }
+                }
+                return m_RoadNetworkGetter;
+            }
+        }
+
+        RoadNetworkTrafficManager m_RoadNetworkTrafficManager;
+
+        public RoadNetworkTrafficManager RnManager
+        {
+            get
+            {
+                if (m_RoadNetworkTrafficManager == null)
+                {
+                    m_RoadNetworkTrafficManager = GameObject.FindObjectOfType<RoadNetworkTrafficManager>();
+                    if (m_RoadNetworkTrafficManager == null)
+                    {
+                        Debug.LogError($"RoadNetworkTrafficManager is null");
+                    }
+                }
+                return m_RoadNetworkTrafficManager;
+            }
+        }
 
         void Reset()
         {
@@ -539,29 +575,11 @@ namespace AWSIM
             return edges.LastOrDefault().GetChildLineString(RnGetter).GetChildPointsVector(RnGetter).LastOrDefault();
         }
 
-        RoadNetworkDataGetter m_RoadNetworkGetter;
-        public RoadNetworkDataGetter RnGetter
-        {
-            get
-            {
-                if (m_RoadNetworkGetter == null)
-                {
-                    PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
-                    m_RoadNetworkGetter = roadNetwork?.GetRoadNetworkDataGetter();
-                    if (m_RoadNetworkGetter == null)
-                    {
-                        Debug.LogError($"RoadNetworkDataGetter is null");
-                    }
-                }
-                return m_RoadNetworkGetter;
-            }
-        }
-
         void OnDrawGizmos()
         {
             if (!Application.isPlaying)
                 return;
-            if (!RoadNetworkConstants.SHOW_DEBUG_GIZMOS)
+            if (!RnManager.ShowTrafficLightGizmos)
                 return;
 
             var (firstPoint, lastPoint) = GetFirstLastBorderPointsNormalized();

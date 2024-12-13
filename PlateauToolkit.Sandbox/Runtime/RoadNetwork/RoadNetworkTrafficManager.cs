@@ -24,6 +24,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField][HideInInspector]
         GameObject m_CurrentTrafficLightPrefab;
 
+        [SerializeField, Tooltip("Show Traffic light Gizmos")]
+        bool m_Show_TrafficLight_Gizmos = RoadNetworkConstants.SHOW_DEBUG_GIZMOS;
+
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
         public TrafficManager SimTrafficManager
@@ -57,6 +60,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return m_RoadNetworkGetter;
             }
         }
+
+        public bool ShowTrafficLightGizmos => m_Show_TrafficLight_Gizmos;
 
         public int GetNumMaxVehicles()
         {
