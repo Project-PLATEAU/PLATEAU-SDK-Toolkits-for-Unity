@@ -700,6 +700,20 @@ v2.0.0-alpha時点では以下の5種類の建築物アセットを提供して�
 
 - シャッターに庇を追加：シャッターに庇を追加できます。
 
+##### 複合ビル
+<img width="400" alt="building_settings_complex" src="../Documentation~/Sandbox Images/building_settings_complex.png">
+
+- 上部の建造物タイプ：上部の建造物タイプを選択できます。
+- 下部の建造物タイプ：下部の建造物タイプを選択できます。
+- 建物同士の境界線の高さ：建物同士の境界線の高さを指定できます。
+  
+  <img width="400" alt="building_settings_complex" src="../Documentation~/Sandbox Images/sandbox_buildings_complex_boundary.gif">
+
+<img width="400" alt="building_settings_complex_other" src="../Documentation~/Sandbox Images/building_settings_complex_other.png">
+
+- 建造物タイプにマンションを選択するとマンション設定が表示されます。
+- 建造物タイプにオフィスビルを選択するとオフィスビル設定が表示されます。
+
 #### 色設定
 
 建物の色をテクスチャやカラー情報を利用して変更できます。テクスチャを利用する場合は、マテリアルで利用しているテクスチャを編集します。カラー情報を利用する場合は、「テクスチャ利用」チェックボックスをオフにすることでカラー編集項目が表示されます。
