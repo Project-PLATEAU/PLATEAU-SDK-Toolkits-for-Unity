@@ -19,6 +19,7 @@ namespace AWSIM.TrafficSimulation
             else
             {
                 DrawPropertiesExcluding(serializedObject, "rnTrafficLightController");
+                serializedObject.ApplyModifiedProperties();
             }
         }
     }

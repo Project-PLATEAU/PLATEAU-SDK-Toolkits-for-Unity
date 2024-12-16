@@ -17,11 +17,11 @@ namespace PlateauToolkit.Sandbox
     public class PlateauSandboxInteractiveTrafficLight : MonoBehaviour
     {
 
-        [SerializeField] TrafficLight m_TrafficLight;
+        [SerializeField] TrafficLight m_TrafficLightController;
 
         public void SetTrafficLight(TrafficLight trafficLight)
         {
-            m_TrafficLight = trafficLight;
+            m_TrafficLightController = trafficLight;
         }
     }
 }

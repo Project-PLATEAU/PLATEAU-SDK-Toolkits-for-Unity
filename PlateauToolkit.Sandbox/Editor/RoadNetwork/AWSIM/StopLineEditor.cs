@@ -26,6 +26,7 @@ namespace AWSIM.TrafficSimulation
             else
             {
                 DrawPropertiesExcluding(serializedObject, "rnRoad", "rnIntersection", "rnBorder");
+                serializedObject.ApplyModifiedProperties();
             }
         }
 

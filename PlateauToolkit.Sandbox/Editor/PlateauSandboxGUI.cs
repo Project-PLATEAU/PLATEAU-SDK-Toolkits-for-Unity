@@ -108,7 +108,21 @@ namespace PlateauToolkit.Sandbox.Editor
                 }
                 else
                 {
-                    GUI.DrawTexture(textureRect, AssetPreview.GetMiniThumbnail(asset.Asset.gameObject));
+                    // PlayMode 終了時にnullになるため再生成
+                    Texture2D preview = AssetPreview.GetAssetPreview(asset.Asset.gameObject);
+                    if (preview != null)
+                    {
+                        Texture2D cachedPreviewTexture = new(preview.width, preview.height);
+                        cachedPreviewTexture.SetPixels(preview.GetPixels());
+                        cachedPreviewTexture.Apply();
+                        preview = cachedPreviewTexture;
+                        asset.PreviewTexture = preview;
+                        GUI.DrawTexture(textureRect, preview);
+                    }
+                    else
+                    {
+                        GUI.DrawTexture(textureRect, AssetPreview.GetMiniThumbnail(asset.Asset.gameObject));
+                    }
                 }
 
                 GUILayout.FlexibleSpace();

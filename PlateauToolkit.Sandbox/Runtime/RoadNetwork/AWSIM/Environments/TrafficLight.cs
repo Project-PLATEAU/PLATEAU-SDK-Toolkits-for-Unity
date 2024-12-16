@@ -5,8 +5,6 @@ using UnityEngine;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
-using UnityEditor.Experimental;
-using AWSIM.TrafficSimulation;
 using PlateauToolkit.Sandbox;
 
 namespace AWSIM
@@ -325,7 +323,7 @@ namespace AWSIM
             renderer = _renderer_;
         }
 
-        [SerializeField, Tooltip("Set the Renderer containing the bulb material.")] 
+        [SerializeField, Tooltip("Set the Renderer containing the bulb material.")]
         new Renderer renderer;
 
         /// <summary>

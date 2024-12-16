@@ -104,7 +104,7 @@
         public static readonly bool SHOW_DEBUG_GIZMOS = true;
 
         /// <summary>
-        /// インスペクタにRoadNetwork参照等のDebug情報を表示
+        /// インスペクタにRoadNetwork参照、VehicleInternalState等のDebug情報を表示
         /// </summary>
         public static readonly bool SHOW_DEBUG_ROADNETWORK_INFO = false;
     }
