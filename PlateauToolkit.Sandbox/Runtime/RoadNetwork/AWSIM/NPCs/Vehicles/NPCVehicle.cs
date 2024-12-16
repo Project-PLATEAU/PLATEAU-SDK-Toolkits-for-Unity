@@ -57,7 +57,7 @@ namespace AWSIM
         }
 
         //debug情報
-        [Header("InternalStateInfo")]
+        [Header("Debug InternalStateInfo")]
         [SerializeField]
         public VehicleParameters status = new VehicleParameters();
 

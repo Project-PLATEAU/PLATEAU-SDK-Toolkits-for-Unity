@@ -7,6 +7,7 @@ using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using UnityEditor.Experimental;
 using AWSIM.TrafficSimulation;
+using PlateauToolkit.Sandbox;
 
 namespace AWSIM
 {
@@ -299,6 +300,26 @@ namespace AWSIM
             }
         }
 
+        /// <summary>
+        /// PlateauSandboxInteractive とRendererをセット
+        /// </summary>
+        /// <param name="interactiveAsset"></param>
+        public void SetTrafficLightAsset(PlateauSandboxInteractive interactiveAsset)
+        {
+            PlateauSandboxInteractiveTrafficLight interactiveTrafficLight = interactiveAsset.gameObject.GetComponent<PlateauSandboxInteractiveTrafficLight>();
+            if (interactiveTrafficLight == null)
+            {
+                interactiveTrafficLight = interactiveAsset.gameObject.AddComponent<PlateauSandboxInteractiveTrafficLight>();
+            }
+            interactiveTrafficLight.SetTrafficLight(this);
+
+            SetRenderer(interactiveAsset.gameObject.GetComponentInChildren<Renderer>());
+        }
+
+        /// <summary>
+        /// Rendererのみセット
+        /// </summary>
+        /// <param name="_renderer_"></param>
         public void SetRenderer(Renderer _renderer_)
         {
             renderer = _renderer_;

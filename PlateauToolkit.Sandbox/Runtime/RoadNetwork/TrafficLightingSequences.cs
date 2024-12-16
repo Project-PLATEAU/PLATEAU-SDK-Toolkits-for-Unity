@@ -6,6 +6,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 {
     public class TrafficLightingSequences
     {
+        /// <summary>
+        /// 青黄赤バルブ信号機用シーケンス
+        /// </summary>
+        /// <param name="numGroups"></param>
+        /// <returns></returns>
         public static LightingSequence[] GetLightingSequences(int numGroups)
         {
             if (numGroups >= 2)

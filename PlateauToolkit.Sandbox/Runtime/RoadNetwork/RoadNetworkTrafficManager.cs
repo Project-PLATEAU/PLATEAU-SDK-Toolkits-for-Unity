@@ -24,6 +24,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField][HideInInspector]
         GameObject m_CurrentTrafficLightPrefab;
 
+        [Header("Debug")]
         [SerializeField, Tooltip("Show Traffic light Gizmos")]
         bool m_Show_TrafficLight_Gizmos = RoadNetworkConstants.SHOW_DEBUG_GIZMOS;
 
@@ -125,12 +126,19 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 var gameObject = (GameObject)PrefabUtility.InstantiatePrefab(trafficLightPrefab);
                 gameObject.name = gameObjectName;
                 gameObject.transform.position = trafficLight.GetAssetPosition();
-                //gameObject.transform.position = trafficLight.transform.position;
                 gameObject.transform.right = trafficLight.GetRightVector();
 
                 gameObject.transform.SetParent(trafficLightParent.transform, false);
-                trafficLight.SetRenderer(gameObject.GetComponentInChildren<Renderer>());
-                //gameObject.GetComponentsInChildren<Renderer>();
+
+                PlateauSandboxInteractive component = gameObject.GetComponent<PlateauSandboxInteractive>();
+                if (component != null)
+                {
+                    trafficLight.SetTrafficLightAsset(component);
+                }
+                else
+                {
+                    trafficLight.SetRenderer(gameObject.GetComponentInChildren<Renderer>());
+                }
             }
         }
 
