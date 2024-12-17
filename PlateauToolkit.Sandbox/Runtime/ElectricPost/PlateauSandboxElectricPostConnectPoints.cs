@@ -38,6 +38,10 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
             {
                 if (connectPoint.wireType == wireType && connectPoint.isFront == isFront)
                 {
+                    if (connectPoint.target == null)
+                    {
+                        continue;
+                    }
                     return connectPoint.target.transform.position;
                 }
             }

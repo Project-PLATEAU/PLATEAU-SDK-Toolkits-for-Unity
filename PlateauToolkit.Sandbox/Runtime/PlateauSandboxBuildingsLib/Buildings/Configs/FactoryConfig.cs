@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor;
 using ProceduralToolkit;
 using System;
 using UnityEngine;
@@ -9,7 +10,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         [Serializable]
         public class Params
         {
-            [CustomLabel("シャッターに庇を追加")]
+            [Label("シャッターに庇を追加")]
             public bool hasEntranceRoof;
         }
 

@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor;
 using ProceduralToolkit;
 using System;
 using UnityEngine;
@@ -10,20 +11,20 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         [Serializable]
         public class Params
         {
-            [CustomLabel("左側に窓を付ける")]
+            [Label("左側に窓を付ける")]
             public bool hasWindowLeft;
-            [CustomLabel("右側に窓を付ける")]
+            [Label("右側に窓を付ける")]
             public bool hasWindowRight;
-            [CustomLabel("屋根の暑さ")]
+            [Label("屋根の暑さ")]
             public float roofThickness;
         }
 
         [Serializable]
         public class ShaderParams
         {
-            [CustomLabel("横のオフセット")]
+            [Label("横のオフセット")]
             public float textureOffsetX;
-            [CustomLabel("縦のオフセット")]
+            [Label("縦のオフセット")]
             public float textureOffsetY;
         }
 

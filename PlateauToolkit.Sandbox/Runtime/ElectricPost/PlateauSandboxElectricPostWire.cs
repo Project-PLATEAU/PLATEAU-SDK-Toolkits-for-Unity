@@ -72,7 +72,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 
         public bool IsTarget(PlateauSandboxElectricConnectInfo info)
         {
-            if (m_TargetInfo == null)
+            if (info == null || m_TargetInfo == null)
             {
                 return false;
             }

@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor;
 using ProceduralToolkit;
 using System;
 using UnityEngine;
@@ -11,9 +12,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         {
             public const float k_BillboardHeight = 0.5f;
 
-            [CustomLabel("側面を壁に設定")]
+            [Label("側面を壁に設定")]
             public bool isSideWall = true;
-            [CustomLabel("屋根の厚さ")]
+            [Label("屋根の厚さ")]
             public float roofThickness = 0.2f;
         }
 

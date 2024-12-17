@@ -67,6 +67,14 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         public FactoryConfig.VertexColorMaterialPalette factoryVertexColorMaterialPalette = new();
         public FactoryConfig.MaterialPalette factoryMaterialPalette = new();
 
+        public ComplexBuildingConfig.BuildingPlannerParams m_ComplexBuildingPlannerParams = new();
+        public ComplexBuildingConfig.Params complexBuildingParams = new();
+        public ComplexBuildingConfig.SkyscraperCondominiumParams complexSkyscraperCondominiumBuildingParams = new();
+        public ComplexBuildingConfig.OfficeParams complexOfficeBuildingParams = new();
+        public ComplexBuildingConfig.VertexColorPalette complexBuildingVertexColorPalette = new();
+        public ComplexBuildingConfig.VertexColorMaterialPalette complexBuildingVertexColorMaterialPalette = new();
+        public ComplexBuildingConfig.MaterialPalette complexBuildingMaterialPalette = new();
+
         public FacadePlanner facadePlanner;
         public FacadeConstructor facadeConstructor;
         public RoofPlanner roofPlanner;
@@ -83,6 +91,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 BuildingType.k_CommercialBuilding => "CommercialBuilding",
                 BuildingType.k_Hotel => "Hotel",
                 BuildingType.k_Factory => "Factory",
+                BuildingType.k_ComplexBuilding => "ComplexBuilding",
                 _ => throw new ArgumentOutOfRangeException()
             };
         }
@@ -127,6 +136,14 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             m_Config.factoryVertexColorPalette = factoryVertexColorPalette;
             m_Config.factoryVertexColorMaterialPalette = factoryVertexColorMaterialPalette;
             m_Config.factoryMaterialPalette = factoryMaterialPalette;
+
+            m_Config.m_ComplexBuildingPlannerParams = m_ComplexBuildingPlannerParams;
+            m_Config.complexBuildingParams = complexBuildingParams;
+            m_Config.complexSkyscraperCondominiumBuildingParams = complexSkyscraperCondominiumBuildingParams;
+            m_Config.complexOfficeBuildingParams = complexOfficeBuildingParams;
+            m_Config.complexBuildingVertexColorPalette = complexBuildingVertexColorPalette;
+            m_Config.complexBuildingVertexColorMaterialPalette = complexBuildingVertexColorMaterialPalette;
+            m_Config.complexBuildingMaterialPalette = complexBuildingMaterialPalette;
 
             m_Config.lodNum = inLodNum;
 

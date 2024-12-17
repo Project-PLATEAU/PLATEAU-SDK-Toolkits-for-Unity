@@ -119,7 +119,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             foreach (RnDataTrafficLight trafficLight in trafficLights)
             {
+#if UNITY_EDITOR
                 var trafficLightName = GameObjectUtility.GetUniqueNameForSibling(intersectionGameObject.transform, $"TrafficLight_{intersection.GetId(getter)}");
+#else
+                var trafficLightName = $"TrafficLight_{intersection.GetId(getter)}";
+#endif
                 var trafficLightGameObject = new GameObject(trafficLightName, typeof(TrafficLight));
                 trafficLightGameObject.transform.SetParent(intersectionGameObject.transform, true);
                 var trafficLightComp = trafficLightGameObject.GetComponent<TrafficLight>();

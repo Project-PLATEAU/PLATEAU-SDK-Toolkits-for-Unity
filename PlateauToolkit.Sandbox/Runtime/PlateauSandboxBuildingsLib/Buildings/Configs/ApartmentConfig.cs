@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor;
 using ProceduralToolkit;
 using System;
 using UnityEngine;
@@ -9,17 +10,17 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         [Serializable]
         public class Params
         {
-            [CustomLabel("バルコニーを外壁にせり出す(1m)")]
+            [Label("バルコニーを外壁にせり出す(1m)")]
             public bool convexBalcony;
-            [CustomLabel("窓ガラスバルコニーに切り替え")]
+            [Label("窓ガラスバルコニーに切り替え")]
             public bool hasBalconyGlass;
-            [CustomLabel("左側にバルコニーを作成")]
+            [Label("左側にバルコニーを作成")]
             public bool hasBalconyLeft;
-            [CustomLabel("右側にバルコニーを作成")]
+            [Label("右側にバルコニーを作成")]
             public bool hasBalconyRight;
-            [CustomLabel("前側にバルコニーを作成")]
+            [Label("前側にバルコニーを作成")]
             public bool hasBalconyFront;
-            [CustomLabel("後ろ側にバルコニーを作成")]
+            [Label("後ろ側にバルコニーを作成")]
             public bool hasBalconyBack;
         }
 

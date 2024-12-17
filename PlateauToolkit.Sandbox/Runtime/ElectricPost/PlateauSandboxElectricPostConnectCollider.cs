@@ -47,7 +47,7 @@ namespace PlateauToolkit.Sandbox.Runtime.ElectricPost
 
             // 電線非表示
             info.post.RemoveWireID(info.isFront, info.index);
-            info.post.TryShowWire(info.isFront, info.index, m_ParentPost, isFront);
+            info.post.TryShowWire(info.isFront, info.index, null, isFront);
 
             m_ParentPost.SetHighLight(false);
         }
