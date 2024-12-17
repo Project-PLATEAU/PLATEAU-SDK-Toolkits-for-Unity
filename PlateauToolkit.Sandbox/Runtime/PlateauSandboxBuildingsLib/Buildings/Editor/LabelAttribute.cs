@@ -12,6 +12,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Ed
         }
     }
 
+#if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(LabelAttribute))]
     public class CustomLabelAttributeDrawer : PropertyDrawer
     {
@@ -31,4 +32,5 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Ed
             return EditorGUI.GetPropertyHeight(property, true);
         }
     }
+#endif
 }

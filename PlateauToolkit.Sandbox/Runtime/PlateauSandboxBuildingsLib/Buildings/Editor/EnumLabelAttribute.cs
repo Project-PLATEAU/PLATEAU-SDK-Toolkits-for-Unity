@@ -32,6 +32,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Ed
         }
     }
 
+#if UNITY_EDITOR
     [CustomPropertyDrawer(typeof(EnumElementUsageAttribute))]
     public class EnumElementUsageAttributeDrawer : PropertyDrawer
     {
@@ -64,4 +65,5 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Ed
             return EditorGUI.GetPropertyHeight(property, true);
         }
     }
+#endif
 }
