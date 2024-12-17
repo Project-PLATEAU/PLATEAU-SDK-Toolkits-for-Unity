@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 9729fd4853543e44c82a1ae18dfbc01c
+guid: d358de66dc196314ca85dad8f6fd505f
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,17 +8,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: LightBulbId0
-    second: {fileID: 2100000, guid: 6eccaeff91272f2468d6adeaae8eb516, type: 2}
+    second: {fileID: 2100000, guid: d84d95abbefdcb34a89e08d4f629eed3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: LightBulbId1
-    second: {fileID: 2100000, guid: 6eccaeff91272f2468d6adeaae8eb516, type: 2}
+    second: {fileID: 2100000, guid: d84d95abbefdcb34a89e08d4f629eed3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: LightBulbId2
-    second: {fileID: 2100000, guid: 6eccaeff91272f2468d6adeaae8eb516, type: 2}
+    second: {fileID: 2100000, guid: d84d95abbefdcb34a89e08d4f629eed3, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
