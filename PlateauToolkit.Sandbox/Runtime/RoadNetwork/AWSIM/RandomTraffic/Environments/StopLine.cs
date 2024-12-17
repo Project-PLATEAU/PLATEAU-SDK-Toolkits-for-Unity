@@ -53,7 +53,11 @@ namespace AWSIM.TrafficSimulation
 
         public static StopLine Create(Vector3 p1, Vector3 p2, Transform parent)
         {
+#if UNITY_EDITOR
             var gameObjectName = GameObjectUtility.GetUniqueNameForSibling(parent, "StopLine");
+#else
+            var gameObjectName = "StopLine";
+#endif
             var gameObject = new GameObject(gameObjectName, typeof(StopLine));
             gameObject.transform.SetParent(parent.transform, false);
             gameObject.transform.position = p1;
