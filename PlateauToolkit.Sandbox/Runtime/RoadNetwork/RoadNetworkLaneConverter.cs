@@ -76,7 +76,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             {
                 foreach (var item in cityObjs)
                 {
-                    item.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+                    if (item != null)
+                    {
+                        item.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+                    }
                 }
             }
         }
@@ -116,7 +119,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             foreach (RnDataTrafficLight trafficLight in trafficLights)
             {
+#if UNITY_EDITOR
                 var trafficLightName = GameObjectUtility.GetUniqueNameForSibling(intersectionGameObject.transform, $"TrafficLight_{intersection.GetId(getter)}");
+#else
+                var trafficLightName = $"TrafficLight_{intersection.GetId(getter)}";
+#endif
                 var trafficLightGameObject = new GameObject(trafficLightName, typeof(TrafficLight));
                 //var edges = trafficLight.GetEdges(getter);
                 trafficLightGameObject.transform.SetParent(intersectionGameObject.transform, true);

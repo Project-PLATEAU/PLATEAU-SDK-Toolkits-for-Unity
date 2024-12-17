@@ -104,6 +104,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public void SetTrafficLightAsset(GameObject trafficLightPrefab)
         {
+#if UNITY_EDITOR
             m_TrafficLightPrefab = m_CurrentTrafficLightPrefab = trafficLightPrefab;
 
             var trafficLightParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
@@ -127,6 +128,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 trafficLight.SetRenderer(gameObject.GetComponentInChildren<Renderer>());
                 //gameObject.GetComponentsInChildren<Renderer>();
             }
+#endif
         }
 
 #if UNITY_EDITOR
