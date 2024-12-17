@@ -8,17 +8,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: LightBulbId0
-    second: {fileID: 2100000, guid: 6eccaeff91272f2468d6adeaae8eb516, type: 2}
+    second: {fileID: 2100000, guid: 643adb33ff36df34eae80f73f6bbbc93, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: LightBulbId1
-    second: {fileID: 2100000, guid: 6eccaeff91272f2468d6adeaae8eb516, type: 2}
+    second: {fileID: 2100000, guid: 643adb33ff36df34eae80f73f6bbbc93, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: LightBulbId2
-    second: {fileID: 2100000, guid: 6eccaeff91272f2468d6adeaae8eb516, type: 2}
+    second: {fileID: 2100000, guid: 643adb33ff36df34eae80f73f6bbbc93, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
