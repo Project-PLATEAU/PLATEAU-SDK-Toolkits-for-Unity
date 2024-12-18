@@ -24,8 +24,13 @@ namespace AWSIM.TrafficSimulation
                 serializedObject.ApplyModifiedProperties();
             }
 
-            if (GUILayout.Button("Update Traffic Light Sequence"))
+            if (GUILayout.Button("Update Traffic Lights"))
             {
+                if (Application.isPlaying)
+                {
+                    return;
+                }
+
                 RoadNetworkTrafficManager manager = target as RoadNetworkTrafficManager;
                 manager.UpdateTrafficLightSequences();
             }

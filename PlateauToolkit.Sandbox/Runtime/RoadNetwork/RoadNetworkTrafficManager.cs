@@ -20,7 +20,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         [Header("Debug")]
         [SerializeField, Tooltip("Show Traffic light Gizmos")]
-        bool m_Show_TrafficLight_Gizmos = RoadNetworkConstants.SHOW_DEBUG_GIZMOS;
+        bool m_ShowTrafficLightGizmos = RoadNetworkConstants.SHOW_DEBUG_GIZMOS;
 
         [Header("TrafficLight")]
         [SerializeField, Tooltip("Traffic light prefab")]
@@ -30,14 +30,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [HideInInspector]
         GameObject m_CurrentTrafficLightPrefab;
 
-        [SerializeField]
-        public float m_TrafficLight_GreenRed_Interval = RoadNetworkConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
+        [SerializeField, Tooltip("TrafficLight Green/Red interval seconds.")]
+        public float m_GreenRedInterval = RoadNetworkConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
 
-        [SerializeField]
-        public float m_TrafficLight_Yellow_Interval = RoadNetworkConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
+        [SerializeField, Tooltip("TrafficLight Yellow interval seconds.")]
+        public float m_YellowInterval = RoadNetworkConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
 
-        [SerializeField]
-        public float m_TrafficLight_Extra_Red_Interval = RoadNetworkConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
+        [SerializeField, Tooltip("TrafficLight additional Red interval seconds.")]
+        public float m_ExtraRedInterval = RoadNetworkConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
 
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
@@ -73,7 +73,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
         }
 
-        public bool ShowTrafficLightGizmos => m_Show_TrafficLight_Gizmos;
+        public bool ShowTrafficLightGizmos => m_ShowTrafficLightGizmos;
 
         public int GetNumMaxVehicles()
         {
@@ -119,15 +119,6 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             SimTrafficManager.Initialize();
         }
 
-        public void UpdateTrafficLightSequences()
-        {
-            var trafficIntersections = GameObject.FindObjectsOfType<TrafficIntersection>();
-            foreach (var intersection in trafficIntersections)
-            {
-                intersection.UpdateTrafficLightSequences(m_TrafficLight_GreenRed_Interval, m_TrafficLight_Yellow_Interval, m_TrafficLight_Extra_Red_Interval);
-            }
-        }
-
         public void SetTrafficLightAsset(GameObject trafficLightPrefab)
         {
 #if UNITY_EDITOR
@@ -165,6 +156,20 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
 #if UNITY_EDITOR
+        public void UpdateTrafficLightSequences()
+        {
+            var trafficIntersections = GameObject.FindObjectsOfType<TrafficIntersection>();
+            foreach (var intersection in trafficIntersections)
+            {
+                intersection.UpdateTrafficLightSequences(m_GreenRedInterval, m_YellowInterval, m_ExtraRedInterval);
+            }
+
+            if (m_TrafficLightPrefab != m_CurrentTrafficLightPrefab)
+            {
+                EditorApplication.delayCall += ClearCurrentAssetsAndSetTrafficLightAsset;
+            }
+        }
+
         void ClearCurrentAssetsAndSetTrafficLightAsset()
         {
             EditorApplication.delayCall -= ClearCurrentAssetsAndSetTrafficLightAsset;
@@ -178,20 +183,24 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             {
                 SetTrafficLightAsset(m_TrafficLightPrefab);
             }
-        }
-
-        void OnValidate()
-        {
-            if (Application.isPlaying)
+            else
             {
-                return;
-            }
-
-            if (m_TrafficLightPrefab != m_CurrentTrafficLightPrefab)
-            {
-                EditorApplication.delayCall += ClearCurrentAssetsAndSetTrafficLightAsset;
+                m_CurrentTrafficLightPrefab = null;
             }
         }
+
+        //void OnValidate()
+        //{
+        //    if (Application.isPlaying)
+        //    {
+        //        return;
+        //    }
+
+        //    if (m_TrafficLightPrefab != m_CurrentTrafficLightPrefab)
+        //    {
+        //        EditorApplication.delayCall += ClearCurrentAssetsAndSetTrafficLightAsset;
+        //    }
+        //}
 #endif
     }
 }

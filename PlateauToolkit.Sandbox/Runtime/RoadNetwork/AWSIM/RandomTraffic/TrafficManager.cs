@@ -120,7 +120,7 @@ namespace AWSIM.TrafficSimulation
                 }
             }
 
-            if(routeTrafficSims != null)
+            if (routeTrafficSims != null)
             {
                 foreach (var routeTrafficSimConf in routeTrafficSims)
                 {

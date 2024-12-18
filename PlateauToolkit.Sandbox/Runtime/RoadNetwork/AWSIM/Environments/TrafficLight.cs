@@ -257,10 +257,10 @@ namespace AWSIM
         /// Define the Emission parameter to be applied to the material when the Bulb is turned on.
         /// </summary>
         [Header("Bulb Emission config")]
-        [SerializeField, Tooltip("Define the Emission parameter for BulbColor.")]
+        [SerializeField, Tooltip("Define the Emission parameter for BulbColor.")][HideInInspector]
         TrafficLightData.EmissionConfig[] bulbEmissionConfigs = TrafficLightData.GetDefaultEmissionConfigs();
 
-        [Header("Bulb material config"), Tooltip("Link the material of the bulb to the type.")]
+        [Header("Bulb material config"), Tooltip("Link the material of the bulb to the type.")][HideInInspector]
         [SerializeField] Bulb[] bulbs;
 
         Dictionary<BulbType, Bulb> bulbPairs;
@@ -403,6 +403,11 @@ namespace AWSIM
             if (TrafficLightAsset != null)
             {
                 renderer = TrafficLightAsset.GetComponentInChildren<Renderer>();
+                TrafficLightAsset.SetTrafficLight(this);
+            }
+            else
+            {
+                renderer = null;
             }
 
             if (TrafficLightAsset != null)
