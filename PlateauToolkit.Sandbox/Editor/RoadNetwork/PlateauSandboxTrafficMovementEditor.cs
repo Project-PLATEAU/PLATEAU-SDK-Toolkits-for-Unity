@@ -21,6 +21,7 @@ namespace AWSIM.TrafficSimulation
             else
             {
                 DrawPropertiesExcluding(serializedObject, "status");
+                serializedObject.ApplyModifiedProperties();
             }
         }
     }

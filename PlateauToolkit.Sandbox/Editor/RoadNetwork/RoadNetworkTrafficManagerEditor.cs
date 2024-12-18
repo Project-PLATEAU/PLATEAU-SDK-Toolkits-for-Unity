@@ -21,6 +21,13 @@ namespace AWSIM.TrafficSimulation
             else
             {
                 DrawPropertiesExcluding(serializedObject, "m_TrafficLightPrefab");
+                serializedObject.ApplyModifiedProperties();
+            }
+
+            if (GUILayout.Button("Update Traffic Light Sequence"))
+            {
+                RoadNetworkTrafficManager manager = target as RoadNetworkTrafficManager;
+                manager.UpdateTrafficLightSequences();
             }
         }
     }

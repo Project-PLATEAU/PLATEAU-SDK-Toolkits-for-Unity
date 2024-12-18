@@ -18,15 +18,26 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     public class RoadNetworkTrafficManager : MonoBehaviour
     {
 
-        [SerializeField, Tooltip("Traffic light prefab")]
-        GameObject m_TrafficLightPrefab;
-
-        [SerializeField][HideInInspector]
-        GameObject m_CurrentTrafficLightPrefab;
-
         [Header("Debug")]
         [SerializeField, Tooltip("Show Traffic light Gizmos")]
         bool m_Show_TrafficLight_Gizmos = RoadNetworkConstants.SHOW_DEBUG_GIZMOS;
+
+        [Header("TrafficLight")]
+        [SerializeField, Tooltip("Traffic light prefab")]
+        GameObject m_TrafficLightPrefab;
+
+        [SerializeField]
+        [HideInInspector]
+        GameObject m_CurrentTrafficLightPrefab;
+
+        [SerializeField]
+        public float m_TrafficLight_GreenRed_Interval = RoadNetworkConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
+
+        [SerializeField]
+        public float m_TrafficLight_Yellow_Interval = RoadNetworkConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
+
+        [SerializeField]
+        public float m_TrafficLight_Extra_Red_Interval = RoadNetworkConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
 
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
@@ -108,6 +119,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             SimTrafficManager.Initialize();
         }
 
+        public void UpdateTrafficLightSequences()
+        {
+            var trafficIntersections = GameObject.FindObjectsOfType<TrafficIntersection>();
+            foreach (var intersection in trafficIntersections)
+            {
+                intersection.UpdateTrafficLightSequences(m_TrafficLight_GreenRed_Interval, m_TrafficLight_Yellow_Interval, m_TrafficLight_Extra_Red_Interval);
+            }
+        }
+
         public void SetTrafficLightAsset(GameObject trafficLightPrefab)
         {
 #if UNITY_EDITOR
@@ -131,7 +151,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 gameObject.transform.SetParent(trafficLightParent.transform, false);
 
-                PlateauSandboxInteractive component = gameObject.GetComponent<PlateauSandboxInteractive>();
+                PlateauSandboxInteractiveTrafficLight component = gameObject.GetComponent<PlateauSandboxInteractiveTrafficLight>();
                 if (component != null)
                 {
                     trafficLight.SetTrafficLightAsset(component);

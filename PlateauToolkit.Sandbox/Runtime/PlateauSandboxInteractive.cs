@@ -14,14 +14,15 @@ namespace PlateauToolkit.Sandbox
     /// <summary>
     /// 信号機アセット
     /// </summary>
-    public class PlateauSandboxInteractiveTrafficLight : MonoBehaviour
-    {
+    //[SelectionBase]
+    //public class PlateauSandboxInteractiveTrafficLight : PlateauSandboxInteractive
+    //{
 
-        [SerializeField] TrafficLight m_TrafficLightController;
+    //    [SerializeField] TrafficLight m_TrafficLightController;
 
-        public void SetTrafficLight(TrafficLight trafficLight)
-        {
-            m_TrafficLightController = trafficLight;
-        }
-    }
+    //    public void SetTrafficLight(TrafficLight trafficLight)
+    //    {
+    //        m_TrafficLightController = trafficLight;
+    //    }
+    //}
 }

@@ -61,7 +61,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 563560df555255e4899e0764a084a182,
         type: 3}
       propertyPath: m_Name
-      value: TrafficLight_Interactive_01_Mesh_LOD0
+      value: Interactive_TrafficLight_01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -70,7 +70,7 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 563560df555255e4899e0764a084a182,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 6460990068084118809}
+      addedObject: {fileID: 2178620417917385095}
   m_SourcePrefab: {fileID: 100100000, guid: 563560df555255e4899e0764a084a182, type: 3}
 --- !u!1 &3586513440180841131 stripped
 GameObject:
@@ -78,7 +78,7 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 4396836125502183418}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6460990068084118809
+--- !u!114 &2178620417917385095
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,7 +87,30 @@ MonoBehaviour:
   m_GameObject: {fileID: 3586513440180841131}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: acf0784fd9d75184bab59aff470a2f0c, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b918206001cafe44bb27815da5fe54b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   groundPlacementDirection: 0
+  m_TrafficLightAssetBulbData:
+  - bulbType: 3
+    materialIndex: 1
+    EmissionConfig:
+      BulbColor: 2
+      Color: {r: 0, g: 1, b: 0.098634005, a: 1}
+      Intensity: 14
+      ExposureWeight: 0.8
+  - bulbType: 2
+    materialIndex: 2
+    EmissionConfig:
+      BulbColor: 1
+      Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+      Intensity: 14
+      ExposureWeight: 0.8
+  - bulbType: 1
+    materialIndex: 3
+    EmissionConfig:
+      BulbColor: 0
+      Color: {r: 1, g: 0, b: 0, a: 1}
+      Intensity: 14
+      ExposureWeight: 0.8
+  m_TrafficLightController: {fileID: 0}
