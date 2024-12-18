@@ -12,7 +12,7 @@ namespace PlateauToolkit.Sandbox
     public class PlateauSandboxInteractiveTrafficLight : PlateauSandboxInteractive
     {
 
-        [SerializeField] TrafficLightAssetBulbData[] m_TrafficLightAssetBulbData = TrafficLightData.GetDefaultTrafficLightAssetBulbData();
+        [SerializeField] TrafficLightAssetBulbData[] m_TrafficLightAssetBulbData;
 
         [SerializeField] TrafficLight m_TrafficLightController;
 
@@ -21,6 +21,18 @@ namespace PlateauToolkit.Sandbox
         public void SetTrafficLight(TrafficLight trafficLight)
         {
             m_TrafficLightController = trafficLight;
+        }
+
+        [ContextMenu("Create default URP Bulb Data")]
+        void CreateURPBulbData()
+        {
+            m_TrafficLightAssetBulbData = TrafficLightData.GetDefaultTrafficLightAssetBulbData(false);
+        }
+
+        [ContextMenu("Create default HDRP Bulb Data")]
+        void CreateHDRPBulbData()
+        {
+            m_TrafficLightAssetBulbData = TrafficLightData.GetDefaultTrafficLightAssetBulbData(true);
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using AWSIM;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
-using static PlasticGui.Help.GuiHelp;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
@@ -120,8 +117,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             };
         }
 
-        public static TrafficLightAssetBulbData[] GetDefaultTrafficLightAssetBulbData()
+        public static TrafficLightAssetBulbData[] GetDefaultTrafficLightAssetBulbData(bool isHDRP)
         {
+            float intensity = isHDRP ? 14f : 5.0f;
+            float exposureWeight = isHDRP ? 0.8f : 0f;
             return new TrafficLightAssetBulbData[]
             {
                 new TrafficLightAssetBulbData()
@@ -132,8 +131,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     {
                         BulbColor = BulbColor.GREEN,
                         Color = Color.green,
-                        Intensity = 14,
-                        ExposureWeight = 0.8f,
+                        Intensity = intensity,
+                        ExposureWeight = exposureWeight,
                     },
                 },
                 new TrafficLightAssetBulbData()
@@ -144,8 +143,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     {
                         BulbColor = BulbColor.YELLOW,
                         Color = Color.yellow,
-                        Intensity = 14,
-                        ExposureWeight = 0.8f,
+                        Intensity = intensity,
+                        ExposureWeight = exposureWeight,
                     },
                 },
                 new TrafficLightAssetBulbData()
@@ -156,12 +155,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     {
                         BulbColor = BulbColor.RED,
                         Color = Color.red,
-                        Intensity = 14,
-                        ExposureWeight = 0.8f,
+                        Intensity = intensity,
+                        ExposureWeight = exposureWeight,
                     },
                 },
             };
         }
-
     }
 }

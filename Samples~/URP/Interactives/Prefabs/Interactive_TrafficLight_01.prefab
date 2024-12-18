@@ -96,21 +96,21 @@ MonoBehaviour:
     materialIndex: 1
     EmissionConfig:
       BulbColor: 2
-      Color: {r: 0, g: 1, b: 0.098634005, a: 1}
-      Intensity: 14
-      ExposureWeight: 0.8
+      Color: {r: 0, g: 1, b: 0, a: 1}
+      Intensity: 5
+      ExposureWeight: 0
   - bulbType: 2
     materialIndex: 2
     EmissionConfig:
       BulbColor: 1
       Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-      Intensity: 14
-      ExposureWeight: 0.8
+      Intensity: 5
+      ExposureWeight: 0
   - bulbType: 1
     materialIndex: 3
     EmissionConfig:
       BulbColor: 0
       Color: {r: 1, g: 0, b: 0, a: 1}
-      Intensity: 14
-      ExposureWeight: 0.8
+      Intensity: 5
+      ExposureWeight: 0
   m_TrafficLightController: {fileID: 0}

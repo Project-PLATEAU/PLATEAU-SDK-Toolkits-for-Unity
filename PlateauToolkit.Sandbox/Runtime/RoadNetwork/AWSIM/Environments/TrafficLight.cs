@@ -16,86 +16,11 @@ namespace AWSIM
     public class TrafficLight : MonoBehaviour
     {
         /// <summary>
-        /// Type of each bulb.
-        /// </summary>
-        //public enum BulbType
-        //{
-        //    ANY_CIRCLE_BULB         = 0,
-        //    RED_BULB         = 1,
-        //    YELLOW_BULB      = 2,
-        //    GREEN_BULB       = 3,
-        //    LEFT_ARROW_BULB         = 4,
-        //    RIGHT_ARROW_BULB        = 5,
-        //    UP_ARROW_BULB           = 6,
-        //    DOWN_ARROW_BULB         = 7,
-        //    DOWN_LEFT_ARROW_BULB    = 8,
-        //    DOWN_RIGHT_ARROW_BULB   = 9,
-        //    CROSS_BULB              = 10,
-        //}
-
-        ///// <summary>
-        ///// Bulb lighting status.
-        ///// </summary>
-        //public enum BulbStatus
-        //{
-        //    SOLID_OFF               = 0,        // Lights off.
-        //    SOLID_ON                = 1,        // Lights on.
-        //    FLASHING                = 2,        // Lights on every flashSec.
-        //}
-
-        ///// <summary>
-        ///// Bulb lighting color.
-        ///// </summary>
-        //public enum BulbColor
-        //{
-        //    RED                     = 0,
-        //    YELLOW                  = 1,
-        //    GREEN                   = 2,
-        //    WHITE                   = 3,
-        //}
-
-        /// <summary>
-        /// Used in TrafficLight.SetBulbData(). Based on the data in this class, the lighting of each bulb is controlled.
-        /// </summary>
-        //[Serializable]
-        //public struct BulbData
-        //{
-        //    public BulbType Type => type;
-
-        //    public BulbColor Color => color;
-
-        //    public BulbStatus Status => status;
-
-        //    [SerializeField] BulbType type;
-        //    [SerializeField] BulbColor color;
-        //    [SerializeField] BulbStatus status;
-
-        //    public BulbData(BulbType type, BulbColor color, BulbStatus status)
-        //    {
-        //        this.type = type;
-        //        this.color = color;
-        //        this.status = status;
-        //    }
-        //}
-
-        /// <summary>
         /// Define TrafficLight bulbs.
         /// </summary>
         [Serializable]
         class Bulb
         {
-            /// <summary>
-            /// Emission configuration to be applied to the material when the bulb is lit.
-            /// </summary>
-            //[Serializable]
-            //public class EmissionConfig
-            //{
-            //    public BulbColor BulbColor;
-            //    public Color Color;
-            //    public float Intensity;
-            //    [Range(0, 1)] public float ExposureWeight;
-            //}
-
             public BulbType BulbType => bulbType;
 
             public BulbStatus BulbStatus => status;
@@ -305,20 +230,6 @@ namespace AWSIM
         /// <param name="interactiveAsset"></param>
         public void SetTrafficLightAsset(PlateauSandboxInteractiveTrafficLight interactiveAsset)
         {
-            //PlateauSandboxInteractiveTrafficLight interactiveTrafficLight = interactiveAsset.gameObject.GetComponent<PlateauSandboxInteractiveTrafficLight>();
-            //if (interactiveTrafficLight == null)
-            //{
-            //    interactiveTrafficLight = interactiveAsset.gameObject.AddComponent<PlateauSandboxInteractiveTrafficLight>();
-            //}
-            //interactiveTrafficLight.SetTrafficLight(this);
-
-            //PlateauSandboxInteractiveTrafficLight interactiveTrafficLight = interactiveAsset as PlateauSandboxInteractiveTrafficLight;
-            //if (interactiveTrafficLight != null)
-            //{
-            //    interactiveTrafficLight.SetTrafficLight(this);
-            //    CreateBulbsAndEmissionConfigsFromAssetData(interactiveTrafficLight.TrafficLightAssetBulbData);
-            //}
-
             TrafficLightAsset = interactiveAsset;
             interactiveAsset.SetTrafficLight(this);
             CreateBulbsAndEmissionConfigsFromAssetData(interactiveAsset.TrafficLightAssetBulbData);
@@ -348,31 +259,6 @@ namespace AWSIM
         [Header("Bulb Emission config")]
         [SerializeField, Tooltip("Define the Emission parameter for BulbColor.")]
         TrafficLightData.EmissionConfig[] bulbEmissionConfigs = TrafficLightData.GetDefaultEmissionConfigs();
-
-        //TrafficLightData.EmissionConfig[] bulbEmissionConfigs = new TrafficLightData.EmissionConfig[]
-        //{
-        //    new TrafficLightData.EmissionConfig()
-        //    {
-        //        BulbColor = BulbColor.GREEN,
-        //        Color = Color.green,
-        //        Intensity = 14,
-        //        ExposureWeight = 0.8f,
-        //    },
-        //    new TrafficLightData.EmissionConfig()
-        //    {
-        //        BulbColor = BulbColor.YELLOW,
-        //        Color = Color.yellow,
-        //        Intensity = 14,
-        //        ExposureWeight = 0.8f,
-        //    },
-        //    new TrafficLightData.EmissionConfig()
-        //    {
-        //        BulbColor = BulbColor.RED,
-        //        Color = Color.red,
-        //        Intensity = 14,
-        //        ExposureWeight = 0.8f,
-        //    },
-        //};
 
         [Header("Bulb material config"), Tooltip("Link the material of the bulb to the type.")]
         [SerializeField] Bulb[] bulbs;
@@ -432,9 +318,6 @@ namespace AWSIM
         void Reset()
         {
             RefreshAssets();
-
-            //renderer = GetComponent<Renderer>();
-            //CreateDefaultBulbs();
         }
 
         void Awake()
