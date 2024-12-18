@@ -1,3 +1,4 @@
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -31,29 +32,29 @@ namespace AWSIM.TrafficSimulation
             var flashingColor = TrafficLightPassability.GREEN;
             foreach (var bulbData in bulbDataArray)
             {
-                if (bulbData.Status == TrafficLight.BulbStatus.SOLID_OFF)
+                if (bulbData.Status == TrafficLightData.BulbStatus.SOLID_OFF)
                     continue;
 
                 switch (bulbData.Type)
                 {
-                    case TrafficLight.BulbType.RED_BULB:
+                    case TrafficLightData.BulbType.RED_BULB:
                         flashingColor = TrafficLightPassability.RED;
                         break;
-                    case TrafficLight.BulbType.YELLOW_BULB:
+                    case TrafficLightData.BulbType.YELLOW_BULB:
                         flashingColor = TrafficLightPassability.YELLOW;
                         break;
-                    case TrafficLight.BulbType.GREEN_BULB:
+                    case TrafficLightData.BulbType.GREEN_BULB:
                         flashingColor = TrafficLightPassability.GREEN;
                         break;
-                    case TrafficLight.BulbType.LEFT_ARROW_BULB:
+                    case TrafficLightData.BulbType.LEFT_ARROW_BULB:
                         arrowDirection = TrafficLane.TurnDirectionType.LEFT;
                         hasArrowSignal = true;
                         break;
-                    case TrafficLight.BulbType.RIGHT_ARROW_BULB:
+                    case TrafficLightData.BulbType.RIGHT_ARROW_BULB:
                         arrowDirection = TrafficLane.TurnDirectionType.RIGHT;
                         hasArrowSignal = true;
                         break;
-                    case TrafficLight.BulbType.UP_ARROW_BULB:
+                    case TrafficLightData.BulbType.UP_ARROW_BULB:
                         arrowDirection = TrafficLane.TurnDirectionType.STRAIGHT;
                         hasArrowSignal = true;
                         break;

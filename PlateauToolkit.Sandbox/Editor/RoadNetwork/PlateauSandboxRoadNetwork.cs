@@ -63,7 +63,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void PlaceTrafficLights()
         {
-            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxInteractive>(RoadNetworkConstants.TRAFFIC_LIGHT_INTERACTIVE_ASSET_NAME)?.gameObject;
+            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxInteractiveTrafficLight>(RoadNetworkConstants.TRAFFIC_LIGHT_INTERACTIVE_ASSET_NAME)?.gameObject;
             if (trafficLightPrefab == null)
             {
                 EditorUtility.DisplayDialog("信号機アセットの配置に失敗しました。", "信号機アセットが見つかりませんでした。「ビルトインアセットをインポート」を実行してください。", "OK");
