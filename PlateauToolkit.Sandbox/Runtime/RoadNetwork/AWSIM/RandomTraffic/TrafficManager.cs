@@ -162,7 +162,7 @@ namespace AWSIM.TrafficSimulation
 
         private void verifyIntegrationEnvironmentElements()
         {
-            GameObject trafficLanesObject = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+            GameObject trafficLanesObject = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_LANE_ROOT_NAME);
             if (trafficLanesObject == null)
             {
                 Debug.LogError("VerifyIntegrationEnvironmentElements error: Object 'TrafficLanes' not found in the scene.");

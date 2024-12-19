@@ -77,7 +77,7 @@ namespace AWSIM.TrafficSimulation
             TrafficLane trafficLane = target as TrafficLane;
             serializedObject.Update();
 
-            if (RoadNetworkConstants.SHOW_DEBUG_ROADNETWORK_INFO)
+            if (PlateauSandboxTrafficManagerConstants.SHOW_DEBUG_ROADNETWORK_INFO)
             {
                 if (trafficLane.intersectionLane)
                 {

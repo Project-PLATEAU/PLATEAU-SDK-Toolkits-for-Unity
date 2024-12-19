@@ -21,9 +21,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
             public TrafficLightingParam()
             {
-                greenRedInterval = RoadNetworkConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
-                yellowInterval = RoadNetworkConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
-                extraRedInterval = RoadNetworkConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
+                greenRedInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
+                yellowInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
+                extraRedInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
             }
         }
 

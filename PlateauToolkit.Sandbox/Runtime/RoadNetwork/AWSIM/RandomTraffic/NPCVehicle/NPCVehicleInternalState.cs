@@ -92,11 +92,11 @@ namespace AWSIM.TrafficSimulation
             //赤信号の場合はIDLE TIME + Green + Red
             if (TrafficLightPassability == TrafficLightPassability.RED)
             {
-                return RoadNetworkConstants.MAX_IDLE_TIME
-                    + RoadNetworkConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS
-                    + RoadNetworkConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
+                return PlateauSandboxTrafficManagerConstants.MAX_IDLE_TIME
+                    + PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS
+                    + PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
             }
-            return RoadNetworkConstants.MAX_IDLE_TIME;
+            return PlateauSandboxTrafficManagerConstants.MAX_IDLE_TIME;
         }
 
         public bool CheckMaxIdleTimeExceeded()

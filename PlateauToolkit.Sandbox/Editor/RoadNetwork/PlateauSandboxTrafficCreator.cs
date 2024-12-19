@@ -6,7 +6,6 @@ using PlateauToolkit.Sandbox.RoadNetwork;
 using AWSIM.TrafficSimulation;
 using UnityEditor;
 using PLATEAU.CityInfo;
-using AWSIM;
 using PLATEAU.RoadAdjust.RoadNetworkToMesh;
 
 namespace PlateauToolkit.Sandbox.Editor
@@ -15,15 +14,15 @@ namespace PlateauToolkit.Sandbox.Editor
     /// Editor側のTrafficSim生成処理
     /// PlateauSandboxWindowTrafficViewから呼ばれる
     /// </summary>
-    public class PlateauSandboxRoadNetwork
+    public class PlateauSandboxTrafficCreator
     {
         RoadNetworkDataGetter m_RoadNetworkGetter;
-        RoadNetworkTrafficManager m_RnTrafficManager;
+        PlateauSandboxTrafficManager m_RnTrafficManager;
         TrafficManager m_TrafficManager;
 
         public void ClearTrafficManager()
         {
-            var manager = GameObject.Find(RoadNetworkConstants.TRAFFIC_MANAGER_NAME);
+            var manager = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_MANAGER_NAME);
             if (manager != null)
             {
                 GameObject.DestroyImmediate(manager);
@@ -39,10 +38,10 @@ namespace PlateauToolkit.Sandbox.Editor
                 return false;
             }
 
-            if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_VEHICLE))
-                Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
-            if (!Layers.LayerExists(RoadNetworkConstants.LAYER_MASK_GROUND))
-                Layers.CreateLayer(RoadNetworkConstants.LAYER_MASK_GROUND);
+            if (!Layers.LayerExists(PlateauSandboxTrafficManagerConstants.LAYER_MASK_VEHICLE))
+                Layers.CreateLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_VEHICLE);
+            if (!Layers.LayerExists(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND))
+                Layers.CreateLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
 
             try
             {
@@ -63,7 +62,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void PlaceTrafficLights()
         {
-            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxInteractiveTrafficLight>(RoadNetworkConstants.TRAFFIC_LIGHT_INTERACTIVE_ASSET_NAME)?.gameObject;
+            var trafficLightPrefab = PlateauSandboxAssetUtility.FindAssetByName<PlateauSandboxInteractiveTrafficLight>(PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_INTERACTIVE_ASSET_NAME)?.gameObject;
             if (trafficLightPrefab == null)
             {
                 EditorUtility.DisplayDialog("信号機アセットの配置に失敗しました。", "信号機アセットが見つかりませんでした。「ビルトインアセットをインポート」を実行してください。", "OK");
@@ -92,7 +91,7 @@ namespace PlateauToolkit.Sandbox.Editor
             }
             foreach (Transform trans in dems)
             {
-                ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
+                ChangeLayersIncludeChildren(trans, LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND));
             }
         }
         void SetReproducedRoadsAsGroundLayer()
@@ -102,7 +101,7 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 for (int i = 0; i < reproducedRoads.Length; i++)
                 {
-                    ChangeLayersIncludeChildren(reproducedRoads[i].transform, LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND));
+                    ChangeLayersIncludeChildren(reproducedRoads[i].transform, LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND));
                 }
             }
         }
@@ -119,9 +118,9 @@ namespace PlateauToolkit.Sandbox.Editor
 
         void PostCreateSimulator()
         {
-            if (RoadNetworkConstants.USE_RIGHT_OF_WAYS)
+            if (PlateauSandboxTrafficManagerConstants.USE_RIGHT_OF_WAYS)
             {
-                var lanes = GameObject.Find(RoadNetworkConstants.TRAFFIC_LANE_ROOT_NAME);
+                var lanes = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_LANE_ROOT_NAME);
                 for (int i = 0; i < lanes.transform.childCount; i++)
                 {
                     TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
@@ -130,12 +129,12 @@ namespace PlateauToolkit.Sandbox.Editor
 
             SetReproducedRoadsAsGroundLayer();
 
-            if (RoadNetworkConstants.SET_DEM_AS_GROUND_LAYER)
+            if (PlateauSandboxTrafficManagerConstants.SET_DEM_AS_GROUND_LAYER)
             {
                 SetCityObjectAsGroundLayer("_dem_"); //Demをground Layerに
             }
 
-            if (RoadNetworkConstants.ADD_TRAFFIC_LIGHTS)
+            if (PlateauSandboxTrafficManagerConstants.ADD_TRAFFIC_LIGHTS)
             {
                 PlaceTrafficLights();
             }
@@ -154,16 +153,16 @@ namespace PlateauToolkit.Sandbox.Editor
             m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
 
             //Attach Components
-            GameObject managerGo = GameObject.Find(RoadNetworkConstants.TRAFFIC_MANAGER_NAME);
+            GameObject managerGo = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_MANAGER_NAME);
             if (managerGo == null)
             {
-                managerGo = new GameObject(RoadNetworkConstants.TRAFFIC_MANAGER_NAME);
+                managerGo = new GameObject(PlateauSandboxTrafficManagerConstants.TRAFFIC_MANAGER_NAME);
             }
 
-            m_RnTrafficManager = managerGo.GetComponent<RoadNetworkTrafficManager>();
+            m_RnTrafficManager = managerGo.GetComponent<PlateauSandboxTrafficManager>();
             if (m_RnTrafficManager == null)
             {
-                m_RnTrafficManager = managerGo.AddComponent<RoadNetworkTrafficManager>();
+                m_RnTrafficManager = managerGo.AddComponent<PlateauSandboxTrafficManager>();
             }
 
             m_TrafficManager = managerGo.GetComponent<TrafficManager>();

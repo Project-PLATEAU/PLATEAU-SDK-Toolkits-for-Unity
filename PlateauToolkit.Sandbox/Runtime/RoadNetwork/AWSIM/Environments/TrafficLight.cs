@@ -225,16 +225,25 @@ namespace AWSIM
         }
 
         /// <summary>
-        /// PlateauSandboxInteractive とRendererをセット
+        /// PlateauSandboxInteractiveTrafficLightとRendererをセット
         /// </summary>
         /// <param name="interactiveAsset"></param>
         public void SetTrafficLightAsset(PlateauSandboxInteractiveTrafficLight interactiveAsset)
         {
-            TrafficLightAsset = interactiveAsset;
-            interactiveAsset.SetTrafficLight(this);
-            CreateBulbsAndEmissionConfigsFromAssetData(interactiveAsset.TrafficLightAssetBulbData);
+            if (TrafficLightAsset == interactiveAsset)
+            {
+                return;
+            }
 
-            SetRenderer(interactiveAsset.gameObject.GetComponentInChildren<Renderer>());
+            TrafficLightAsset = interactiveAsset;
+
+            if (TrafficLightAsset != null)
+            {
+                //interactiveAsset.SetTrafficLight(this);
+                CreateBulbsAndEmissionConfigsFromAssetData(interactiveAsset.TrafficLightAssetBulbData);
+
+                SetRenderer(interactiveAsset.gameObject.GetComponentInChildren<Renderer>());
+            }
         }
 
         /// <summary>
@@ -274,39 +283,30 @@ namespace AWSIM
         [SerializeField]
         public RnDataTrafficLight rnTrafficLight;
 
-        RoadNetworkDataGetter m_RoadNetworkGetter;
+        //RoadNetworkDataGetter m_RoadNetworkGetter;
         public RoadNetworkDataGetter RnGetter
         {
             get
             {
-                if (m_RoadNetworkGetter == null)
-                {
-                    PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
-                    m_RoadNetworkGetter = roadNetwork?.GetRoadNetworkDataGetter();
-                    if (m_RoadNetworkGetter == null)
-                    {
-                        Debug.LogError($"RoadNetworkDataGetter is null");
-                    }
-                }
-                return m_RoadNetworkGetter;
+                return RnManager?.RnGetter;
             }
         }
 
-        RoadNetworkTrafficManager m_RoadNetworkTrafficManager;
+        PlateauSandboxTrafficManager m_PlateauTrafficManager;
 
-        public RoadNetworkTrafficManager RnManager
+        public PlateauSandboxTrafficManager RnManager
         {
             get
             {
-                if (m_RoadNetworkTrafficManager == null)
+                if (m_PlateauTrafficManager == null)
                 {
-                    m_RoadNetworkTrafficManager = GameObject.FindObjectOfType<RoadNetworkTrafficManager>();
-                    if (m_RoadNetworkTrafficManager == null)
+                    m_PlateauTrafficManager = GameObject.FindObjectOfType<PlateauSandboxTrafficManager>();
+                    if (m_PlateauTrafficManager == null)
                     {
                         Debug.LogError($"RoadNetworkTrafficManager is null");
                     }
                 }
-                return m_RoadNetworkTrafficManager;
+                return m_PlateauTrafficManager;
             }
         }
 
@@ -400,15 +400,7 @@ namespace AWSIM
 
         void RefreshAssets()
         {
-            if (TrafficLightAsset != null)
-            {
-                renderer = TrafficLightAsset.GetComponentInChildren<Renderer>();
-                TrafficLightAsset.SetTrafficLight(this);
-            }
-            else
-            {
-                renderer = null;
-            }
+            renderer = TrafficLightAsset?.GetComponentInChildren<Renderer>();
 
             if (TrafficLightAsset != null)
             {

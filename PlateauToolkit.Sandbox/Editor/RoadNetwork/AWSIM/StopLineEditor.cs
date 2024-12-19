@@ -19,7 +19,7 @@ namespace AWSIM.TrafficSimulation
         {
             serializedObject.Update();
 
-            if (RoadNetworkConstants.SHOW_DEBUG_ROADNETWORK_INFO)
+            if (PlateauSandboxTrafficManagerConstants.SHOW_DEBUG_ROADNETWORK_INFO)
             {
                 base.OnInspectorGUI();
             }

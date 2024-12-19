@@ -15,29 +15,29 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     /// <summary>
     /// Traffic Simulator / RoadNetwork 総合管理
     /// </summary>
-    public class RoadNetworkTrafficManager : MonoBehaviour
+    public class PlateauSandboxTrafficManager : MonoBehaviour
     {
-
-        [Header("Debug")]
-        [SerializeField, Tooltip("Show Traffic light Gizmos")]
-        bool m_ShowTrafficLightGizmos = RoadNetworkConstants.SHOW_DEBUG_GIZMOS;
 
         [Header("TrafficLight")]
         [SerializeField, Tooltip("Traffic light prefab")]
-        GameObject m_TrafficLightPrefab;
+        public GameObject m_TrafficLightPrefab;
 
         [SerializeField]
         [HideInInspector]
         GameObject m_CurrentTrafficLightPrefab;
 
         [SerializeField, Tooltip("TrafficLight Green/Red interval seconds.")]
-        public float m_GreenRedInterval = RoadNetworkConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
+        public float m_GreenRedInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
 
         [SerializeField, Tooltip("TrafficLight Yellow interval seconds.")]
-        public float m_YellowInterval = RoadNetworkConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
+        public float m_YellowInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
 
         [SerializeField, Tooltip("TrafficLight additional Red interval seconds.")]
-        public float m_ExtraRedInterval = RoadNetworkConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
+        public float m_ExtraRedInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
+
+        [Header("Debug")]
+        [SerializeField, Tooltip("Show Traffic light Gizmos")]
+        public bool m_ShowTrafficLightGizmos = PlateauSandboxTrafficManagerConstants.SHOW_DEBUG_GIZMOS;
 
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
@@ -78,19 +78,19 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public int GetNumMaxVehicles()
         {
             int numRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().Count();
-            return (int)Mathf.Min(numRoads / 2, RoadNetworkConstants.NUM_MAX_VEHICLES); // 交差点以外の道路数の半分 or 最大車輛数
+            return (int)Mathf.Min(numRoads / 2, PlateauSandboxTrafficManagerConstants.NUM_MAX_VEHICLES); // 交差点以外の道路数の半分 or 最大車輛数
         }
 
         public void CreateSimulator(List<GameObject> prefabs)
         {
-            GameObject vehicles = GameObject.Find(RoadNetworkConstants.VEHICLE_ROOT_NAME);
+            GameObject vehicles = GameObject.Find(PlateauSandboxTrafficManagerConstants.VEHICLE_ROOT_NAME);
             if (vehicles == null)
             {
-                vehicles = new GameObject(RoadNetworkConstants.VEHICLE_ROOT_NAME);
+                vehicles = new GameObject(PlateauSandboxTrafficManagerConstants.VEHICLE_ROOT_NAME);
                 vehicles.transform.SetParent(SimTrafficManager.transform, false);
             }
 
-            SimTrafficManager.InitParams(LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_GROUND), GetNumMaxVehicles(), vehicles, RoadNetworkConstants.SHOW_DEBUG_GIZMOS);
+            SimTrafficManager.InitParams(LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_VEHICLE), LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND), GetNumMaxVehicles(), vehicles, PlateauSandboxTrafficManagerConstants.SHOW_DEBUG_GIZMOS);
 
             List<TrafficLane> allLanes = new RoadNetworkLaneConverter().Create(RnGetter, SimTrafficManager.transform); //全て変換 (TrafficLane)
 
@@ -124,10 +124,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 #if UNITY_EDITOR
             m_TrafficLightPrefab = m_CurrentTrafficLightPrefab = trafficLightPrefab;
 
-            var trafficLightParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+            var trafficLightParent = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
             if (trafficLightParent == null)
             {
-                trafficLightParent = new GameObject(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+                trafficLightParent = new GameObject(PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
                 trafficLightParent.transform.SetParent(transform, false);
             }
 
@@ -173,7 +173,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         void ClearCurrentAssetsAndSetTrafficLightAsset()
         {
             EditorApplication.delayCall -= ClearCurrentAssetsAndSetTrafficLightAsset;
-            GameObject trafficLightParent = GameObject.Find(RoadNetworkConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
+            GameObject trafficLightParent = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_ASSETS_ROOT_NAME);
             if (trafficLightParent != null)
             {
                 DestroyImmediate(trafficLightParent);

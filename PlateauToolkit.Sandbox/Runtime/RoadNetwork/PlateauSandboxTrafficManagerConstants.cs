@@ -1,6 +1,6 @@
 ﻿namespace PlateauToolkit.Sandbox.RoadNetwork
 {
-    public class RoadNetworkConstants
+    public class PlateauSandboxTrafficManagerConstants
     {
         /// <summary>
         /// 最大車輛数

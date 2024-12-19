@@ -121,10 +121,10 @@ namespace AWSIM.TrafficSimulation
             obj.transform.parent = NPCVehicleParentsObj.transform;
 
             //Layer ïœçX (ChildÇÃColliderÇÃLayerÇïœçXÇµÇ»Ç¢Ç∆BoxcastÇ™å¯Ç©Ç»Ç¢Åj
-            obj.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
+            obj.layer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_VEHICLE);
             foreach (UnityEngine.Transform child in obj.transform)
             {
-                child.gameObject.layer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
+                child.gameObject.layer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_VEHICLE);
             }
 
             if (obj.TryGetComponent<IPlateauSandboxTrafficObject>(out _) &&
@@ -155,7 +155,7 @@ namespace AWSIM.TrafficSimulation
         {
             var rotation = npcVehicleSpawnPoint.Forward == Vector3.zero ? Quaternion.identity : Quaternion.LookRotation(npcVehicleSpawnPoint.Forward);
             var center = rotation * localBounds.center + npcVehicleSpawnPoint.Position;
-            var ignoreGroundLayerMask = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND, "Default");
+            var ignoreGroundLayerMask = ~LayerMask.GetMask(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND, "Default");
             return !Physics.CheckBox(
                 center,
                 localBounds.extents,

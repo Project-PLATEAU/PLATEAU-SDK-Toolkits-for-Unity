@@ -51,7 +51,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         PlateauToolkitGUIStyles.k_ButtonPrimaryColor)
                     .Button("実行"))
                     {
-                        PlateauSandboxRoadNetwork roadNetwork = new PlateauSandboxRoadNetwork();
+                        PlateauSandboxTrafficCreator roadNetwork = new PlateauSandboxTrafficCreator();
                         var success = roadNetwork.PlaceVehicles(context.SelectedObjectsMultiple);
                         if (success)
                         {

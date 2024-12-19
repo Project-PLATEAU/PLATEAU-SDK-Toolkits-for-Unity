@@ -43,7 +43,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                                 }
                             }
 
-                            var nextLanes = nextIntersection.GetNextLanesFromLane(getter, lane.rnRoad, lane.rnLane, RoadNetworkConstants.IGNORE_REVERSED_LANE);
+                            var nextLanes = nextIntersection.GetNextLanesFromLane(getter, lane.rnRoad, lane.rnLane, PlateauSandboxTrafficManagerConstants.IGNORE_REVERSED_LANE);
 
                             Debug.Log($"nextLanes {nextLanes.Count}");
 

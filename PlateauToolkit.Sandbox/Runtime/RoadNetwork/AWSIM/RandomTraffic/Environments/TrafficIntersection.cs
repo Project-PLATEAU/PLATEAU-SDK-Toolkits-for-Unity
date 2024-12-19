@@ -157,7 +157,7 @@ namespace AWSIM.TrafficSimulation
             lightingSequences = defaultSequences;
 
             // layer and collider mask
-            var vehiclelayer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
+            var vehiclelayer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_VEHICLE);
             colliderMask.value = 1 << vehiclelayer;
         }
 
