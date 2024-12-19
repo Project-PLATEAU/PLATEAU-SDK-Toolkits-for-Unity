@@ -20,6 +20,7 @@ namespace PlateauToolkit.Sandbox.Editor
             Advertisement,
             StreetFurniture,
             Sign,
+            InteractiveTrafficLight,
             Miscellaneous,
         }
 
@@ -94,6 +95,10 @@ namespace PlateauToolkit.Sandbox.Editor
                     break;
                 case Type.Sign:
                     variant.AddComponent<PlateauSandboxSign>();
+                    break;
+                case Type.InteractiveTrafficLight:
+                    PlateauSandboxInteractiveTrafficLight trafficLightComponent = variant.AddComponent<PlateauSandboxInteractiveTrafficLight>();
+                    trafficLightComponent.CreateBulbDataAuto();
                     break;
                 case Type.Miscellaneous:
                     variant.AddComponent<PlateauSandboxMiscellaneous>();

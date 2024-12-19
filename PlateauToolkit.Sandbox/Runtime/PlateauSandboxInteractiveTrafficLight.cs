@@ -1,5 +1,6 @@
 ﻿using PlateauToolkit.Sandbox.RoadNetwork;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static PlateauToolkit.Sandbox.RoadNetwork.TrafficLightData;
 
 namespace PlateauToolkit.Sandbox
@@ -15,6 +16,30 @@ namespace PlateauToolkit.Sandbox
 
         public TrafficLightAssetBulbData[] TrafficLightAssetBulbData => m_TrafficLightAssetBulbData;
 
+        public void CreateBulbDataAuto()
+        {
+            bool isHDRP = false;
+            if (GraphicsSettings.defaultRenderPipeline != null)
+            {
+                if (QualitySettings.renderPipeline == null)
+                {
+                    isHDRP = GraphicsSettings.defaultRenderPipeline.name.Contains("HDRP");
+                }
+                else
+                {
+                    isHDRP = QualitySettings.renderPipeline.name.Contains("HDRP");
+                }
+
+                if (isHDRP)
+                {
+                    CreateHDRPBulbData();
+                }
+                else
+                {
+                    CreateURPBulbData();
+                }
+            }
+        }
 
         [ContextMenu("Create default URP Bulb Data")]
         void CreateURPBulbData()
