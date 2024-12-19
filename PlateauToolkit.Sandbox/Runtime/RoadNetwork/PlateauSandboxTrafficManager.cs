@@ -26,12 +26,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [HideInInspector]
         GameObject m_CurrentTrafficLightPrefab;
 
-        [SerializeField, Tooltip("TrafficLight Green/Red interval seconds.")]
-        public float m_GreenRedInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
+        [SerializeField, Tooltip("TrafficLight Green interval seconds.")]
+        public float m_GreenInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS;
 
         [SerializeField, Tooltip("TrafficLight Yellow interval seconds.")]
         public float m_YellowInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_YELLOW_INTERVAL_SECONDS;
 
+        // Red Interval = Green + Yellow + additional Red
         [SerializeField, Tooltip("TrafficLight additional Red interval seconds.")]
         public float m_ExtraRedInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
 
@@ -161,11 +162,17 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             var trafficIntersections = GameObject.FindObjectsOfType<TrafficIntersection>();
             foreach (var intersection in trafficIntersections)
             {
-                intersection.UpdateTrafficLightSequences(m_GreenRedInterval, m_YellowInterval, m_ExtraRedInterval);
+                intersection.UpdateTrafficLightSequences(m_GreenInterval, m_YellowInterval, m_ExtraRedInterval);
             }
 
             if (m_TrafficLightPrefab != m_CurrentTrafficLightPrefab)
             {
+                if (!m_TrafficLightPrefab.TryGetComponent<PlateauSandboxInteractiveTrafficLight>(out _))
+                {
+                    EditorUtility.DisplayDialog("エラー", "PlateauSandboxInteractiveTrafficLightコンポーネントがアタッチされたGameObjectを選択してください。", "OK");
+                    return;
+                }
+
                 EditorApplication.delayCall += ClearCurrentAssetsAndSetTrafficLightAsset;
             }
         }

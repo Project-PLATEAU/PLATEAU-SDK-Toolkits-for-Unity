@@ -20,7 +20,7 @@ namespace AWSIM.TrafficSimulation
                 EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_TrafficLightPrefab)));
             }
 
-            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_GreenRedInterval)));
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_GreenInterval)));
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_YellowInterval)));
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_ExtraRedInterval)));
 
@@ -31,6 +31,7 @@ namespace AWSIM.TrafficSimulation
                     EditorUtility.DisplayDialog("エラー", "プレイモードを終了してから実行してください。", "OK");
                     return;
                 }
+
                 PlateauSandboxTrafficManager manager = target as PlateauSandboxTrafficManager;
                 manager.UpdateTrafficLightSequences();
             }
