@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace PlateauToolkit.Sandbox.RoadNetwork
+namespace AWSIM
 {
     public class TrafficLightData
     {

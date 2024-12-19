@@ -1,8 +1,9 @@
 ﻿using AWSIM;
+using PlateauToolkit.Sandbox.RoadNetwork;
 using System.Collections.Generic;
 using static AWSIM.TrafficSimulation.TrafficIntersection;
 
-namespace PlateauToolkit.Sandbox.RoadNetwork
+namespace AWSIM
 {
     public class TrafficLightingSequences
     {

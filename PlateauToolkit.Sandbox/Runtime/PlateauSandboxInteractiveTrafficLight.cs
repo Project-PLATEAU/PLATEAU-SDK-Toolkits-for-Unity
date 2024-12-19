@@ -1,7 +1,7 @@
-﻿using PlateauToolkit.Sandbox.RoadNetwork;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Rendering;
-using static PlateauToolkit.Sandbox.RoadNetwork.TrafficLightData;
+using AWSIM;
+using static AWSIM.TrafficLightData;
 
 namespace PlateauToolkit.Sandbox
 {

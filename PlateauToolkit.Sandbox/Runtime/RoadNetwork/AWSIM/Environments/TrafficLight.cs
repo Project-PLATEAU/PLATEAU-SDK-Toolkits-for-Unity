@@ -6,7 +6,7 @@ using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
 using PlateauToolkit.Sandbox;
-using static PlateauToolkit.Sandbox.RoadNetwork.TrafficLightData;
+using static AWSIM.TrafficLightData;
 
 namespace AWSIM
 {
