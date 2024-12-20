@@ -70,6 +70,9 @@ PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミ�
         - [コンビニエンスストア](#コンビニエンスストア)
         - [一軒家](#一軒家)
         - [オフィスビル](#オフィスビル)
+        - [ホテル](#ホテル)
+        - [工場](#工場)
+        - [複合ビル](#複合ビル)
       - [色設定](#色設定)
       - [Prefab保存](#prefab保存)
   - [8-3. 電柱の結線機能](#8-3-電柱の結線機能)
@@ -90,6 +93,12 @@ PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミ�
   - [10-1. 交通シミュレーションの設定](#10-1-交通シミュレーションの設定)
   - [10-2. 交通シミュレーションの作成](#10-2-交通シミュレーションの作成)
     - [交通シミュレーションの利用方法](#交通シミュレーションの利用方法)
+  - [10-3. 交通シミュレーションの編集](#10-3-交通シミュレーションの編集)
+    - [カスタム信号機アセットの作成](#カスタム信号機アセットの作成)
+          - [URP](#urp)
+          - [HDRP](#hdrp)
+    - [カスタム信号機アセットの設置](#カスタム信号機アセットの設置)
+  - [10-4. AWSIMコンポーネント](#10-4-awsimコンポーネント)
 - [関連API](#関連api)
 
 # 1. Sandbox Toolkitの利用に必要な設定
@@ -887,8 +896,75 @@ Sandboxアセットの車両リストが表示されます。フィルタリン�
 
 ### 交通シミュレーションの利用方法
 
-実行後、道路ネットワークを基に、必要なコンポーネントが自動的に配置、設定されます。<br>
+実行後、道路ネットワークを基に、必要なコンポーネントが自動的に配置、設定されます。
 交通シミュレーションはエディターモードでは動作しません。プレイモードを実行することで交通シミュレーションを開始させることができます。
+<img width="500" alt="sandbox_toolkit_traffic_scene" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_scene.png">
+
+## 10-3. 交通シミュレーションの編集
+
+交通シミュレータ配置により生成されたコンポーネントの値を編集することでカスタマイズを行う事ができます。
+
+<img width="500" alt="sandbox_toolkit_traffic_manager" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_manager.png">
+
+TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandboxTrafficManager` から以下の設定が行えます。
+
+| 設定項目                                 | 内容                      |
+|:------------------------------------ |:----------------------- |
+| Traffic Light Prefab              | 信号機アセットのPrefab       |
+| Green Interval              | 青信号の点灯秒数      |
+| Yellow Interval              | 黄信号の点灯秒数       |
+| Extra Red Interval              | 赤信号の追加点灯秒数       |
+
+赤信号の点灯秒数は、「青信号の点灯秒数」と「黄信号の点灯秒数」と「赤信号の追加点灯秒数」の合計値になります。
+上記の設定後、「Update Traffic Lights」ボタンを押下げすることで設置された全信号機の設定が置き換わります。
+
+`ShowTrafficLightGizmos`のチェックを入れる事で信号機アセットが設定されていない状態でもシーン上で信号機の動作を確認できるようになります。
+
+### カスタム信号機アセットの作成
+
+交通シミュレーションで利用可能な信号機SandboxアセットのTypeは、`Interactive Traffic Light` であり、交通シミュレーション作成時に自動的に配置される信号機アセットには` PlateauSandboxInteractiveTrafficLight` コンポーネントがアタッチされています。
+デフォルトでは、コンポーネントに緑、黄、赤のランプが設定されています。<br>
+信号機アセットは、他のアセットと同様に`アセットを作成`ボタンから新規作成することができます。この際、Typeフィールドで、`Interactive Traffic Light` を選択します。
+<img width="500" alt="sandbox_toolkit_traffic_light_creation" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_creation.png">
+詳しいアセット作成方法は、[4-3. 新規作成](#4-3-新規作成)をご参照ください。
+
+信号機アセットは、青、赤、黄のランプに該当するマテリアルが設定されている必要があります。
+`Traffic Light Asset Bulb Data` の`Material Index` 値に作成したアセットのランプマテリアルに対応する値を設定してください。<br>
+該当するマテリアルの以下のシェーダーパラメータの値を変更して信号機の色が設定されます。
+`Traffic Light Asset Bulb Data` の対応するパラメータを必要に応じて変更してください。
+<img width="500" alt="sandbox_toolkit_traffic_light_asset_data" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_asset_data.png">
+
+###### URP     
+| シェーダーパラメータ       |対応するコンポーネントの値       |
+|:------------------------------------ |:------------------------------------|
+| _EmissionColor            |Emission Config / Color |
+
+###### HDRP   
+| シェーダーパラメータ       |対応するコンポーネントの値       |
+|:------------------------------------ |:------------------------------------|
+| _EmissiveColor            |Emission Config / Color |
+| _EmissiveExposureWeight            |Emission Config / Color |
+
+### カスタム信号機アセットの設置
+
+TrafficManagerゲームオブジェクト配下には`TrafficIntersections/TrafficIntersection_〇〇/TrafficLight_〇〇` が生成されていて、TrafficLight_〇〇ゲームオブジェクトには、`TrafficLight` コンポーネントがアタッチされています。
+<img width="500" alt="sandbox_toolkit_traffic_hierarchy" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_hierarchy.png">
+作成した信号機アセットをシーンの任意の箇所に設置し、変更したいTrafficLight_〇〇ゲームオブジェクトを選択します。
+選択したゲームオブジェクトの`TrafficLight`コンポーネントの`Traffic Light Asset` に設置した信号機アセットをドラッグして設定します。
+<img width="500" alt="sandbox_toolkit_traffic_light" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light.png">
+
+全ての信号機を一括で置き換えたい場合は、TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandboxTrafficManager`の`Traffic Light Prefab`に作成した信号機プレハブを設定し、「Update Traffic Lights」ボタンを押します。
+
+## 10-4. AWSIMコンポーネント
+
+交通シミュレーションではAWSIMライブラリの以下の機能を使用しています。
+より詳細なカスタマイズを行いたい場合は以下を参考にしてください。
+
+1. [Traffic Manager](https://tier4.github.io/AWSIM/Components/Traffic/TrafficComponents/)
+2. [Traffic Intersection](https://tier4.github.io/AWSIM/Components/Environment/AddNewEnvironment/AddRandomTraffic/AddTrafficIntersection/)
+3. [Random Traffic](https://tier4.github.io/AWSIM/Components/Environment/AddNewEnvironment/AddRandomTraffic/AddRandomTraffic/)
+4. [NPC Vehicle](https://tier4.github.io/AWSIM/Components/Traffic/NPCs/Vehicle/)
+5. [Traffic Light](https://tier4.github.io/AWSIM/Components/Environment/AddNewEnvironment/AddTrafficLights/)
 
 # 関連API
 
