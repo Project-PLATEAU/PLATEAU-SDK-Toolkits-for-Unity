@@ -12,14 +12,14 @@ namespace AWSIM.TrafficSimulation
         public override void OnInspectorGUI()
         {
             serializedObject.Update();
-
-            if (RoadNetworkConstants.SHOW_DEBUG_ROADNETWORK_INFO)
+            if (PlateauSandboxTrafficManagerConstants.SHOW_DEBUG_ROADNETWORK_INFO)
             {
                 base.OnInspectorGUI();
             }
             else
             {
                 DrawPropertiesExcluding(serializedObject, "rnTrafficLight");
+                serializedObject.ApplyModifiedProperties();
             }
         }
     }

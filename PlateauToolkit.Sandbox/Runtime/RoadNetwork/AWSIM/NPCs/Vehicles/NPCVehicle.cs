@@ -57,7 +57,7 @@ namespace AWSIM
         }
 
         //debug情報
-        [Header("InternalStateInfo")]
+        [Header("Debug InternalStateInfo")]
         [SerializeField]
         public VehicleParameters status = new VehicleParameters();
 
@@ -183,13 +183,13 @@ namespace AWSIM
             var physicMaterial = Resources.Load<PhysicMaterial>("VehiclePhisicMaterial");
             if (collider != null)
             {
-                collider.excludeLayers = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND);  // Everything but ground
+                collider.excludeLayers = ~LayerMask.GetMask(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);  // Everything but ground
                 collider.material = physicMaterial;
             }
             else
             {
                 var boxCollider =  visualObjectRoot.AddComponent<BoxCollider>();
-                boxCollider.excludeLayers = ~LayerMask.GetMask(RoadNetworkConstants.LAYER_MASK_GROUND); // Everything but ground
+                boxCollider.excludeLayers = ~LayerMask.GetMask(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND); // Everything but ground
                 boxCollider.material = physicMaterial;
             }
             lastPosition = rigidbody.position;

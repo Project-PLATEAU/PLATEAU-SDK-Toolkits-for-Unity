@@ -18,7 +18,7 @@ namespace AWSIM.TrafficSimulation
     public class TrafficIntersection : MonoBehaviour
     {
         /// <summary>
-        /// Grouped TrafficLight.
+        /// Grouped TrafficLightData.
         /// </summary>
         [Serializable]
         public class TrafficLightGroup
@@ -32,7 +32,7 @@ namespace AWSIM.TrafficSimulation
                 this.trafficLights = trafficLights.ToArray();
             }
 
-            public void SetBulbData(TrafficLight.BulbData[] bulbData)
+            public void SetBulbData(TrafficLightData.BulbData[] bulbData)
             {
                 foreach (var trafficLight in TrafficLights)
                 {
@@ -86,22 +86,22 @@ namespace AWSIM.TrafficSimulation
         public class GroupLightingOrder
         {
             public int Group => group;
-            public TrafficLight.BulbData[] BulbData => bulbData;
+            public TrafficLightData.BulbData[] BulbData => bulbData;
 
-            public GroupLightingOrder(int group, TrafficLight.BulbData[] bulbData)
+            public GroupLightingOrder(int group, TrafficLightData.BulbData[] bulbData)
             {
                 this.group = group;
                 this.bulbData = bulbData;
             }
 
-            public GroupLightingOrder(int group, TrafficLight.BulbData bulbData)
+            public GroupLightingOrder(int group, TrafficLightData.BulbData bulbData)
             {
                 this.group = group;
-                this.bulbData = new TrafficLight.BulbData[] { bulbData };
+                this.bulbData = new TrafficLightData.BulbData[] { bulbData };
             }
 
             [SerializeField] int group;
-            [SerializeField] TrafficLight.BulbData[] bulbData;
+            [SerializeField] TrafficLightData.BulbData[] bulbData;
         }
 
         [SerializeField] LayerMask colliderMask;
@@ -120,8 +120,13 @@ namespace AWSIM.TrafficSimulation
             var trafficLightGroup = new TrafficLightGroup(group, trafficLights);
             trafficLightGroups.Add(trafficLightGroup);
 
-            //trafficLightGroupêîÇ…âûÇ∂Çƒsequenceê∂ê¨
-            lightingSequences = TrafficLightingSequences.GetLightingSequences(trafficLightGroups.Count);
+            //trafficLightGroupÊï∞„Å´Âøú„Åò„Å¶sequenceÁîüÊàê
+            lightingSequences = TrafficLightingSequences.GetLightingSequences(trafficLightGroups.Count, new TrafficLightingSequences.TrafficLightingParam());
+        }
+
+        public void UpdateTrafficLightSequences(float green, float yellow, float red)
+        {
+            lightingSequences = TrafficLightingSequences.GetLightingSequences(trafficLightGroups.Count, new TrafficLightingSequences.TrafficLightingParam(green, yellow, red));
         }
 
         /// <summary>
@@ -148,11 +153,11 @@ namespace AWSIM.TrafficSimulation
             boxCollider.center = new Vector3(0, 1.1f, 0);
 
             // default sequence
-            var defaultSequences = TrafficLightingSequences.LightingSequencesSingleGroup();
+            var defaultSequences = TrafficLightingSequences.LightingSequencesSingleGroup(new TrafficLightingSequences.TrafficLightingParam());
             lightingSequences = defaultSequences;
 
             // layer and collider mask
-            var vehiclelayer = LayerMask.NameToLayer(RoadNetworkConstants.LAYER_MASK_VEHICLE);
+            var vehiclelayer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_VEHICLE);
             colliderMask.value = 1 << vehiclelayer;
         }
 

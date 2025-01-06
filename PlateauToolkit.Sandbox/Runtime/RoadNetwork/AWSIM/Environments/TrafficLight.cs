@@ -5,8 +5,8 @@ using UnityEngine;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using PlateauToolkit.Sandbox.RoadNetwork;
-using UnityEditor.Experimental;
-using AWSIM.TrafficSimulation;
+using PlateauToolkit.Sandbox;
+using static AWSIM.TrafficLightData;
 
 namespace AWSIM
 {
@@ -16,86 +16,11 @@ namespace AWSIM
     public class TrafficLight : MonoBehaviour
     {
         /// <summary>
-        /// Type of each bulb.
-        /// </summary>
-        public enum BulbType
-        {
-            ANY_CIRCLE_BULB         = 0,
-            RED_BULB         = 1,
-            YELLOW_BULB      = 2,
-            GREEN_BULB       = 3,
-            LEFT_ARROW_BULB         = 4,
-            RIGHT_ARROW_BULB        = 5,
-            UP_ARROW_BULB           = 6,
-            DOWN_ARROW_BULB         = 7,
-            DOWN_LEFT_ARROW_BULB    = 8,
-            DOWN_RIGHT_ARROW_BULB   = 9,
-            CROSS_BULB              = 10,
-        }
-
-        /// <summary>
-        /// Bulb lighting status.
-        /// </summary>
-        public enum BulbStatus
-        {
-            SOLID_OFF               = 0,        // Lights off.
-            SOLID_ON                = 1,        // Lights on.
-            FLASHING                = 2,        // Lights on every flashSec.
-        }
-
-        /// <summary>
-        /// Bulb lighting color.
-        /// </summary>
-        public enum BulbColor
-        {
-            RED                     = 0,
-            YELLOW                  = 1,
-            GREEN                   = 2,
-            WHITE                   = 3,
-        }
-
-        /// <summary>
-        /// Used in TrafficLight.SetBulbData(). Based on the data in this class, the lighting of each bulb is controlled.
-        /// </summary>
-        [Serializable]
-        public struct BulbData
-        {
-            public BulbType Type => type;
-
-            public BulbColor Color => color;
-
-            public BulbStatus Status => status;
-
-            [SerializeField] BulbType type;
-            [SerializeField] BulbColor color;
-            [SerializeField] BulbStatus status;
-
-            public BulbData(BulbType type, BulbColor color, BulbStatus status)
-            {
-                this.type = type;
-                this.color = color;
-                this.status = status;
-            }
-        }
-
-        /// <summary>
         /// Define TrafficLight bulbs.
         /// </summary>
         [Serializable]
         class Bulb
         {
-            /// <summary>
-            /// Emission configuration to be applied to the material when the bulb is lit.
-            /// </summary>
-            [Serializable]
-            public class EmissionConfig
-            {
-                public BulbColor BulbColor;
-                public Color Color;
-                public float Intensity;
-                [Range(0, 1)] public float ExposureWeight;
-            }
-
             public BulbType BulbType => bulbType;
 
             public BulbStatus BulbStatus => status;
@@ -143,12 +68,19 @@ namespace AWSIM
                     // set material.
                     material = renderer.materials[materialIndex];
 
-                    defaultEmissiveColor = Color.black;
-
                     // cache default material parameters.
+                    if (material.HasColor(EmissiveColorURP))
+                    {
+                        defaultEmissiveColor = Color.black;
+                    }
+
                     if (material.HasColor(EmissiveColorHDRP))
                     {
                         defaultEmissiveColor = material.GetColor(EmissiveColorHDRP);
+                    }
+
+                    if (material.HasFloat(EmissiveExposureWeightHDRP))
+                    {
                         defaultEmissiveExposureWeightHDRP = material.GetFloat(EmissiveExposureWeightHDRP);
                     }
                 }
@@ -234,9 +166,14 @@ namespace AWSIM
                         {
                             material.SetColor(EmissiveColorURP, config.Color * config.Intensity);
                         }
-                        else if (material.HasColor(EmissiveColorHDRP))
+
+                        if (material.HasColor(EmissiveColorHDRP))
                         {
                             material.SetColor(EmissiveColorHDRP, config.Color * config.Intensity);
+                        }
+
+                        if (material.HasFloat(EmissiveExposureWeightHDRP))
+                        {
                             material.SetFloat(EmissiveExposureWeightHDRP, config.ExposureWeight);
                         }
 
@@ -256,9 +193,14 @@ namespace AWSIM
                         {
                             material.SetColor(EmissiveColorURP, defaultEmissiveColor);
                         }
-                        else if (material.HasColor(EmissiveColorHDRP))
+
+                        if (material.HasColor(EmissiveColorHDRP))
                         {
                             material.SetColor(EmissiveColorHDRP, defaultEmissiveColor);
+                        }
+
+                        if (material.HasFloat(EmissiveExposureWeightHDRP))
+                        {
                             material.SetFloat(EmissiveExposureWeightHDRP, defaultEmissiveExposureWeightHDRP);
                         }
 
@@ -282,62 +224,100 @@ namespace AWSIM
             }
         }
 
+        /// <summary>
+        /// PlateauSandboxInteractiveTrafficLightとRendererをセット
+        /// </summary>
+        /// <param name="interactiveAsset"></param>
+        public void SetTrafficLightAsset(PlateauSandboxInteractiveTrafficLight interactiveAsset)
+        {
+            if (TrafficLightAsset == interactiveAsset)
+            {
+                return;
+            }
+
+            TrafficLightAsset = interactiveAsset;
+
+            if (TrafficLightAsset != null)
+            {
+                //interactiveAsset.SetTrafficLight(this);
+                CreateBulbsAndEmissionConfigsFromAssetData(interactiveAsset.TrafficLightAssetBulbData);
+
+                SetRenderer(interactiveAsset.gameObject.GetComponentInChildren<Renderer>());
+            }
+        }
+
+        /// <summary>
+        /// Rendererのみセット
+        /// </summary>
+        /// <param name="_renderer_"></param>
         public void SetRenderer(Renderer _renderer_)
         {
             renderer = _renderer_;
         }
 
-        [SerializeField, Tooltip("Set the Renderer containing the bulb material.")] 
+        [SerializeField, Tooltip("Set the PlateauSandboxInteractiveTrafficLight.")]
+        PlateauSandboxInteractiveTrafficLight TrafficLightAsset;
+
+        //[SerializeField, Tooltip("Set the Renderer containing the bulb material.")]
+        [SerializeField][HideInInspector]
         new Renderer renderer;
 
         /// <summary>
         /// Define the Emission parameter to be applied to the material when the Bulb is turned on.
         /// </summary>
         [Header("Bulb Emission config")]
-        [SerializeField, Tooltip("Define the Emission parameter for BulbColor.")]
-        Bulb.EmissionConfig[] bulbEmissionConfigs = new Bulb.EmissionConfig[]
-        {
-            new Bulb.EmissionConfig()
-            {
-                BulbColor = BulbColor.GREEN,
-                Color = Color.green,
-                Intensity = 14,
-                ExposureWeight = 0.8f,
-            },
-            new Bulb.EmissionConfig()
-            {
-                BulbColor = BulbColor.YELLOW,
-                Color = Color.yellow,
-                Intensity = 14,
-                ExposureWeight = 0.8f,
-            },
-            new Bulb.EmissionConfig()
-            {
-                BulbColor = BulbColor.RED,
-                Color = Color.red,
-                Intensity = 14,
-                ExposureWeight = 0.8f,
-            },
-        };
+        [SerializeField, Tooltip("Define the Emission parameter for BulbColor.")][HideInInspector]
+        TrafficLightData.EmissionConfig[] bulbEmissionConfigs = TrafficLightData.GetDefaultEmissionConfigs();
 
-        [Header("Bulb material config"), Tooltip("Link the material of the bulb to the type.")]
+        [Header("Bulb material config"), Tooltip("Link the material of the bulb to the type.")][HideInInspector]
         [SerializeField] Bulb[] bulbs;
 
         Dictionary<BulbType, Bulb> bulbPairs;
         int bulbCount;
         BulbData[] bulbDataArray;
 
-        [SerializeField]
+        [SerializeField][HideInInspector]
         List<AWSIM.TrafficSimulation.StopLine> stoplines = new();
 
         [Header("RoadNetwork")]
         [SerializeField]
         public RnDataTrafficLight rnTrafficLight;
 
+        //RoadNetworkDataGetter m_RoadNetworkGetter;
+        public RoadNetworkDataGetter RnGetter
+        {
+            get
+            {
+                return RnManager?.RnGetter;
+            }
+        }
+
+        PlateauSandboxTrafficManager m_PlateauTrafficManager;
+
+        public PlateauSandboxTrafficManager RnManager
+        {
+            get
+            {
+                if (m_PlateauTrafficManager == null)
+                {
+                    m_PlateauTrafficManager = GameObject.FindObjectOfType<PlateauSandboxTrafficManager>();
+                    if (m_PlateauTrafficManager == null)
+                    {
+                        Debug.LogError($"RoadNetworkTrafficManager is null");
+                    }
+                }
+                return m_PlateauTrafficManager;
+            }
+        }
+
+        void OnValidate()
+        {
+            RefreshAssets();
+        }
+
         void Reset()
         {
-            //renderer = GetComponent<Renderer>();
-            CreateDefaultBulbs();
+            RefreshAssets();
         }
 
         void Awake()
@@ -362,11 +342,20 @@ namespace AWSIM
             }
         }
 
+        void OnDestroy()
+        {
+            // Destory bulb materials.
+            foreach (var e in bulbs)
+            {
+                e.Destroy();
+            }
+        }
+
         public void TurnOffAllBulbs()
         {
             foreach (var e in bulbs)
             {
-                e.SetBulbLighting(TrafficLight.BulbStatus.SOLID_OFF, BulbColor.WHITE);
+                e.SetBulbLighting(BulbStatus.SOLID_OFF, BulbColor.WHITE);
             }
         }
 
@@ -409,13 +398,37 @@ namespace AWSIM
             return bulbDataArray;
         }
 
-        void OnDestroy()
+        void RefreshAssets()
         {
-            // Destory bulb materials.
-            foreach (var e in bulbs)
+            renderer = TrafficLightAsset?.GetComponentInChildren<Renderer>();
+
+            if (TrafficLightAsset != null)
             {
-                e.Destroy();
+                CreateBulbsAndEmissionConfigsFromAssetData(TrafficLightAsset.TrafficLightAssetBulbData);
             }
+            else
+            {
+                CreateDefaultBulbs();
+            }
+        }
+
+        void CreateBulbsAndEmissionConfigsFromAssetData(TrafficLightAssetBulbData[] data)
+        {
+            List<Bulb> bulbList = new List<Bulb>();
+            List<EmissionConfig> emissionConfigList = new List<EmissionConfig>();
+            foreach (TrafficLightAssetBulbData e in data)
+            {
+                var bulb = new Bulb()
+                {
+                    bulbType = e.bulbType,
+                    materialIndex = e.materialIndex,
+                };
+                bulbList.Add(bulb);
+                emissionConfigList.Add(e.EmissionConfig);
+            }
+
+            bulbs = bulbList.ToArray();
+            bulbEmissionConfigs = emissionConfigList.ToArray();
         }
 
         void CreateDefaultBulbs()
@@ -522,29 +535,11 @@ namespace AWSIM
             return edges.LastOrDefault().GetChildLineString(RnGetter).GetChildPointsVector(RnGetter).LastOrDefault();
         }
 
-        RoadNetworkDataGetter m_RoadNetworkGetter;
-        public RoadNetworkDataGetter RnGetter
-        {
-            get
-            {
-                if (m_RoadNetworkGetter == null)
-                {
-                    PLATEAURnStructureModel roadNetwork = GameObject.FindObjectOfType<PLATEAURnStructureModel>();
-                    m_RoadNetworkGetter = roadNetwork?.GetRoadNetworkDataGetter();
-                    if (m_RoadNetworkGetter == null)
-                    {
-                        Debug.LogError($"RoadNetworkDataGetter is null");
-                    }
-                }
-                return m_RoadNetworkGetter;
-            }
-        }
-
         void OnDrawGizmos()
         {
             if (!Application.isPlaying)
                 return;
-            if (!RoadNetworkConstants.SHOW_DEBUG_GIZMOS)
+            if (!RnManager.ShowTrafficLightGizmos)
                 return;
 
             var (firstPoint, lastPoint) = GetFirstLastBorderPointsNormalized();

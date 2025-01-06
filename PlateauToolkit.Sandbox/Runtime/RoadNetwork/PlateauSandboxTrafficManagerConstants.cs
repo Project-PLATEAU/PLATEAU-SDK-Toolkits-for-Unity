@@ -1,6 +1,6 @@
 ﻿namespace PlateauToolkit.Sandbox.RoadNetwork
 {
-    public class RoadNetworkConstants
+    public class PlateauSandboxTrafficManagerConstants
     {
         /// <summary>
         /// 最大車輛数
@@ -46,6 +46,11 @@
         public static readonly string TRAFFIC_LIGHT_ASSETS_ROOT_NAME = "TrafficLights";
 
         /// <summary>
+        /// 信号機アセット(PlateauSandboxStreetFurniture)
+        /// </summary>
+        public static readonly string TRAFFIC_LIGHT_INTERACTIVE_ASSET_NAME = "Interactive_TrafficLight_01";
+
+        /// <summary>
         /// 実行後にRightOfWaysを自動生成
         /// </summary>
         public static readonly bool USE_RIGHT_OF_WAYS = false;
@@ -89,13 +94,18 @@
         public static readonly bool ADD_TRAFFIC_LIGHTS = true;
 
         /// <summary>
+        /// 信号機アセット変更可否
+        /// </summary>
+        public static readonly bool TRAFFIC_LIGHT_ASSET_REPLACEABLE = true;
+
+        /// <summary>
         /// DefaultでGizmoを表示
         /// </summary>
         public static readonly bool SHOW_DEBUG_GIZMOS = true;
 
         /// <summary>
-        /// インスペクタにRoadNetwork参照等のDebug情報を表示
+        /// インスペクタにRoadNetwork参照、VehicleInternalState等のDebug情報を表示
         /// </summary>
-        public static readonly bool SHOW_DEBUG_ROADNETWORK_INFO = true;
+        public static readonly bool SHOW_DEBUG_ROADNETWORK_INFO = false;
     }
 }

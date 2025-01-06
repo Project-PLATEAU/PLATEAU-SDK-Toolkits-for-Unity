@@ -285,7 +285,7 @@ namespace AWSIM.TrafficSimulation
                     currentForward = nextForward;
                 }
 
-                IsTurnings[index] = turnAngle > RoadNetworkConstants.IS_TURNING_ANGLE;
+                IsTurnings[index] = turnAngle > PlateauSandboxTrafficManagerConstants.IS_TURNING_ANGLE;
             }
         }
 
@@ -941,10 +941,10 @@ namespace AWSIM.TrafficSimulation
                     if (GroundHitInfoArray[i].collider == null)
                         States[i].ShouldDespawn = true;
 
-                    if (RoadNetworkConstants.CHECK_DISTANCE_FROM_GROUND && States[i].ShouldDespawn == false)
+                    if (PlateauSandboxTrafficManagerConstants.CHECK_DISTANCE_FROM_GROUND && States[i].ShouldDespawn == false)
                     {
                         //Gound‚©‚ç‚Ì‹——£”»’è (5fˆÈ‰º‚¾‚ÆBus‚ªdefault‚ÅÁ‚¦‚Ä‚µ‚Ü‚¤j
-                        if (Vector3.Distance(States[i].Vehicle.transform.position, GroundHitInfoArray[i].point) > RoadNetworkConstants.MAX_DISTANCE_FROM_GROUND)
+                        if (Vector3.Distance(States[i].Vehicle.transform.position, GroundHitInfoArray[i].point) > PlateauSandboxTrafficManagerConstants.MAX_DISTANCE_FROM_GROUND)
                             States[i].ShouldDespawn = true;
                     }
 
