@@ -43,7 +43,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             List<Vector3> outPoints = new List<Vector3>();
             var spline = GeometryTool.CreateSplineFromPoints(points);
-            for (int i = 0; i < numPoints; i++)
+            for (int i = 0; i <= numPoints; i++)
             {
                 float percent = (float)i * ((float)numPoints / 1f);
                 outPoints.Add(GeometryTool.GetPointOnSpline(spline, percent));
@@ -54,7 +54,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public List<Vector3> ConvertToSplinePoints(Spline spline, int numPoints = 10)
         {
             List<Vector3> outPoints = new List<Vector3>();
-            for (int i = 0; i < numPoints; i++)
+            for (int i = 0; i <= numPoints; i++)
             {
                 float percent = (float)i / ((float)numPoints);
                 outPoints.Add(GeometryTool.GetPointOnSpline(spline, percent));

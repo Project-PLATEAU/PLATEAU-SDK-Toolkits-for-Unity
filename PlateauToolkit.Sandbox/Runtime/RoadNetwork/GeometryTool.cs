@@ -26,6 +26,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         // Unity Spline 上のPoint
         public static Vector3 GetPointOnSpline(Spline spline, float percent)
         {
+            if (percent >= 1f)
+            {
+                return spline.EvaluatePosition(1f);
+            }
+
             int splineIndex = (int)math.floor(percent);
             float t = math.frac(percent);
             if (splineIndex > 0 && t == 0f)
