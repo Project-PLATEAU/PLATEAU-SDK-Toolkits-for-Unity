@@ -892,19 +892,20 @@ PLATEAU SDKにより生成された道路ネットワークから、Sandboxア�
 Sandboxアセットの車両リストが表示されます。フィルタリング方法は、[Sandboxアセット](#4-sandboxアセット)をご参照ください。<br>
 リストの中から使用したい車両アセットを選択し（複数選択可能）、「実行」ボタンを押します。
 
-<img width="500" alt="sandbox_toolkit_traffic_menu" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_menu.png">
+<img width="500" alt="sandbox_toolkit_traffic_menu" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_menu.png" />
 
 ### 交通シミュレーションの利用方法
 
 実行後、道路ネットワークを基に、必要なコンポーネントが自動的に配置、設定されます。
 交通シミュレーションはエディターモードでは動作しません。プレイモードを実行することで交通シミュレーションを開始させることができます。
-<img width="500" alt="sandbox_toolkit_traffic_scene" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_scene.png">
+
+<img width="500" alt="sandbox_toolkit_traffic_scene" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_scene.png" />
 
 ## 10-3. 交通シミュレーションの編集
 
 交通シミュレータ配置により生成されたコンポーネントの値を編集することでカスタマイズを行う事ができます。
 
-<img width="500" alt="sandbox_toolkit_traffic_manager" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_manager.png">
+<img width="500" alt="sandbox_toolkit_traffic_manager" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_manager.png" />
 
 TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandboxTrafficManager` から以下の設定が行えます。
 
@@ -925,14 +926,17 @@ TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandbox
 交通シミュレーションで利用可能な信号機SandboxアセットのTypeは、`Interactive Traffic Light` であり、交通シミュレーション作成時に自動的に配置される信号機アセットには` PlateauSandboxInteractiveTrafficLight` コンポーネントがアタッチされています。
 デフォルトでは、コンポーネントに緑、黄、赤のランプが設定されています。<br>
 信号機アセットは、他のアセットと同様に`アセットを作成`ボタンから新規作成することができます。この際、Typeフィールドで、`Interactive Traffic Light` を選択します。
-<img width="500" alt="sandbox_toolkit_traffic_light_creation" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_creation.png">
+
+<img width="500" alt="sandbox_toolkit_traffic_light_creation" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_creation.png" />
+
 詳しいアセット作成方法は、[4-3. 新規作成](#4-3-新規作成)をご参照ください。
 
 信号機アセットは、青、赤、黄のランプに該当するマテリアルが設定されている必要があります。
 `Traffic Light Asset Bulb Data` の`Material Index` 値に作成したアセットのランプマテリアルに対応する値を設定してください。<br>
 該当するマテリアルの以下のシェーダーパラメータの値を変更して信号機の色が設定されます。
 `Traffic Light Asset Bulb Data` の対応するパラメータを必要に応じて変更してください。
-<img width="500" alt="sandbox_toolkit_traffic_light_asset_data" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_asset_data.png">
+
+<img width="500" alt="sandbox_toolkit_traffic_light_asset_data" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_asset_data.png" />
 
 ###### URP     
 | シェーダーパラメータ       |対応するコンポーネントの値       |
@@ -948,10 +952,13 @@ TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandbox
 ### カスタム信号機アセットの設置
 
 TrafficManagerゲームオブジェクト配下には`TrafficIntersections/TrafficIntersection_〇〇/TrafficLight_〇〇` が生成されていて、TrafficLight_〇〇ゲームオブジェクトには、`TrafficLight` コンポーネントがアタッチされています。
-<img width="500" alt="sandbox_toolkit_traffic_hierarchy" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_hierarchy.png">
+
+<img width="500" alt="sandbox_toolkit_traffic_hierarchy" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_hierarchy.png" />
+
 作成した信号機アセットをシーンの任意の箇所に設置し、変更したいTrafficLight_〇〇ゲームオブジェクトを選択します。
 選択したゲームオブジェクトの`TrafficLight`コンポーネントの`Traffic Light Asset` に設置した信号機アセットをドラッグして設定します。
-<img width="500" alt="sandbox_toolkit_traffic_light" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light.png">
+
+<img width="500" alt="sandbox_toolkit_traffic_light" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light.png" />
 
 全ての信号機を一括で置き換えたい場合は、TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandboxTrafficManager`の`Traffic Light Prefab`に作成した信号機プレハブを設定し、「Update Traffic Lights」ボタンを押します。
 
