@@ -173,16 +173,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             var compoundMeshDraft = new CompoundMeshDraft();
             var balconyMeshDraft = new MeshDraft { name = k_WallTexturedDraftName };
             // バルコニー外側部分作成
-            MeshDraft balconyOuter = BalconyOuterTextured(origin, widthVector, heightVector, balconyDepth, balconyTexturedData, out Vector3 balconyCenter);
+            MeshDraft balconyOuter = BalconyOuterTextured(origin, widthVector, heightVector, balconyDepth, origin.ToVector3Y(), balconyTexturedData, out Vector3 balconyCenter);
             balconyMeshDraft.Add(balconyOuter);
             // バルコニー内側部分作成
-            MeshDraft balconyInner = BalconyInnerTextured(widthVector, heightVector, balconyDepth, balconyCenter, balconyTexturedData, out Vector3 innerWidthOffset, out Vector3 innerWidth, out Vector3 innerDepth);
+            MeshDraft balconyInner = BalconyInnerTextured(widthVector, heightVector, balconyDepth, balconyCenter, origin.ToVector3Y(), balconyTexturedData, out Vector3 innerWidthOffset, out Vector3 innerWidth, out Vector3 innerDepth);
             balconyMeshDraft.Add(balconyInner);
             Vector3 min = origin - balconyDepth;
             Vector3 max = origin - balconyDepth + widthVector + heightVector;
             Vector3 innerMin = origin - balconyDepth + innerWidthOffset + innerHeightOffset;
             Vector3 innerMax = origin - balconyDepth + widthVector - innerWidthOffset + heightVector - innerHeightOffset;
-            MeshDraft balconyBorder = PerforatedQuad(min, max, innerMin, innerMax, Vector2.zero, true);
+            MeshDraft balconyBorder = PerforatedQuad(min, max, innerMin, innerMax, balconyTexturedData.m_UVScale, true);
             balconyBorder.Paint(balconyTexturedData.m_WallMat);
             balconyMeshDraft.Add(balconyBorder);
             compoundMeshDraft.Add(balconyMeshDraft);
@@ -196,7 +196,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             }
             else
             {
-                MeshDraft wall = MeshDraft.PartialBox(balconyInnerWidth, Vector3.forward * k_BalconyGlassDepth, Vector3.up * k_BalconyGlassHeight, Directions.All & ~Directions.Down & ~Directions.Left & ~Directions.Right, true)
+                MeshDraft wall = MeshDraft.PartialBox(balconyInnerWidth, Vector3.forward * k_BalconyGlassDepth, Vector3.up * k_BalconyGlassHeight, Directions.All & ~Directions.Down & ~Directions.Left & ~Directions.Right, true, windowTexturedData.m_UVScale, innerMin.ToVector3XY())
                     .Move(innerMin + balconyInnerWidth * 0.5f + Vector3.up * (k_BalconyGlassHeight * 0.5f) + Vector3.forward * (k_BalconyGlassDepth * 0.5f))
                     .Paint(balconyTexturedData.m_WallMat);
                 wall.name = k_WallTexturedDraftName;
@@ -215,10 +215,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .Paint(balconyColorData.m_WallColor, balconyColorData.m_VertexWallMat);
         }
 
-        private static MeshDraft BalconyOuterTextured(Vector3 origin, Vector3 widthVector, Vector3 heightVector, Vector3 balconyDepth, BalconyTexturedData balconyTexturedData, out Vector3 balconyCenter)
+        private static MeshDraft BalconyOuterTextured(Vector3 origin, Vector3 widthVector, Vector3 heightVector, Vector3 balconyDepth, Vector3 balconyUvOrigin, BalconyTexturedData balconyTexturedData, out Vector3 balconyCenter)
         {
             balconyCenter = origin + widthVector / 2 - balconyDepth / 2 + heightVector / 2;
-            return MeshDraft.PartialBox(widthVector, balconyDepth, heightVector, balconyTexturedData.m_BalconyOuterFrameDirections, true)
+            return MeshDraft.PartialBox(widthVector, balconyDepth, heightVector, balconyTexturedData.m_BalconyOuterFrameDirections, true, balconyTexturedData.m_UVScale, balconyUvOrigin)
                 .Move(balconyCenter)
                 .Paint(balconyTexturedData.m_WallMat);
         }
@@ -237,7 +237,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .Paint(balconyColorData.m_WallColor, balconyColorData.m_VertexWallMat);
         }
 
-        private static MeshDraft BalconyInnerTextured(Vector3 widthVector, Vector3 balconyHeight, Vector3 balconyDepth, Vector3 balconyCenter, BalconyTexturedData balconyTexturedData, out Vector3 innerWidthOffset, out Vector3 innerWidth, out Vector3 innerDepth)
+        private static MeshDraft BalconyInnerTextured(Vector3 widthVector, Vector3 balconyHeight, Vector3 balconyDepth, Vector3 balconyCenter, Vector3 balconyUvOrigin, BalconyTexturedData balconyTexturedData, out Vector3 innerWidthOffset, out Vector3 innerWidth, out Vector3 innerDepth)
         {
             innerWidthOffset = Vector3.right * k_BalconyThickness;
             innerWidth = widthVector - innerWidthOffset * 2;
@@ -245,7 +245,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             Vector3 innerHeight = balconyHeight - innerHeightOffset * 2;
             innerDepth = balconyDepth;
 
-            return MeshDraft.PartialBox(innerWidth, balconyDepth, innerHeight, Directions.Left | Directions.Right | Directions.Down | Directions.Up, true)
+            return MeshDraft.PartialBox(innerWidth, balconyDepth, innerHeight, Directions.Left | Directions.Right | Directions.Down | Directions.Up, true, balconyTexturedData.m_UVScale, balconyUvOrigin.ToVector3Y() + innerHeightOffset)
                 .FlipFaces()
                 .Move(balconyCenter)
                 .Paint(balconyTexturedData.m_WallMat);

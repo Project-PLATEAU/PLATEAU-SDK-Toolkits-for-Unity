@@ -105,7 +105,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 18, y: 0.05000019, z: 18}
-  m_Center: {x: 0, y: 5.0249996, z: 0}
+  m_Center: {x: 0, y: 5.025, z: 0}
 --- !u!1 &1189239763146412701
 GameObject:
   m_ObjectHideFlags: 0
@@ -171,11 +171,9 @@ MeshRenderer:
   - {fileID: 2100000, guid: ec8eba52ca141f64e80de3f56c4d1a96, type: 2}
   - {fileID: 2100000, guid: 41566ea851facf5428435de7327fa5d7, type: 2}
   - {fileID: 2100000, guid: 54a7641d4924ba6409398594019f8032, type: 2}
-  - {fileID: 2100000, guid: c44f543525914eb4985072a1e3cbe8a7, type: 2}
-  - {fileID: 2100000, guid: 6a95457485795ae4fa71112d061885ca, type: 2}
   - {fileID: 2100000, guid: 0e5639004f557ce4599fc42f71832e77, type: 2}
-  - {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
   - {fileID: 2100000, guid: b8a6a8db63fd6a24e95f0a608435ab55, type: 2}
+  - {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -464,6 +462,61 @@ MonoBehaviour:
     windowGlass: {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
     roof: {fileID: 2100000, guid: 1fecb9eab6eb26a4b8a183b2d99fef61, type: 2}
     roofSide: {fileID: 2100000, guid: 9b4a88b369379d749b078babd3c08cbe, type: 2}
+  complexBuildingParams:
+    higherFloorBuildingType: 1
+    lowerFloorBuildingType: 2
+    buildingBoundaryHeight: 15
+  complexSkyscraperCondominiumBuildingParams:
+    convexBalcony: 0
+    hasBalconyGlass: 0
+    hasBalconyLeft: 0
+    hasBalconyRight: 0
+    hasBalconyFront: 0
+    hasBalconyBack: 0
+  complexOfficeBuildingParams:
+    spandrelHeight: 1.25
+  complexBuildingVertexColorPalette:
+    boundaryWallColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    apartmentWallColor: {r: 1, g: 1, b: 1, a: 1}
+    apartmentWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    apartmentWindowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    apartmentRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    apartmentRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    officeBuildingWallColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    officeBuildingWindowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingSpandrelColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    officeBuildingRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    commercialBuildingWallColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingDepressionWallColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    commercialBuildingWindowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    commercialBuildingRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  complexBuildingVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  complexBuildingMaterialPalette:
+    boundaryWall: {fileID: 0}
+    apartmentWall: {fileID: 0}
+    apartmentWindowFrame: {fileID: 0}
+    apartmentWindowGlass: {fileID: 0}
+    apartmentRoof: {fileID: 0}
+    apartmentRoofSide: {fileID: 0}
+    officeBuildingWall: {fileID: 0}
+    officeBuildingWindowFrame: {fileID: 0}
+    officeBuildingWindowGlass: {fileID: 0}
+    officeBuildingSpandrel: {fileID: 0}
+    officeBuildingRoof: {fileID: 0}
+    officeBuildingRoofSide: {fileID: 0}
+    commercialBuildingWall: {fileID: 0}
+    commercialBuildingDepressionWall: {fileID: 0}
+    commercialBuildingWindowFrame: {fileID: 0}
+    commercialBuildingWindowGlass: {fileID: 0}
+    commercialBuildingRoof: {fileID: 0}
+    commercialBuildingRoofSide: {fileID: 0}
   facadePlanner: {fileID: 11400000, guid: d235e7dab9e277e40a3cc7dd020b19f2, type: 2}
   facadeConstructor: {fileID: 11400000, guid: 721d020d3fea92147a87e71ee42a460e, type: 2}
   roofPlanner: {fileID: 11400000, guid: 1daa4b67c2086c941b136b24e3c7af8a, type: 2}

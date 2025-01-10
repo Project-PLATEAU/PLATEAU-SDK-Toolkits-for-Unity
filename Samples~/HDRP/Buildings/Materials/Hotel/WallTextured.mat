@@ -36,8 +36,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: 8250c80b84a942443939d41aa031353c, type: 3}
-        m_Scale: {x: 7, y: 10}
+        m_Texture: {fileID: 2800000, guid: 941b7ea8f3fd7784b9d3808f20c9a3b3, type: 3}
+        m_Scale: {x: 10, y: 10}
         m_Offset: {x: 0, y: 0}
     - _BaseMap:
         m_Texture: {fileID: 2800000, guid: 8250c80b84a942443939d41aa031353c, type: 3}
@@ -96,8 +96,8 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 8250c80b84a942443939d41aa031353c, type: 3}
-        m_Scale: {x: 7, y: 10}
+        m_Texture: {fileID: 2800000, guid: 941b7ea8f3fd7784b9d3808f20c9a3b3, type: 3}
+        m_Scale: {x: 10, y: 10}
         m_Offset: {x: 0, y: 0}
     - _MaskMap:
         m_Texture: {fileID: 0}
@@ -108,7 +108,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
-        m_Texture: {fileID: 2800000, guid: df26fb19d67eaa744bdcaa99e1e00e0e, type: 3}
+        m_Texture: {fileID: 2800000, guid: e01c2c652e2bd004eb5833e89dbf7df2, type: 3}
         m_Scale: {x: 7, y: 10}
         m_Offset: {x: 0, y: 0}
     - _NormalMapOS:
@@ -243,7 +243,7 @@ Material:
     - _HeightPoMAmplitude: 2
     - _HeightTessAmplitude: 2
     - _HeightTessCenter: 0.5
-    - _InvTilingScale: 1
+    - _InvTilingScale: 0.1
     - _Ior: 1.5
     - _IridescenceMask: 1
     - _IridescenceThickness: 1
@@ -272,7 +272,7 @@ Material:
     - _ReceivesSSR: 1
     - _ReceivesSSRTransparent: 0
     - _RefractionModel: 0
-    - _Smoothness: 0.805
+    - _Smoothness: 0.472
     - _SmoothnessRemapMax: 1
     - _SmoothnessRemapMin: 0
     - _SmoothnessTextureChannel: 0

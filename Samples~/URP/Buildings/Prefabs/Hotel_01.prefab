@@ -218,6 +218,89 @@ MonoBehaviour:
     roof: {fileID: 2100000, guid: e1513a5312425a8479e2677165d5fe11, type: 2}
     roofSide: {fileID: 2100000, guid: 7995d4bccd6d0eb46bbc84908ba814e6, type: 2}
     roofSideFront: {fileID: 2100000, guid: 465f910bf72088d4484b6adb6a7905f2, type: 2}
+  factoryParams:
+    hasEntranceRoof: 0
+  factoryVertexColorPalette:
+    socleColor: {r: 1, g: 1, b: 1, a: 1}
+    socleTopColor: {r: 0, g: 0, b: 0, a: 1}
+    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    entranceShutter: {r: 0, g: 0, b: 0, a: 0}
+    entranceShutterFrame: {r: 0, g: 0, b: 0, a: 0}
+    entranceShutterRoof: {r: 0, g: 0, b: 0, a: 0}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  factoryVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  factoryMaterialPalette:
+    socle: {fileID: 0}
+    socleTop: {fileID: 0}
+    wall: {fileID: 0}
+    entranceShutter: {fileID: 0}
+    entranceShutterFrame: {fileID: 0}
+    entranceShutterRoof: {fileID: 0}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+  complexBuildingParams:
+    higherFloorBuildingType: 1
+    lowerFloorBuildingType: 2
+    buildingBoundaryHeight: 15
+  complexSkyscraperCondominiumBuildingParams:
+    convexBalcony: 0
+    hasBalconyGlass: 0
+    hasBalconyLeft: 0
+    hasBalconyRight: 0
+    hasBalconyFront: 0
+    hasBalconyBack: 0
+  complexOfficeBuildingParams:
+    spandrelHeight: 1.25
+  complexBuildingVertexColorPalette:
+    boundaryWallColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    apartmentWallColor: {r: 1, g: 1, b: 1, a: 1}
+    apartmentWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    apartmentWindowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    apartmentRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    apartmentRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    officeBuildingWallColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    officeBuildingWindowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingSpandrelColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    officeBuildingRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    commercialBuildingWallColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingDepressionWallColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    commercialBuildingWindowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    commercialBuildingRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  complexBuildingVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  complexBuildingMaterialPalette:
+    boundaryWall: {fileID: 0}
+    apartmentWall: {fileID: 0}
+    apartmentWindowFrame: {fileID: 0}
+    apartmentWindowGlass: {fileID: 0}
+    apartmentRoof: {fileID: 0}
+    apartmentRoofSide: {fileID: 0}
+    officeBuildingWall: {fileID: 0}
+    officeBuildingWindowFrame: {fileID: 0}
+    officeBuildingWindowGlass: {fileID: 0}
+    officeBuildingSpandrel: {fileID: 0}
+    officeBuildingRoof: {fileID: 0}
+    officeBuildingRoofSide: {fileID: 0}
+    commercialBuildingWall: {fileID: 0}
+    commercialBuildingDepressionWall: {fileID: 0}
+    commercialBuildingWindowFrame: {fileID: 0}
+    commercialBuildingWindowGlass: {fileID: 0}
+    commercialBuildingRoof: {fileID: 0}
+    commercialBuildingRoofSide: {fileID: 0}
   facadePlanner: {fileID: 11400000, guid: deeda03b8fde88346b1a582a554cbe21, type: 2}
   facadeConstructor: {fileID: 11400000, guid: 721d020d3fea92147a87e71ee42a460e, type: 2}
   roofPlanner: {fileID: 11400000, guid: a30ffacec962bb748a00c8e8aa15c235, type: 2}
@@ -285,8 +368,8 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 0a40a4986cfa153439f764ee6f0d8f6e, type: 2}
-  - {fileID: 2100000, guid: 46d55868ac398fe49a7f2370771cf589, type: 2}
   - {fileID: 2100000, guid: 3272cf5fbefd39d4693d84cbf1cee610, type: 2}
+  - {fileID: 2100000, guid: 46d55868ac398fe49a7f2370771cf589, type: 2}
   - {fileID: 2100000, guid: 9af31f2a9ac8ad340aefdbe165370bd4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0

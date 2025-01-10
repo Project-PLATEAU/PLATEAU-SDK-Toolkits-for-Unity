@@ -15,9 +15,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private const float k_MaxBuildingHeight = 100f;
         private const float k_MinBuildingHeight = 5f;
         private const float k_BufferWidth = 2;
-        private const float k_SocleHeight = 0.3f;
-        private const float k_SocleTopHeight = 0.05f;
-        private const string k_SocleTopTexturedDraftName = "SocleTopTextured";
         private const float k_NarrowPanelSize = 2.5f;
         private const float k_MinWallWidthOffset = 1.25f;
         private const float k_ShadowWallHeightOffset = 0f;
@@ -84,23 +81,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private void SetupConstructors(BuildingGenerator.Config config)
         {
-            m_Constructors[PanelType.k_Socle] = new List<Func<ILayoutElement>>
-            {
-                () => new ProceduralFacadeCompoundElements.ProceduralSocle(
-                    config,
-                    socleColor: config.factoryVertexColorPalette.socleColor,
-                    socleMat: config.factoryMaterialPalette.socle
-                )
-            };
-            m_Constructors[PanelType.k_SocleTop] = new List<Func<ILayoutElement>>
-            {
-                () => new ProceduralFacadeCompoundElements.ProceduralSocle(
-                    config,
-                    socleName: k_SocleTopTexturedDraftName,
-                    socleColor: config.factoryVertexColorPalette.socleTopColor,
-                    socleMat: config.factoryMaterialPalette.socleTop
-                )
-            };
             m_Constructors[PanelType.k_Wall] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
@@ -139,9 +119,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             float floorWidthOffset = remainderWidth / panelSizes.Count;
             var vertical = new VerticalLayout
             {
-                CreateHorizontal(panelSizes, 0, panelSizes.Count, k_SocleHeight, floorWidthOffset, m_Constructors[PanelType.k_Socle]),
-                CreateHorizontal(panelSizes, 0, panelSizes.Count, k_SocleTopHeight, floorWidthOffset, m_Constructors[PanelType.k_SocleTop]),
-                CreateHorizontalWindow(panelSizes, 0, panelSizes.Count, k_MinBuildingHeight - k_SocleHeight - k_SocleTopHeight, floorWidthOffset)
+                CreateHorizontalWindow(panelSizes, 0, panelSizes.Count, k_MinBuildingHeight, floorWidthOffset)
             };
 
             // エントランスを除いた階数分の壁を生成
@@ -351,8 +329,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private enum PanelType : byte
         {
-            k_Socle,
-            k_SocleTop,
             k_Wall,
             k_ShadowWall,
             k_Window,

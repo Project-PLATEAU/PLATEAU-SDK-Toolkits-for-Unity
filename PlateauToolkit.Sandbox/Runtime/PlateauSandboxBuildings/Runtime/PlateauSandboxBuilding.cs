@@ -184,7 +184,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         CompoundMeshDraft facadesDraft = generatedResult.Item1;
                         facadesHeight = generatedResult.Item2;
                         Mesh mesh = facadesDraft.ToMeshWithSubMeshes();
-                        NormalSolver.RecalculateNormals(mesh, 0);
+                        mesh.RecalculateNormals();
+                        mesh.RecalculateTangents();
+                        mesh.RecalculateBounds();
                         meshFilter.mesh = mesh;
 
                         var materials = new List<Material>();
@@ -210,7 +212,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         MeshRenderer meshRenderer = roofObject.GetComponent<MeshRenderer>();
                         CompoundMeshDraft roofMesh = generator.GenerateRoofMesh(lsFoundationPolygonVertex, m_Config, facadesHeight);
                         Mesh mesh = roofMesh.ToMeshWithSubMeshes();
-                        NormalSolver.RecalculateNormals(mesh, 0);
+                        mesh.RecalculateNormals();
+                        mesh.RecalculateTangents();
+                        mesh.RecalculateBounds();
                         meshFilter.mesh = mesh;
 
                         var materials = new List<Material>();

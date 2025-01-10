@@ -1092,12 +1092,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 Material socleMat = null
                 ) : base(config)
             {
+                m_WallName = socleName;
+
                 switch (config.buildingType)
                 {
                     case BuildingType.k_Apartment:
                         if (UseTexture)
                         {
-                            m_WallTexturedData.m_WallName = socleName;
                             m_WallTexturedData.m_WallMat = config.skyscraperCondominiumMaterialPalette.wall;
                         }
                         else
@@ -1108,7 +1109,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     case BuildingType.k_House:
                         if (UseTexture)
                         {
-                            m_WallTexturedData.m_WallName = socleName;
                             m_WallTexturedData.m_WallMat = socleMat ? socleMat : config.residenceMaterialPalette.socle;
                         }
                         else
@@ -1119,7 +1119,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     case BuildingType.k_ConvenienceStore:
                         if (UseTexture)
                         {
-                            m_WallTexturedData.m_WallName = socleName;
                             m_WallTexturedData.m_WallMat = config.conveniMaterialPalette.socle;
                         }
                         else
@@ -1130,7 +1129,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     case BuildingType.k_Factory:
                         if (UseTexture)
                         {
-                            m_WallTexturedData.m_WallName = socleName;
                             m_WallTexturedData.m_WallMat = socleMat ? socleMat : config.factoryMaterialPalette.socle;
                         }
                         else

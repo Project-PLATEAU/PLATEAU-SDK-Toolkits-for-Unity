@@ -51,7 +51,7 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _BaseColorMap:
-        m_Texture: {fileID: 2800000, guid: 8ff20c17eb670b941bd7cf8ec120f464, type: 3}
+        m_Texture: {fileID: 2800000, guid: 832286b2786ef7c4b96e5fb90eaa0915, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _BentNormalMap:
@@ -95,7 +95,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TextMap:
-        m_Texture: {fileID: 2800000, guid: aa78ce2aeb188694ea8626806c6eab62, type: 3}
+        m_Texture: {fileID: 2800000, guid: 443160bf81b2a1c43b19c16709233065, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _TransmittanceColorMap:

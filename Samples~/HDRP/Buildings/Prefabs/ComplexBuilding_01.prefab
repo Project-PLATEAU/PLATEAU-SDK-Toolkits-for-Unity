@@ -63,9 +63,9 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 2100000, guid: 5916bc6b759f935498701cff064c9fb0, type: 2}
-  - {fileID: 2100000, guid: c7b9a0d7e4127bc44b60ce4df49972af, type: 2}
-  - {fileID: 2100000, guid: 0d5e889ce236fa34a9c0ef8fbed83319, type: 2}
-  - {fileID: 2100000, guid: 0a17ebc98d4790d4aa819d3074a96155, type: 2}
+  - {fileID: 2100000, guid: 5331d354bb3fe604eb69ca321811b9c6, type: 2}
+  - {fileID: 2100000, guid: 68471c82cf2ce8c4988c463ccaefaba4, type: 2}
+  - {fileID: 2100000, guid: d7283811dbc1a4c48a9dcd91f73b24de, type: 2}
   - {fileID: 2100000, guid: 11e933f03e1b63a44a342fe56d4a5bdd, type: 2}
   - {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
   - {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
@@ -361,7 +361,7 @@ MonoBehaviour:
     roofSide: {fileID: 0}
   complexBuildingParams:
     higherFloorBuildingType: 0
-    lowerFloorBuildingType: 1
+    lowerFloorBuildingType: 2
     buildingBoundaryHeight: 20
   complexSkyscraperCondominiumBuildingParams:
     convexBalcony: 0
