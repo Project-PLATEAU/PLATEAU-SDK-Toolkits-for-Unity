@@ -108,6 +108,12 @@ namespace PlateauToolkit.Editor
             EditorGUI.DrawRect(borderRect, PlateauToolkitGUIStyles.k_LineColor);
         }
 
+        public static void BorderLine(Color color, float height = 1f)
+        {
+            Rect borderRect = EditorGUILayout.GetControlRect(false, height, PlateauToolkitGUIStyles.BorderStyle);
+            EditorGUI.DrawRect(borderRect, color);
+        }
+
         public static void Title(float windowWidth, string label)
         {
             EditorGUILayout.Space(15);
@@ -301,6 +307,30 @@ namespace PlateauToolkit.Editor
                 buttonStyle);
 
             return button;
+        }
+
+        public bool TabButton(string label)
+        {
+            float scopeWidth = m_IsPositionCenter ? 0 : m_Width;
+            using (var scope = new EditorGUILayout.HorizontalScope(GUILayout.Height(m_Height), GUILayout.Width(scopeWidth)))
+            {
+                GUILayout.FlexibleSpace();
+
+                float centerY = (scope.rect.height - m_Height) / 2;
+                float centerX = (scope.rect.width - m_Width) / 2;
+                var buttonRect = new Rect(scope.rect.x + centerX, scope.rect.y + centerY, m_Width, m_Height);
+
+                GUI.DrawTexture(buttonRect, WhiteTexture, ScaleMode.StretchToFill, true, 0, m_Color, new Vector4(), new Vector4(6f, 6f, 0f, 0f));
+
+                bool button = GUILayout.Button(
+                    label,
+                    PlateauToolkitGUIStyles.ButtonStyle,
+                    GUILayout.Height(m_Height),
+                    GUILayout.Width(m_Width));
+
+                GUILayout.FlexibleSpace();
+                return button;
+            }
         }
 
         public bool Button(string label)

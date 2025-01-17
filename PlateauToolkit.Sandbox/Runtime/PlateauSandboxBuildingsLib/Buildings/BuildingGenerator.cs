@@ -134,6 +134,19 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             public HotelConfig.VertexColorMaterialPalette hotelVertexColorMaterialPalette = new();
             public HotelConfig.MaterialPalette hotelMaterialPalette = new();
 
+            public FactoryConfig.Params factoryParams = new();
+            public FactoryConfig.VertexColorPalette factoryVertexColorPalette = new();
+            public FactoryConfig.VertexColorMaterialPalette factoryVertexColorMaterialPalette = new();
+            public FactoryConfig.MaterialPalette factoryMaterialPalette = new();
+
+            public ComplexBuildingConfig.BuildingPlannerParams m_ComplexBuildingPlannerParams = new();
+            public ComplexBuildingConfig.Params complexBuildingParams = new();
+            public ComplexBuildingConfig.SkyscraperCondominiumParams complexSkyscraperCondominiumBuildingParams = new();
+            public ComplexBuildingConfig.OfficeParams complexOfficeBuildingParams = new();
+            public ComplexBuildingConfig.VertexColorPalette complexBuildingVertexColorPalette = new();
+            public ComplexBuildingConfig.VertexColorMaterialPalette complexBuildingVertexColorMaterialPalette = new();
+            public ComplexBuildingConfig.MaterialPalette complexBuildingMaterialPalette = new();
+
             public Vector2 textureScale = new(0.1f, 0.1f);
             public int lodNum;
         }
@@ -153,6 +166,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
         k_House,
         k_ConvenienceStore,
         k_CommercialBuilding,
-        k_Hotel
+        k_Hotel,
+        k_Factory,
+        k_ComplexBuilding
     }
 }

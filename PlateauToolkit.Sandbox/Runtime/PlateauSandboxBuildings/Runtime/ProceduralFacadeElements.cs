@@ -26,8 +26,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         protected const string k_EntranceDoorRoofTexturedDraftName = "EntranceDoorRoofTextured";
         protected const string k_GlassDraftName = "Glass";
         protected const string k_WindowPaneDraftName = "WindowPane";
-        protected const string k_WindowPaneTexturedDraftName = "WindowpaneTextured";
-        protected const string k_WindowGlassTexturedDraftName = "WindowpaneGlassTextured";
+        protected const string k_WindowPaneFrameTexturedDraftName = "WindowpaneFrameTextured";
+        protected const string k_WindowPaneGlassTexturedDraftName = "WindowpaneGlassTextured";
+        protected const string k_WindowSillTexturedDraftName = "WindowSillTextured";
         protected const string k_BillboardTexturedDraftName = "BillboardTextured";
         protected const string k_BillboardBottomTexturedDraftName = "BillboardBottomTextured";
 
@@ -53,7 +54,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected const float k_WindowDepth = 0.1f;
         protected const float k_WindowWidthOffset = 0.5f;
-        protected const float k_WindowBottomOffset = 1;
+        protected const float k_WindowBottomOffset = 0; // 値を変えると窓の高さが変わる
         protected const float k_WindowTopOffset = 0.3f;
         protected const float k_WindowFrameWidth = 0.05f;
         protected const float k_WindowFrameRodWidth = 0.05f;
@@ -66,7 +67,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         protected const float k_WindowsillDepth = 0.15f;
         protected const float k_WindowsillThickness = 0.05f;
 
-        protected const float k_BalconyDepth = 0.6f;
+        protected const float k_BalconyConcaveDepth = 0.6f;
+        protected const float k_BalconyConvexDepth = 1f;
         protected const float k_BalconyThickness = 0.1f;
         protected const float k_BalconyGlassDepth = 0.1f;
         protected const float k_BalconyGlassHeight = 1;

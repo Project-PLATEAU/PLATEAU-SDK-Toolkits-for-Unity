@@ -1,11 +1,13 @@
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Common;
 using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings;
+using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Configs;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 {
@@ -13,6 +15,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
     public class PlateauSandboxBuildingEditor : UnityEditor.Editor
     {
         private int m_AllowUndoCount;
+        private List<Object> m_UndoObjectWithShaderParam;
+        private MeshRenderer m_RoofMeshRenderer;
         private Runtime.PlateauSandboxBuilding m_Generator;
         private Color m_GeneratorBtnColor;
         private Color m_SeparatorColor;
@@ -43,17 +47,37 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_CommercialFacilityMaterialPalette;
 
         private SerializedProperty m_HotelParams;
+        private SerializedProperty m_HotelShaderParams;
         private SerializedProperty m_HotelVertexColorPalette;
         private SerializedProperty m_HotelVertexColorMaterialPalette;
         private SerializedProperty m_HotelMaterialPalette;
 
-        private SerializedProperty m_BuildingName;
+        private SerializedProperty m_FactoryParams;
+        private SerializedProperty m_FactoryVertexColorPalette;
+        private SerializedProperty m_FactoryVertexColorMaterialPalette;
+        private SerializedProperty m_FactoryMaterialPalette;
+
+        private SerializedProperty m_ComplexBuildingParams;
+        private SerializedProperty m_ComplexSkyscraperCondominiumBuildingParams;
+        private SerializedProperty m_ComplexOfficeBuildingParams;
+        private SerializedProperty m_ComplexBuildingVertexColorPalette;
+        private SerializedProperty m_ComplexBuildingVertexColorMaterialPalette;
+        private SerializedProperty m_ComplexBuildingMaterialPalette;
 
         private GUIStyle m_SaveMeshBtnTextColorStyle;
 
         private void OnEnable()
         {
             m_Generator = (Runtime.PlateauSandboxBuilding) target;
+            m_UndoObjectWithShaderParam = new List<Object>();
+
+            var lsLodObject = m_Generator.gameObject.GetComponentsInChildrenWithoutSelf<Transform>().ToList();
+            foreach (Transform roofObject in lsLodObject.Select(lodObject => lodObject.Find("Roof")).Where(roofObject => roofObject != null))
+            {
+                m_RoofMeshRenderer = roofObject.GetComponent<MeshRenderer>();
+                break;
+            }
+
             m_GeneratorBtnColor = GuiUtility.GetColor(GuiUtility.KColor.BtnColor);
             m_SeparatorColor = GuiUtility.GetColor(GuiUtility.KColor.Separator);
             m_BuildingType = serializedObject.FindProperty("buildingType");
@@ -83,9 +107,22 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_CommercialFacilityMaterialPalette = serializedObject.FindProperty("commercialFacilityMaterialPalette");
 
             m_HotelParams = serializedObject.FindProperty("hotelParams");
+            m_HotelShaderParams = serializedObject.FindProperty("hotelShaderParams");
             m_HotelVertexColorPalette = serializedObject.FindProperty("hotelVertexColorPalette");
             m_HotelVertexColorMaterialPalette = serializedObject.FindProperty("hotelVertexColorMaterialPalette");
             m_HotelMaterialPalette = serializedObject.FindProperty("hotelMaterialPalette");
+
+            m_FactoryParams = serializedObject.FindProperty("factoryParams");
+            m_FactoryVertexColorPalette = serializedObject.FindProperty("factoryVertexColorPalette");
+            m_FactoryVertexColorMaterialPalette = serializedObject.FindProperty("factoryVertexColorMaterialPalette");
+            m_FactoryMaterialPalette = serializedObject.FindProperty("factoryMaterialPalette");
+
+            m_ComplexBuildingParams = serializedObject.FindProperty("complexBuildingParams");
+            m_ComplexSkyscraperCondominiumBuildingParams = serializedObject.FindProperty("complexSkyscraperCondominiumBuildingParams");
+            m_ComplexOfficeBuildingParams = serializedObject.FindProperty("complexOfficeBuildingParams");
+            m_ComplexBuildingVertexColorPalette = serializedObject.FindProperty("complexBuildingVertexColorPalette");
+            m_ComplexBuildingVertexColorMaterialPalette = serializedObject.FindProperty("complexBuildingVertexColorMaterialPalette");
+            m_ComplexBuildingMaterialPalette = serializedObject.FindProperty("complexBuildingMaterialPalette");
 
             m_SaveMeshBtnTextColorStyle = null;
 
@@ -135,7 +172,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 
                 if (serializedObject.hasModifiedProperties)
                 {
-                    Undo.RecordObject(m_Generator, "Change property");
+                    Undo.RecordObject(m_Generator, "Change Property");
                     serializedObject.ApplyModifiedProperties();
                     return true;
                 }
@@ -144,7 +181,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             return false;
         }
 
-        private bool DrawDynamicPropertyOnly<T>(SerializedProperty inProperty, Dictionary<string, Tuple<string, T, T>> inMinMax = null) where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
+        private bool DrawDynamicPropertyOnly<T>(SerializedProperty inProperty, Dictionary<string, Tuple<string, T, T>> inMinMax = null, bool isUpdateShaderParams = false) where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
         {
             int depth = inProperty.depth;
             SerializedProperty iterator = inProperty.Copy();
@@ -166,7 +203,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             break;
                         case "float":
                             iterator.floatValue = EditorGUILayout.Slider(minMaxTuple.Item1, iterator.floatValue, (float)(dynamic)minMaxTuple.Item2, (float)(dynamic)minMaxTuple.Item3);
-                            iterator.floatValue = Mathf.Floor(iterator.floatValue * 100.0f) / 100f;
+                            iterator.floatValue = Mathf.Floor(iterator.floatValue * 1000.0f) / 1000f;
                             break;
                     }
                 }
@@ -177,8 +214,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 
                 if (serializedObject.hasModifiedProperties)
                 {
-                    Undo.RecordObject(m_Generator, "Change property");
-                    serializedObject.ApplyModifiedProperties();
+                    if (isUpdateShaderParams)
+                    {
+                        m_UndoObjectWithShaderParam.Add(m_Generator);
+                        Undo.RecordObjects(m_UndoObjectWithShaderParam.ToArray(), "Change Building Params");
+                    }
+                    else
+                    {
+                        Undo.RecordObject(m_Generator, "Change property");
+                        serializedObject.ApplyModifiedProperties();
+                    }
                     return true;
                 }
             }
@@ -188,6 +233,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 
         public override void OnInspectorGUI()
         {
+            m_UndoObjectWithShaderParam.Clear();
             bool changedValue = false;
             serializedObject.Update();
 
@@ -246,6 +292,42 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                         {
                             changedValue = true;
                         }
+                        EditorGUILayout.Space(10);
+                        EditorGUILayout.LabelField("テクスチャ設定", EditorStyles.boldLabel);
+                        if (DrawDynamicPropertyOnly(m_HotelShaderParams, new Dictionary<string, Tuple<string, float, float>>
+                            {
+                                {"textureOffsetX", new Tuple<string, float, float>("横のオフセット値", -1f, 1f)},
+                                {"textureOffsetY", new Tuple<string, float, float>("縦のオフセット値", -1f, 1f)},
+                            }))
+                        {
+                            SerializedProperty  roofSideFrontSerializedProperty = m_HotelMaterialPalette.FindPropertyRelative("roofSideFront");
+                            if (roofSideFrontSerializedProperty != null)
+                            {
+                                Object roofSideFrontObjRef = roofSideFrontSerializedProperty.objectReferenceValue;
+                                if (roofSideFrontObjRef != null)
+                                {
+                                    var material = (Material)roofSideFrontObjRef;
+                                    if (material.shader.name.Contains("Movable Texture"))
+                                    {
+                                        Undo.RecordObject(material, "Change Shader Params");
+                                        material.SetFloat("_TextOffsetX", m_HotelShaderParams.FindPropertyRelative("textureOffsetX").floatValue);
+                                        material.SetFloat("_TextOffsetY", m_HotelShaderParams.FindPropertyRelative("textureOffsetY").floatValue);
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case (int)BuildingType.k_Factory:
+                        if (DrawDynamicPropertyOnly(m_FactoryMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
+                        break;
+                    case (int)BuildingType.k_ComplexBuilding:
+                        if (DrawDynamicPropertyOnly(m_ComplexBuildingMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
                         break;
                 }
             }
@@ -289,6 +371,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             changedValue = true;
                         }
                         break;
+                    case (int)BuildingType.k_Factory:
+                        if (DrawDynamicPropertyOnly(m_FactoryVertexColorPalette) || DrawDynamicPropertyOnly(m_FactoryVertexColorMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
+                        break;
+                    case (int)BuildingType.k_ComplexBuilding:
+                        if (DrawDynamicPropertyOnly(m_ComplexBuildingVertexColorPalette) || DrawDynamicPropertyOnly(m_ComplexBuildingVertexColorMaterialPalette))
+                        {
+                            changedValue = true;
+                        }
+                        break;
                 }
             }
             if (changedValue)
@@ -300,6 +394,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 foreach (int lodNum in new List<int> {0})
                 {
                     m_Generator.GenerateMesh(lodNum, m_Generator.buildingWidth, m_Generator.buildingDepth);
+                }
+
+                // Shaderパラメータと一緒にUndoするパラメータが登録されていれば、Shaderパラメータを更新
+                if (0 < m_UndoObjectWithShaderParam.Count)
+                {
+                    UpdateShaderParam();
                 }
             }
             EditorGUILayout.Space(10);
@@ -330,7 +430,38 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_Generator.facadeConstructor = (FacadeConstructor)EditorGUILayout.ObjectField("FacadeConstructor", m_Generator.facadeConstructor, typeof(ScriptableObject), allowSceneObjects: true);
             m_Generator.roofPlanner = (RoofPlanner)EditorGUILayout.ObjectField("RoofPlanner", m_Generator.roofPlanner, typeof(ScriptableObject), allowSceneObjects: true);
             m_Generator.roofConstructor = (RoofConstructor)EditorGUILayout.ObjectField("RoofConstructor", m_Generator.roofConstructor, typeof(ScriptableObject), allowSceneObjects: true);
-            m_Generator.buildingName = EditorGUILayout.TextField("Building Name", m_Generator.buildingName);
+        }
+
+        private void UpdateShaderParam()
+        {
+            SerializedProperty  roofSideFrontSerializedProperty = m_HotelMaterialPalette.FindPropertyRelative("roofSideFront");
+            if (roofSideFrontSerializedProperty != null)
+            {
+                Object roofSideFrontObjRef = roofSideFrontSerializedProperty.objectReferenceValue;
+                if (roofSideFrontObjRef != null)
+                {
+                    var roofSideFrontMat = (Material)roofSideFrontObjRef;
+                    if (roofSideFrontMat.shader.name.Contains("Movable Texture"))
+                    {
+                        if (m_RoofMeshRenderer != null)
+                        {
+                            m_UndoObjectWithShaderParam.Add(roofSideFrontMat);
+                            Undo.RecordObjects(m_UndoObjectWithShaderParam.ToArray(), "Change Building Params");
+
+                            Bounds bounds = m_RoofMeshRenderer.bounds;
+                            Vector3 size = bounds.size;
+                            Texture textMap = roofSideFrontMat.GetTexture("_TextMap");
+                            float meshAspect = size.x / size.y;
+                            float textureAspect = (float)textMap.width / textMap.height;
+                            float aspect = meshAspect / textureAspect;
+                            float normalize = textureAspect / meshAspect;
+                            roofSideFrontMat.SetFloat("_TextureCenterOffsetX", aspect * 0.5f - aspect * normalize * 0.5f);
+                            roofSideFrontMat.SetFloat("_TextureAspect", aspect);
+                            roofSideFrontMat.SetFloat("_TextureNormalize", normalize);
+                        }
+                    }
+                }
+            }
         }
 
         private bool BuildingDynamicGUI()
@@ -340,12 +471,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             float buildingHeight = m_Generator.buildingHeight;
             switch (m_BuildingType.enumValueIndex)
             {
-                case (int)BuildingType.k_Hotel:
-                    buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 8.0f, 100.0f);
-                    break;
                 case (int)BuildingType.k_Apartment:
                 case (int)BuildingType.k_OfficeBuilding:
                 case (int)BuildingType.k_CommercialBuilding:
+                case (int)BuildingType.k_Hotel:
+                case (int)BuildingType.k_Factory:
+                case (int)BuildingType.k_ComplexBuilding:
                     buildingHeight = EditorGUILayout.Slider("高さ", m_Generator.buildingHeight, 5.0f, 100.0f);
                     break;
             }
@@ -361,7 +492,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                 }
                 else if (Math.Abs(buildingWidth - m_Generator.buildingWidth) > float.Epsilon)
                 {
-                    Undo.RecordObject(m_Generator, "Change width");
+                    m_UndoObjectWithShaderParam.Add(m_Generator);
+                    Undo.RecordObjects(m_UndoObjectWithShaderParam.ToArray(), "Change Building Params");
                     m_Generator.buildingWidth = Mathf.Floor(buildingWidth * 10.0f) / 10f;
                 }
                 else if (Math.Abs(buildingDepth - m_Generator.buildingDepth) > float.Epsilon)
@@ -404,7 +536,45 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     return false;
                 case (int)BuildingType.k_Hotel:
                     EditorGUILayout.LabelField("ホテル設定", EditorStyles.boldLabel);
-                    return DrawDynamicPropertyOnly(m_HotelParams);
+                    return DrawDynamicPropertyOnly(m_HotelParams, new Dictionary<string, Tuple<string, float, float>>
+                    {
+                        {"roofThickness", new Tuple<string, float, float>("屋根の暑さ", 0f, 5f)}
+                    }, isUpdateShaderParams:true);
+                case (int)BuildingType.k_Factory:
+                    EditorGUILayout.LabelField("工場設定", EditorStyles.boldLabel);
+                    return DrawDynamicPropertyOnly(m_FactoryParams);
+                case (int)BuildingType.k_ComplexBuilding:
+                    EditorGUILayout.LabelField("複合ビル設定", EditorStyles.boldLabel);
+                    bool changedComplexBuildingParam = DrawDynamicPropertyOnly(m_ComplexBuildingParams, new Dictionary<string, Tuple<string, float, float>>
+                    {
+                        {"buildingBoundaryHeight", new Tuple<string, float, float>("建物同士の境界線の高さ", 10f, 100f)},
+                    });
+
+                    SerializedProperty lowerFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("lowerFloorBuildingType");
+                    SerializedProperty higherFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("higherFloorBuildingType");
+                    bool changedComplexSkyscraperCondominiumBuildingParam = false;
+                    bool changedComplexOfficeBuildingParam = false;
+
+                    if (lowerFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Apartment ||
+                        higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Apartment)
+                    {
+                        EditorGUILayout.Space(10);
+                        EditorGUILayout.LabelField("マンション設定", EditorStyles.boldLabel);
+                        changedComplexSkyscraperCondominiumBuildingParam = DrawDynamicPropertyOnly(m_ComplexSkyscraperCondominiumBuildingParams);
+                    }
+
+                    if (lowerFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_OfficeBuilding ||
+                        higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_OfficeBuilding)
+                    {
+                        EditorGUILayout.Space(10);
+                        EditorGUILayout.LabelField("オフィスビル設定", EditorStyles.boldLabel);
+                        changedComplexOfficeBuildingParam = DrawDynamicPropertyOnly(m_ComplexOfficeBuildingParams, new Dictionary<string, Tuple<string, float, float>>
+                        {
+                            {"spandrelHeight", new Tuple<string, float, float>("壁パネルの高さ", 0.25f, 2.5f)}
+                        });
+                    }
+
+                    return changedComplexBuildingParam || changedComplexSkyscraperCondominiumBuildingParam || changedComplexOfficeBuildingParam;
             }
             return false;
         }
@@ -426,62 +596,40 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             return false;
         }
 
+        /// <summary>
+        /// インスペクタ上のプレハブ保存ボタン押下時にコール
+        /// </summary>
         private void SavePrefab()
         {
             if (!PrefabUtility.IsPartOfPrefabInstance(m_Generator.gameObject))
             {
-                EditorUtility.DisplayDialog("建築物を新規プレハブとして保存", "プレハブインスタンスに対してのみ実行可能です。", "はい");
+                EditorUtility.DisplayDialog("建築物を新規プレハブとして保存に失敗", "プレハブインスタンスに対してのみ実行可能です。", "はい");
                 return;
             }
 
-            string meshAssetsFolderPath = BuildingMeshUtility.GetMeshAssetsFolderPath();
-            if (!Directory.Exists(meshAssetsFolderPath))
-            {
-                Directory.CreateDirectory(meshAssetsFolderPath);
-            }
-
-            string prefabAssetsFolderPath = BuildingMeshUtility.GetPrefabAssetsFolderPath();
-            if (!Directory.Exists(prefabAssetsFolderPath))
-            {
-                Directory.CreateDirectory(prefabAssetsFolderPath);
-            }
-
-            Match matchRes = Regex.Match(m_Generator.buildingName, "[0-9]+$");
-            string newPrefabName;
-            if (matchRes.Success)
-            {
-                int count = 0;
-                m_Generator.buildingName = m_Generator.buildingName.Remove(matchRes.Index, matchRes.Length);
-
-                do
-                {
-                    count++;
-                    newPrefabName = m_Generator.buildingName + $"{int.Parse(matchRes.Value) + count:D2}";
-                }
-                while (File.Exists(Path.Combine(prefabAssetsFolderPath, newPrefabName + ".prefab").Replace("\\", "/")));
-
-                m_Generator.buildingName += $"{int.Parse(matchRes.Value) + count:D2}";
-            }
-            else
-            {
-                m_Generator.buildingName += "_01";
-                newPrefabName = m_Generator.buildingName;
-            }
-
+            Runtime.PlateauSandboxBuilding prefab = PrefabUtility.GetCorrespondingObjectFromSource(m_Generator);
+            string prefabPath = AssetDatabase.GetAssetPath(prefab);
             var lsFacadeMeshFilter = m_Generator.transform.GetComponentsInChildren<MeshFilter>().ToList();
-            if (!BuildingMeshUtility.SaveMesh(lsFacadeMeshFilter, newPrefabName))
+            if (!BuildingMeshUtility.SaveMesh(prefabPath, m_Generator.GetBuildingName(), lsFacadeMeshFilter, true))
             {
-                EditorUtility.DisplayDialog("建築物のメッシュを保存", "建築物の保存に失敗しました。建築物を再生成して下さい。", "はい");
+                EditorUtility.DisplayDialog("建築物のメッシュ保存に失敗", "建築物の保存に失敗しました。建築物を再生成して下さい。", "はい");
                 return;
             }
 
-            m_Generator.gameObject.name = m_Generator.buildingName;
-            string prefabPath = Path.Combine(prefabAssetsFolderPath, newPrefabName + ".prefab").Replace("\\", "/");
+            string prefabFolderPath = Path.GetDirectoryName(prefabPath);
+            if (prefabFolderPath == null)
+            {
+                EditorUtility.DisplayDialog("建築物のメッシュ保存に失敗", "保存パスが不正です。", "はい");
+                return;
+            }
+            string newPrefabName = BuildingMeshUtility.GetMeshNamePrefix(prefabFolderPath, m_Generator.GetBuildingName(), true);
+            m_Generator.gameObject.name = newPrefabName;
+            string prefabFullPath = Path.Combine(prefabFolderPath, newPrefabName + ".prefab").Replace("\\", "/");
             PrefabUtility.UnpackPrefabInstance(m_Generator.gameObject, PrefabUnpackMode.Completely, InteractionMode.AutomatedAction);
-            OnPrefabInstanceUpdatedParameter.instance.canUpdate = false;
-            PrefabUtility.SaveAsPrefabAssetAndConnect(m_Generator.gameObject, prefabPath, InteractionMode.AutomatedAction);
-            OnPrefabInstanceUpdatedParameter.instance.canUpdate = true;
-            EditorUtility.DisplayDialog("建築物を新規プレハブとして保存", "建築物のプレハブが正常に保存されました。", "はい");
+            OnPrefabInstanceUpdatedParameter.instance.canUpdatePrefabInstance = false;
+            PrefabUtility.SaveAsPrefabAssetAndConnect(m_Generator.gameObject, prefabFullPath, InteractionMode.AutomatedAction);
+            OnPrefabInstanceUpdatedParameter.instance.canUpdatePrefabInstance = true;
+            EditorUtility.DisplayDialog("建築物を新規プレハブとして保存に成功", "建築物のプレハブが正常に保存されました。", "はい");
         }
     }
 }

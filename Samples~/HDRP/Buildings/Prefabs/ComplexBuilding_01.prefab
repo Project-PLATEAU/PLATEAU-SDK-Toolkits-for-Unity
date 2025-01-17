@@ -1,0 +1,559 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5844738380807789104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5525074117492206889}
+  - component: {fileID: 3931523667733921097}
+  - component: {fileID: 4419869450932686847}
+  - component: {fileID: 7650375521579784313}
+  m_Layer: 0
+  m_Name: Facades
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5525074117492206889
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5844738380807789104}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7368845673306428762}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &3931523667733921097
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5844738380807789104}
+  m_Mesh: {fileID: 4300000, guid: 9db98efa9ff0ec342a7a8483537a7b45, type: 2}
+--- !u!23 &4419869450932686847
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5844738380807789104}
+  m_Enabled: 1
+  m_CastShadows: 2
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 2
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 5916bc6b759f935498701cff064c9fb0, type: 2}
+  - {fileID: 2100000, guid: 5331d354bb3fe604eb69ca321811b9c6, type: 2}
+  - {fileID: 2100000, guid: 68471c82cf2ce8c4988c463ccaefaba4, type: 2}
+  - {fileID: 2100000, guid: d7283811dbc1a4c48a9dcd91f73b24de, type: 2}
+  - {fileID: 2100000, guid: 11e933f03e1b63a44a342fe56d4a5bdd, type: 2}
+  - {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
+  - {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
+  - {fileID: 2100000, guid: 11e933f03e1b63a44a342fe56d4a5bdd, type: 2}
+  - {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &7650375521579784313
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5844738380807789104}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 20.000002, y: 40, z: 20.000004}
+  m_Center: {x: -0.0000009536743, y: 20, z: 0}
+--- !u!1 &7607605379447210006
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6448461632721687392}
+  - component: {fileID: 8240983163045898539}
+  - component: {fileID: 312532574145823425}
+  m_Layer: 0
+  m_Name: ComplexBuilding_01
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6448461632721687392
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7607605379447210006}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7368845673306428762}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!205 &8240983163045898539
+LODGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7607605379447210006}
+  serializedVersion: 2
+  m_LocalReferencePoint: {x: 0.014921904, y: 0.46499997, z: 0.0010421723}
+  m_Size: 1.6057813
+  m_FadeMode: 0
+  m_AnimateCrossFading: 0
+  m_LastLODIsBillboard: 0
+  m_LODs:
+  - screenRelativeHeight: 0.002
+    fadeTransitionWidth: 0
+    renderers:
+    - renderer: {fileID: 4419869450932686847}
+    - renderer: {fileID: 3197875275835848641}
+  m_Enabled: 1
+--- !u!114 &312532574145823425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7607605379447210006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f595d76393ef4794c9cb608a7e1b6720, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundPlacementDirection: 0
+  buildingType: 7
+  buildingHeight: 40
+  buildingWidth: 20
+  buildingDepth: 20
+  useTexture: 1
+  skyscraperCondominiumParams:
+    convexBalcony: 0
+    hasBalconyGlass: 1
+    hasBalconyLeft: 1
+    hasBalconyRight: 1
+    hasBalconyFront: 1
+    hasBalconyBack: 1
+  skyscraperCondominiumVertexColorPalette:
+    socleColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  skyscraperCondominiumVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  skyscraperCondominiumMaterialPalette:
+    wall: {fileID: 0}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+  officeBuildingParams:
+    useWindow: 1
+    spandrelHeight: 1.25
+  officeBuildingVertexColorPalette:
+    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    spandrelColor: {r: 1, g: 1, b: 1, a: 1}
+    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  officeBuildingVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  officeBuildingMaterialPalette:
+    wall: {fileID: 0}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    spandrel: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+  residenceParams:
+    numFloor: 2
+    hasEntranceRoof: 0
+    roofType: 0
+    roofThickness: 0.2
+  residenceVertexColorPalette:
+    socleColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+    socleTopColor: {r: 0, g: 0, b: 0, a: 1}
+    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    entranceDoorColor: {r: 1, g: 1, b: 1, a: 1}
+    entranceDoorFrameColor: {r: 1, g: 1, b: 1, a: 1}
+    entranceDoorRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  residenceVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  residenceMaterialPalette:
+    socle: {fileID: 0}
+    socleTop: {fileID: 0}
+    wall: {fileID: 0}
+    entranceDoor: {fileID: 0}
+    entranceDoorFrame: {fileID: 0}
+    entranceDoorRoof: {fileID: 0}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+  conveniParams:
+    isSideWall: 1
+    roofThickness: 0.2
+  conveniVertexColorPalette:
+    socleColor: {r: 0.7529412, g: 0.7529412, b: 0.7529412, a: 1}
+    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    billboardColor: {r: 1, g: 1, b: 1, a: 1}
+    billboardBottomColor: {r: 1, g: 1, b: 1, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  conveniVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  conveniMaterialPalette:
+    socle: {fileID: 0}
+    wall: {fileID: 0}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    billboard: {fileID: 0}
+    billboardBottom: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+  commercialFacilityVertexColorPalette:
+    wallColor: {r: 0.9843137, g: 0.9843137, b: 0.9843137, a: 1}
+    depressionWallColor: {r: 0.07058824, g: 0.07058824, b: 0.07058824, a: 1}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 0.7529412, g: 0.9137255, b: 0.99215686, a: 1}
+    roofColor: {r: 0.9843137, g: 0.9843137, b: 0.9843137, a: 1}
+    roofSideColor: {r: 0.9843137, g: 0.9843137, b: 0.9843137, a: 1}
+  commercialFacilityVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  commercialFacilityMaterialPalette:
+    wall: {fileID: 0}
+    depressionWall: {fileID: 0}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+  hotelParams:
+    hasWindowLeft: 0
+    hasWindowRight: 0
+    roofThickness: 0
+  hotelShaderParams:
+    textureOffsetX: 0
+    textureOffsetY: 0
+  hotelVertexColorPalette:
+    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    windowTopAndBottomWallColor: {r: 1, g: 1, b: 1, a: 1}
+    windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideFrontColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  hotelVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindowPane: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  hotelMaterialPalette:
+    wall: {fileID: 0}
+    windowTopAndBottomWall: {fileID: 0}
+    windowPane: {fileID: 0}
+    windowGlass: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+    roofSideFront: {fileID: 0}
+  factoryParams:
+    hasEntranceRoof: 0
+  factoryVertexColorPalette:
+    socleColor: {r: 1, g: 1, b: 1, a: 1}
+    socleTopColor: {r: 0, g: 0, b: 0, a: 1}
+    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    entranceShutter: {r: 0, g: 0, b: 0, a: 0}
+    entranceShutterFrame: {r: 0, g: 0, b: 0, a: 0}
+    entranceShutterRoof: {r: 0, g: 0, b: 0, a: 0}
+    windowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    windowGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+  factoryVertexColorMaterialPalette:
+    vertexWall: {fileID: 0}
+    vertexWindow: {fileID: 0}
+    vertexRoof: {fileID: 0}
+  factoryMaterialPalette:
+    socle: {fileID: 0}
+    socleTop: {fileID: 0}
+    wall: {fileID: 0}
+    entranceShutter: {fileID: 0}
+    entranceShutterFrame: {fileID: 0}
+    entranceShutterRoof: {fileID: 0}
+    windowFrame: {fileID: 0}
+    windowGlass: {fileID: 0}
+    roof: {fileID: 0}
+    roofSide: {fileID: 0}
+  complexBuildingParams:
+    higherFloorBuildingType: 0
+    lowerFloorBuildingType: 2
+    buildingBoundaryHeight: 20
+  complexSkyscraperCondominiumBuildingParams:
+    convexBalcony: 0
+    hasBalconyGlass: 0
+    hasBalconyLeft: 0
+    hasBalconyRight: 0
+    hasBalconyFront: 0
+    hasBalconyBack: 0
+  complexOfficeBuildingParams:
+    spandrelHeight: 0.5
+  complexBuildingVertexColorPalette:
+    boundaryWallColor: {r: 0.18490559, g: 0.116568245, b: 0.073613346, a: 1}
+    apartmentWallColor: {r: 0.7283019, g: 0.62130445, b: 0.5153079, a: 1}
+    apartmentWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    apartmentWindowGlassColor: {r: 0.59607846, g: 0.9254902, b: 1, a: 1}
+    apartmentRoofColor: {r: 1, g: 1, b: 1, a: 1}
+    apartmentRoofSideColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingWallColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    officeBuildingWindowGlassColor: {r: 0.5943396, g: 0.92402136, b: 1, a: 1}
+    officeBuildingSpandrelColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingRoofColor: {r: 1, g: 1, b: 1, a: 1}
+    officeBuildingRoofSideColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingWallColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingDepressionWallColor: {r: 0.15471691, g: 0.15471691, b: 0.15471691, a: 1}
+    commercialBuildingWindowFrameColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
+    commercialBuildingWindowGlassColor: {r: 0.59607846, g: 0.9254902, b: 1, a: 1}
+    commercialBuildingRoofColor: {r: 1, g: 1, b: 1, a: 1}
+    commercialBuildingRoofSideColor: {r: 1, g: 1, b: 1, a: 1}
+  complexBuildingVertexColorMaterialPalette:
+    vertexWall: {fileID: 2100000, guid: e4bb7e8b9e726f343a3bb3f9cb5ace31, type: 2}
+    vertexWindow: {fileID: 2100000, guid: 67634c5c08334c44ea84f8c3eadea811, type: 2}
+    vertexRoof: {fileID: 2100000, guid: 5647b566a97884c42b0b5bc3cb72c4b6, type: 2}
+  complexBuildingMaterialPalette:
+    boundaryWall: {fileID: 2100000, guid: 5916bc6b759f935498701cff064c9fb0, type: 2}
+    apartmentWall: {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
+    apartmentWindowFrame: {fileID: 2100000, guid: 11e933f03e1b63a44a342fe56d4a5bdd, type: 2}
+    apartmentWindowGlass: {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
+    apartmentRoof: {fileID: 2100000, guid: 8832938e00f64f64085fe9fd263a3ce2, type: 2}
+    apartmentRoofSide: {fileID: 2100000, guid: 3e0b2a4ed7c487646a67ecf314e99264, type: 2}
+    officeBuildingWall: {fileID: 2100000, guid: 0a17ebc98d4790d4aa819d3074a96155, type: 2}
+    officeBuildingWindowFrame: {fileID: 2100000, guid: c7b9a0d7e4127bc44b60ce4df49972af, type: 2}
+    officeBuildingWindowGlass: {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
+    officeBuildingSpandrel: {fileID: 2100000, guid: 0d5e889ce236fa34a9c0ef8fbed83319, type: 2}
+    officeBuildingRoof: {fileID: 2100000, guid: 111e87690921a724d922977fe944edb1, type: 2}
+    officeBuildingRoofSide: {fileID: 2100000, guid: e196884dcfa6b5e40b236c9d15202381, type: 2}
+    commercialBuildingWall: {fileID: 2100000, guid: 68471c82cf2ce8c4988c463ccaefaba4, type: 2}
+    commercialBuildingDepressionWall: {fileID: 2100000, guid: d7283811dbc1a4c48a9dcd91f73b24de, type: 2}
+    commercialBuildingWindowFrame: {fileID: 2100000, guid: 5331d354bb3fe604eb69ca321811b9c6, type: 2}
+    commercialBuildingWindowGlass: {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
+    commercialBuildingRoof: {fileID: 2100000, guid: a8137f9fea5d28341bdb4a84e080dd6e, type: 2}
+    commercialBuildingRoofSide: {fileID: 2100000, guid: c6709e3bfa6fd7941b734c63660eacae, type: 2}
+  facadePlanner: {fileID: 11400000, guid: 6bc87d3414415134d8b305435a8f81fb, type: 2}
+  facadeConstructor: {fileID: 11400000, guid: 721d020d3fea92147a87e71ee42a460e, type: 2}
+  roofPlanner: {fileID: 11400000, guid: b472869bf0628a546a6e014d30b3d0d8, type: 2}
+  roofConstructor: {fileID: 11400000, guid: 60b9ca7f2d3d0f044b509d70c12548a9, type: 2}
+--- !u!1 &7744612100807853899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8144052013649705697}
+  - component: {fileID: 8194958623233795153}
+  - component: {fileID: 3197875275835848641}
+  - component: {fileID: 8039462937630700605}
+  m_Layer: 0
+  m_Name: Roof
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8144052013649705697
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7744612100807853899}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7368845673306428762}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &8194958623233795153
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7744612100807853899}
+  m_Mesh: {fileID: 4300000, guid: 85ebf926de91d824898379312287ee3b, type: 2}
+--- !u!23 &3197875275835848641
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7744612100807853899}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 2
+  m_LightProbeUsage: 0
+  m_ReflectionProbeUsage: 0
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 3e0b2a4ed7c487646a67ecf314e99264, type: 2}
+  - {fileID: 2100000, guid: 8832938e00f64f64085fe9fd263a3ce2, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &8039462937630700605
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7744612100807853899}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 20, y: 0.049999237, z: 20}
+  m_Center: {x: 0, y: 40.025, z: 0}
+--- !u!1 &8837801326409029941
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7368845673306428762}
+  m_Layer: 0
+  m_Name: Buildings_LOD0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7368845673306428762
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8837801326409029941}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 5525074117492206889}
+  - {fileID: 8144052013649705697}
+  m_Father: {fileID: 6448461632721687392}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

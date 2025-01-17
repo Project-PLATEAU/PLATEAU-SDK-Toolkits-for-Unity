@@ -644,9 +644,9 @@ namespace ProceduralToolkit
         /// <summary>
         /// Constructs a partial box with specified faces
         /// </summary>
-        public static MeshDraft PartialBox(Vector3 width, Vector3 depth, Vector3 height, Directions parts, bool generateUV = false)
+        public static MeshDraft PartialBox(Vector3 width, Vector3 depth, Vector3 height, Directions parts, bool generateUV = false, Vector2 uvScale=default, Vector3 uvOffset = default)
         {
-            Vector3 v000 = -width/2 - depth/2 - height/2;
+            Vector3 v000 = -width / 2 - depth / 2 - height / 2;
             Vector3 v001 = v000 + height;
             Vector3 v010 = v000 + width;
             Vector3 v011 = v000 + width + height;
@@ -658,34 +658,38 @@ namespace ProceduralToolkit
             var draft = new MeshDraft {name = "Partial box"};
             if (generateUV)
             {
-                Vector2 uv0 = new(0, 0);
-                Vector2 uv1 = new(0, 1);
-                Vector2 uv2 = new(1, 1);
-                Vector2 uv3 = new(1, 0);
+                Vector3 uv000 = v000 + width/2 + depth/2 + height/2 + uvOffset;
+                Vector3 uv001 = v001 + width/2 + depth/2 + height/2 + uvOffset;
+                Vector3 uv010 = v010 + width/2 + depth/2 + height/2 + uvOffset;
+                Vector3 uv011 = v011 + width/2 + depth/2 + height/2 + uvOffset;
+                Vector3 uv100 = v100 + width/2 + depth/2 + height/2 + uvOffset;
+                Vector3 uv101 = v101 + width/2 + depth/2 + height/2 + uvOffset;
+                Vector3 uv110 = v110 + width/2 + depth/2 + height/2 + uvOffset;
+                Vector3 uv111 = v111 + width/2 + depth/2 + height/2 + uvOffset;
 
                 if (parts.HasFlag(Directions.Left))
                 {
-                    draft.AddQuad(v100, v101, v001, v000, true, uv0, uv1, uv2, uv3);
+                    draft.AddQuad(v100, v101, v001, v000, true, new Vector2(uv100.z * uvScale.x, uv100.y * uvScale.y), new Vector2(uv101.z * uvScale.x, uv101.y * uvScale.y), new Vector2(uv001.z * uvScale.x, uv001.y * uvScale.y), new Vector2(uv000.z * uvScale.x, uv000.y * uvScale.y));
                 }
                 if (parts.HasFlag(Directions.Right))
                 {
-                    draft.AddQuad(v010, v011, v111, v110, true, uv0, uv1, uv2, uv3);
+                    draft.AddQuad(v010, v011, v111, v110, true, new Vector2(uv010.z * uvScale.x, uv010.y * uvScale.y), new Vector2(uv011.z * uvScale.x, uv011.y * uvScale.y), new Vector2(uv111.z * uvScale.x, uv111.y * uvScale.y), new Vector2(uv110.z * uvScale.x, uv110.y * uvScale.y));
                 }
                 if (parts.HasFlag(Directions.Down))
                 {
-                    draft.AddQuad(v010, v110, v100, v000, true, uv0, uv1, uv2, uv3);
+                    draft.AddQuad(v010, v110, v100, v000, true, new Vector2(uv010.x * uvScale.x, uv010.z * uvScale.y), new Vector2(uv110.x * uvScale.x, uv110.z * uvScale.y), new Vector2(uv100.x * uvScale.x, uv100.z * uvScale.y), new Vector2(uv000.x * uvScale.x, uv000.z * uvScale.y));
                 }
                 if (parts.HasFlag(Directions.Up))
                 {
-                    draft.AddQuad(v111, v011, v001, v101, true, uv0, uv1, uv2, uv3);
+                    draft.AddQuad(v111, v011, v001, v101, true, new Vector2(uv111.x * uvScale.x, uv111.z * uvScale.y), new Vector2(uv011.x * uvScale.x, uv011.z * uvScale.y), new Vector2(uv001.x * uvScale.x, uv001.z * uvScale.y), new Vector2(uv101.x * uvScale.x, uv101.z * uvScale.y));
                 }
                 if (parts.HasFlag(Directions.Back))
                 {
-                    draft.AddQuad(v000, v001, v011, v010, true, uv0, uv1, uv2, uv3);
+                    draft.AddQuad(v000, v001, v011, v010, true, new Vector2(uv000.x * uvScale.x, uv000.y * uvScale.y), new Vector2(uv001.x * uvScale.x, uv001.y * uvScale.y), new Vector2(uv011.x * uvScale.x, uv011.y * uvScale.y), new Vector2(uv010.x * uvScale.x, uv010.y * uvScale.y));
                 }
                 if (parts.HasFlag(Directions.Forward))
                 {
-                    draft.AddQuad(v110, v111, v101, v100, true, uv0, uv1, uv2, uv3);
+                    draft.AddQuad(v110, v111, v101, v100, true, new Vector2(uv110.x * uvScale.x, uv110.y * uvScale.y), new Vector2(uv111.x * uvScale.x, uv111.y * uvScale.y), new Vector2(uv101.x * uvScale.x, uv101.y * uvScale.y), new Vector2(uv100.x * uvScale.x, uv100.y * uvScale.y));
                 }
             }
             else
