@@ -104,6 +104,7 @@ namespace AWSIM
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
                     rigidbody.useGravity = true;
+                    rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                     return rigidbody;
                 }
             }
