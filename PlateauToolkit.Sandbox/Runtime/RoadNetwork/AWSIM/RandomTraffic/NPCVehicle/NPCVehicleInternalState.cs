@@ -64,8 +64,8 @@ namespace AWSIM.TrafficSimulation
             get => _SpeedMode;
             set
             {
-                //停止からの時間測定
-                if (!IsStopped(_SpeedMode) && IsStopped(value))
+                //停止開始からの時間測定用
+                if (!IsStopped(_SpeedMode) && IsStopped(value) && _SpeedModeStopStartTime == 0f) //停止した瞬間の時間を記録
                 {
                     _SpeedModeStopStartTime = Time.time;
                 }
