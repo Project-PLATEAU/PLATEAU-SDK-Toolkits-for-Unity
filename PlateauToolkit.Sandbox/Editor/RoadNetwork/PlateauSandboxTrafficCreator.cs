@@ -123,7 +123,9 @@ namespace PlateauToolkit.Sandbox.Editor
                 var lanes = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_LANE_ROOT_NAME);
                 for (int i = 0; i < lanes.transform.childCount; i++)
                 {
-                    TrafficLaneEditor.FindAndSetRightOfWays(lanes.transform.GetChild(i).GetComponent<TrafficLane>());
+                    TrafficLane lane = lanes.transform.GetChild(i).GetComponent<TrafficLane>();
+                    if (lane.TurnDirection != TrafficLane.TurnDirectionType.STRAIGHT) //直進の場合設定しない
+                        TrafficLaneEditor.FindAndSetRightOfWays(lane);
                 }
             }
 
@@ -150,7 +152,22 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 throw new System.Exception("道路ネットワークが見つかりませんでした。");
             }
-            m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
+
+            //未シリアライズ対応
+            m_RoadNetworkGetter = null;
+            try
+            {
+                m_RoadNetworkGetter = roadNetwork.GetRoadNetworkDataGetter();
+            }
+            catch (System.NullReferenceException ex)
+            {
+                Debug.LogError($"GetRoadNetworkDataGetter Failed. {ex.Message}");
+            }
+
+            if (m_RoadNetworkGetter == null)
+            {
+                throw new System.Exception("道路ネットワークが保存されていません。");
+            }
 
             //Attach Components
             GameObject managerGo = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_MANAGER_NAME);

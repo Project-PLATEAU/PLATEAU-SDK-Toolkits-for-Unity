@@ -16,7 +16,7 @@
         /// <summary>
         /// 停止してから消すまでの時間(秒）
         /// </summary>
-        public static readonly float MAX_IDLE_TIME = 20f;
+        public static readonly float MAX_IDLE_TIME = 30f;
 
         //信号の切替秒数
         public static readonly float TRAFFIC_LIGHT_GREEN_INTERVAL_SECONDS = 10f;
