@@ -26,9 +26,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         protected const string k_EntranceDoorRoofTexturedDraftName = "EntranceDoorRoofTextured";
         protected const string k_GlassDraftName = "Glass";
         protected const string k_WindowPaneDraftName = "WindowPane";
-        protected const string k_WindowPaneFrameTexturedDraftName = "WindowpaneFrameTextured";
-        protected const string k_WindowPaneGlassTexturedDraftName = "WindowpaneGlassTextured";
-        protected const string k_WindowSillTexturedDraftName = "WindowSillTextured";
+        protected const string k_WindowFrameTexturedDraftName = "WindowFrameTextured";
+        protected const string k_WindowGlassTexturedDraftName = "WindowGlassTextured";
+        protected const string k_WindowTopAndBottomWallTexturedDraftName = "WindowTopAndBottomWallTexturedDraft";
         protected const string k_BillboardTexturedDraftName = "BillboardTextured";
         protected const string k_BillboardBottomTexturedDraftName = "BillboardBottomTextured";
 

@@ -24,6 +24,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private const float k_EntranceWindowHeight = 2.5f;
         private const float k_MinSkyscraperCondominiumWallWidthOffset = 1.25f;
         private const float k_SkyscraperCondominiumWindowFrameRodHeight = 0.05f;
+        private const float k_HotelWindowBottomOffset = 1;
+        private const float k_HotelWindowTopOffset = 0.3f;
+        private const float k_HotelWindowFrameRodHeight = 0.05f;
         private const int   k_RoundDigit = 3;
         private const float k_NarrowPanelSize = 2.5f;
         private const float k_MinWallWidthOffset = 1.25f;
@@ -158,26 +161,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private void SetupConstructors(BuildingGenerator.Config config)
         {
-            string shadowWallName;
-            switch (config.complexBuildingParams.lowerFloorBuildingType)
-            {
-                case ComplexBuildingConfig.ComplexBuildingType.k_Apartment:
-                    shadowWallName = "SkyscraperCondominiumWallTextured";
-                    break;
-                case ComplexBuildingConfig.ComplexBuildingType.k_OfficeBuilding:
-                    shadowWallName = "OfficeBuildingWallTextured";
-                    break;
-                case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
-                    shadowWallName = "CommercialBuildingWallTextured";
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
             m_Constructors[PanelType.k_ShadowWall] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
                 {
-                    m_WallName = shadowWallName,
                     m_IsShadowWall = true,
                     m_MoveShadowWallDepth = 0.7f,
                     m_ShadowWallWidthOffset = k_ShadowWallOffset,
@@ -188,16 +175,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             m_Constructors[PanelType.k_SkyscraperCondominiumWall] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
-                {
-                    m_WallName = "SkyscraperCondominiumWallTextured"
-                }
             };
 
             m_Constructors[PanelType.k_SkyscraperCondominiumWindow] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralWindow(
-                    config,
-                    windowpaneFrameName: "SkyscraperCondominiumFrameTextured")
+                () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
                 {
                     m_WindowBottomOffset = 0,
                     m_WindowTopOffset = 0,
@@ -208,11 +190,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     m_IsRectangleWindow = true
                 }
             };
+
             m_Constructors[PanelType.k_SkyscraperCondominiumFullWindow] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
-                    config,
-                    windowpaneFrameName: "SkyscraperCondominiumFrameTextured")
+                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
                 {
                     m_WindowFrameRodWidth = 0.2f
                 }
@@ -220,9 +201,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             m_Constructors[PanelType.k_CommercialFullWindow] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
-                    config,
-                    windowpaneFrameName: "CommercialBuildingFrameTextured")
+                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
                 {
                     m_WindowFrameRodWidth = 0.2f
                 }
@@ -230,9 +209,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             m_Constructors[PanelType.k_CommercialSmallFullWindow] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
-                    config,
-                    windowpaneFrameName: "CommercialBuildingFrameTextured")
+                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
                 {
                     m_NumCenterRods = 1,
                     m_WindowFrameRodType = ProceduralFacadeElement.WindowFrameRodType.k_Vertical,
@@ -242,10 +219,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             m_Constructors[PanelType.k_CommercialWallWithFrame] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralWallWithFrame(
-                    config,
-                    wallName: "CommercialBuildingWallTextured",
-                    windowpaneFrameName: "CommercialBuildingFrameTextured")
+                () => new ProceduralFacadeCompoundElements.ProceduralWallWithFrame(config)
                 {
                     m_NumCenterRods = 0
                 }
@@ -253,9 +227,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             m_Constructors[PanelType.k_OfficeFullWindow] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
-                    config,
-                    windowpaneFrameName: "OfficeBuildingFrameTextured")
+                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
                 {
                     m_WindowFrameRodWidth = 0.2f
                 }
@@ -263,14 +235,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             m_Constructors[PanelType.k_OfficeSmallFullWindow] = new List<Func<ILayoutElement>>
             {
-                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
-                    config,
-                    config.complexBuildingMaterialPalette.officeBuildingSpandrel,
-                    "OfficeBuildingGlassSpandrelTextured",
-                    "OfficeBuildingFrameTextured")
+                () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config, config.complexBuildingMaterialPalette.officeBuildingSpandrel)
                 {
+                    m_GlassVariationName = "OfficeBuildingSmallWindow",
                     m_WindowFrameRodWidth = 0.2f,
                 }
+            };
+
+            m_Constructors[PanelType.k_HotelWall] = new List<Func<ILayoutElement>>
+            {
+                () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
             };
         }
 
@@ -288,7 +262,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private HorizontalLayout CreateEntranceVertical(List<PanelSize> panelSizes, float remainderWidth, float floorWidthOffset, int entranceIndexInterval, bool noLeftLayout, bool noRightLayout, BuildingGenerator.Config config)
         {
-            // マンションタイプはHorizontalで生成しているので、下部の建造物も横幅を合わせるためにHorizontalで生成すること
+            // マンションタイプ、ホテルタイプはHorizontalで生成しているので、下部の建造物も横幅を合わせるためにHorizontalで生成すること
             // つまり、from-toは必ず0, panelSizes.Countになる
             ComplexBuildingConfig.ComplexBuildingType complexBuildingType = GetComplexBuildingType(config);
             var horizontal = new HorizontalLayout();
@@ -304,7 +278,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     break;
                 case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
                     config.m_ComplexBuildingPlannerParams.m_AddedBoundaryWall = false;
-                    horizontal.Add(CreateCommercialEntranceVertical(panelSizes, remainderWidth, floorWidthOffset, entranceIndexInterval, noLeftLayout, noRightLayout, config));
+                    horizontal.Add(CreateCommercialEntranceVertical(panelSizes, remainderWidth, floorWidthOffset, entranceIndexInterval, config));
+                    break;
+                case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                    config.m_ComplexBuildingPlannerParams.m_AddedBoundaryWall = false;
+                    horizontal.Add(CreateHotelEntranceVertical(panelSizes, remainderWidth, floorWidthOffset, entranceIndexInterval, config));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -358,9 +336,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 Construct(new List<Func<ILayoutElement>>
                 {
-                    () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
-                        config,
-                        windowpaneFrameName: "OfficeBuildingFrameTextured")
+                    () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
                     {
                         m_WindowBottomOffset = 0,
                         m_WindowWidthOffset = 0,
@@ -388,7 +364,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return vertical;
         }
 
-        private VerticalLayout CreateCommercialEntranceVertical(List<PanelSize> panelSizes, float remainderWidth, float floorWidthOffset, int entranceIndexInterval, bool noLeftLayout, bool noRightLayout, BuildingGenerator.Config config)
+        private VerticalLayout CreateCommercialEntranceVertical(List<PanelSize> panelSizes, float remainderWidth, float floorWidthOffset, int entranceIndexInterval, BuildingGenerator.Config config)
         {
             float entranceHeight = config.complexBuildingParams.buildingBoundaryHeight <= config.buildingHeight ? config.complexBuildingParams.buildingBoundaryHeight - m_NumLowerFloorWithoutEntrance * m_LowerFloorHeight : config.buildingHeight - m_NumFloorWithoutEntrance * m_FloorHeight;
             entranceHeight = (float)Math.Round(entranceHeight, k_RoundDigit, MidpointRounding.AwayFromZero);
@@ -396,9 +372,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 Construct(new List<Func<ILayoutElement>>
                 {
-                    () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(
-                        config,
-                        windowpaneFrameName: "CommercialBuildingFrameTextured")
+                    () => new ProceduralFacadeCompoundElements.ProceduralFullWindow(config)
                     {
                         m_WindowBottomOffset = 0,
                         m_WindowWidthOffset = 0,
@@ -436,6 +410,40 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             }
 
             vertical.Add(CreateNormalFacadeVerticalIter(panelSizes, remainingHeight, remainderWidth, currentHeight, floorWidthOffset, entranceHeight, 0, panelSizes.Count, config));
+
+            return vertical;
+        }
+
+        private VerticalLayout CreateHotelEntranceVertical(List<PanelSize> panelSizes, float remainderWidth, float floorWidthOffset, int entranceIndexInterval, BuildingGenerator.Config config)
+        {
+            float entranceHeight = config.complexBuildingParams.buildingBoundaryHeight <= config.buildingHeight ? config.complexBuildingParams.buildingBoundaryHeight - m_NumLowerFloorWithoutEntrance * m_LowerFloorHeight : config.buildingHeight - m_NumFloorWithoutEntrance * m_FloorHeight;
+            var vertical = new VerticalLayout();
+            var horizontal = new HorizontalLayout
+            {
+                CreateHorizontal(panelSizes, 0, entranceIndexInterval, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_HotelWall]),
+                Construct(new List<Func<ILayoutElement>>
+                {
+                    () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
+                    {
+                        m_WindowBottomOffset = 0,
+                        m_WindowWidthOffset = 0.3f,
+                        m_WindowDepthOffset = 0,
+                        m_WindowTopOffset = 0 < entranceHeight - k_EntranceWindowHeight ? entranceHeight - k_EntranceWindowHeight : Math.Abs(entranceHeight - k_EntranceWindowHeight),
+                        m_WindowFrameRodHeight = k_HotelWindowFrameRodHeight,
+                        m_NumCenterRods = 1,
+                        m_HasWindowsill = false
+                    }
+                }, m_SizeValues[panelSizes[entranceIndexInterval]] + floorWidthOffset, entranceHeight),
+                CreateHorizontal(panelSizes, entranceIndexInterval + 1, panelSizes.Count, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_HotelWall]),
+            };
+            vertical.Add(horizontal);
+
+            float remainingHeight = config.buildingHeight - entranceHeight;
+            float currentHeight = entranceHeight;
+            if (0 < remainingHeight)
+            {
+                vertical.Add(CreateNormalFacadeVerticalIter(panelSizes, remainingHeight, remainderWidth, currentHeight, floorWidthOffset, entranceHeight, 0, panelSizes.Count, config));
+            }
 
             return vertical;
         }
@@ -499,6 +507,20 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     vertical.Add(CreateNormalFacadeVerticalIter(panelSizes, remainingHeight, remainderWidth, currentHeight, floorWidthOffset, entranceHeight, from, to, config));
                     break;
                 }
+                case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                {
+                    float buildingHeight = Math.Min(config.complexBuildingParams.buildingBoundaryHeight, config.buildingHeight);
+                    int numFloorWithoutEntrance = (int)Mathf.Floor(buildingHeight / m_LowerFloorHeight) - 1;
+                    entranceHeight = buildingHeight - numFloorWithoutEntrance * m_LowerFloorHeight;
+                    entranceHeight = (float)Math.Round(entranceHeight, k_RoundDigit, MidpointRounding.AwayFromZero);
+                    vertical.Add(CreateHorizontal(panelSizes, from, to, entranceHeight, floorWidthOffset, m_Constructors[PanelType.k_HotelWall]));
+                    float remainingHeight = config.buildingHeight - entranceHeight;
+                    float currentHeight = entranceHeight;
+                    remainingHeight = (float)Math.Round(remainingHeight, k_RoundDigit, MidpointRounding.AwayFromZero);
+                    currentHeight = (float)Math.Round(currentHeight, k_RoundDigit, MidpointRounding.AwayFromZero);
+                    vertical.Add(CreateNormalFacadeVerticalIter(panelSizes, remainingHeight, remainderWidth, currentHeight, floorWidthOffset, entranceHeight, from, to, config));
+                    break;
+                }
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -539,6 +561,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         commercialFloorIndex = tupleData.Item1;
                         break;
                     }
+                    case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                    {
+                        float floorHeight = addedBoundaryWall ? m_HigherFloorHeight : m_LowerFloorHeight;
+                        tupleData = CreateHotelPlanner(vertical, complexBuildingType, addedBoundaryWall, floorHeight, currentHeight, remainingHeight, remainderWidth, panelSizes, floorWidthOffset, entranceHeight, from, to, config);
+                        break;
+                    }
                     default:
                         throw new ArgumentOutOfRangeException();
                 }
@@ -552,8 +580,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         private (int, bool, float, float) CreateSkyscraperCondominiumPlanner(VerticalLayout vertical, ComplexBuildingConfig.ComplexBuildingType complexBuildingType, bool addedBoundaryWall, float floorHeight, float currentHeight, float remainingHeight, float remainderWidth, List<PanelSize> panelSizes, float floorWidthOffset, float entranceHeight, int from, int to, BuildingGenerator.Config config)
         {
-            (int, bool, float, float) tupleData;
-
             // for文での生成処理を行っていないので生成範囲がなければそのまま返す
             if (to == from)
             {
@@ -719,7 +745,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 if (config.complexBuildingParams.buildingBoundaryHeight < config.buildingHeight)
                 {
                     // 境界線を作成するだけに利用
-                    tupleData = CreateBuildingPlanner(vertical, complexBuildingType, floorIndex: 0, addedBoundaryWall: false, canAddLowerFloor: false, floorHeight: 0, currentHeight, remainingHeight, panelSizes, floorWidthOffset, entranceHeight, from, to, config);
+                    (int, bool, float, float) tupleData = CreateBuildingPlanner(vertical, complexBuildingType, floorIndex: 0, addedBoundaryWall: false, canAddLowerFloor: false, floorHeight: 0, currentHeight, remainingHeight, panelSizes, floorWidthOffset, entranceHeight, from, to, config);
                     currentHeight = tupleData.Item3;
                     remainingHeight = tupleData.Item4;
                 }
@@ -752,6 +778,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
                     panelType = floorIndex % 4 == 3 ? PanelType.k_CommercialSmallFullWindow : PanelType.k_CommercialWallWithFrame;
                     panelHeight = floorIndex % 4 == 3 ? k_SmallWindowHeight : entranceHeight;
+                    panelHeight = (float)Math.Round(panelHeight, k_RoundDigit, MidpointRounding.AwayFromZero);
+                    break;
+                case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                    panelType = PanelType.k_HotelWall;
+                    panelHeight = floorHeight;
                     panelHeight = (float)Math.Round(panelHeight, k_RoundDigit, MidpointRounding.AwayFromZero);
                     break;
                 default:
@@ -864,6 +895,96 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return (floorIndex, addedBoundaryWall, currentHeight, remainingHeight);
         }
 
+        private (int, bool, float, float) CreateHotelPlanner(VerticalLayout vertical, ComplexBuildingConfig.ComplexBuildingType complexBuildingType, bool addedBoundaryWall, float floorHeight, float currentHeight, float remainingHeight, float remainderWidth, List<PanelSize> panelSizes, float floorWidthOffset, float entranceHeight, int from, int to, BuildingGenerator.Config config)
+        {
+            // for文での生成処理を行っていないので生成範囲がなければそのまま返す
+            if (to == from)
+            {
+                currentHeight = config.buildingHeight;
+                remainingHeight = 0;
+                return (0, false, currentHeight, remainingHeight);
+            }
+
+            // 窓の高さは残りの高さで割って余りが出ないようにする
+            if (addedBoundaryWall)
+            {
+                float buildingHeight = config.buildingHeight - config.complexBuildingParams.buildingBoundaryHeight - k_DepressionWallHeight;
+                int numFloor = (int)Mathf.Floor(buildingHeight / floorHeight);
+                for (int i = 0; i < numFloor; i++)
+                {
+                    switch (config.faceDirection)
+                    {
+                        case BuildingGenerator.Config.FaceDirection.k_Front:
+                        case BuildingGenerator.Config.FaceDirection.k_Back:
+                            vertical.Add(new HorizontalLayout { CreateHorizontalHotelWindow(panelSizes, from, to, floorHeight, floorWidthOffset, config) });
+                            break;
+                        default:
+                            if (config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Left && config.complexHotelParams.hasWindowLeft ||
+                                config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Right && config.complexHotelParams.hasWindowRight)
+                            {
+                                vertical.Add(new HorizontalLayout { CreateHorizontalHotelWindow(panelSizes, from, to, floorHeight, floorWidthOffset, config) });
+                            }
+                            else
+                            {
+                                vertical.Add(new HorizontalLayout { CreateHorizontal(panelSizes, from, to, floorHeight, floorWidthOffset, m_Constructors[PanelType.k_HotelWall]) });
+                            }
+                            break;
+                    }
+                    remainingHeight -= floorHeight;
+                    remainingHeight = (float)Math.Round(remainingHeight, k_RoundDigit, MidpointRounding.AwayFromZero);
+                }
+
+                // 残りの高さは壁で埋める
+                if (0 < remainingHeight)
+                {
+                    vertical.Add(CreateHorizontal(panelSizes, from, to, remainingHeight, floorWidthOffset, m_Constructors[PanelType.k_HotelWall]));
+                }
+
+                currentHeight = config.buildingHeight;
+                remainingHeight = 0;
+
+                return (0, true, currentHeight, remainingHeight);
+            }
+            else
+            {
+                float buildingHeight = Math.Min(config.complexBuildingParams.buildingBoundaryHeight, config.buildingHeight);
+                int numFloorWithoutEntrance = (int)Mathf.Floor(buildingHeight / floorHeight) - 1;
+                for (int i = 0; i < numFloorWithoutEntrance; i++)
+                {
+                    switch (config.faceDirection)
+                    {
+                        case BuildingGenerator.Config.FaceDirection.k_Front:
+                        case BuildingGenerator.Config.FaceDirection.k_Back:
+                            vertical.Add(new HorizontalLayout { CreateHorizontalHotelWindow(panelSizes, from, to, floorHeight, floorWidthOffset, config) });
+                            break;
+                        default:
+                            if (config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Left && config.complexHotelParams.hasWindowLeft ||
+                                config.faceDirection == BuildingGenerator.Config.FaceDirection.k_Right && config.complexHotelParams.hasWindowRight)
+                            {
+                                vertical.Add(new HorizontalLayout { CreateHorizontalHotelWindow(panelSizes, from, to, floorHeight, floorWidthOffset, config) });
+                            }
+                            else
+                            {
+                                vertical.Add(new HorizontalLayout { CreateHorizontal(panelSizes, from, to, floorHeight, floorWidthOffset, m_Constructors[PanelType.k_HotelWall]) });
+                            }
+                            break;
+                    }
+                }
+                currentHeight = config.complexBuildingParams.buildingBoundaryHeight;
+                remainingHeight = config.buildingHeight - currentHeight;
+
+                if (config.complexBuildingParams.buildingBoundaryHeight < config.buildingHeight)
+                {
+                    // 境界線を作成するだけに利用
+                    (int, bool, float, float) tupleData = CreateBuildingPlanner(vertical, complexBuildingType, floorIndex: 0, addedBoundaryWall: false, canAddLowerFloor: false, floorHeight: 0, currentHeight, remainingHeight, panelSizes, floorWidthOffset, entranceHeight, from, to, config);
+                    currentHeight = tupleData.Item3;
+                    remainingHeight = tupleData.Item4;
+                }
+
+                return (0, true, currentHeight, remainingHeight);
+            }
+        }
+
         private List<PanelSize> DivideFacade(float facadeWidth, bool leftIsConvex, bool rightIsConvex, out float remainder)
         {
             float availableWidth = facadeWidth;
@@ -931,6 +1052,30 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             return horizontal;
         }
 
+        private HorizontalLayout CreateHorizontalHotelWindow(List<PanelSize> panelSizes, int from, int to, float height, float floorWidthOffset, BuildingGenerator.Config config)
+        {
+            var horizontal = new HorizontalLayout();
+            for (int i = from; i < to; i++)
+            {
+                float panelWidth = m_SizeValues[panelSizes[i]] + floorWidthOffset;
+                var window = new List<Func<ILayoutElement>>
+                {
+                    () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
+                    {
+                        m_WindowBottomOffset = k_HotelWindowBottomOffset,
+                        m_WindowTopOffset = k_HotelWindowTopOffset,
+                        m_WindowFrameRodHeight = k_HotelWindowFrameRodHeight,
+                        m_NumCenterRods = 0,
+                        m_HasWindowsill = false,
+                        m_IsRectangleWindow = true,
+                        m_IsChangeBothSidesWallColor = true
+                    }
+                };
+                horizontal.Add(Construct(window, panelWidth, height));
+            }
+            return horizontal;
+        }
+
         private HorizontalLayout CreateDepressionWallNormalFacadeHorizontal(List<PanelSize> panelSizes, int from, int to, float height, float floorWidthOffset, bool isEntrance, BuildingGenerator.Config config)
         {
             var horizontal = new HorizontalLayout();
@@ -972,7 +1117,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     {
                         () => new ProceduralFacadeCompoundElements.ProceduralDepressionWall(config, positionType)
                         {
-                            m_DepressionWallName = "BoundaryWallTextured",
+                            // 境界線のテクスチャにDepressionWallのテクスチャを使用しているため名前を変えないと商業ビルとコンフリクトする
+                            m_DepressionWallVariationName = "BoundaryWallTextured",
                             m_DepressionWallDepth = 0f,
                             m_DepressionWallMat = config.complexBuildingMaterialPalette.boundaryWall,
                             m_DepressionWallColor = config.complexBuildingVertexColorPalette.boundaryWallColor,
@@ -1021,6 +1167,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             k_OfficeFullWindow,
             k_OfficeSmallFullWindow,
+
+            k_HotelWall,
         }
     }
 }

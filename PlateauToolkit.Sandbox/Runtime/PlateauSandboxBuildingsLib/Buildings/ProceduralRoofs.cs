@@ -87,6 +87,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                                 m_RoofSideMat = m_Config.complexBuildingMaterialPalette.commercialBuildingRoofSide;
                                 m_UVScale = new Vector2(0.1f, 0.1f);
                                 break;
+                            case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                m_RoofMat = m_Config.complexBuildingMaterialPalette.hotelRoof;
+                                m_RoofSideMat = m_Config.complexBuildingMaterialPalette.hotelRoofSide;
+                                m_RoofSideFrontMat = m_Config.complexBuildingMaterialPalette.hotelRoofSideFront;
+                                m_UVScale = new Vector2(0.1f, 0.1f);
+                                break;
                             default:
                                 throw new ArgumentOutOfRangeException();
                         }
@@ -152,6 +158,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                             case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
                                 m_RoofColor = m_Config.complexBuildingVertexColorPalette.commercialBuildingRoofColor;
                                 m_RoofSideColor = m_Config.complexBuildingVertexColorPalette.commercialBuildingRoofSideColor;
+                                m_VertexRoofMat = m_Config.complexBuildingVertexColorMaterialPalette.vertexRoof;
+                                break;
+                            case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                m_RoofColor = m_Config.complexBuildingVertexColorPalette.hotelRoofColor;
+                                m_RoofSideColor = m_Config.complexBuildingVertexColorPalette.hotelRoofSideColor;
                                 m_VertexRoofMat = m_Config.complexBuildingVertexColorMaterialPalette.vertexRoof;
                                 break;
                             default:
@@ -333,6 +344,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             {
                 case BuildingType.k_Hotel:
                     return ConstructSeparatedFrontRoof();
+                case BuildingType.k_ComplexBuilding:
+                    ComplexBuildingConfig.ComplexBuildingType buildingType = m_Config.m_ComplexBuildingPlannerParams.m_AddedBoundaryWall ? m_Config.complexBuildingParams.higherFloorBuildingType : m_Config.complexBuildingParams.lowerFloorBuildingType;
+                    if (buildingType == ComplexBuildingConfig.ComplexBuildingType.k_Hotel)
+                    {
+                        return ConstructSeparatedFrontRoof();
+                    }
+                    break;
             }
 
             var compoundMeshDraft = new CompoundMeshDraft();

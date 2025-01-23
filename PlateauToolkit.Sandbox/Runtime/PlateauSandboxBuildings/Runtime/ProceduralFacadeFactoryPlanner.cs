@@ -85,16 +85,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
             };
-            m_Constructors[PanelType.k_ShadowWall] = new List<Func<ILayoutElement>>
-            {
-                () => new ProceduralFacadeCompoundElements.ProceduralWall(config)
-                {
-                    m_IsShadowWall = true,
-                    m_MoveShadowWallDepth = 0.8f,
-                    m_ShadowWallWidthOffset = k_ShadowWallHeightOffset,
-                    m_ShadowWallHeightOffset = 0
-                }
-            };
             m_Constructors[PanelType.k_Window] = new List<Func<ILayoutElement>>
             {
                 () => new ProceduralFacadeCompoundElements.ProceduralWindow(config)
@@ -330,7 +320,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         private enum PanelType : byte
         {
             k_Wall,
-            k_ShadowWall,
             k_Window,
             k_WallOrWindow
         }

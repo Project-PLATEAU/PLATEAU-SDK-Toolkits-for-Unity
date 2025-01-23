@@ -20,6 +20,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected class EntranceTexturedData
         {
+            public string m_PrefixName;
             public bool m_HasRoof;
             public Vector2 m_UVScale;
             public Material m_WallMat;
@@ -107,7 +108,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             var meshDraft = new CompoundMeshDraft();
             MeshDraft bracket = EntranceBracketTextured(origin, widthVector, heightVector, doorOrigin, doorWidth, doorHeight, entranceTexturedData.m_UVScale)
                 .Paint(entranceTexturedData.m_WallMat);
-            bracket.name = k_WallTexturedDraftName;
+            bracket.name = entranceTexturedData.m_PrefixName + k_WallTexturedDraftName;
             meshDraft.Add(bracket);
 
             MeshDraft doorLeftFrame = MeshDraft.PartialBox(doorFrameWidth, -doorThickness / 2, doorHeight, Directions.Back | Directions.Right, generateUV: true)
@@ -232,10 +233,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
             var meshDraft = new CompoundMeshDraft();
 
-            MeshDraft topWall = new MeshDraft {name = k_WallTexturedDraftName}
+            MeshDraft topWall = new MeshDraft()
                 .AddQuad(origin, widthVector, Vector3.up * entranceTexturedData.m_EntranceTopOffset, entranceTexturedData.m_UVScale, calculateNormal: true, generateUV: true)
                 .Move(heightVector -  Vector3.up * entranceTexturedData.m_EntranceTopOffset)
                 .Paint(entranceTexturedData.m_WallMat);
+            topWall.name = entranceTexturedData.m_PrefixName + k_WallTexturedDraftName;
             meshDraft.Add(topWall);
 
             MeshDraft doorLeftFrame = MeshDraft.PartialBox(doorFrameWidth, -doorThickness / 2, doorHeight, Directions.Back | Directions.Right, generateUV: true)

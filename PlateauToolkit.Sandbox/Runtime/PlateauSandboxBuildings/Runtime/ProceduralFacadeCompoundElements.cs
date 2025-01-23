@@ -13,7 +13,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         {
             protected readonly WallColorData m_WallColorData;
             protected readonly WallTexturedData m_WallTexturedData;
-            public string m_WallName = k_WallTexturedDraftName;
+            public string m_WallVariationName = null;
             public bool m_IsShadowWall = false;
             public float m_MoveShadowWallDepth = 0;
             public float m_ShadowWallWidthOffset = 0;
@@ -30,6 +30,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WallTexturedData = new WallTexturedData
                             {
+                                m_PrefixName = "Apartment",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.skyscraperCondominiumMaterialPalette.wall
                             };
@@ -48,6 +49,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WallTexturedData = new WallTexturedData
                             {
+                                m_PrefixName = "OfficeBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.officeBuildingMaterialPalette.wall
                             };
@@ -66,6 +68,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WallTexturedData = new WallTexturedData
                             {
+                                m_PrefixName = "House",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.residenceMaterialPalette.wall
                             };
@@ -84,6 +87,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WallTexturedData = new WallTexturedData
                             {
+                                m_PrefixName = "ConvenienceStore",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.conveniMaterialPalette.wall
                             };
@@ -102,6 +106,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WallTexturedData = new WallTexturedData
                             {
+                                m_PrefixName = "CommercialBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.commercialFacilityMaterialPalette.wall
                             };
@@ -120,6 +125,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WallTexturedData = new WallTexturedData
                             {
+                                m_PrefixName = "Hotel",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.hotelMaterialPalette.wall
                             };
@@ -138,6 +144,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WallTexturedData = new WallTexturedData
                             {
+                                m_PrefixName = "Factory",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.factoryMaterialPalette.wall
                             };
@@ -160,6 +167,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                 case ComplexBuildingConfig.ComplexBuildingType.k_Apartment:
                                     m_WallTexturedData = new WallTexturedData
                                     {
+                                        m_PrefixName = "Apartment",
                                         m_UVScale = config.textureScale,
                                         m_WallMat = config.complexBuildingMaterialPalette.apartmentWall
                                     };
@@ -167,6 +175,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                 case ComplexBuildingConfig.ComplexBuildingType.k_OfficeBuilding:
                                     m_WallTexturedData = new WallTexturedData
                                     {
+                                        m_PrefixName = "OfficeBuilding",
                                         m_UVScale = config.textureScale,
                                         m_WallMat = config.complexBuildingMaterialPalette.officeBuildingWall
                                     };
@@ -174,8 +183,17 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                 case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
                                     m_WallTexturedData = new WallTexturedData
                                     {
+                                        m_PrefixName = "CommercialBuilding",
                                         m_UVScale = config.textureScale,
                                         m_WallMat = config.complexBuildingMaterialPalette.commercialBuildingWall
+                                    };
+                                    break;
+                                case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                    m_WallTexturedData = new WallTexturedData
+                                    {
+                                        m_PrefixName = "Hotel",
+                                        m_UVScale = config.textureScale,
+                                        m_WallMat = config.complexBuildingMaterialPalette.hotelWall
                                     };
                                     break;
                                 default:
@@ -207,6 +225,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                         m_VertexColorWallMat = config.complexBuildingVertexColorMaterialPalette.vertexWall
                                     };
                                     break;
+                                case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                    m_WallColorData = new WallColorData
+                                    {
+                                        m_WallColor = config.complexBuildingVertexColorPalette.hotelWallColor,
+                                        m_VertexColorWallMat = config.complexBuildingVertexColorMaterialPalette.vertexWall
+                                    };
+                                    break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
@@ -221,7 +246,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 if (UseTexture)
                 {
-                    m_WallTexturedData.m_WallName = m_WallName;
+                    m_WallTexturedData.m_VariationName = m_WallVariationName ?? "";
                     m_WallTexturedData.m_IsShadowWall = m_IsShadowWall;
                     m_WallTexturedData.m_MoveShadowWallDepth = m_MoveShadowWallDepth;
                     m_WallTexturedData.m_ShadowWallWidthOffset = m_ShadowWallWidthOffset;
@@ -249,7 +274,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             protected readonly WallTexturedData m_WallTexturedData;
             public int m_NumCenterRods;
 
-            public ProceduralWallWithFrame(BuildingGenerator.Config config, string wallName = k_WallTexturedDraftName, string windowpaneGlassName = k_WindowPaneGlassTexturedDraftName, string windowpaneFrameName = k_WindowPaneFrameTexturedDraftName)
+            public ProceduralWallWithFrame(BuildingGenerator.Config config)
             {
                 UseTexture = config.useTexture;
                 m_NumCenterRods = -1;
@@ -261,17 +286,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new ProceduralFacadeWindowElement.WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "CommercialBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.commercialFacilityMaterialPalette.wall,
-                                m_WindowPaneMat = config.commercialFacilityMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.commercialFacilityMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.commercialFacilityMaterialPalette.windowGlass,
                             };
 
                             m_WallTexturedData = new WallTexturedData
                             {
-                                m_WallName = wallName,
+                                m_PrefixName = "CommercialBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.commercialFacilityMaterialPalette.wall
                             };
@@ -299,17 +323,16 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new ProceduralFacadeWindowElement.WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "ComplexBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.complexBuildingMaterialPalette.commercialBuildingWall,
-                                m_WindowPaneMat = config.complexBuildingMaterialPalette.commercialBuildingWindowFrame,
+                                m_WindowFrameMat = config.complexBuildingMaterialPalette.commercialBuildingWindowFrame,
                                 m_WindowGlassMat = config.complexBuildingMaterialPalette.commercialBuildingWindowGlass,
                             };
 
                             m_WallTexturedData = new WallTexturedData
                             {
-                                m_WallName = wallName,
+                                m_PrefixName = "ComplexBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.complexBuildingMaterialPalette.commercialBuildingWall
                             };
@@ -389,12 +412,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 if (UseTexture)
                 {
                     MeshDraft windowpaneFrameTextured = ProceduralFacadeWindowElement.WindowpaneFrameTextured(min, max, k_WindowFrameRodWidth, k_WindowFrameRodHeight, k_WindowFrameRodDepth, m_NumCenterRods, WindowFrameRodType.k_Vertical, out Vector3 frameDepth, out Vector3 windowMin, out Vector3 windowWidth, out Vector3 windowHeight);
-                    windowpaneFrameTextured.Paint(m_WindowTexturedData.m_WindowPaneMat);
-                    windowpaneFrameTextured.name = m_WindowTexturedData.m_WindowpaneFrameName;
+                    windowpaneFrameTextured.Paint(m_WindowTexturedData.m_WindowFrameMat);
+                    windowpaneFrameTextured.name = m_WindowTexturedData.m_PrefixName + k_WindowFrameTexturedDraftName;
                     compoundMeshDraft.Add(windowpaneFrameTextured);
 
                     MeshDraft wallTextured = WallTextured(windowMin, windowWidth, windowHeight, m_WallTexturedData);
-                    wallTextured.name = m_WallTexturedData.m_WallName;
+                    wallTextured.name = m_WallTexturedData.m_PrefixName + k_WallTexturedDraftName;
                     compoundMeshDraft.Add(wallTextured);
                 }
                 else
@@ -430,8 +453,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public bool m_IsRectangleWindow;
             public bool m_IsChangeBothSidesWallColor;
             public float m_RectangleWindowOffsetScale = 0.2f;
+            public string m_GlassVariationName = null;
 
-            public ProceduralWindow(BuildingGenerator.Config config, string windowpaneGlassName = k_WindowPaneGlassTexturedDraftName, string windowpaneFrameName = k_WindowPaneFrameTexturedDraftName)
+            public ProceduralWindow(BuildingGenerator.Config config)
             {
                 UseTexture = config.useTexture;
                 m_WindowWidthOffset = k_WindowWidthOffset;
@@ -454,11 +478,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "Apartment",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.skyscraperCondominiumMaterialPalette.wall,
-                                m_WindowPaneMat = config.skyscraperCondominiumMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.skyscraperCondominiumMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.skyscraperCondominiumMaterialPalette.windowGlass,
                             };
                         }
@@ -479,11 +502,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "OfficeBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = null,
-                                m_WindowPaneMat = config.officeBuildingMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.officeBuildingMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.officeBuildingMaterialPalette.windowGlass,
                             };
                         }
@@ -504,11 +526,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "House",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.residenceMaterialPalette.wall,
-                                m_WindowPaneMat = config.residenceMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.residenceMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.residenceMaterialPalette.windowGlass,
                             };
                         }
@@ -529,11 +550,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "ConvenienceStore",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.conveniMaterialPalette.wall,
-                                m_WindowPaneMat = config.conveniMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.conveniMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.conveniMaterialPalette.windowGlass,
                             };
                         }
@@ -554,11 +574,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "CommercialBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.commercialFacilityMaterialPalette.wall,
-                                m_WindowPaneMat = config.commercialFacilityMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.commercialFacilityMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.commercialFacilityMaterialPalette.windowGlass,
                             };
                         }
@@ -579,12 +598,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "Hotel",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.hotelMaterialPalette.wall,
                                 m_WindowTopAndBottomWallMat = config.hotelMaterialPalette.windowTopAndBottomWall,
-                                m_WindowPaneMat = config.hotelMaterialPalette.windowPane,
+                                m_WindowFrameMat = config.hotelMaterialPalette.windowPane,
                                 m_WindowGlassMat = config.hotelMaterialPalette.windowGlass,
                             };
                         }
@@ -606,11 +624,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_WindowTexturedData = new WindowTexturedData
                             {
-                                m_WindowpaneGlassName = windowpaneGlassName,
-                                m_WindowpaneFrameName = windowpaneFrameName,
+                                m_PrefixName = "Factory",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.factoryMaterialPalette.wall,
-                                m_WindowPaneMat = config.factoryMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.factoryMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.factoryMaterialPalette.windowGlass,
                             };
                         }
@@ -635,34 +652,42 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                 case ComplexBuildingConfig.ComplexBuildingType.k_Apartment:
                                     m_WindowTexturedData = new WindowTexturedData
                                     {
-                                        m_WindowpaneGlassName = windowpaneGlassName,
-                                        m_WindowpaneFrameName = windowpaneFrameName,
+                                        m_PrefixName = "Apartment",
                                         m_UVScale = config.textureScale,
                                         m_WallMat = config.complexBuildingMaterialPalette.apartmentWall,
-                                        m_WindowPaneMat = config.complexBuildingMaterialPalette.apartmentWindowFrame,
+                                        m_WindowFrameMat = config.complexBuildingMaterialPalette.apartmentWindowFrame,
                                         m_WindowGlassMat = config.complexBuildingMaterialPalette.apartmentWindowGlass,
                                     };
                                     break;
                                 case ComplexBuildingConfig.ComplexBuildingType.k_OfficeBuilding:
                                     m_WindowTexturedData = new WindowTexturedData
                                     {
-                                        m_WindowpaneGlassName = windowpaneGlassName,
-                                        m_WindowpaneFrameName = windowpaneFrameName,
+                                        m_PrefixName = "OfficeBuilding",
                                         m_UVScale = config.textureScale,
                                         m_WallMat = config.complexBuildingMaterialPalette.officeBuildingWall,
-                                        m_WindowPaneMat = config.complexBuildingMaterialPalette.officeBuildingWindowFrame,
+                                        m_WindowFrameMat = config.complexBuildingMaterialPalette.officeBuildingWindowFrame,
                                         m_WindowGlassMat = config.complexBuildingMaterialPalette.officeBuildingWindowGlass,
                                     };
                                     break;
                                 case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
                                     m_WindowTexturedData = new WindowTexturedData
                                     {
-                                        m_WindowpaneGlassName = windowpaneGlassName,
-                                        m_WindowpaneFrameName = windowpaneFrameName,
+                                        m_PrefixName = "CommercialBuilding",
                                         m_UVScale = config.textureScale,
                                         m_WallMat = config.complexBuildingMaterialPalette.commercialBuildingWall,
-                                        m_WindowPaneMat = config.complexBuildingMaterialPalette.commercialBuildingWindowFrame,
+                                        m_WindowFrameMat = config.complexBuildingMaterialPalette.commercialBuildingWindowFrame,
                                         m_WindowGlassMat = config.complexBuildingMaterialPalette.commercialBuildingWindowGlass,
+                                    };
+                                    break;
+                                case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                    m_WindowTexturedData = new WindowTexturedData
+                                    {
+                                        m_PrefixName = "Hotel",
+                                        m_UVScale = config.textureScale,
+                                        m_WallMat = config.complexBuildingMaterialPalette.hotelWall,
+                                        m_WindowTopAndBottomWallMat = config.complexBuildingMaterialPalette.hotelWindowTopAndBottomWall,
+                                        m_WindowFrameMat = config.complexBuildingMaterialPalette.hotelWindowFrame,
+                                        m_WindowGlassMat = config.complexBuildingMaterialPalette.hotelWindowGlass,
                                     };
                                     break;
                                 default:
@@ -703,6 +728,17 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                                         m_VertexWindowPaneMat = config.complexBuildingVertexColorMaterialPalette.vertexWindow,
                                     };
                                     break;
+                                case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                    m_WindowColorData = new WindowColorData
+                                    {
+                                        m_WallColor = config.complexBuildingVertexColorPalette.hotelWallColor,
+                                        m_WindowTopAndBottomWallColor = config.complexBuildingVertexColorPalette.hotelWindowTopAndBottomWallColor,
+                                        m_VertexWallMat = config.complexBuildingVertexColorMaterialPalette.vertexWall,
+                                        m_WindowPaneColor = config.complexBuildingVertexColorPalette.hotelWindowFrameColor,
+                                        m_WindowPaneGlassColor = config.complexBuildingVertexColorPalette.hotelWindowFrameGlassColor,
+                                        m_VertexWindowPaneMat = config.complexBuildingVertexColorMaterialPalette.vertexWindow,
+                                    };
+                                    break;
                                 default:
                                     throw new ArgumentOutOfRangeException();
                             }
@@ -717,6 +753,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 if (UseTexture)
                 {
+                    m_WindowTexturedData.m_GlassVariationName = m_GlassVariationName ?? "";
                     m_WindowTexturedData.m_HasWindowsill = m_HasWindowsill;
                     m_WindowTexturedData.m_IsRectangleWindow = m_IsRectangleWindow;
                     m_WindowTexturedData.m_IsChangeBothSidesWallColor = m_IsChangeBothSidesWallColor;
@@ -741,23 +778,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public new float m_WindowFrameRodWidth;
             public new float m_WindowFrameRodHeight;
             public new int m_NumCenterRods;
+            public new string m_GlassVariationName = null;
 
-            public ProceduralFullWindow(BuildingGenerator.Config config, string windowpaneGlassName = k_WindowPaneGlassTexturedDraftName, string windowpaneFrameName = k_WindowPaneFrameTexturedDraftName) : base(config)
+            public ProceduralFullWindow(BuildingGenerator.Config config) : base(config)
             {
                 UseTexture = config.useTexture;
                 UVScale = config.textureScale;
                 m_WindowFrameRodWidth = k_WindowFrameRodWidth;
                 m_WindowFrameRodHeight = k_WindowFrameRodHeight;
                 m_NumCenterRods = 0;
-
-                if (UseTexture)
-                {
-                    m_WindowTexturedData.m_WindowpaneGlassName = windowpaneGlassName;
-                    m_WindowTexturedData.m_WindowpaneFrameName = windowpaneFrameName;
-                }
             }
 
-            public ProceduralFullWindow(BuildingGenerator.Config config, Material spandrelGlassMat, string windowpaneGlassName = k_WindowPaneGlassTexturedDraftName, string windowpaneFrameName = k_WindowPaneFrameTexturedDraftName) : base(config)
+            public ProceduralFullWindow(BuildingGenerator.Config config, Material spandrelGlassMat) : base(config)
             {
                 UseTexture = config.useTexture;
                 UVScale = config.textureScale;
@@ -767,8 +799,6 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
                 if (UseTexture)
                 {
-                    m_WindowTexturedData.m_WindowpaneGlassName = windowpaneGlassName;
-                    m_WindowTexturedData.m_WindowpaneFrameName = windowpaneFrameName;
                     m_WindowTexturedData.m_WindowGlassMat = spandrelGlassMat;
                 }
                 else
@@ -813,6 +843,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 Vector3 heightVector = Vector3.up * (height * heightScale);
                 Vector3 min = parentLayoutOrigin + origin;
                 Vector3 frameMax = min + widthVector + heightVector;
+
+                if (UseTexture)
+                {
+                    m_WindowTexturedData.m_GlassVariationName = m_GlassVariationName ?? "";
+                }
+
                 return UseTexture
                     ? new CompoundMeshDraft { WindowPaneTextured(min, frameMax, m_WindowTexturedData, m_WindowFrameRodWidth, m_WindowFrameRodHeight * heightScale, numCenterRod:m_NumCenterRods, windowFrameRodType:m_WindowFrameRodType) }
                     : new CompoundMeshDraft { WindowPane(min, frameMax, m_WindowColorData, m_WindowFrameRodWidth, m_WindowFrameRodHeight * heightScale, numCenterRod:m_NumCenterRods, windowFrameRodType:m_WindowFrameRodType) };
@@ -848,10 +884,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
                             m_WindowTexturedData = new ProceduralFacadeWindowElement.WindowTexturedData
                             {
-                                m_WindowpaneGlassName = k_WindowPaneGlassTexturedDraftName,
+                                m_PrefixName = "Apartment",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.skyscraperCondominiumMaterialPalette.wall,
-                                m_WindowPaneMat = config.skyscraperCondominiumMaterialPalette.windowFrame,
+                                m_WindowFrameMat = config.skyscraperCondominiumMaterialPalette.windowFrame,
                                 m_WindowGlassMat = config.skyscraperCondominiumMaterialPalette.windowGlass,
                             };
                         }
@@ -890,10 +926,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
                             m_WindowTexturedData = new ProceduralFacadeWindowElement.WindowTexturedData
                             {
-                                m_WindowpaneGlassName = k_WindowPaneGlassTexturedDraftName,
+                                m_PrefixName = "Hotel",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.hotelMaterialPalette.wall,
-                                m_WindowPaneMat = config.hotelMaterialPalette.windowPane,
+                                m_WindowFrameMat = config.hotelMaterialPalette.windowPane,
                                 m_WindowGlassMat = config.hotelMaterialPalette.windowGlass,
                             };
                         }
@@ -932,10 +968,10 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
                             m_WindowTexturedData = new ProceduralFacadeWindowElement.WindowTexturedData
                             {
-                                m_WindowpaneGlassName = k_WindowPaneGlassTexturedDraftName,
+                                m_PrefixName = "ComplexBuilding",
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.complexBuildingMaterialPalette.apartmentWall,
-                                m_WindowPaneMat = config.complexBuildingMaterialPalette.apartmentWindowFrame,
+                                m_WindowFrameMat = config.complexBuildingMaterialPalette.apartmentWindowFrame,
                                 m_WindowGlassMat = config.complexBuildingMaterialPalette.apartmentWindowGlass,
                             };
                         }
@@ -1008,6 +1044,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_EntranceTexturedData = new EntranceTexturedData
                             {
+                                m_PrefixName = "House",
                                 m_HasRoof = config.residenceParams.hasEntranceRoof,
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.residenceMaterialPalette.wall,
@@ -1034,6 +1071,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_EntranceTexturedData = new EntranceTexturedData
                             {
+                                m_PrefixName = "Factory",
                                 m_HasRoof = config.factoryParams.hasEntranceRoof,
                                 m_UVScale = config.textureScale,
                                 m_WallMat = config.factoryMaterialPalette.wall,
@@ -1092,7 +1130,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 Material socleMat = null
                 ) : base(config)
             {
-                m_WallName = socleName;
+                m_WallVariationName = socleName;
 
                 switch (config.buildingType)
                 {
@@ -1147,7 +1185,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             protected readonly DepressionWallColorData m_DepressionWallColorData;
             protected readonly DepressionWallTexturedData m_DepressionWallTexturedData;
             public float m_DepressionWallDepth = 0.3f;
-            public string m_DepressionWallName = null;
+            public string m_DepressionWallVariationName = null;
             public Material m_DepressionWallMat = null;
             public Color? m_DepressionWallColor = null;
 
@@ -1160,7 +1198,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_DepressionWallTexturedData = new DepressionWallTexturedData
                             {
-                                m_WallName = k_DepressionWallTexturedDraftName,
+                                m_PrefixName = "CommercialBuilding",
                                 m_UVScale = config.textureScale,
                                 m_DepressionWallMat = config.commercialFacilityMaterialPalette.depressionWall,
                                 m_PositionType = positionType
@@ -1181,7 +1219,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         {
                             m_DepressionWallTexturedData = new DepressionWallTexturedData
                             {
-                                m_WallName = k_DepressionWallTexturedDraftName,
+                                m_PrefixName = "ComplexBuilding",
                                 m_UVScale = config.textureScale,
                                 m_DepressionWallMat = config.complexBuildingMaterialPalette.commercialBuildingDepressionWall,
                                 m_PositionType = positionType
@@ -1208,7 +1246,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 Vector3 heightVector = Vector3.up * height;
                 if (UseTexture)
                 {
-                    m_DepressionWallTexturedData.m_WallName = m_DepressionWallName ?? m_DepressionWallTexturedData.m_WallName;
+                    m_DepressionWallTexturedData.m_VariationName = m_DepressionWallVariationName ?? "";
                     m_DepressionWallTexturedData.m_DepressionWallDepth = m_DepressionWallDepth;
                     m_DepressionWallTexturedData.m_DepressionWallMat = m_DepressionWallMat != null ? m_DepressionWallMat : m_DepressionWallTexturedData.m_DepressionWallMat;
                 }
