@@ -97,7 +97,7 @@ MeshRenderer:
   m_Materials:
   - {fileID: 2100000, guid: 0229563171a26784b88dccc6a63944bc, type: 2}
   - {fileID: 2100000, guid: 29ca399680ab83e479587b28a0eb029b, type: 2}
-  - {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
+  - {fileID: 2100000, guid: e3bcb5d5f72d8ed4b9acad950cdae86a, type: 2}
   - {fileID: 2100000, guid: 8ef6bca9fa420d249a3901b43287a6be, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -447,10 +447,10 @@ MonoBehaviour:
     textureOffsetX: 0.21
     textureOffsetY: 0
   hotelVertexColorPalette:
-    wallColor: {r: 1, g: 1, b: 1, a: 1}
+    wallColor: {r: 0.49411765, g: 0.49411765, b: 0.49411765, a: 1}
     windowTopAndBottomWallColor: {r: 1, g: 1, b: 1, a: 1}
     windowPaneColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
-    windowPaneGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    windowPaneGlassColor: {r: 0.59607846, g: 0.9254902, b: 1, a: 1}
     roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideFrontColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
@@ -462,7 +462,7 @@ MonoBehaviour:
     wall: {fileID: 2100000, guid: 0229563171a26784b88dccc6a63944bc, type: 2}
     windowTopAndBottomWall: {fileID: 2100000, guid: 8ef6bca9fa420d249a3901b43287a6be, type: 2}
     windowPane: {fileID: 2100000, guid: 29ca399680ab83e479587b28a0eb029b, type: 2}
-    windowGlass: {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
+    windowGlass: {fileID: 2100000, guid: e3bcb5d5f72d8ed4b9acad950cdae86a, type: 2}
     roof: {fileID: 2100000, guid: 10c56981fde661d48b6f2178b599964f, type: 2}
     roofSide: {fileID: 2100000, guid: a43c9d858f7938d4e922fff303606ffa, type: 2}
     roofSideFront: {fileID: 2100000, guid: bff8aa06eb10dfa44bb17e18ce2b0e67, type: 2}
@@ -507,6 +507,13 @@ MonoBehaviour:
     hasBalconyBack: 0
   complexOfficeBuildingParams:
     spandrelHeight: 1.25
+  complexHotelParams:
+    hasWindowLeft: 0
+    hasWindowRight: 0
+    roofThickness: 0
+  complexHotelShaderParams:
+    textureOffsetX: 0
+    textureOffsetY: 0
   complexBuildingVertexColorPalette:
     boundaryWallColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 1}
     apartmentWallColor: {r: 1, g: 1, b: 1, a: 1}
@@ -526,6 +533,13 @@ MonoBehaviour:
     commercialBuildingWindowGlassColor: {r: 1, g: 1, b: 1, a: 1}
     commercialBuildingRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     commercialBuildingRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    hotelWallColor: {r: 1, g: 1, b: 1, a: 1}
+    hotelWindowTopAndBottomWallColor: {r: 1, g: 1, b: 1, a: 1}
+    hotelWindowFrameColor: {r: 0, g: 0, b: 0, a: 1}
+    hotelWindowFrameGlassColor: {r: 1, g: 1, b: 1, a: 1}
+    hotelRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    hotelRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    hotelRoofSideFrontColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
   complexBuildingVertexColorMaterialPalette:
     vertexWall: {fileID: 0}
     vertexWindow: {fileID: 0}
@@ -549,6 +563,13 @@ MonoBehaviour:
     commercialBuildingWindowGlass: {fileID: 0}
     commercialBuildingRoof: {fileID: 0}
     commercialBuildingRoofSide: {fileID: 0}
+    hotelWall: {fileID: 0}
+    hotelWindowTopAndBottomWall: {fileID: 0}
+    hotelWindowFrame: {fileID: 0}
+    hotelWindowGlass: {fileID: 0}
+    hotelRoof: {fileID: 0}
+    hotelRoofSide: {fileID: 0}
+    hotelRoofSideFront: {fileID: 0}
   facadePlanner: {fileID: 11400000, guid: deeda03b8fde88346b1a582a554cbe21, type: 2}
   facadeConstructor: {fileID: 11400000, guid: 721d020d3fea92147a87e71ee42a460e, type: 2}
   roofPlanner: {fileID: 11400000, guid: a30ffacec962bb748a00c8e8aa15c235, type: 2}
