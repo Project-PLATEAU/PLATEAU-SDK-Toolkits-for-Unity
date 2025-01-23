@@ -62,14 +62,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
-  - {fileID: 2100000, guid: 11e933f03e1b63a44a342fe56d4a5bdd, type: 2}
-  - {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
-  - {fileID: 2100000, guid: 5916bc6b759f935498701cff064c9fb0, type: 2}
-  - {fileID: 2100000, guid: 0a17ebc98d4790d4aa819d3074a96155, type: 2}
-  - {fileID: 2100000, guid: c7b9a0d7e4127bc44b60ce4df49972af, type: 2}
-  - {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
-  - {fileID: 2100000, guid: 0d5e889ce236fa34a9c0ef8fbed83319, type: 2}
+  - {fileID: 2100000, guid: e4bb7e8b9e726f343a3bb3f9cb5ace31, type: 2}
+  - {fileID: 2100000, guid: 67634c5c08334c44ea84f8c3eadea811, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -183,7 +177,7 @@ MonoBehaviour:
   buildingHeight: 40
   buildingWidth: 25
   buildingDepth: 20
-  useTexture: 1
+  useTexture: 0
   skyscraperCondominiumParams:
     convexBalcony: 0
     hasBalconyGlass: 1
@@ -500,8 +494,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3e0b2a4ed7c487646a67ecf314e99264, type: 2}
-  - {fileID: 2100000, guid: 8832938e00f64f64085fe9fd263a3ce2, type: 2}
+  - {fileID: 2100000, guid: 5647b566a97884c42b0b5bc3cb72c4b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
