@@ -202,7 +202,7 @@ MonoBehaviour:
     wallColor: {r: 0.4943396, g: 0.4943396, b: 0.4943396, a: 1}
     windowTopAndBottomWallColor: {r: 1, g: 1, b: 1, a: 1}
     windowPaneColor: {r: 0, g: 0, b: 0, a: 1}
-    windowPaneGlassColor: {r: 0.2471698, g: 0.7339423, b: 1, a: 1}
+    windowPaneGlassColor: {r: 0.59607846, g: 0.9254902, b: 1, a: 1}
     roofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
     roofSideFrontColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
