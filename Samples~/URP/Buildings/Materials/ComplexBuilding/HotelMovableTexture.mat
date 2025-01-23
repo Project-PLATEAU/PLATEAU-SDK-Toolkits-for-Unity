@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MovableTexture
+  m_Name: HotelMovableTexture
   m_Shader: {fileID: -6465566751694194690, guid: 186212456c157624eb49e7f94ddd4376, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
