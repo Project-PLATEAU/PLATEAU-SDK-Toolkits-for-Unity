@@ -68,7 +68,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   groundPlacementDirection: 0
   buildingType: 5
-  buildingHeight: 35
+  buildingHeight: 30
   buildingWidth: 25
   buildingDepth: 20
   useTexture: 1
@@ -432,8 +432,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 25.000002, y: 35, z: 20.000004}
-  m_Center: {x: -0.0000009536743, y: 17.5, z: 0}
+  m_Size: {x: 25.000002, y: 30, z: 20.000004}
+  m_Center: {x: -0.0000009536743, y: 15, z: 0}
 --- !u!1 &3546171931730863251
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +541,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 25, y: 3, z: 20}
-  m_Center: {x: 0, y: 36.5, z: 0}
+  m_Center: {x: 0, y: 31.5, z: 0}
 --- !u!114 &7798135462931419731
 MonoBehaviour:
   m_ObjectHideFlags: 0
