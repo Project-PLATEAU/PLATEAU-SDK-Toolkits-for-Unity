@@ -177,7 +177,7 @@ MonoBehaviour:
   buildingHeight: 40
   buildingWidth: 25
   buildingDepth: 20
-  useTexture: 0
+  useTexture: 1
   skyscraperCondominiumParams:
     convexBalcony: 0
     hasBalconyGlass: 1
