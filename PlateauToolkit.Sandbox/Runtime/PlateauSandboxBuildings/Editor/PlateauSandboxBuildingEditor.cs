@@ -606,7 +606,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     EditorGUILayout.LabelField("ホテル設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_HotelParams, new Dictionary<string, Tuple<string, float, float>>
                     {
-                        {"roofThickness", new Tuple<string, float, float>("屋根の暑さ", 0f, 5f)}
+                        {"roofThickness", new Tuple<string, float, float>("屋根の厚さ", 0f, 5f)}
                     });
                 case (int)BuildingType.k_Factory:
                     EditorGUILayout.LabelField("工場設定", EditorStyles.boldLabel);
@@ -651,7 +651,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                         EditorGUILayout.LabelField("ホテル設定", EditorStyles.boldLabel);
                         changedComplexHotelBuildingParam = DrawDynamicPropertyOnly(m_ComplexHotelParams, new Dictionary<string, Tuple<string, float, float>>
                         {
-                            {"roofThickness", new Tuple<string, float, float>("屋根の暑さ", 0f, 5f)}
+                            {"roofThickness", new Tuple<string, float, float>("屋根の厚さ", 0f, 5f)}
                         }, hideParam:higherFloorBuildingTypeProperty.enumValueIndex != (int)ComplexBuildingConfig.ComplexBuildingType.k_Hotel);
                     }
 
