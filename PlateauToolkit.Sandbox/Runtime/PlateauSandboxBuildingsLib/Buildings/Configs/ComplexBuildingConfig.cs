@@ -2,6 +2,7 @@ using PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Editor
 using ProceduralToolkit;
 using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Configs
 {
@@ -15,6 +16,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             k_OfficeBuilding,
             [EnumElement("商業ビル")]
             k_CommercialBuilding,
+            [EnumElement("ホテル")]
+            k_Hotel,
         }
 
         public class BuildingPlannerParams
@@ -56,6 +59,26 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
         }
 
         [Serializable]
+        public class HotelParams
+        {
+            [Label("左側に窓を付ける")]
+            public bool hasWindowLeft;
+            [Label("右側に窓を付ける")]
+            public bool hasWindowRight;
+            [Label("屋根の厚さ")]
+            public float roofThickness;
+        }
+
+        [Serializable]
+        public class HotelShaderParams
+        {
+            [Label("横のオフセット")]
+            public float textureOffsetX;
+            [Label("縦のオフセット")]
+            public float textureOffsetY;
+        }
+
+        [Serializable]
         public class VertexColorPalette
         {
             public Color boundaryWallColor = ColorE.gray;
@@ -79,8 +102,15 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             public Color commercialBuildingWindowGlassColor = ColorE.white;
             public Color commercialBuildingRoofColor = (ColorE.gray/4).WithA(1);
             public Color commercialBuildingRoofSideColor = (ColorE.gray/4).WithA(1);
-        }
 
+            public Color hotelWallColor = ColorE.white;
+            public Color hotelWindowTopAndBottomWallColor = ColorE.white;
+            public Color hotelWindowFrameColor = ColorE.black;
+            public Color hotelWindowFrameGlassColor = ColorE.white;
+            public Color hotelRoofColor = (ColorE.gray/4).WithA(1);
+            public Color hotelRoofSideColor = (ColorE.gray/4).WithA(1);
+            public Color hotelRoofSideFrontColor = (ColorE.gray/4).WithA(1);
+        }
 
         [Serializable]
         public class VertexColorMaterialPalette
@@ -114,6 +144,14 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             public Material commercialBuildingWindowGlass;
             public Material commercialBuildingRoof;
             public Material commercialBuildingRoofSide;
+
+            public Material hotelWall;
+            public Material hotelWindowTopAndBottomWall;
+            public Material hotelWindowFrame;
+            public Material hotelWindowGlass;
+            public Material hotelRoof;
+            public Material hotelRoofSide;
+            public Material hotelRoofSideFront;
         }
     }
 }

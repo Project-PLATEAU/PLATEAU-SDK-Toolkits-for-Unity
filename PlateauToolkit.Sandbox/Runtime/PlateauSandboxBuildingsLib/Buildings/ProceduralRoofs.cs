@@ -61,7 +61,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                         m_RoofMat = m_Config.hotelMaterialPalette.roof;
                         m_RoofSideMat = m_Config.hotelMaterialPalette.roofSide;
                         m_RoofSideFrontMat = m_Config.hotelMaterialPalette.roofSideFront;
-                        m_UVScale = new Vector2(0.1f, 0.5f);
+                        m_UVScale = new Vector2(0.1f, 0.1f);
                         break;
                     case BuildingType.k_Factory:
                         m_RoofMat = m_Config.factoryMaterialPalette.roof;
@@ -85,6 +85,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                             case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
                                 m_RoofMat = m_Config.complexBuildingMaterialPalette.commercialBuildingRoof;
                                 m_RoofSideMat = m_Config.complexBuildingMaterialPalette.commercialBuildingRoofSide;
+                                m_UVScale = new Vector2(0.1f, 0.1f);
+                                break;
+                            case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                m_RoofMat = m_Config.complexBuildingMaterialPalette.hotelRoof;
+                                m_RoofSideMat = m_Config.complexBuildingMaterialPalette.hotelRoofSide;
+                                m_RoofSideFrontMat = m_Config.complexBuildingMaterialPalette.hotelRoofSideFront;
                                 m_UVScale = new Vector2(0.1f, 0.1f);
                                 break;
                             default:
@@ -152,6 +158,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
                             case ComplexBuildingConfig.ComplexBuildingType.k_CommercialBuilding:
                                 m_RoofColor = m_Config.complexBuildingVertexColorPalette.commercialBuildingRoofColor;
                                 m_RoofSideColor = m_Config.complexBuildingVertexColorPalette.commercialBuildingRoofSideColor;
+                                m_VertexRoofMat = m_Config.complexBuildingVertexColorMaterialPalette.vertexRoof;
+                                break;
+                            case ComplexBuildingConfig.ComplexBuildingType.k_Hotel:
+                                m_RoofColor = m_Config.complexBuildingVertexColorPalette.hotelRoofColor;
+                                m_RoofSideColor = m_Config.complexBuildingVertexColorPalette.hotelRoofSideColor;
+                                m_RoofSideFrontColor = m_Config.complexBuildingVertexColorPalette.hotelRoofSideFrontColor;
                                 m_VertexRoofMat = m_Config.complexBuildingVertexColorMaterialPalette.vertexRoof;
                                 break;
                             default:
@@ -333,6 +345,13 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             {
                 case BuildingType.k_Hotel:
                     return ConstructSeparatedFrontRoof();
+                case BuildingType.k_ComplexBuilding:
+                    ComplexBuildingConfig.ComplexBuildingType buildingType = m_Config.m_ComplexBuildingPlannerParams.m_AddedBoundaryWall ? m_Config.complexBuildingParams.higherFloorBuildingType : m_Config.complexBuildingParams.lowerFloorBuildingType;
+                    if (buildingType == ComplexBuildingConfig.ComplexBuildingType.k_Hotel)
+                    {
+                        return ConstructSeparatedFrontRoof();
+                    }
+                    break;
             }
 
             var compoundMeshDraft = new CompoundMeshDraft();

@@ -127,11 +127,11 @@ Material:
     - _Surface: 0
     - _TextAspect: 0
     - _TextOffset: 0
-    - _TextOffsetX: 0.03
+    - _TextOffsetX: 0.21
     - _TextOffsetY: 0
-    - _TextureAspect: 1
-    - _TextureCenterOffsetX: 0.21250005
-    - _TextureNormalize: 0.70175433
+    - _TextureAspect: 1.0416666
+    - _TextureCenterOffsetX: 0.020833313
+    - _TextureNormalize: 0.96000004
     - _WorkflowMode: 1
     - _ZTest: 4
     - _ZWrite: 1

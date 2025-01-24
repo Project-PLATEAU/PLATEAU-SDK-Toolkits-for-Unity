@@ -25,7 +25,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public float m_ShadowWallWidthOffset;
             public float m_ShadowWallHeightOffset;
 
-            public string m_WallName = k_WallTexturedDraftName;
+            public string m_PrefixName;
+            public string m_VariationName;
             public Vector2 m_UVScale;
             public Material m_WallMat;
         }
@@ -78,7 +79,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected static MeshDraft WallTextured(Vector3 origin, float width, float height, WallTexturedData wallTexturedData)
         {
-            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_WallName}
+            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_PrefixName + k_WallTexturedDraftName + wallTexturedData.m_VariationName}
                 .AddQuad(origin, Vector3.right * width, Vector3.up * height, wallTexturedData.m_UVScale, calculateNormal: true, generateUV: true)
                 .Paint(wallTexturedData.m_WallMat);
 
@@ -94,7 +95,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected static MeshDraft WallTextured(Vector3 origin, Vector3 width, Vector3 height, WallTexturedData wallTexturedData)
         {
-            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_WallName}
+            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_PrefixName + k_WallTexturedDraftName + wallTexturedData.m_VariationName}
                 .AddQuad(origin, width, height, wallTexturedData.m_UVScale, calculateNormal:true, generateUV:true)
                 .Paint(wallTexturedData.m_WallMat);
 
@@ -189,7 +190,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .Move(origin + depressionMoveWidth + height / 2 + depressionThickness / 2)
                 .Paint(wallTexturedData.m_DepressionWallMat);
             meshDraft.Add(depressionWallBack);
-            meshDraft.name = wallTexturedData.m_WallName;
+            meshDraft.name = wallTexturedData.m_PrefixName + k_DepressionWallTexturedDraftName + wallTexturedData.m_VariationName;
 
             return meshDraft;
         }

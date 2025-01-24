@@ -62,15 +62,8 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 5916bc6b759f935498701cff064c9fb0, type: 2}
-  - {fileID: 2100000, guid: 5331d354bb3fe604eb69ca321811b9c6, type: 2}
-  - {fileID: 2100000, guid: 68471c82cf2ce8c4988c463ccaefaba4, type: 2}
-  - {fileID: 2100000, guid: d7283811dbc1a4c48a9dcd91f73b24de, type: 2}
-  - {fileID: 2100000, guid: 11e933f03e1b63a44a342fe56d4a5bdd, type: 2}
-  - {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
-  - {fileID: 2100000, guid: e0af66f9bac78fc4bb3c746ba5e99441, type: 2}
-  - {fileID: 2100000, guid: 11e933f03e1b63a44a342fe56d4a5bdd, type: 2}
-  - {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
+  - {fileID: 2100000, guid: e4bb7e8b9e726f343a3bb3f9cb5ace31, type: 2}
+  - {fileID: 2100000, guid: 67634c5c08334c44ea84f8c3eadea811, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,7 +104,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 20.000002, y: 40, z: 20.000004}
+  m_Size: {x: 25.000002, y: 40, z: 20.000004}
   m_Center: {x: -0.0000009536743, y: 20, z: 0}
 --- !u!1 &7607605379447210006
 GameObject:
@@ -182,7 +175,7 @@ MonoBehaviour:
   groundPlacementDirection: 0
   buildingType: 7
   buildingHeight: 40
-  buildingWidth: 20
+  buildingWidth: 25
   buildingDepth: 20
   useTexture: 1
   skyscraperCondominiumParams:
@@ -361,7 +354,7 @@ MonoBehaviour:
     roofSide: {fileID: 0}
   complexBuildingParams:
     higherFloorBuildingType: 0
-    lowerFloorBuildingType: 2
+    lowerFloorBuildingType: 1
     buildingBoundaryHeight: 20
   complexSkyscraperCondominiumBuildingParams:
     convexBalcony: 0
@@ -372,6 +365,13 @@ MonoBehaviour:
     hasBalconyBack: 0
   complexOfficeBuildingParams:
     spandrelHeight: 0.5
+  complexHotelParams:
+    hasWindowLeft: 0
+    hasWindowRight: 0
+    roofThickness: 3
+  complexHotelShaderParams:
+    textureOffsetX: 0.21
+    textureOffsetY: 0
   complexBuildingVertexColorPalette:
     boundaryWallColor: {r: 0.18490559, g: 0.116568245, b: 0.073613346, a: 1}
     apartmentWallColor: {r: 0.7283019, g: 0.62130445, b: 0.5153079, a: 1}
@@ -391,6 +391,13 @@ MonoBehaviour:
     commercialBuildingWindowGlassColor: {r: 0.59607846, g: 0.9254902, b: 1, a: 1}
     commercialBuildingRoofColor: {r: 1, g: 1, b: 1, a: 1}
     commercialBuildingRoofSideColor: {r: 1, g: 1, b: 1, a: 1}
+    hotelWallColor: {r: 0.49411765, g: 0.49411765, b: 0.49411765, a: 1}
+    hotelWindowTopAndBottomWallColor: {r: 1, g: 1, b: 1, a: 1}
+    hotelWindowFrameColor: {r: 0, g: 0, b: 0, a: 1}
+    hotelWindowFrameGlassColor: {r: 0.59607846, g: 0.9254902, b: 1, a: 1}
+    hotelRoofColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    hotelRoofSideColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
+    hotelRoofSideFrontColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 1}
   complexBuildingVertexColorMaterialPalette:
     vertexWall: {fileID: 2100000, guid: e4bb7e8b9e726f343a3bb3f9cb5ace31, type: 2}
     vertexWindow: {fileID: 2100000, guid: 67634c5c08334c44ea84f8c3eadea811, type: 2}
@@ -414,6 +421,13 @@ MonoBehaviour:
     commercialBuildingWindowGlass: {fileID: 2100000, guid: 5459583a0f83fe541ad8d58e4aec085d, type: 2}
     commercialBuildingRoof: {fileID: 2100000, guid: a8137f9fea5d28341bdb4a84e080dd6e, type: 2}
     commercialBuildingRoofSide: {fileID: 2100000, guid: c6709e3bfa6fd7941b734c63660eacae, type: 2}
+    hotelWall: {fileID: 2100000, guid: aed0322fab04ad34ea5ce510bb643e88, type: 2}
+    hotelWindowTopAndBottomWall: {fileID: 2100000, guid: 317682e46b225324ebaa595a0088b6e3, type: 2}
+    hotelWindowFrame: {fileID: 2100000, guid: fb8bfec6851611b4dbb8ee9221c99846, type: 2}
+    hotelWindowGlass: {fileID: 2100000, guid: 3591db158541c234b83905ebdb9c8494, type: 2}
+    hotelRoof: {fileID: 2100000, guid: 12c037904161830459b57b12fb6724e8, type: 2}
+    hotelRoofSide: {fileID: 2100000, guid: 74c40e386e45dcd43b824e3dcad1f8a0, type: 2}
+    hotelRoofSideFront: {fileID: 2100000, guid: 5710d04b94cbb4f459017518786a0335, type: 2}
   facadePlanner: {fileID: 11400000, guid: 6bc87d3414415134d8b305435a8f81fb, type: 2}
   facadeConstructor: {fileID: 11400000, guid: 721d020d3fea92147a87e71ee42a460e, type: 2}
   roofPlanner: {fileID: 11400000, guid: b472869bf0628a546a6e014d30b3d0d8, type: 2}
@@ -480,8 +494,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3e0b2a4ed7c487646a67ecf314e99264, type: 2}
-  - {fileID: 2100000, guid: 8832938e00f64f64085fe9fd263a3ce2, type: 2}
+  - {fileID: 2100000, guid: 5647b566a97884c42b0b5bc3cb72c4b6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -522,7 +535,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 20, y: 0.049999237, z: 20}
+  m_Size: {x: 25, y: 0.049999237, z: 20}
   m_Center: {x: 0, y: 40.025, z: 0}
 --- !u!1 &8837801326409029941
 GameObject:

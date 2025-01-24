@@ -60,6 +60,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
         private SerializedProperty m_ComplexBuildingParams;
         private SerializedProperty m_ComplexSkyscraperCondominiumBuildingParams;
         private SerializedProperty m_ComplexOfficeBuildingParams;
+        private SerializedProperty m_ComplexHotelParams;
+        private SerializedProperty m_ComplexHotelShaderParams;
         private SerializedProperty m_ComplexBuildingVertexColorPalette;
         private SerializedProperty m_ComplexBuildingVertexColorMaterialPalette;
         private SerializedProperty m_ComplexBuildingMaterialPalette;
@@ -120,6 +122,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             m_ComplexBuildingParams = serializedObject.FindProperty("complexBuildingParams");
             m_ComplexSkyscraperCondominiumBuildingParams = serializedObject.FindProperty("complexSkyscraperCondominiumBuildingParams");
             m_ComplexOfficeBuildingParams = serializedObject.FindProperty("complexOfficeBuildingParams");
+            m_ComplexHotelParams = serializedObject.FindProperty("complexHotelParams");
+            m_ComplexHotelShaderParams = serializedObject.FindProperty("complexHotelShaderParams");
             m_ComplexBuildingVertexColorPalette = serializedObject.FindProperty("complexBuildingVertexColorPalette");
             m_ComplexBuildingVertexColorMaterialPalette = serializedObject.FindProperty("complexBuildingVertexColorMaterialPalette");
             m_ComplexBuildingMaterialPalette = serializedObject.FindProperty("complexBuildingMaterialPalette");
@@ -181,7 +185,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
             return false;
         }
 
-        private bool DrawDynamicPropertyOnly<T>(SerializedProperty inProperty, Dictionary<string, Tuple<string, T, T>> inMinMax = null, bool isUpdateShaderParams = false) where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
+        private bool DrawDynamicPropertyOnly<T>(SerializedProperty inProperty, Dictionary<string, Tuple<string, T, T>> inMinMax = null, bool isUpdateShaderParams = false, bool hideParam = false) where T : struct, IComparable, IFormattable, IConvertible, IComparable<T>, IEquatable<T>
         {
             int depth = inProperty.depth;
             SerializedProperty iterator = inProperty.Copy();
@@ -196,6 +200,11 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 
                 if (inMinMax != null && inMinMax.TryGetValue(iterator.name, out Tuple<string, T, T> minMaxTuple))
                 {
+                    if (hideParam)
+                    {
+                        continue;
+                    }
+
                     switch (iterator.type)
                     {
                         case "int":
@@ -222,8 +231,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     else
                     {
                         Undo.RecordObject(m_Generator, "Change property");
-                        serializedObject.ApplyModifiedProperties();
                     }
+                    serializedObject.ApplyModifiedProperties();
                     return true;
                 }
             }
@@ -298,9 +307,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                             {
                                 {"textureOffsetX", new Tuple<string, float, float>("横のオフセット値", -1f, 1f)},
                                 {"textureOffsetY", new Tuple<string, float, float>("縦のオフセット値", -1f, 1f)},
-                            }))
+                            }, isUpdateShaderParams:true))
                         {
-                            SerializedProperty  roofSideFrontSerializedProperty = m_HotelMaterialPalette.FindPropertyRelative("roofSideFront");
+                            SerializedProperty roofSideFrontSerializedProperty = m_HotelMaterialPalette.FindPropertyRelative("roofSideFront");
                             if (roofSideFrontSerializedProperty != null)
                             {
                                 Object roofSideFrontObjRef = roofSideFrontSerializedProperty.objectReferenceValue;
@@ -315,6 +324,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                                     }
                                 }
                             }
+                            changedValue = true;
                         }
                         break;
                     case (int)BuildingType.k_Factory:
@@ -327,6 +337,37 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                         if (DrawDynamicPropertyOnly(m_ComplexBuildingMaterialPalette))
                         {
                             changedValue = true;
+                        }
+
+                        SerializedProperty higherFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("higherFloorBuildingType");
+                        bool hasHotelRoof = higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Hotel;
+                        if (hasHotelRoof)
+                        {
+                            EditorGUILayout.Space(10);
+                            EditorGUILayout.LabelField("テクスチャ設定", EditorStyles.boldLabel);
+                            if (DrawDynamicPropertyOnly(m_ComplexHotelShaderParams, new Dictionary<string, Tuple<string, float, float>>
+                                {
+                                    {"textureOffsetX", new Tuple<string, float, float>("横のオフセット値", -1f, 1f)},
+                                    {"textureOffsetY", new Tuple<string, float, float>("縦のオフセット値", -1f, 1f)}
+                                }, isUpdateShaderParams:true))
+                            {
+                                SerializedProperty roofSideFrontSerializedProperty = m_ComplexBuildingMaterialPalette.FindPropertyRelative("hotelRoofSideFront");
+                                if (roofSideFrontSerializedProperty != null)
+                                {
+                                    Object roofSideFrontObjRef = roofSideFrontSerializedProperty.objectReferenceValue;
+                                    if (roofSideFrontObjRef != null)
+                                    {
+                                        var material = (Material)roofSideFrontObjRef;
+                                        if (material.shader.name.Contains("Movable Texture"))
+                                        {
+                                            Undo.RecordObject(material, "Change Shader Params");
+                                            material.SetFloat("_TextOffsetX", m_ComplexHotelShaderParams.FindPropertyRelative("textureOffsetX").floatValue);
+                                            material.SetFloat("_TextOffsetY", m_ComplexHotelShaderParams.FindPropertyRelative("textureOffsetY").floatValue);
+                                        }
+                                    }
+                                }
+                                changedValue = true;
+                            }
                         }
                         break;
                 }
@@ -434,7 +475,34 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
 
         private void UpdateShaderParam()
         {
-            SerializedProperty  roofSideFrontSerializedProperty = m_HotelMaterialPalette.FindPropertyRelative("roofSideFront");
+            if (!m_Generator.useTexture)
+            {
+                return;
+            }
+
+            SerializedProperty roofSideFrontSerializedProperty;
+            switch (m_BuildingType.enumValueIndex)
+            {
+                case (int)BuildingType.k_Hotel:
+                    roofSideFrontSerializedProperty = m_HotelMaterialPalette.FindPropertyRelative("roofSideFront");
+                    break;
+                case (int)BuildingType.k_ComplexBuilding:
+                    SerializedProperty lowerFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("lowerFloorBuildingType");
+                    SerializedProperty higherFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("higherFloorBuildingType");
+                    if (lowerFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Hotel ||
+                        higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Hotel)
+                    {
+                        roofSideFrontSerializedProperty = m_ComplexBuildingMaterialPalette.FindPropertyRelative("hotelRoofSideFront");
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    break;
+                default:
+                    return;
+            }
+
             if (roofSideFrontSerializedProperty != null)
             {
                 Object roofSideFrontObjRef = roofSideFrontSerializedProperty.objectReferenceValue;
@@ -538,8 +606,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     EditorGUILayout.LabelField("ホテル設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_HotelParams, new Dictionary<string, Tuple<string, float, float>>
                     {
-                        {"roofThickness", new Tuple<string, float, float>("屋根の暑さ", 0f, 5f)}
-                    }, isUpdateShaderParams:true);
+                        {"roofThickness", new Tuple<string, float, float>("屋根の厚さ", 0f, 5f)}
+                    });
                 case (int)BuildingType.k_Factory:
                     EditorGUILayout.LabelField("工場設定", EditorStyles.boldLabel);
                     return DrawDynamicPropertyOnly(m_FactoryParams);
@@ -554,6 +622,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                     SerializedProperty higherFloorBuildingTypeProperty = m_ComplexBuildingParams.FindPropertyRelative("higherFloorBuildingType");
                     bool changedComplexSkyscraperCondominiumBuildingParam = false;
                     bool changedComplexOfficeBuildingParam = false;
+                    bool changedComplexHotelBuildingParam = false;
+                    bool changedComplexHotelShaderBuildingParam = false;
 
                     if (lowerFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Apartment ||
                         higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Apartment)
@@ -574,7 +644,18 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Editor
                         });
                     }
 
-                    return changedComplexBuildingParam || changedComplexSkyscraperCondominiumBuildingParam || changedComplexOfficeBuildingParam;
+                    if (lowerFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Hotel ||
+                        higherFloorBuildingTypeProperty.enumValueIndex == (int)ComplexBuildingConfig.ComplexBuildingType.k_Hotel)
+                    {
+                        EditorGUILayout.Space(10);
+                        EditorGUILayout.LabelField("ホテル設定", EditorStyles.boldLabel);
+                        changedComplexHotelBuildingParam = DrawDynamicPropertyOnly(m_ComplexHotelParams, new Dictionary<string, Tuple<string, float, float>>
+                        {
+                            {"roofThickness", new Tuple<string, float, float>("屋根の厚さ", 0f, 5f)}
+                        }, hideParam:higherFloorBuildingTypeProperty.enumValueIndex != (int)ComplexBuildingConfig.ComplexBuildingType.k_Hotel);
+                    }
+
+                    return changedComplexBuildingParam || changedComplexSkyscraperCondominiumBuildingParam || changedComplexOfficeBuildingParam || changedComplexHotelBuildingParam || changedComplexHotelShaderBuildingParam;
             }
             return false;
         }

@@ -15,7 +15,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings.Co
             public bool hasWindowLeft;
             [Label("右側に窓を付ける")]
             public bool hasWindowRight;
-            [Label("屋根の暑さ")]
+            [Label("屋根の厚さ")]
             public float roofThickness;
         }
 

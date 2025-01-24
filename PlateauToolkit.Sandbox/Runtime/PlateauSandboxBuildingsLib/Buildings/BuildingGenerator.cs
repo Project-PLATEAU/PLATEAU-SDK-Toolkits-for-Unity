@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.Serialization;
 
 namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
 {
@@ -143,6 +144,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildingsLib.Buildings
             public ComplexBuildingConfig.Params complexBuildingParams = new();
             public ComplexBuildingConfig.SkyscraperCondominiumParams complexSkyscraperCondominiumBuildingParams = new();
             public ComplexBuildingConfig.OfficeParams complexOfficeBuildingParams = new();
+            public ComplexBuildingConfig.HotelParams complexHotelParams = new();
+            public ComplexBuildingConfig.HotelShaderParams complexHotelShaderParams = new();
             public ComplexBuildingConfig.VertexColorPalette complexBuildingVertexColorPalette = new();
             public ComplexBuildingConfig.VertexColorMaterialPalette complexBuildingVertexColorMaterialPalette = new();
             public ComplexBuildingConfig.MaterialPalette complexBuildingMaterialPalette = new();
