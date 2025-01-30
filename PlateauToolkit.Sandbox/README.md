@@ -5,6 +5,7 @@
 PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミュレーション実行などを支援します。  
 乗り物、アバター、建築物、広告、標識・標示などのSandboxアセットの配置及び操作、トラックの設定機能などをGUI上で提供します。
 
+- [Sandbox Toolkit 利用マニュアル](#sandbox-toolkit-利用マニュアル)
 - [1. Sandbox Toolkitの利用に必要な設定](#1-sandbox-toolkitの利用に必要な設定)
 - [2. Sandbox Toolkitの起動](#2-sandbox-toolkitの起動)
 - [3. UI](#3-ui)
@@ -16,21 +17,88 @@ PLATEAUの3D都市モデルを用いたゲーム開発、映像製作、シミ�
 - [5. アセット配置機能](#5-アセット配置機能)
   - [5-1. 配置ツールの開始方法](#5-1-配置ツールの開始方法)
   - [5-2. 配置オプション](#5-2-配置オプション)
+      - [配置位置](#配置位置)
+        - [配置位置 - 表面に配置](#配置位置---表面に配置)
+        - [配置位置 - トラックに沿って配置](#配置位置---トラックに沿って配置)
+      - [配置方法](#配置方法)
+        - [配置方法 - クリック](#配置方法---クリック)
+        - [配置方法 - ブラシ](#配置方法---ブラシ)
+      - [オブジェクトの向き](#オブジェクトの向き)
+        - [オブジェクトの向き - 配置面の法線](#オブジェクトの向き---配置面の法線)
+        - [オブジェクトの向き - ワールド座標](#オブジェクトの向き---ワールド座標)
 - [6. アセット一括配置機能](#6-アセット一括配置機能)
   - [6-1. シェープファイルの読み込み](#6-1-シェープファイルの読み込み)
+      - [シェープファイルのアセット種別の選択](#シェープファイルのアセット種別の選択)
   - [6-2. CSVファイルの読み込み](#6-2-csvファイルの読み込み)
+      - [CSVファイルに入力する値](#csvファイルに入力する値)
+      - [CSVファイルの読み込み](#csvファイルの読み込み)
+      - [CSVファイルのアセットの配置高さの設定](#csvファイルのアセットの配置高さの設定)
+      - [CSVファイルの属性列の選択](#csvファイルの属性列の選択)
   - [6-3. 配置するアセットの選択](#6-3-配置するアセットの選択)
   - [6-4. アセットを一括配置](#6-4-アセットを一括配置)
+      - [配置の結果](#配置の結果)
 - [7. トラック機能](#7-トラック機能)
   - [7-1. トラックの作成](#7-1-トラックの作成)
+    - [トラックの速度制限](#トラックの速度制限)
   - [7-2. トラック移動コンポーネント](#7-2-トラック移動コンポーネント)
+    - [トラック上の正規化位置](#トラック上の正規化位置)
+    - [トラック移動コンポーネントの設定方法](#トラック移動コンポーネントの設定方法)
+    - [トラック移動コンポーネントの利用方法](#トラック移動コンポーネントの利用方法)
+    - [トラック移動コンポーネントの機能](#トラック移動コンポーネントの機能)
+      - [衝突判定](#衝突判定)
+      - [移動アニメーション](#移動アニメーション)
   - [7-3. トラックに沿ってオブジェクトを生成する機能](#7-3-トラックに沿ってオブジェクトを生成する機能)
+    - [生成アイテムリストの設定](#生成アイテムリストの設定)
+      - [生成するオブジェクトの追加・削除](#生成するオブジェクトの追加削除)
+      - [生成するオブジェクトの出現割合の設定](#生成するオブジェクトの出現割合の設定)
+    - [`SplineInstantiate` コンポーネントの設定](#splineinstantiate-コンポーネントの設定)
+    - [生成ツール](#生成ツール)
+      - [自動リフレッシュ機能](#自動リフレッシュ機能)
+      - [リセット](#リセット)
+      - [生成シード値 (乱数パターンの設定)](#生成シード値-乱数パターンの設定)
 - [8. 配置したアセットの編集機能](#8-配置したアセットの編集機能)
   - [8-1. 広告変更機能](#8-1-広告変更機能)
+    - [テクスチャ切り替え](#テクスチャ切り替え)
+    - [ビデオクリップ切り替え](#ビデオクリップ切り替え)
+    - [サイズ変更機能](#サイズ変更機能)
   - [8-2. 建築物カスタマイズ機能](#8-2-建築物カスタマイズ機能)
+    - [パラメータ変更方法](#パラメータ変更方法)
+      - [建造物設定](#建造物設定)
+      - [建造物タイプの個別設定](#建造物タイプの個別設定)
+        - [マンション](#マンション)
+        - [商業ビル](#商業ビル)
+        - [コンビニエンスストア](#コンビニエンスストア)
+        - [一軒家](#一軒家)
+        - [オフィスビル](#オフィスビル)
+        - [ホテル](#ホテル)
+        - [工場](#工場)
+        - [複合ビル](#複合ビル)
+      - [色設定](#色設定)
+      - [Prefab保存](#prefab保存)
+  - [8-3. 電柱の結線機能](#8-3-電柱の結線機能)
+    - [電柱の種類](#電柱の種類)
+    - [電線の自動結線](#電線の自動結線)
+    - [電線の手動結線](#電線の手動結線)
+      - [電線の手動結線 - 電柱の選択](#電線の手動結線---電柱の選択)
+      - [電線の手動結線 - 電柱の削除](#電線の手動結線---電柱の削除)
+      - [電線の手動結線 - 電柱の移動と回転](#電線の手動結線---電柱の移動と回転)
 - [9. カメラインタラクション機能](#9-カメラインタラクション機能)
   - [9-1. 操作方法](#9-1-操作方法)
+    - [共通](#共通)
+    - [一人称視点](#一人称視点)
+    - [三人称視点](#三人称視点)
+    - [三人称中心視点](#三人称中心視点)
   - [9-2. カメラのデフォルト位置の変更](#9-2-カメラのデフォルト位置の変更)
+- [10. 交通シミュレーション機能](#10-交通シミュレーション機能)
+  - [10-1. 交通シミュレーションの設定](#10-1-交通シミュレーションの設定)
+  - [10-2. 交通シミュレーションの作成](#10-2-交通シミュレーションの作成)
+    - [交通シミュレーションの利用方法](#交通シミュレーションの利用方法)
+  - [10-3. 交通シミュレーションの編集](#10-3-交通シミュレーションの編集)
+    - [カスタム信号機アセットの作成](#カスタム信号機アセットの作成)
+          - [URP](#urp)
+          - [HDRP](#hdrp)
+    - [カスタム信号機アセットの設置](#カスタム信号機アセットの設置)
+  - [10-4. AWSIMコンポーネント](#10-4-awsimコンポーネント)
 - [関連API](#関連api)
 
 # 1. Sandbox Toolkitの利用に必要な設定
@@ -602,16 +670,110 @@ v2.0.0-alpha時点では以下の5種類の建築物アセットを提供して�
 - 1階を窓に変更：建物の1階部分を壁から窓に変更できます。
 - 壁パネルの高さ：上下の窓ガラスに挟まれた壁パネルの高さを指定できます。
 
+##### ホテル
+<img width="400" alt="building_settings_hotel" src="../Documentation~/Sandbox Images/building_settings_hotel.png">
+
+- 左側に窓を付ける：建物の正面から左側の壁を窓に変更できます。
+- 右側に窓を付ける：建物の正面から右側の壁を窓に変更できます。
+- 屋根の厚さ：屋根の厚さを指定できます。
+
+<img width="400" alt="building_settings_hotel" src="../Documentation~/Sandbox Images/building_settings_hotel2.png">
+
+- RoofSideFrontマテリアルに割当てたテクスチャ位置を変更できます。
+  - 横のオフセット：テクスチャのX位置を変更できます。
+  - 縦のオフセット：テクスチャのY位置を変更できます。
+
+
+##### 工場
+<img width="400" alt="building_settings_factory" src="../Documentation~/Sandbox Images/building_settings_factory.png">
+
+- シャッターに庇を追加：シャッターに庇を追加できます。
+
+##### 複合ビル
+<img width="400" alt="building_settings_complex" src="../Documentation~/Sandbox Images/building_settings_complex.png">
+
+- 上部の建造物タイプ：上部の建造物タイプを選択できます。
+- 下部の建造物タイプ：下部の建造物タイプを選択できます。
+- 建物同士の境界線の高さ：建物同士の境界線の高さを指定できます。
+  
+  <img width="400" alt="building_settings_complex" src="../Documentation~/Sandbox Images/sandbox_buildings_complex_boundary.gif">
+
+<img width="400" alt="building_settings_complex_other" src="../Documentation~/Sandbox Images/building_settings_complex_other.png">
+
+- 建造物タイプにマンションを選択するとマンション設定が表示されます。
+- 建造物タイプにオフィスビルを選択するとオフィスビル設定が表示されます。
+
 #### 色設定
 
 建物の色をテクスチャやカラー情報を利用して変更できます。テクスチャを利用する場合は、マテリアルで利用しているテクスチャを編集します。カラー情報を利用する場合は、「テクスチャ利用」チェックボックスをオフにすることでカラー編集項目が表示されます。
 
 #### Prefab保存
 
-建物アセットのPrefab保存では [インスタンスのオーバーライド](https://docs.unity3d.com/ja/2019.4/Manual/PrefabInstanceOverrides.html) に加えて、「建造物を新規プレハブとして保存」ボタンにより、カスタマイズしたパラメータを名前が連番の別のPrefabとして保存できます。Prefabと同時に利用しているメッシュも併せてサンプルフォルダ内のBuildingsフォルダ内に保存されます。
+建物アセットのPrefab保存では [インスタンスのオーバーライド](https://docs.unity3d.com/ja/2019.4/Manual/PrefabInstanceOverrides.html) に加えて、「建造物を新規プレハブとして保存」ボタンにより、カスタマイズしたパラメータを名前が連番の別のPrefabとして保存できます。Prefabと同時に利用しているメッシュも併せてサンプルフォルダ内のBuildingsフォルダ内に保存されます。 ヒエラルキーからのドラッグ＆ドロップによるPrefab保存、およびプレハブモードでのPrefabの編集についてもサポートしています。
 
-> [!WARNING]
-> 現在のバージョンではヒエラルキーからのドラッグ＆ドロップによるPrefab保存、およびプレハブモードでのPrefabの編集はサポートされていません。
+## 8-3. 電柱の結線機能
+
+配置可能アセットの中には、電柱アセットを配置して電柱同士を結線することができる電柱コンポーネント ( `PlateauSandboxElectricPost` ) がアタッチされているものがあります。
+
+電線は配置時に自動で他の電柱に結線されます。また、配置後インスペクタより手動で解除、接続が可能です。
+
+電柱には前と後ろの２箇所の結線位置があり、電線はこの２箇所に結線します。
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost.png">
+
+### 電柱の種類
+
+電柱には以下の３種類の電柱アセットが用意されています。
+
+- StreetFurniture_ElectricPost_01
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_type01.png">
+
+- StreetFurniture_ElectricPost_02
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_type02.png">
+
+- StreetFurniture_ElectricPost_03
+
+<img width="400" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_type03.png">
+
+### 電線の自動結線
+
+電柱を配置することで、電柱同士に自動で電線が結線されます。
+
+ただし、結線されるのは配置された電柱が50m以内、かつ間に障害物がない場合となります。 
+
+電柱の前と後ろの結線位置のどちらに結線されるかは、配置位置関係として近い方に結線されます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_auto_connect.gif">
+
+### 電線の手動結線
+
+電柱を配置後、インスペクタより電線を接続、削除が可能です。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_edit.png">
+
+#### 電線の手動結線 - 電柱の選択
+
+`前方接続部`、もしくは`後方接続部`の「追加する」ボタンを押下することで、他の電柱に結線できる枠を追加できます。
+
+枠を追加後、「選択する」を選択することで、別の電柱に結線が可能です。
+
+電柱の結線位置は前と後ろの２箇所あり、マウスでホバーしている位置に結線されます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_edit.gif">
+
+#### 電線の手動結線 - 電柱の削除
+
+「削除する」を選択することで、結線されている電線が削除されます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_delete.gif">
+
+#### 電線の手動結線 - 電柱の移動と回転
+
+結線状態にてシーン上で電柱を移動または回転すると、結線状態は維持されたまま、電線が引き延ばされます。
+
+<img width="600" alt="電柱アセット" src="../Documentation~/Sandbox Images/sandbox_electricpost_manual_move.gif">
 
 # 9. カメラインタラクション機能
 
@@ -695,6 +857,101 @@ v2.0.0-alpha時点では以下の5種類の建築物アセットを提供して�
 | ThirdPersonOrbitInitialRotation      | 見回しモードの注視点デフォルト位置       |
 | ThirdPersonOrbitOffset               | 見回しモードの注視点の原点からのオフセット   |
 | ThirdPersonOrbitDefaultDistance      | 見回しモードの注視点からカメラへの距離の初期値 |
+
+# 10. 交通シミュレーション機能
+
+PLATEAU SDKにより生成された道路ネットワークから、Sandboxアセットの車両を利用した交通シミュレーションを作成することができます。
+
+## 10-1. 交通シミュレーションの設定
+
+事前に `PLATEAU SDK` から3D都市モデルを読み込み、道路ネットワークを生成してください。
+
+## 10-2. 交通シミュレーションの作成
+
+「トラック」「交通シミュレータ配置」メニューを表示します。
+Sandboxアセットの車両リストが表示されます。フィルタリング方法は、[Sandboxアセット](#4-sandboxアセット)をご参照ください。<br>
+リストの中から使用したい車両アセットを選択し（複数選択可能）、「実行」ボタンを押します。
+
+<img width="500" alt="sandbox_toolkit_traffic_menu" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_menu.png" />
+
+### 交通シミュレーションの利用方法
+
+実行後、道路ネットワークを基に、必要なコンポーネントが自動的に配置、設定されます。
+交通シミュレーションはエディターモードでは動作しません。プレイモードを実行することで交通シミュレーションを開始させることができます。
+
+<img width="500" alt="sandbox_toolkit_traffic_scene" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_scene.png" />
+
+## 10-3. 交通シミュレーションの編集
+
+交通シミュレータ配置により生成されたコンポーネントの値を編集することでカスタマイズを行う事ができます。
+
+<img width="500" alt="sandbox_toolkit_traffic_manager" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_manager.png" />
+
+TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandboxTrafficManager` から以下の設定が行えます。
+
+| 設定項目                                 | 内容                      |
+|:------------------------------------ |:----------------------- |
+| Traffic Light Prefab              | 信号機アセットのPrefab       |
+| Green Interval              | 青信号の点灯秒数      |
+| Yellow Interval              | 黄信号の点灯秒数       |
+| Extra Red Interval              | 赤信号の追加点灯秒数       |
+
+赤信号の点灯秒数は、「青信号の点灯秒数」と「黄信号の点灯秒数」と「赤信号の追加点灯秒数」の合計値になります。
+上記の設定後、「Update Traffic Lights」ボタンを押下げすることで設置された全信号機の設定が置き換わります。
+
+`ShowTrafficLightGizmos`のチェックを入れる事で信号機アセットが設定されていない状態でもシーン上で信号機の動作を確認できるようになります。
+
+### カスタム信号機アセットの作成
+
+交通シミュレーションで利用可能な信号機SandboxアセットのTypeは、`Interactive Traffic Light` であり、交通シミュレーション作成時に自動的に配置される信号機アセットには` PlateauSandboxInteractiveTrafficLight` コンポーネントがアタッチされています。
+デフォルトでは、コンポーネントに緑、黄、赤のランプが設定されています。<br>
+信号機アセットは、他のアセットと同様に`アセットを作成`ボタンから新規作成することができます。この際、Typeフィールドで、`Interactive Traffic Light` を選択します。
+
+<img width="500" alt="sandbox_toolkit_traffic_light_creation" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_creation.png" />
+
+詳しいアセット作成方法は、[4-3. 新規作成](#4-3-新規作成)をご参照ください。
+
+信号機アセットは、青、赤、黄のランプに該当するマテリアルが設定されている必要があります。
+`Traffic Light Asset Bulb Data` の`Material Index` 値に作成したアセットのランプマテリアルに対応する値を設定してください。<br>
+該当するマテリアルの以下のシェーダーパラメータの値を変更して信号機の色が設定されます。
+`Traffic Light Asset Bulb Data` の対応するパラメータを必要に応じて変更してください。
+
+<img width="500" alt="sandbox_toolkit_traffic_light_asset_data" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light_asset_data.png" />
+
+###### URP     
+| シェーダーパラメータ       |対応するコンポーネントの値       |
+|:------------------------------------ |:------------------------------------|
+| _EmissionColor            |Emission Config / Color |
+
+###### HDRP   
+| シェーダーパラメータ       |対応するコンポーネントの値       |
+|:------------------------------------ |:------------------------------------|
+| _EmissiveColor            |Emission Config / Color |
+| _EmissiveExposureWeight            |Emission Config / Color |
+
+### カスタム信号機アセットの設置
+
+TrafficManagerゲームオブジェクト配下には`TrafficIntersections/TrafficIntersection_〇〇/TrafficLight_〇〇` が生成されていて、TrafficLight_〇〇ゲームオブジェクトには、`TrafficLight` コンポーネントがアタッチされています。
+
+<img width="500" alt="sandbox_toolkit_traffic_hierarchy" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_hierarchy.png" />
+
+作成した信号機アセットをシーンの任意の箇所に設置し、変更したいTrafficLight_〇〇ゲームオブジェクトを選択します。
+選択したゲームオブジェクトの`TrafficLight`コンポーネントの`Traffic Light Asset` に設置した信号機アセットをドラッグして設定します。
+
+<img width="500" alt="sandbox_toolkit_traffic_light" src="../Documentation~/Sandbox Images/sandbox_toolkit_traffic_light.png" />
+
+全ての信号機を一括で置き換えたい場合は、TrafficManagerゲームオブジェクトにアタッチされた`PlateauSandboxTrafficManager`の`Traffic Light Prefab`に作成した信号機プレハブを設定し、「Update Traffic Lights」ボタンを押します。
+
+## 10-4. AWSIMコンポーネント
+
+交通シミュレーションではAWSIMライブラリの以下の機能を使用しています。
+より詳細なカスタマイズを行いたい場合は以下を参考にしてください。
+
+1. [Traffic Manager](https://tier4.github.io/AWSIM/Components/Traffic/TrafficComponents/)
+2. [Traffic Intersection](https://tier4.github.io/AWSIM/Components/Environment/AddNewEnvironment/AddRandomTraffic/AddTrafficIntersection/)
+3. [Random Traffic](https://tier4.github.io/AWSIM/Components/Environment/AddNewEnvironment/AddRandomTraffic/AddRandomTraffic/)
+4. [NPC Vehicle](https://tier4.github.io/AWSIM/Components/Traffic/NPCs/Vehicle/)
+5. [Traffic Light](https://tier4.github.io/AWSIM/Components/Environment/AddNewEnvironment/AddTrafficLights/)
 
 # 関連API
 

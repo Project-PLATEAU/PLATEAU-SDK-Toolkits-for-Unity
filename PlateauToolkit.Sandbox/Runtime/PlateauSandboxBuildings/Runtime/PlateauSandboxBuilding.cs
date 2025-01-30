@@ -57,15 +57,46 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         public CommercialBuildingConfig.MaterialPalette commercialFacilityMaterialPalette = new();
 
         public HotelConfig.Params hotelParams = new();
+        public HotelConfig.ShaderParams hotelShaderParams = new();
         public HotelConfig.VertexColorPalette hotelVertexColorPalette = new();
         public HotelConfig.VertexColorMaterialPalette hotelVertexColorMaterialPalette = new();
         public HotelConfig.MaterialPalette hotelMaterialPalette = new();
 
-        public string buildingName = "Building_Name";
+        public FactoryConfig.Params factoryParams = new();
+        public FactoryConfig.VertexColorPalette factoryVertexColorPalette = new();
+        public FactoryConfig.VertexColorMaterialPalette factoryVertexColorMaterialPalette = new();
+        public FactoryConfig.MaterialPalette factoryMaterialPalette = new();
+
+        public ComplexBuildingConfig.BuildingPlannerParams m_ComplexBuildingPlannerParams = new();
+        public ComplexBuildingConfig.Params complexBuildingParams = new();
+        public ComplexBuildingConfig.SkyscraperCondominiumParams complexSkyscraperCondominiumBuildingParams = new();
+        public ComplexBuildingConfig.OfficeParams complexOfficeBuildingParams = new();
+        public ComplexBuildingConfig.HotelParams complexHotelParams = new();
+        public ComplexBuildingConfig.HotelShaderParams complexHotelShaderParams = new();
+        public ComplexBuildingConfig.VertexColorPalette complexBuildingVertexColorPalette = new();
+        public ComplexBuildingConfig.VertexColorMaterialPalette complexBuildingVertexColorMaterialPalette = new();
+        public ComplexBuildingConfig.MaterialPalette complexBuildingMaterialPalette = new();
+
         public FacadePlanner facadePlanner;
         public FacadeConstructor facadeConstructor;
         public RoofPlanner roofPlanner;
         public RoofConstructor roofConstructor;
+
+        public string GetBuildingName()
+        {
+            return buildingType switch
+            {
+                BuildingType.k_Apartment => "Apartment",
+                BuildingType.k_OfficeBuilding => "OfficeBuilding",
+                BuildingType.k_House => "House",
+                BuildingType.k_ConvenienceStore => "ConvenienceStore",
+                BuildingType.k_CommercialBuilding => "CommercialBuilding",
+                BuildingType.k_Hotel => "Hotel",
+                BuildingType.k_Factory => "Factory",
+                BuildingType.k_ComplexBuilding => "ComplexBuilding",
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
 
         public void GenerateMesh(int inLodNum, float inBuildingWidth, float inBuildingDepth)
         {
@@ -102,6 +133,21 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             m_Config.hotelVertexColorPalette = hotelVertexColorPalette;
             m_Config.hotelVertexColorMaterialPalette = hotelVertexColorMaterialPalette;
             m_Config.hotelMaterialPalette = hotelMaterialPalette;
+
+            m_Config.factoryParams = factoryParams;
+            m_Config.factoryVertexColorPalette = factoryVertexColorPalette;
+            m_Config.factoryVertexColorMaterialPalette = factoryVertexColorMaterialPalette;
+            m_Config.factoryMaterialPalette = factoryMaterialPalette;
+
+            m_Config.m_ComplexBuildingPlannerParams = m_ComplexBuildingPlannerParams;
+            m_Config.complexBuildingParams = complexBuildingParams;
+            m_Config.complexSkyscraperCondominiumBuildingParams = complexSkyscraperCondominiumBuildingParams;
+            m_Config.complexOfficeBuildingParams = complexOfficeBuildingParams;
+            m_Config.complexHotelParams = complexHotelParams;
+            m_Config.complexHotelShaderParams = complexHotelShaderParams;
+            m_Config.complexBuildingVertexColorPalette = complexBuildingVertexColorPalette;
+            m_Config.complexBuildingVertexColorMaterialPalette = complexBuildingVertexColorMaterialPalette;
+            m_Config.complexBuildingMaterialPalette = complexBuildingMaterialPalette;
 
             m_Config.lodNum = inLodNum;
 
@@ -142,7 +188,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         CompoundMeshDraft facadesDraft = generatedResult.Item1;
                         facadesHeight = generatedResult.Item2;
                         Mesh mesh = facadesDraft.ToMeshWithSubMeshes();
-                        NormalSolver.RecalculateNormals(mesh, 0);
+                        mesh.RecalculateNormals();
+                        mesh.RecalculateTangents();
+                        mesh.RecalculateBounds();
                         meshFilter.mesh = mesh;
 
                         var materials = new List<Material>();
@@ -168,7 +216,9 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                         MeshRenderer meshRenderer = roofObject.GetComponent<MeshRenderer>();
                         CompoundMeshDraft roofMesh = generator.GenerateRoofMesh(lsFoundationPolygonVertex, m_Config, facadesHeight);
                         Mesh mesh = roofMesh.ToMeshWithSubMeshes();
-                        NormalSolver.RecalculateNormals(mesh, 0);
+                        mesh.RecalculateNormals();
+                        mesh.RecalculateTangents();
+                        mesh.RecalculateBounds();
                         meshFilter.mesh = mesh;
 
                         var materials = new List<Material>();
@@ -192,6 +242,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             {
                 Debug.LogException(e);
             }
+        }
+
+        public override bool CanPlaceOnOtherSandboxObject()
+        {
+            // 建物であれば他のオブジェクトを配置することができる
+            return true;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace PlateauToolkit.Sandbox.Editor
         /// <summary>
         /// <see cref="Texture2D" /> of a preview of the asset.
         /// </summary>
-        public Texture2D PreviewTexture { get; }
+        public Texture2D PreviewTexture { get; set; }
 
         public SandboxAsset(TComponent asset, SandboxAssetType assetType, Texture2D previewTexture)
         {

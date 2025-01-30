@@ -25,7 +25,8 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
             public float m_ShadowWallWidthOffset;
             public float m_ShadowWallHeightOffset;
 
-            public string m_WallName = k_WallTexturedDraftName;
+            public string m_PrefixName;
+            public string m_VariationName;
             public Vector2 m_UVScale;
             public Material m_WallMat;
         }
@@ -33,11 +34,15 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
         protected class DepressionWallColorData : WallColorData
         {
             public PositionType m_PositionType;
+            public float m_DepressionWallDepth;
+            public Color m_DepressionWallColor;
         }
 
         protected class DepressionWallTexturedData : WallTexturedData
         {
             public PositionType m_PositionType;
+            public float m_DepressionWallDepth;
+            public Material m_DepressionWallMat;
         }
 
         protected static MeshDraft Wall(Vector3 origin, float width, float height, WallColorData wallColorData)
@@ -74,7 +79,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected static MeshDraft WallTextured(Vector3 origin, float width, float height, WallTexturedData wallTexturedData)
         {
-            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_WallName}
+            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_PrefixName + k_WallTexturedDraftName + wallTexturedData.m_VariationName}
                 .AddQuad(origin, Vector3.right * width, Vector3.up * height, wallTexturedData.m_UVScale, calculateNormal: true, generateUV: true)
                 .Paint(wallTexturedData.m_WallMat);
 
@@ -90,7 +95,7 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected static MeshDraft WallTextured(Vector3 origin, Vector3 width, Vector3 height, WallTexturedData wallTexturedData)
         {
-            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_WallName}
+            MeshDraft meshDraft = new MeshDraft {name = wallTexturedData.m_PrefixName + k_WallTexturedDraftName + wallTexturedData.m_VariationName}
                 .AddQuad(origin, width, height, wallTexturedData.m_UVScale, calculateNormal:true, generateUV:true)
                 .Paint(wallTexturedData.m_WallMat);
 
@@ -135,12 +140,12 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                 .PartialBox(width, depressionThickness, height, Directions.YAxis)
                 .FlipFaces()
                 .Move(origin + width / 2 + height / 2 + depressionThickness / 2)
-                .Paint(wallColorData.m_WallColor, wallColorData.m_VertexColorWallMat);
+                .Paint(wallColorData.m_DepressionWallColor, wallColorData.m_VertexColorWallMat);
 
             MeshDraft depressionWallBack = MeshDraft
                 .PartialBox(depressionWidth, -depressionThickness, height, Directions.Back)
                 .Move(origin + depressionMoveWidth + height / 2 + depressionThickness / 2)
-                .Paint(wallColorData.m_WallColor, wallColorData.m_VertexColorWallMat);
+                .Paint(wallColorData.m_DepressionWallColor, wallColorData.m_VertexColorWallMat);
             depressionWallYAxis.Add(depressionWallBack);
             depressionWallYAxis.name = k_WallDraftName;
 
@@ -149,21 +154,21 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
 
         protected static MeshDraft DepressionWallTextured(Vector3 origin, Vector3 width, Vector3 height, DepressionWallTexturedData wallTexturedData)
         {
-            Vector3 depressionThickness = -Vector3.back * 0.3f;
+            Vector3 depressionThickness = -Vector3.back * wallTexturedData.m_DepressionWallDepth;
             Vector3 depressionWidth;
             Vector3 depressionMoveWidth;
             switch (wallTexturedData.m_PositionType)
             {
                 case PositionType.k_NoLeftRight:
-                    depressionWidth = width - Vector3.right * 0.6f;
-                    depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * 0.3f;
+                    depressionWidth = width - Vector3.right * (wallTexturedData.m_DepressionWallDepth * 2.0f);
+                    depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * wallTexturedData.m_DepressionWallDepth;
                     break;
                 case PositionType.k_NoLeft:
-                    depressionWidth = width - Vector3.right * 0.3f;
-                    depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * 0.3f;
+                    depressionWidth = width - Vector3.right * wallTexturedData.m_DepressionWallDepth;
+                    depressionMoveWidth = depressionWidth * 0.5f + Vector3.right * wallTexturedData.m_DepressionWallDepth;
                     break;
                 case PositionType.k_NoRight:
-                    depressionWidth = width - Vector3.right * 0.3f;
+                    depressionWidth = width - Vector3.right * wallTexturedData.m_DepressionWallDepth;
                     depressionMoveWidth = depressionWidth * 0.5f;
                     break;
                 case PositionType.k_Middle:
@@ -174,19 +179,20 @@ namespace PlateauToolkit.Sandbox.Runtime.PlateauSandboxBuildings.Runtime
                     throw new ArgumentOutOfRangeException();
             }
 
-            MeshDraft depressionWallYAxis = MeshDraft
+            MeshDraft meshDraft = MeshDraft
                 .PartialBox(width, depressionThickness, height, Directions.YAxis, true)
                 .FlipFaces()
                 .Move(origin + width / 2 + height / 2 + depressionThickness / 2)
-                .Paint(wallTexturedData.m_WallMat);
+                .Paint(wallTexturedData.m_DepressionWallMat);
 
             MeshDraft depressionWallBack = MeshDraft
                 .PartialBox(depressionWidth, -depressionThickness, height, Directions.Back, true)
                 .Move(origin + depressionMoveWidth + height / 2 + depressionThickness / 2)
-                .Paint(wallTexturedData.m_WallMat);
-            depressionWallYAxis.Add(depressionWallBack);
+                .Paint(wallTexturedData.m_DepressionWallMat);
+            meshDraft.Add(depressionWallBack);
+            meshDraft.name = wallTexturedData.m_PrefixName + k_DepressionWallTexturedDraftName + wallTexturedData.m_VariationName;
 
-            return depressionWallYAxis;
+            return meshDraft;
         }
     }
 }
