@@ -17,6 +17,9 @@ namespace PlateauToolkit.Sandbox.Editor
         void OnEnd();
         GameObject GetAssetByPrefabConstantId(int prefabConstantId);
 
+        void EnableMultipleSelect(bool enable);
+        void SelectAll(bool select, PlateauSandboxContext context);
+
         SandboxAssetType SelectedAssetType { get; set; }
     }
 
@@ -31,12 +34,18 @@ namespace PlateauToolkit.Sandbox.Editor
         SandboxAssetListState<TAsset> m_CurrentState = new SandboxAssetListState<TAsset>();
         CancellationTokenSource m_Cancellation;
         bool m_IsReadyApplied;
+        bool m_IsMultipleSelect = false;
         GUIStyle m_FooterContentStyle;
 
         public SandboxAssetType SelectedAssetType
         {
             get => m_CurrentState.SelectedAssetType;
             set => m_CurrentState.SelectedAssetType = value;
+        }
+
+        public void EnableMultipleSelect(bool enable)
+        {
+            m_IsMultipleSelect = enable;
         }
 
         public void OnBegin()
@@ -101,7 +110,27 @@ namespace PlateauToolkit.Sandbox.Editor
                                 .Where(asset => asset.Asset != null)
                                 .Select<SandboxAsset<TAsset>, Action>(propAsset =>
                                 {
-                                    return () => PlateauSandboxGUI.AssetButton(
+                                    if (m_IsMultipleSelect)
+                                    {
+                                        return () => PlateauSandboxGUI.AssetButton(
+                                        propAsset,
+                                        context.IsSelectedObjectMultiple(propAsset.Asset.gameObject),
+                                        () =>
+                                        {
+                                            if (context.IsSelectedObject(propAsset.Asset.gameObject))
+                                            {
+                                                context.RemoveSelectedObjectMultiple(propAsset.Asset.gameObject);
+                                            }
+                                            else
+                                            {
+                                                context.SelectPlaceableObjectMultiple(propAsset.Asset.gameObject);
+                                            }
+                                        },
+                                        isDragEnabled);
+                                    }
+                                    else
+                                    {
+                                        return () => PlateauSandboxGUI.AssetButton(
                                         propAsset,
                                         context.IsSelectedObject(propAsset.Asset.gameObject),
                                         () =>
@@ -116,6 +145,7 @@ namespace PlateauToolkit.Sandbox.Editor
                                             }
                                         },
                                         isDragEnabled);
+                                    }
                                 })
                                 .ToArray();
                             PlateauToolkitEditorGUILayout.GridLayout(windowWidth, 100, 100, buttonGuis);
@@ -133,6 +163,19 @@ namespace PlateauToolkit.Sandbox.Editor
             }
 
             DrawFooter(isShowAssetCreate);
+        }
+
+        public void SelectAll(bool select, PlateauSandboxContext context)
+        {
+            var targets = m_CurrentState.Assets.Where(asset => (asset.AssetType & m_CurrentState.SelectedAssetType) == asset.AssetType).ToList();
+            foreach (SandboxAsset<TAsset> asset in targets)
+            {
+                context.RemoveSelectedObjectMultiple(asset.Asset.gameObject);
+                if (select)
+                {
+                    context.SelectPlaceableObjectMultiple(asset.Asset.gameObject);
+                }
+            }
         }
 
         void DrawFooter(bool isShowAssetCreate)
