@@ -168,7 +168,16 @@ namespace PlateauToolkit.Sandbox
 
         void LateUpdate()
         {
-            m_CurrentCameraController?.HandleInput();
+            try
+            {
+                m_CurrentCameraController?.HandleInput();
+            }
+            catch (MissingReferenceException)
+            {
+                // 追跡車両が消えたらMissingReferenceExceptionが発生
+                // SandboxCameraの制御を解除
+                SwitchCamera(PlateauSandboxCameraMode.None);
+            }
         }
 
         void CheckCameraTarget(Vector3 screenPosition)
