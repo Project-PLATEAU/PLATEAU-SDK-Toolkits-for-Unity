@@ -1,7 +1,7 @@
 ﻿using PLATEAU.RoadNetwork.Data;
+using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using PLATEAU.RoadNetwork.Structure;
 using System.Linq;
 using UnityEngine;
 
@@ -661,9 +661,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         /// <summary>
-        /// RnDataIntersectionのBorder(RnDataWay)に接続する全Edge(RnDataNeighbor)を取得
+        /// RnDataIntersectionのBorder(RnDataWay)に接続する全Edge(RnDataIntersectionEdge)を取得
         /// </summary>
-        public static List<RnDataNeighbor> GetEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
+        public static List<RnDataIntersectionEdge> GetEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
         {
             return intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
         }
@@ -714,9 +714,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         /// RnDataIntersectionの指定と反対側の道路のEdgeを取得
         /// Empty Intersection用
         /// </summary>
-        public static List<RnDataNeighbor> GetOppositeSideEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, int roadId)
+        public static List<RnDataIntersectionEdge> GetOppositeSideEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, int roadId)
         {
-            var edges = new List<RnDataNeighbor>(intersection.Edges);
+            var edges = new List<RnDataIntersectionEdge>(intersection.Edges);
             edges.RemoveAll(e => e.Road.ID == roadId || !e.Road.IsValid);
             return edges;
         }
@@ -781,13 +781,13 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         /// <summary>
-        /// RnDataIntersectionのBorderと同一ライン上にあるEdge(RnDataNeighbor)を取得
+        /// RnDataIntersectionのBorderと同一ライン上にあるEdge(RnDataIntersectionEdge)を取得
         /// </summary>
-        public static List<RnDataNeighbor> GetStraightLineEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
+        public static List<RnDataIntersectionEdge> GetStraightLineEdgesFromBorder([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataWay way)
         {
             var edges = intersection.Edges.FindAll(x => x.GetBorder(getter).IsSameLine(way));
             var roads = edges.Select(x => x.GetRoad(getter)).OfType<RnDataRoad>().ToList();
-            List<RnDataNeighbor> outEdges = new List<RnDataNeighbor>();
+            List<RnDataIntersectionEdge> outEdges = new List<RnDataIntersectionEdge>();
             foreach (var road in roads)
             {
                 outEdges.AddRange(intersection.GetEdgesFromRoad(getter, road));
@@ -796,9 +796,9 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         }
 
         /// <summary>
-        /// RnDataIntersectionと隣接する道路に接するEdge(RnDataNeighbor)取得
+        /// RnDataIntersectionと隣接する道路に接するEdge(RnDataIntersectionEdge)取得
         /// </summary>
-        public static List<RnDataNeighbor> GetEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
+        public static List<RnDataIntersectionEdge> GetEdgesFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoad road)
         {
             return intersection.Edges.FindAll(x => x.Road.ID == road.GetId(getter));
         }
@@ -814,11 +814,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public static List<RnDataTrack> GetAllFromTracksFromRoad([DisallowNull] this RnDataIntersection intersection, RoadNetworkDataGetter getter, RnDataRoadBase road)
         {
             HashSet<RnDataTrack> outTracks = new HashSet<RnDataTrack>();
-            List<RnDataNeighbor> edges = intersection.Edges?.FindAll(x => x.GetRoad(getter) == road);
-            foreach(var edge in edges)
+            List<RnDataIntersectionEdge> edges = intersection.Edges?.FindAll(x => x.GetRoad(getter) == road);
+            foreach (var edge in edges)
             {
                 var tracks = intersection.Tracks.FindAll(x => x.GetFromBorder(getter).IsSameLine(edge.GetBorder(getter)));
-                foreach(var track in tracks)
+                foreach (var track in tracks)
                 {
                     outTracks.Add(track);
                 }
@@ -916,7 +916,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         /// <param name="border"></param>
         /// <param name="getter"></param>
         /// <returns></returns>
-        public static RnDataNeighbor GetEdgeByBorder([DisallowNull] this RnDataIntersection self,
+        public static RnDataIntersectionEdge GetEdgeByBorder([DisallowNull] this RnDataIntersection self,
             RoadNetworkDataGetter getter, RnDataWay border)
         {
             if (border == null)
@@ -1014,14 +1014,14 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         //Edge / Neighbor
         #region Edge
-        public static RnDataRoadBase GetRoad([DisallowNull] this RnDataNeighbor neighbor, RoadNetworkDataGetter getter)
+        public static RnDataRoadBase GetRoad([DisallowNull] this RnDataIntersectionEdge neighbor, RoadNetworkDataGetter getter)
         {
             if (neighbor.Road.IsValid)
                 return getter.GetRoadBases().TryGet(neighbor.Road);
             return null;
         }
 
-        public static RnDataWay GetBorder([DisallowNull] this RnDataNeighbor neighbor, RoadNetworkDataGetter getter)
+        public static RnDataWay GetBorder([DisallowNull] this RnDataIntersectionEdge neighbor, RoadNetworkDataGetter getter)
         {
             if (neighbor.Border.IsValid)
                 return getter.GetWays().TryGet(neighbor.Border);
@@ -1116,7 +1116,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             List<RnDataWay> edges = new();
             foreach (RnID<RnDataWay> neighbor in trafficLight.Neighbor)
             {
-                edges.Add( getter.GetWays().TryGet(neighbor));
+                edges.Add(getter.GetWays().TryGet(neighbor));
             }
             return edges;
         }
