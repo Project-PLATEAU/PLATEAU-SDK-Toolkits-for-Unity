@@ -173,7 +173,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 List<TrafficLight> trafficLightsInSameArea = trafficLights.FindAll(x => (RnDataIntersection)x.rnTrafficLight.GetParentController(getter).GetParentRoad(getter) == stopline.rnIntersection);
                 foreach (var trafficLight in trafficLightsInSameArea)
                 {
-                    RnDataNeighbor edge = stopline.rnIntersection.GetEdgeByBorder(getter, stopline.rnBorder);
+                    RnDataIntersectionEdge edge = stopline.rnIntersection.GetEdgeByBorder(getter, stopline.rnBorder);
 
                     if (edge.GetBorder(getter).ContainsSameLine(trafficLight.rnTrafficLight.GetEdges(getter)))
                     {

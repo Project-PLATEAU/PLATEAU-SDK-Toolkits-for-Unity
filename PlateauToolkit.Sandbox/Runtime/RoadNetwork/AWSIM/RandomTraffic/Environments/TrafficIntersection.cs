@@ -112,6 +112,9 @@ namespace AWSIM.TrafficSimulation
         [SerializeField] LayerMask colliderMask;
         [SerializeField] List<TrafficLightGroup> trafficLightGroups;
         [SerializeField] LightingSequence[] lightingSequences;
+        
+        public List<TrafficLightGroup> TrafficLightGroups => trafficLightGroups;
+        public LightingSequence[] LightingSequences => lightingSequences;
 
         public List<TrafficLightGroup> TrafficLightGroups => trafficLightGroups;
         public LightingSequence[] LightingSequences => lightingSequences;
