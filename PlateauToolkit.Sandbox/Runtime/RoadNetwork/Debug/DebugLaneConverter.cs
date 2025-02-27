@@ -22,7 +22,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     if (nextIntersection != null)
                     {
                         var linestrings = nextIntersection.Edges.Select(x => x.GetBorder(getter).LineString.ID);
-                        Debug.Log($"Next Intersection Borders {string.Join(",", linestrings)} : nextBorder {nextBorder.LineString.ID} {lane.rnLane.IsReverse} {nextIntersection.IsEmptyIntersection} {lane.name} ");
+                        Debug.Log($"Next Intersection Borders {string.Join(",", linestrings)} : nextBorder {nextBorder.LineString.ID} {lane.rnLane.IsReversed} {nextIntersection.IsEmptyIntersection} {lane.name} ");
 
                         if (nextIntersection.IsEmptyIntersection)
                         {
@@ -52,7 +52,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                     if (prevIntersection != null)
                     {
                         var linestrings = prevIntersection.Edges.Select(x => x.GetBorder(getter).LineString.ID);
-                        Debug.Log($"Prev Intersection Borders {string.Join(",", linestrings)} : prevBorder {prevBorder.LineString.ID}  {lane.rnLane.IsReverse} {prevIntersection.IsEmptyIntersection} {lane.name}");
+                        Debug.Log($"Prev Intersection Borders {string.Join(",", linestrings)} : prevBorder {prevBorder.LineString.ID}  {lane.rnLane.IsReversed} {prevIntersection.IsEmptyIntersection} {lane.name}");
                     }
                 }
                 else if (lane.rnIntersection != null)
