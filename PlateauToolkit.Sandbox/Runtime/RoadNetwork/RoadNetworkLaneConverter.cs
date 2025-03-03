@@ -173,7 +173,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 List<TrafficLight> trafficLightsInSameArea = trafficLights.FindAll(x => (RnDataIntersection)x.rnTrafficLight.GetParentController(getter).GetParentRoad(getter) == stopline.rnIntersection);
                 foreach (var trafficLight in trafficLightsInSameArea)
                 {
-                    RnDataNeighbor edge = stopline.rnIntersection.GetEdgeByBorder(getter, stopline.rnBorder);
+                    RnDataIntersectionEdge edge = stopline.rnIntersection.GetEdgeByBorder(getter, stopline.rnBorder);
 
                     if (edge.GetBorder(getter).ContainsSameLine(trafficLight.rnTrafficLight.GetEdges(getter)))
                     {
@@ -261,7 +261,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             continue;
                         }
 
-                        if (PlateauSandboxTrafficManagerConstants.IGNORE_REVERSED_LANE && lane.IsReverse)
+                        if (PlateauSandboxTrafficManagerConstants.IGNORE_REVERSED_LANE && lane.IsReversed)
                             points.Reverse();
 
                         if (PlateauSandboxTrafficManagerConstants.USE_SIMPLE_LINESTRINGS && points.Count > 3)
@@ -279,7 +279,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         RnDataIntersection nextIntersection = road.GetNextRoad(getter) as RnDataIntersection;
                         RnDataIntersection prevIntersection = road.GetPrevRoad(getter) as RnDataIntersection;
 
-                        if (!PlateauSandboxTrafficManagerConstants.IGNORE_REVERSED_LANE && lane.IsReverse) //反転している場合 Prev/Nextを逆に
+                        if (!PlateauSandboxTrafficManagerConstants.IGNORE_REVERSED_LANE && lane.IsReversed) //反転している場合 Prev/Nextを逆に
                         {
                             (nextIntersection, prevIntersection) = (prevIntersection, nextIntersection);
                         }
@@ -289,7 +289,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                             if (!nextIntersection.IsEmptyIntersection)
                             {
                                 var tracks = nextIntersection.GetFromTracksFromLane(getter, lane);
-                                info.nextTracks = nextIntersection.FilterAvailableToTracks(getter,tracks); //一方通行侵入除外
+                                info.nextTracks = nextIntersection.FilterAvailableToTracks(getter, tracks); //一方通行侵入除外
 
                                 //Stopline
                                 if (PlateauSandboxTrafficManagerConstants.ADD_TRAFFIC_LIGHTS && nextIntersection.SignalController != null)
@@ -351,7 +351,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         info.road = rb;
 
                         info.nextLanes = intersection.GetNextLanesFromTrack(getter, track, PlateauSandboxTrafficManagerConstants.IGNORE_REVERSED_LANE);
-  
+
                         info.prevLanes = intersection.GetPrevLanesFromTrack(getter, track, PlateauSandboxTrafficManagerConstants.IGNORE_REVERSED_LANE);
 
                         laneInfo.Add(info);
@@ -367,7 +367,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
                 if (info.prevLanes != null)
                 {
-                    foreach(var l in info.prevLanes)
+                    foreach (var l in info.prevLanes)
                     {
                         if (laneDict.ContainsKey(l))
                             lane.PrevLanes.Add(laneDict[l]);
