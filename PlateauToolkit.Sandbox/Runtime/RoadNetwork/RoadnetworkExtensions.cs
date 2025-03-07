@@ -184,7 +184,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         //Way
         #region Way
-        public static int GetId([DisallowNull] this RnDataWay way, RoadNetworkDataGetter getter )
+        public static int GetId([DisallowNull] this RnDataWay way, RoadNetworkDataGetter getter)
         {
             List<RnDataWay> ways = getter.GetWays() as List<RnDataWay>;
             return ways.FindIndex(x => x == way);
@@ -529,7 +529,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return prevLanes;
 
             //反転している場合は逆にする
-            return mainLanes.FindAll(x => x.IsReverse && x.GetNextBorder(getter)?.IsSameLine(border) == true);
+            return mainLanes.FindAll(x => x.IsReversed && x.GetNextBorder(getter)?.IsSameLine(border) == true);
         }
 
         /// <summary>
@@ -543,7 +543,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 return nextLanes;
 
             //反転している場合は逆にする
-            return mainLanes.FindAll(x => x.IsReverse && x.GetPrevBorder(getter)?.IsSameLine(border) == true);
+            return mainLanes.FindAll(x => x.IsReversed && x.GetPrevBorder(getter)?.IsSameLine(border) == true);
         }
 
         /// <summary>

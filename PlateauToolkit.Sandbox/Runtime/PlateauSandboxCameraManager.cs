@@ -215,5 +215,38 @@ namespace PlateauToolkit.Sandbox
             m_CurrentCameraController = new(
                 m_CameraSettings, m_CameraPivot, cameraTarget, PlateauSandboxCameraMode.FirstPersonView);
         }
+
+        public void SetCameraTarget(Collider targetCollider)
+        {
+            if (targetCollider == null)
+            {
+                return;
+            }
+
+            if (!PlateauSandboxObjectFinder.TryGetSandboxObject(targetCollider, out IPlateauSandboxPlaceableObject sandboxObject))
+            {
+                return;
+            }
+
+            if (sandboxObject is not IPlateauSandboxCameraTarget cameraTarget)
+            {
+                return;
+            }
+
+            if (!cameraTarget.IsCameraViewAvailable)
+            {
+                return;
+            }
+
+            if (Camera.main == null)
+            {
+                return;
+            }
+            m_LastMainCamera = Camera.main;
+            m_LastMainCamera.enabled = false;
+            m_SubCamera.enabled = true;
+            m_CurrentCameraController = new(
+                m_CameraSettings, m_CameraPivot, cameraTarget, PlateauSandboxCameraMode.FirstPersonView);
+        }
     }
 }

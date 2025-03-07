@@ -36,6 +36,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         [SerializeField, Tooltip("TrafficLight additional Red interval seconds.")]
         public float m_ExtraRedInterval = PlateauSandboxTrafficManagerConstants.TRAFFIC_LIGHT_RED_INTERVAL_SECONDS;
 
+        // Runtime時にRightOfWays（交差点での判定処理）を行わないフラグ (車の台数が100台以上の場合の負荷軽減用）
+        [SerializeField, Tooltip("Use RightOfWays.")]
+        public bool m_EnableRightOfWays = true;
+
         [Header("Debug")]
         [SerializeField, Tooltip("Show Traffic light Gizmos")]
         public bool m_ShowTrafficLightGizmos = PlateauSandboxTrafficManagerConstants.SHOW_DEBUG_GIZMOS;

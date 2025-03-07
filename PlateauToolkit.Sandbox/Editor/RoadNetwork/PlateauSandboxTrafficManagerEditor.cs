@@ -36,9 +36,13 @@ namespace AWSIM.TrafficSimulation
                 manager.UpdateTrafficLightSequences();
             }
 
+            EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_EnableRightOfWays)));
             EditorGUILayout.PropertyField(serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_ShowTrafficLightGizmos)));
 
             serializedObject.ApplyModifiedProperties();
+
+            //Runtime時にRightOfWays（交差点での判定処理）を行わないフラグ
+            PlateauSandboxTrafficManagerConstants.USE_RIGHT_OF_WAYS_ON_RUNTIME = serializedObject.FindProperty(nameof(PlateauSandboxTrafficManager.m_EnableRightOfWays)).boolValue;
         }
     }
 }
