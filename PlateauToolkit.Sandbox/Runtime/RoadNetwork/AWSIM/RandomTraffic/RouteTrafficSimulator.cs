@@ -20,6 +20,9 @@ namespace AWSIM.TrafficSimulation
 
         [Tooltip("Is this traffic simulation enabled.")]
         public bool enabled;
+
+        [Tooltip("Time interval between vehicle spawns in seconds.")]
+        public float spawnIntervalTime;
     }
     /// <summary>
     /// Simulate NPC traffic. (Currently only Vehicle is supported)
@@ -33,6 +36,8 @@ namespace AWSIM.TrafficSimulation
 
         private TrafficLane[] route;
         private int maximumSpawns = 0;
+        private float spawnIntervalTime = 0f;
+        private float lastSpawnTime = 0f;
         private NPCVehicleSimulator npcVehicleSimulator;
         private NPCVehicleSpawner npcVehicleSpawner;
         private int currentSpawnNumber = 0;
@@ -64,10 +69,12 @@ namespace AWSIM.TrafficSimulation
             GameObject[] npcPrefabs,
             TrafficLane[] npcRoute,
             NPCVehicleSimulator vehicleSimulator,
-            int maxSpawns = 0)
+            int maxSpawns = 0,
+            float spawnInterval = 0f)
         {
             route = npcRoute;
             maximumSpawns = maxSpawns;
+            spawnIntervalTime = spawnInterval;
             npcVehicleSimulator = vehicleSimulator;
             TrafficLane[] spawnableLane = {route[0]};
             npcVehicleSpawner = new NPCVehicleSpawner(parent, npcPrefabs, spawnableLane); 
@@ -102,9 +109,17 @@ namespace AWSIM.TrafficSimulation
                 return false;
             }
 
+            // スポーン間隔のチェック（spawnIntervalTimeが0より大きい場合のみ）
+            if (spawnIntervalTime > 0f && Time.time - lastSpawnTime < spawnIntervalTime)
+            {
+                spawnedVehicle = null;
+                return false;
+            }
+
             var vehicle = npcVehicleSpawner.Spawn(prefab, SpawnIdGenerator.Generate(), spawnPoint);
             npcVehicleSimulator.Register(vehicle, route.ToList<TrafficLane>(), spawnPoint.WaypointIndex);
             nextPrefabToSpawn = null;
+            lastSpawnTime = Time.time;
             
             if(maximumSpawns > 0)
                 currentSpawnNumber++;
