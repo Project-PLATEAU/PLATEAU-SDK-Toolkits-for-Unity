@@ -116,9 +116,6 @@ namespace AWSIM.TrafficSimulation
         public List<TrafficLightGroup> TrafficLightGroups => trafficLightGroups;
         public LightingSequence[] LightingSequences => lightingSequences;
 
-        public List<TrafficLightGroup> TrafficLightGroups => trafficLightGroups;
-        public LightingSequence[] LightingSequences => lightingSequences;
-
         [Header("RoadNetwork")]
         [SerializeField]
         public RnDataTrafficLightController rnTrafficLightController;
