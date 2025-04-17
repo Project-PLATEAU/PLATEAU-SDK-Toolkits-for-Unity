@@ -46,6 +46,8 @@ namespace PlateauToolkit.Sandbox.Editor
                             EditorSplineUtility.SetKnotPlacementTool();
                             RefreshTracksHierarchy(context);
                         };
+
+                        GUIUtility.ExitGUI();
                     }
                 }
                 else
