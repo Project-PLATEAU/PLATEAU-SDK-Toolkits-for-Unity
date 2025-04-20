@@ -44,6 +44,7 @@ namespace PlateauToolkit.Sandbox
         public float m_Velocity;
         public float m_MoveDelta;
         public float m_SplineContainerT;
+        public Vector3 m_PositionOffset;
         public Vector3 m_LookaheadForward;
         public Vector3 m_SecondAxisPoint;
         public Vector3 m_SecondAxisForward;
@@ -189,15 +190,21 @@ namespace PlateauToolkit.Sandbox
                 return;
             }
 
-            (Vector3 position, Vector3 forward) = m_Track.GetPositionAndForwardBySplineContainerT(m_SplineContainerT);
-
             // Apply the offset.
-            position += transform.right * m_TrackOffset.x;
-            position += transform.up * m_TrackOffset.y;
-            position += transform.forward * m_TrackOffset.z;
+            Vector3 trackOffset = CalcTrackOffset(transform, m_TrackOffset);
+            (Vector3 position, Vector3 forward) = m_Track.GetPositionAndForwardBySplineContainerT(m_SplineContainerT, trackOffset);
 
             m_MovingObject.SetPosition(position);
             transform.rotation = Quaternion.LookRotation(forward, Vector3.up);
+        }
+
+        internal static Vector3 CalcTrackOffset(Transform transform, Vector3 trackOffset)
+        {
+            Vector3 position = Vector3.zero;
+            position += transform.right * trackOffset.x;
+            position += transform.up * trackOffset.y;
+            position += transform.forward * trackOffset.z;
+            return position;
         }
 
         public bool TrySetSplineContainerT(float t)
@@ -329,9 +336,12 @@ namespace PlateauToolkit.Sandbox
                 }
 
                 m_SplineContainerT = t;
+                Vector3 positionOffset = CalcTrackOffset(transform, m_TrackOffset);
 
                 MovementInfo movementInfo;
                 movementInfo.m_SplineContainerT = t;
+                movementInfo.m_PositionOffset = positionOffset;
+
 
                 float secondAxisDistance = m_MovingObject.SecondAxisDistance;
                 if (secondAxisDistance > 0)
