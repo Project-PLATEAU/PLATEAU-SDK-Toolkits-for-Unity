@@ -349,7 +349,7 @@ namespace PlateauToolkit.Sandbox
                     randomWalkPathIterator.Clone()
                         .MoveByLinearDistance(secondAxisDistance, out float secondAxisT);
                     (movementInfo.m_SecondAxisPoint, movementInfo.m_SecondAxisForward) =
-                        m_Track.GetPositionAndForwardBySplineContainerT(secondAxisT);
+                        m_Track.GetPositionAndForwardBySplineContainerT(secondAxisT, positionOffset);
                 }
                 else
                 {
@@ -360,7 +360,7 @@ namespace PlateauToolkit.Sandbox
                 // Get an interpolation value of the collision detection point.
                 randomWalkPathIterator.Clone()
                     .MovePoint(Mathf.Max(m_CurrentVelocity, m_MinCollisionDetectDistance), out float collisionT);
-                Vector3 collisionPoint = m_Track.GetPositionBySplineContainerT(collisionT);
+                Vector3 collisionPoint = m_Track.GetPositionBySplineContainerT(collisionT, positionOffset);
 
                 m_CollisionPoint = collisionPoint + m_MovingObject.TransformUp * m_CollisionDetectHeight;
 
