@@ -17,7 +17,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         //複数選択
         List<GameObject> m_SelectedObjects;
-        public List<GameObject> SelectedObjectsMultiple { get =>  m_SelectedObjects; }
+        public List<GameObject> SelectedObjectsMultiple { get => m_SelectedObjects; }
 
         public UnityEvent<GameObject> OnSelectedObjectChanged { get; } = new UnityEvent<GameObject>();
 
@@ -26,16 +26,29 @@ namespace PlateauToolkit.Sandbox.Editor
             get
             {
                 // TODO: Managing lifecycles of objects is the best way.
-                foreach (PlateauSandboxTrack track in m_Tracks)
+                if (IsAnyTrackDestroyed)
                 {
-                    if (track == null)
-                    {
-                        RefreshArrays(m_Tracks);
-                        break;
-                    }
+                    RefreshArrays(m_Tracks);
                 }
 
                 return m_Tracks;
+            }
+        }
+
+        /// <summary>
+        /// m_Tracksの中に破棄されたものがあるかどうかを返す
+        /// </summary>
+        public bool IsAnyTrackDestroyed
+        {
+            get
+            {
+                foreach (PlateauSandboxTrack track in m_Tracks)
+                {
+                    if (track == null)
+                        return true;
+                }
+
+                return false;
             }
         }
 

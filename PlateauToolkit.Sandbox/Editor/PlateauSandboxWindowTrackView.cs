@@ -24,6 +24,16 @@ namespace PlateauToolkit.Sandbox.Editor
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)
         {
             PlateauToolkitEditorGUILayout.Header("ツール");
+
+            // ヒエラルキーで直接破壊したとき用.
+            // Trackが外部から破壊されたときには表示を更新する
+            if (context.IsAnyTrackDestroyed)
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    RefreshTracksHierarchy(context);
+                };
+            }
             using (new EditorGUILayout.VerticalScope())
             {
                 if (ToolManager.activeToolType.Name != "KnotPlacementTool")
@@ -88,6 +98,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     }
                 }
             }
+
             EditorGUILayout.Space(15);
 
             m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 200));
@@ -152,7 +163,6 @@ namespace PlateauToolkit.Sandbox.Editor
                             },
                         })),
             };
-
             var headerState = new MultiColumnHeaderState(m_HierarchyContext.Hierarchy.Header.Columns);
             var header = new MultiColumnHeader(headerState);
 
