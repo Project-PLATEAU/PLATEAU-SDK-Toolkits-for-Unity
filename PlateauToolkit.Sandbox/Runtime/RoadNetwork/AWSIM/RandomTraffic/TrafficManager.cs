@@ -51,7 +51,7 @@ namespace AWSIM.TrafficSimulation
         private Dictionary<NPCVehicleSpawnPoint, Dictionary<ITrafficSimulator, GameObject>> spawnLanes;
 
         /// <summary>
-        /// ŠeSerializeField‚Ì‰Šúİ’è
+        /// ï¿½eSerializeFieldï¿½Ìï¿½ï¿½ï¿½ï¿½İ’ï¿½
         /// </summary>
         /// <param name="_vehicleLayerMask_"></param>
         /// <param name="_groundLayerMask_"></param>
@@ -129,7 +129,8 @@ namespace AWSIM.TrafficSimulation
                         routeTrafficSimConf.npcPrefabs,
                         routeTrafficSimConf.route,
                         npcVehicleSimulator,
-                        routeTrafficSimConf.maximumSpawns
+                        routeTrafficSimConf.maximumSpawns,
+                        routeTrafficSimConf.spawnIntervalTime
                     );
                     routeTs.enabled = routeTrafficSimConf.enabled;
                     trafficSimulatorNodes.Add(routeTs);
