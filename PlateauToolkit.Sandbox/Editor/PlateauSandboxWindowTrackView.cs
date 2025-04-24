@@ -56,7 +56,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             EditorSplineUtility.SetKnotPlacementTool();
                             RefreshTracksHierarchy(context);
                         };
-
+                        // EndLayoutGroup: BeginLayoutGroup must be called first.が出ないようにする対策
                         GUIUtility.ExitGUI();
                     }
                 }
