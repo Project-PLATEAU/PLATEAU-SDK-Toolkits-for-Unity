@@ -1,4 +1,5 @@
 ﻿using PlateauToolkit.Editor;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.EditorTools;
@@ -20,6 +21,51 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             RefreshTracksHierarchy(context);
         }
+
+        /// <summary>
+        /// KnotPlacementToolの終了判定用
+        /// </summary>
+        private Type LastToolType { get; set; }
+
+        /// <summary>
+        /// 新規トラック作成で作成されたトラック
+        /// </summary>
+        private PlateauSandboxTrack SelectedTrack { get; set; }
+
+        /// <summary>
+        /// ToolManager.activeToolType切り替えコールバック
+        /// </summary>
+        void OnActiveToolChanged()
+        {
+            // KnotPlacementToolがinternalクラスでアクセスできないので名前ハードコーディング
+            // KnotPlacementToolが終わった時に, 対象のTrackにknotsが無ければキャンセル扱いで破棄する
+            if (LastToolType.Name == "KnotPlacementTool")
+            {
+                if (SelectedTrack && SelectedTrack.GetKnotsCount() == 0)
+                {
+                    EditorApplication.delayCall += () =>
+                    {
+                        GameObject.DestroyImmediate(SelectedTrack.gameObject);
+                    };
+                }
+                ToolManager.activeToolChanged -= OnActiveToolChanged;
+                SelectedTrack = null;
+            }
+
+            LastToolType = ToolManager.activeToolType;
+        }
+
+        /// <summary>
+        /// ToolManagerのactiveToolTypeの切り替え検知開始
+        /// </summary>
+        /// <param name="selectedTrack"></param>
+        void StartToolChangeNotifier(PlateauSandboxTrack selectedTrack)
+        {
+            SelectedTrack = selectedTrack;
+            LastToolType = ToolManager.activeToolType;
+            ToolManager.activeToolChanged += OnActiveToolChanged;
+        }
+
 
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)
         {
@@ -45,10 +91,10 @@ namespace PlateauToolkit.Sandbox.Editor
                     {
                         string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null, "Track");
                         GameObject trackGameObject = ObjectFactory.CreateGameObject(gameObjectName, typeof(PlateauSandboxTrack));
-
                         trackGameObject.transform.localPosition = Vector3.zero;
                         trackGameObject.transform.localRotation = Quaternion.identity;
 
+                        StartToolChangeNotifier(trackGameObject.GetComponent<PlateauSandboxTrack>());
                         Selection.activeObject = trackGameObject;
                         ActiveEditorTracker.sharedTracker.RebuildIfNecessary();
                         EditorApplication.delayCall += () =>
@@ -56,6 +102,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             EditorSplineUtility.SetKnotPlacementTool();
                             RefreshTracksHierarchy(context);
                         };
+
                         // EndLayoutGroup: BeginLayoutGroup must be called first.が出ないようにする対策
                         GUIUtility.ExitGUI();
                     }
@@ -70,6 +117,15 @@ namespace PlateauToolkit.Sandbox.Editor
                                 PlateauToolkitGUIStyles.k_ButtonCancelColor).Button("ESCキーまたはエンターキーでトラック作成を終了"))
                         {
                         }
+                    }
+
+                    var evt = Event.current;
+                    if (evt.type == EventType.KeyDown && evt.keyCode == KeyCode.Escape)
+                    {
+                        EditorApplication.delayCall += () =>
+                        {
+                        };
+                        GUIUtility.ExitGUI();
                     }
                 }
                 EditorGUILayout.Space(10);
