@@ -43,9 +43,11 @@ namespace PlateauToolkit.Sandbox.Editor
             {
                 if (SelectedTrack && SelectedTrack.GetKnotsCount() == 0)
                 {
+                    // ↓でSelectedTrack初期化しているので一時変数に入れる
+                    var tmp = SelectedTrack;
                     EditorApplication.delayCall += () =>
                     {
-                        GameObject.DestroyImmediate(SelectedTrack.gameObject);
+                        GameObject.DestroyImmediate(tmp.gameObject);
                     };
                 }
                 ToolManager.activeToolChanged -= OnActiveToolChanged;
