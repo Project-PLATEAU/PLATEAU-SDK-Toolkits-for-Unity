@@ -84,7 +84,7 @@ namespace PlateauToolkit.Sandbox
         public void OnMove(in MovementInfo movementInfo, PlateauSandboxTrack track)
         {
             // Align the object to the spline.
-            Vector3 position = track.GetPositionBySplineContainerT(movementInfo.m_SplineContainerT);
+            Vector3 position = track.GetPositionBySplineContainerT(movementInfo.m_SplineContainerT, movementInfo.m_PositionOffset);
 
             // Set the position first.
             SetPosition(position);
