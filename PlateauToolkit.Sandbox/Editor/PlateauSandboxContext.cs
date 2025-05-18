@@ -11,7 +11,8 @@ namespace PlateauToolkit.Sandbox.Editor
     {
         static PlateauSandboxContext s_Current;
 
-        readonly List<PlateauSandboxTrack> m_Tracks = new();
+        // 最初にアクセスするまで生成を遅延する(後方互換の為)
+        List<PlateauSandboxTrack> m_Tracks = null;
         readonly PlacementSettings m_PlacementSettings = new();
         GameObject m_SelectedObject;
 
@@ -26,9 +27,9 @@ namespace PlateauToolkit.Sandbox.Editor
             get
             {
                 // TODO: Managing lifecycles of objects is the best way.
-                if (IsAnyTrackDestroyed)
+                if (m_Tracks == null || IsAnyTrackDestroyed)
                 {
-                    RefreshArrays(m_Tracks);
+                    RefreshArrays(ref m_Tracks);
                 }
 
                 return m_Tracks;
@@ -42,6 +43,9 @@ namespace PlateauToolkit.Sandbox.Editor
         {
             get
             {
+                if (m_Tracks == null)
+                    return false;
+
                 foreach (PlateauSandboxTrack track in m_Tracks)
                 {
                     if (track == null)
@@ -54,8 +58,9 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public PlacementSettings PlacementSettings => m_PlacementSettings;
 
-        static void RefreshArrays<T>(List<T> list) where T : Component
+        static void RefreshArrays<T>(ref List<T> list) where T : Component
         {
+            list ??= new();
             list.Clear();
 
             Scene activeScene = SceneManager.GetActiveScene();
@@ -168,7 +173,7 @@ namespace PlateauToolkit.Sandbox.Editor
 
         public void RefreshTracks()
         {
-            RefreshArrays(m_Tracks);
+            RefreshArrays(ref m_Tracks);
         }
     }
 
