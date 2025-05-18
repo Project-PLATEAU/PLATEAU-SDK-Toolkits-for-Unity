@@ -120,15 +120,6 @@ namespace PlateauToolkit.Sandbox.Editor
                         {
                         }
                     }
-
-                    var evt = Event.current;
-                    if (evt.type == EventType.KeyDown && evt.keyCode == KeyCode.Escape)
-                    {
-                        EditorApplication.delayCall += () =>
-                        {
-                        };
-                        GUIUtility.ExitGUI();
-                    }
                 }
                 EditorGUILayout.Space(10);
 
