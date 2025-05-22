@@ -1,4 +1,5 @@
 ﻿using PlateauToolkit.Editor;
+using System;
 using System.Linq;
 using UnityEditor;
 using UnityEditor.EditorTools;
@@ -21,9 +22,66 @@ namespace PlateauToolkit.Sandbox.Editor
             RefreshTracksHierarchy(context);
         }
 
+        /// <summary>
+        /// KnotPlacementToolの終了判定用
+        /// </summary>
+        private Type LastToolType { get; set; }
+
+        /// <summary>
+        /// 新規トラック作成で作成されたトラック
+        /// </summary>
+        private PlateauSandboxTrack SelectedTrack { get; set; }
+
+        /// <summary>
+        /// ToolManager.activeToolType切り替えコールバック
+        /// </summary>
+        void OnActiveToolChanged()
+        {
+            // KnotPlacementToolがinternalクラスでアクセスできないので名前ハードコーディング
+            // KnotPlacementToolが終わった時に, 対象のTrackにknotsが無ければキャンセル扱いで破棄する
+            if (LastToolType.Name == "KnotPlacementTool")
+            {
+                if (SelectedTrack && SelectedTrack.GetKnotsCount() == 0)
+                {
+                    // ↓でSelectedTrack初期化しているので一時変数に入れる
+                    var tmp = SelectedTrack;
+                    EditorApplication.delayCall += () =>
+                    {
+                        GameObject.DestroyImmediate(tmp.gameObject);
+                    };
+                }
+                ToolManager.activeToolChanged -= OnActiveToolChanged;
+                SelectedTrack = null;
+            }
+
+            LastToolType = ToolManager.activeToolType;
+        }
+
+        /// <summary>
+        /// ToolManagerのactiveToolTypeの切り替え検知開始
+        /// </summary>
+        /// <param name="selectedTrack"></param>
+        void StartToolChangeNotifier(PlateauSandboxTrack selectedTrack)
+        {
+            SelectedTrack = selectedTrack;
+            LastToolType = ToolManager.activeToolType;
+            ToolManager.activeToolChanged += OnActiveToolChanged;
+        }
+
+
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)
         {
             PlateauToolkitEditorGUILayout.Header("ツール");
+
+            // ヒエラルキーで直接破壊したとき用.
+            // Trackが外部から破壊されたときには表示を更新する
+            if (context.IsAnyTrackDestroyed)
+            {
+                EditorApplication.delayCall += () =>
+                {
+                    RefreshTracksHierarchy(context);
+                };
+            }
             using (new EditorGUILayout.VerticalScope())
             {
                 if (ToolManager.activeToolType.Name != "KnotPlacementTool")
@@ -35,10 +93,10 @@ namespace PlateauToolkit.Sandbox.Editor
                     {
                         string gameObjectName = GameObjectUtility.GetUniqueNameForSibling(null, "Track");
                         GameObject trackGameObject = ObjectFactory.CreateGameObject(gameObjectName, typeof(PlateauSandboxTrack));
-
                         trackGameObject.transform.localPosition = Vector3.zero;
                         trackGameObject.transform.localRotation = Quaternion.identity;
 
+                        StartToolChangeNotifier(trackGameObject.GetComponent<PlateauSandboxTrack>());
                         Selection.activeObject = trackGameObject;
                         ActiveEditorTracker.sharedTracker.RebuildIfNecessary();
                         EditorApplication.delayCall += () =>
@@ -47,6 +105,7 @@ namespace PlateauToolkit.Sandbox.Editor
                             RefreshTracksHierarchy(context);
                         };
 
+                        // EndLayoutGroup: BeginLayoutGroup must be called first.が出ないようにする対策
                         GUIUtility.ExitGUI();
                     }
                 }
@@ -88,6 +147,7 @@ namespace PlateauToolkit.Sandbox.Editor
                     }
                 }
             }
+
             EditorGUILayout.Space(15);
 
             m_TreeView.OnGUI(EditorGUILayout.GetControlRect(false, 200));
@@ -152,7 +212,6 @@ namespace PlateauToolkit.Sandbox.Editor
                             },
                         })),
             };
-
             var headerState = new MultiColumnHeaderState(m_HierarchyContext.Hierarchy.Header.Columns);
             var header = new MultiColumnHeader(headerState);
 
