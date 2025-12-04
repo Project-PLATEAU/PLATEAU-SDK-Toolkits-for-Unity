@@ -14,6 +14,7 @@ using UnityEngine.SceneManagement;
 using System.Linq;
 #if UNITY_URP
 using UnityEngine.Rendering.Universal;
+
 #endif
 #if UNITY_HDRP
 using UnityEngine.Rendering;
@@ -109,6 +110,8 @@ namespace PlateauToolkit.Rendering.Editor
         bool m_TextureMerged;
 #endif
 
+        PlateauToolkitRenderingTileStrategy m_RenderingTileStrategy;
+
         enum Tab
         {
             LodGrouping,
@@ -157,6 +160,12 @@ namespace PlateauToolkit.Rendering.Editor
 
             Selection.selectionChanged += CancelEditMode;
             Selection.selectionChanged += CancelScalingMode;
+
+            // タイル選択UIの初期化
+            if (m_RenderingTileStrategy == null)
+            {
+                m_RenderingTileStrategy = new PlateauToolkitRenderingTileStrategy(this, m_AutoTextureProcessor, m_Grouping);
+            }
         }
 
         void OnDisable()
@@ -364,11 +373,23 @@ namespace PlateauToolkit.Rendering.Editor
                     EditorGUILayout.HelpBox("建物のテクスチャを自動的に生成します。実在する建物の見た目と異なる場合があります。", MessageType.Info);
                     EditorGUILayout.Space();
 
+                    // タイル選択UIの表示
+                    m_RenderingTileStrategy?.Draw();
+
                     EditorGUI.BeginChangeCheck();
                     if (GUILayout.Button("テクスチャ生成"))
                     {
-                        m_SelectedObjects.Clear();
-                        AutoTexture();
+                        if (m_RenderingTileStrategy?.IsTileManagerSelected == true)
+                        {
+                            // タイル用処理
+                            m_RenderingTileStrategy.AutoTexture();
+                        }
+                        else
+                        {
+                            // 通常処理
+                            m_SelectedObjects.Clear();
+                            AutoTexture();
+                        }
                     }
 
                     EditorGUILayout.Space();
@@ -1476,6 +1497,12 @@ namespace PlateauToolkit.Rendering.Editor
                     m_TextureEnhance.SaveImageParameter(ImageEditParameters.Sharpness, m_Sharpness);
                 }
             }
+        }
+
+        internal void BlockUI()
+        {
+            m_BlockUI = true;
+            Repaint();
         }
 
         internal void UnblockUI()

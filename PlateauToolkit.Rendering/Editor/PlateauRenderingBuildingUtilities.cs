@@ -80,7 +80,8 @@ namespace PlateauToolkit.Rendering.Editor
         /// <returns></returns>
         public static bool IsPlateauBuilding(Transform transformOfSelectedMesh)
         {
-            return transformOfSelectedMesh.HasParentWithComponent<PLATEAUInstancedCityModel>() && (transformOfSelectedMesh.name.Contains("BLD") || transformOfSelectedMesh.name.Contains("bldg") || transformOfSelectedMesh.name.Contains("group"));
+            return (transformOfSelectedMesh.HasParentWithComponent<PLATEAUInstancedCityModel>() || transformOfSelectedMesh.HasParentWithComponent<PLATEAU.DynamicTile.PLATEAUTileManager>())
+                && (transformOfSelectedMesh.name.Contains("BLD") || transformOfSelectedMesh.name.Contains("bldg") || transformOfSelectedMesh.name.Contains("group"));
         }
 
         static bool HasParentWithComponent<T>(this Transform child) where T : Component

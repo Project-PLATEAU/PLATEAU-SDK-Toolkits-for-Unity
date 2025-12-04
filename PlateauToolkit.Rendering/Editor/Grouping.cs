@@ -126,6 +126,71 @@ namespace PlateauToolkit.Rendering.Editor
             OnProcessingFinished?.Invoke();
         }
 
+        /// <summary>
+        /// Root Transform内のオブジェクトを地物ごとにグルーピングします。
+        /// </summary>
+        /// <param name="transformRoot"></param>
+        internal void GroupObjectsInTransform(Transform transformRoot)
+        {
+            Dictionary<string, GameObject> rootObjects = new Dictionary<string, GameObject>();
+            Dictionary<string, Dictionary<string, GameObject>> lodObjects = new Dictionary<string, Dictionary<string, GameObject>>();
+
+            List<Transform> copyOfGroupedBuildingsList = new List<Transform>();
+            List<GameObject> objectsToDelete = new List<GameObject>();
+
+            for (int i = 0; i < transformRoot.childCount; i++)
+            {
+                Transform gmlRoot = transformRoot.GetChild(i);
+                float stepProgress = i / (float)transformRoot.childCount;
+                if (EditorUtility.DisplayCancelableProgressBar("地物のグルーピング", "グルーピング中", stepProgress))
+                {
+                    UnityEngine.Debug.Log("LOD生成用のグルーピングがキャンセルされました。");
+                    break;
+                }
+
+                objectsToDelete.Clear();
+                for (int k = 0; k < gmlRoot.childCount; k++)
+                {
+                    Transform lodGroupedBuildings = gmlRoot.transform.GetChild(k);
+                    if (lodGroupedBuildings.name.Contains("LOD0") || lodGroupedBuildings.name.Contains("LOD1") || lodGroupedBuildings.name.Contains("LOD2"))
+                    {
+                        copyOfGroupedBuildingsList.Clear();
+                        for (int l = 0; l < lodGroupedBuildings.transform.childCount; l++)
+                        {
+                            Transform building = lodGroupedBuildings.transform.GetChild(l);
+                            copyOfGroupedBuildingsList.Add(building);
+                        }
+
+                        for (int m = 0; m < copyOfGroupedBuildingsList.Count; m++)
+                        {
+                            Transform buildingCopy = copyOfGroupedBuildingsList[m];
+                            GroupByLodName(gmlRoot, rootObjects, lodObjects, buildingCopy.gameObject, lodGroupedBuildings.name);
+                        }
+                    }
+
+                    if (lodGroupedBuildings.childCount == 0 && !PrefabUtility.IsPartOfAnyPrefab(lodGroupedBuildings.gameObject))
+                    {
+                        objectsToDelete.Add(lodGroupedBuildings.gameObject);
+                    }
+                }
+
+                foreach (GameObject obj in objectsToDelete)
+                {
+                    try
+                    {
+                        GameObject.DestroyImmediate(obj);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogException(e);
+                        Debug.Log("object name: " + obj.name);
+                    }
+                }
+            }
+            EditorUtility.ClearProgressBar();
+            OnProcessingFinished?.Invoke();
+        }
+
         void GroupByLodName(Transform gmlRoot, Dictionary<string, GameObject> rootObjectDictionary, Dictionary<string, Dictionary<string, GameObject>> lodDictionary, GameObject obj, string lodLevel)
         {
             // Use the object name as the key for grouping but ignore if we find _plateau_auto_textured because user may have textured the Lod1 first before creating LOD group
