@@ -343,37 +343,46 @@ namespace PlateauToolkit.Rendering.Editor
                         {
                             m_BlockUI = true;
 
-#if PLATEAU_SDK_222
                             var building = GameObject.FindObjectsOfType<GameObject>()
                                 .Where(obj => obj.GetComponent<PLATEAUCityObjectGroup>() != null
                                         && obj.GetComponentInParent<PLATEAUTileManager>() == null //タイルは除外
                                         && (obj.name.Contains("BLD") || obj.name.Contains("bldg") || obj.name.Contains("group")))
                                 .FirstOrDefault();
-                            if (building != null)
+                            if (building == null)
                             {
-                                m_MeshGranularity = building.GetComponent<PLATEAUCityObjectGroup>().Granularity;
-                            }
-                            if (m_MeshGranularity == MeshGranularity.PerCityModelArea)
-                            {
-                                PLATEAUInstancedCityModel rootCityModel = PlateauRenderingBuildingUtilities.RetrieveTopmostParentWithComponent<PLATEAUInstancedCityModel>(building.transform);
-                                ConvertAsync(rootCityModel.gameObject, () =>
-                                {
-                                    m_Grouping.GroupObjects();
-                                    m_CreateLodGroup.CreateLodGroups();
-                                }).ContinueWithErrorCatch();
+                                EditorUtility.DisplayDialog(
+                                   "オブジェクトの確認",
+                                   "有効なオブジェクトが見つかりませんでした。",
+                                   "OK"
+                                   );
+                                m_BlockUI = false;
                             }
                             else
                             {
+#if PLATEAU_SDK_222
+                                m_MeshGranularity = building.GetComponent<PLATEAUCityObjectGroup>().Granularity;
+                                if (m_MeshGranularity == MeshGranularity.PerCityModelArea)
+                                {
+                                    PLATEAUInstancedCityModel rootCityModel = PlateauRenderingBuildingUtilities.RetrieveTopmostParentWithComponent<PLATEAUInstancedCityModel>(building.transform);
+                                    ConvertAsync(rootCityModel.gameObject, () =>
+                                    {
+                                        m_Grouping.GroupObjects();
+                                        m_CreateLodGroup.CreateLodGroups();
+                                    }).ContinueWithErrorCatch();
+                                }
+                                else
+                                {
+                                    m_Grouping.TrySeparateMeshes();
+                                    m_Grouping.GroupObjects();
+                                    m_CreateLodGroup.CreateLodGroups();
+                                }
+
+#else
                                 m_Grouping.TrySeparateMeshes();
                                 m_Grouping.GroupObjects();
                                 m_CreateLodGroup.CreateLodGroups();
-                            }
-#else
-
-                        m_Grouping.TrySeparateMeshes();
-                        m_Grouping.GroupObjects();
-                        m_CreateLodGroup.CreateLodGroups();
 #endif
+                            }
                         }
                     }
                     break;
