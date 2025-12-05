@@ -138,9 +138,9 @@ namespace PlateauToolkit.Rendering.Editor
             List<Transform> copyOfGroupedBuildingsList = new List<Transform>();
             List<GameObject> objectsToDelete = new List<GameObject>();
 
+            objectsToDelete.Clear();
             for (int i = 0; i < transformRoot.childCount; i++)
             {
-                Transform gmlRoot = transformRoot.GetChild(i);
                 float stepProgress = i / (float)transformRoot.childCount;
                 if (EditorUtility.DisplayCancelableProgressBar("地物のグルーピング", "グルーピング中", stepProgress))
                 {
@@ -148,43 +148,41 @@ namespace PlateauToolkit.Rendering.Editor
                     break;
                 }
 
-                objectsToDelete.Clear();
-                for (int k = 0; k < gmlRoot.childCount; k++)
+                Transform lodGroupedBuildings = transformRoot.transform.GetChild(i);
+                if (lodGroupedBuildings.name.Contains("LOD0") || lodGroupedBuildings.name.Contains("LOD1") || lodGroupedBuildings.name.Contains("LOD2"))
                 {
-                    Transform lodGroupedBuildings = gmlRoot.transform.GetChild(k);
-                    if (lodGroupedBuildings.name.Contains("LOD0") || lodGroupedBuildings.name.Contains("LOD1") || lodGroupedBuildings.name.Contains("LOD2"))
+                    copyOfGroupedBuildingsList.Clear();
+                    for (int l = 0; l < lodGroupedBuildings.transform.childCount; l++)
                     {
-                        copyOfGroupedBuildingsList.Clear();
-                        for (int l = 0; l < lodGroupedBuildings.transform.childCount; l++)
-                        {
-                            Transform building = lodGroupedBuildings.transform.GetChild(l);
-                            copyOfGroupedBuildingsList.Add(building);
-                        }
-
-                        for (int m = 0; m < copyOfGroupedBuildingsList.Count; m++)
-                        {
-                            Transform buildingCopy = copyOfGroupedBuildingsList[m];
-                            GroupByLodName(gmlRoot, rootObjects, lodObjects, buildingCopy.gameObject, lodGroupedBuildings.name);
-                        }
+                        Transform building = lodGroupedBuildings.transform.GetChild(l);
+                        copyOfGroupedBuildingsList.Add(building);
                     }
 
-                    if (lodGroupedBuildings.childCount == 0 && !PrefabUtility.IsPartOfAnyPrefab(lodGroupedBuildings.gameObject))
+                    for (int m = 0; m < copyOfGroupedBuildingsList.Count; m++)
                     {
-                        objectsToDelete.Add(lodGroupedBuildings.gameObject);
+                        Transform buildingCopy = copyOfGroupedBuildingsList[m];
+                        GroupByLodName(transformRoot, rootObjects, lodObjects, buildingCopy.gameObject, lodGroupedBuildings.name);
                     }
                 }
 
-                foreach (GameObject obj in objectsToDelete)
+                if (lodGroupedBuildings.childCount == 0 && !PrefabUtility.IsPartOfAnyPrefab(lodGroupedBuildings.gameObject))
                 {
-                    try
-                    {
-                        GameObject.DestroyImmediate(obj);
-                    }
-                    catch (Exception e)
-                    {
-                        Debug.LogException(e);
-                        Debug.Log("object name: " + obj.name);
-                    }
+                    objectsToDelete.Add(lodGroupedBuildings.gameObject);
+
+                    Debug.Log("Deleting empty LOD group: " + lodGroupedBuildings.name);
+                }
+            }
+
+            foreach (GameObject obj in objectsToDelete)
+            {
+                try
+                {
+                    GameObject.DestroyImmediate(obj);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogException(e);
+                    Debug.Log("object name: " + obj.name);
                 }
             }
             EditorUtility.ClearProgressBar();

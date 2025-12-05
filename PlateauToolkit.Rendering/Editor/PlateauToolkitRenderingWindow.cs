@@ -12,6 +12,8 @@ using PlateauToolkit.Rendering.ImageProcessing;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using PLATEAU.DynamicTile;
+
 #if UNITY_URP
 using UnityEngine.Rendering.Universal;
 
@@ -164,7 +166,7 @@ namespace PlateauToolkit.Rendering.Editor
             // タイル選択UIの初期化
             if (m_RenderingTileStrategy == null)
             {
-                m_RenderingTileStrategy = new PlateauToolkitRenderingTileStrategy(this, m_AutoTextureProcessor, m_Grouping);
+                m_RenderingTileStrategy = new PlateauToolkitRenderingTileStrategy(this);
             }
         }
 
@@ -323,12 +325,19 @@ namespace PlateauToolkit.Rendering.Editor
 
                     if (GUILayout.Button("LODグループ生成"))
                     {
+
+                        string message = "シーンのオブジェクトが変更されます。実行しますか？";
+                        if (FindObjectOfType<PLATEAUTileManager>() != null)
+                        {
+                            message += "\n(動的タイルはLODグループ生成の対象に含まれません。)";
+                        }
+
                         bool isOptionSelected = EditorUtility.DisplayDialog(
-                               "LODグループ生成の確認",
-                               "シーンのオブジェクトが変更されます。実行しますか？",
-                               "はい",
-                               "いいえ"
-                           );
+                            "LODグループ生成の確認",
+                            message,
+                            "はい",
+                            "いいえ"
+                            );
 
                         if (isOptionSelected)
                         {
@@ -337,6 +346,7 @@ namespace PlateauToolkit.Rendering.Editor
 #if PLATEAU_SDK_222
                             var building = GameObject.FindObjectsOfType<GameObject>()
                                 .Where(obj => obj.GetComponent<PLATEAUCityObjectGroup>() != null
+                                        && obj.GetComponentInParent<PLATEAUTileManager>() == null //タイルは除外
                                         && (obj.name.Contains("BLD") || obj.name.Contains("bldg") || obj.name.Contains("group")))
                                 .FirstOrDefault();
                             if (building != null)
@@ -360,9 +370,9 @@ namespace PlateauToolkit.Rendering.Editor
                             }
 #else
 
-                            m_Grouping.TrySeparateMeshes();
-                            m_Grouping.GroupObjects();
-                            m_CreateLodGroup.CreateLodGroups();
+                        m_Grouping.TrySeparateMeshes();
+                        m_Grouping.GroupObjects();
+                        m_CreateLodGroup.CreateLodGroups();
 #endif
                         }
                     }
@@ -382,7 +392,7 @@ namespace PlateauToolkit.Rendering.Editor
                         if (m_RenderingTileStrategy?.IsTileManagerSelected == true)
                         {
                             // タイル用処理
-                            m_RenderingTileStrategy.AutoTexture();
+                            m_RenderingTileStrategy.CreateTexture();
                         }
                         else
                         {
@@ -967,6 +977,18 @@ namespace PlateauToolkit.Rendering.Editor
         void AutoTexture()
         {
             PlateauRenderingMeshUtilities.GetSelectedGameObjects(m_SelectedObjects);
+
+            // TileManager を親に持つオブジェクトが選択されている場合は警告を出す
+            if (m_SelectedObjects.Any(go => go.GetComponentInParent<PLATEAUTileManager>() != null))
+            {
+                string message = "動的タイルを対象とするには「調整対象の種類」を動的タイルにしてください。";
+                EditorUtility.DisplayDialog(
+                    "オブジェクト選択の確認",
+                    message,
+                    "OK"
+                    );
+                return;
+            }
 
             if (!SelectedObjectsExist())
             {
