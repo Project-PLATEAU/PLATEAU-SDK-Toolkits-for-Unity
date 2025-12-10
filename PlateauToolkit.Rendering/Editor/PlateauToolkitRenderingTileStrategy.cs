@@ -13,6 +13,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
+using static PLATEAU.DynamicTile.TileConvertCommon;
 
 namespace PlateauToolkit.Rendering.Editor
 {
@@ -164,53 +165,7 @@ namespace PlateauToolkit.Rendering.Editor
                         m_TileRebuilder = new TileRebuilder();
                         PLATEAUTileManager tileManager = m_TileListElementData.TileManager;
                         ObservableCollection<TileSelectionItem> selectedBuildingTiles = TileConvertCommon.FilterByPackage(PLATEAU.Dataset.PredefinedCityModelPackage.Building, m_TileListElementData.ObservableSelectedTiles, tileManager); // 建物地物に絞り込み
-
-                        List<PLATEAUDynamicTile> selectedTiles = TileConvertCommon.GetSelectedTiles(selectedBuildingTiles, tileManager);
-                        Transform editingTile = await TileConvertCommon.GetEditableTransformParent(selectedBuildingTiles, tileManager, m_TileRebuilder, ct);
-                        List<Transform> tileTransforms = TileConvertCommon.GetEditableTransforms(selectedBuildingTiles, editingTile);
-
-                        if (tileTransforms.Count > 0)
-                        {
-
-#if PLATEAU_SDK_222
-
-                            IEnumerable<Transform> convertibleTiles = tileTransforms.Where(t => Enumerable.Range(0, t.childCount)
-                              .Select(i => t.GetChild(i).name).All(n => n.StartsWith("LOD"))); // タイル直下の子が全てLODであるタイルのみ抽出 (改造構造が変わっていると変換できない）
-                            if (convertibleTiles.Any())
-                            {
-                                // 主要地物に変換します。
-                                PLATEAU.CityImport.Import.Convert.GranularityConvertResult result = await new CityGranularityConverter().ConvertAsync(
-                                    new GranularityConvertOptionUnity(
-                                        new GranularityConvertOption(ConvertGranularity.PerPrimaryFeatureObject, 1), new UniqueParentTransformList(convertibleTiles), true));
-                                tileTransforms = TileConvertCommon.GetEditableTransforms(selectedBuildingTiles, editingTile); // 変換後の Tile を再取得
-                            }
-#endif
-                            foreach (Transform transform in tileTransforms)
-                            {
-                                List<GameObject> processsingGameObjects = GetChildGameObjects(transform);
-                                if (PlateauRenderingBuildingUtilities.GetMeshStructure(processsingGameObjects.First()) != PlateauMeshStructure.CombinedArea && !processsingGameObjects.First().name.Contains(PlateauRenderingConstants.k_Grouped))
-                                {
-                                    m_Grouping.GroupObjectsInTransform(transform);
-                                    processsingGameObjects.RemoveAll(go => go == null);
-                                }
-
-                                var tcs = new TaskCompletionSource<bool>();
-                                void OnProcessingFinishedHandler()
-                                {
-                                    // 処理完了時のコールバック
-                                    m_AutoTextureProcessor.OnProcessingFinished -= OnProcessingFinishedHandler;
-                                    tcs.TrySetResult(true);
-                                }
-
-                                m_AutoTextureProcessor.OnProcessingFinished += OnProcessingFinishedHandler;
-                                m_AutoTextureProcessor.RunOptimizeProcess(processsingGameObjects); // 処理開始
-                                await tcs.Task; // 完了待ち
-                            }
-                        }
-
-                        tileTransforms = TileConvertCommon.GetEditableTransforms(selectedBuildingTiles, editingTile, true); // Tileとして取得し直す
-                        await TileConvertCommon.SavePrefabAssets(tileTransforms, m_TileRebuilder, ct);
-                        await m_TileRebuilder.RebuildByTiles(tileManager, selectedTiles);
+                        await TileConvertCommon.EditAndSaveSelectedTilesAsync<ObservableCollection<TileSelectionItem>>(selectedBuildingTiles, tileManager, m_TileRebuilder, ApplyAutoTextureHandler, selectedBuildingTiles, ct);
                     }
                     catch (Exception ex)
                     {
@@ -225,6 +180,49 @@ namespace PlateauToolkit.Rendering.Editor
             }
         }
 
+        async Task ApplyAutoTextureHandler(EditAndSaveTilesParams param, ObservableCollection<TileSelectionItem> selectedItems)
+        {
+            List<Transform> tileTransforms = param.TileTransforms;
+            if (param.TileTransforms.Count > 0)
+            {
+
+#if PLATEAU_SDK_222
+
+                IEnumerable<Transform> convertibleTiles = tileTransforms.Where(t => Enumerable.Range(0, t.childCount)
+                  .Select(i => t.GetChild(i).name).All(n => n.StartsWith("LOD"))); // タイル直下の子が全てLODであるタイルのみ抽出 (改造構造が変わっていると変換できない）
+                if (convertibleTiles.Any())
+                {
+                    // 主要地物に変換します。
+                    PLATEAU.CityImport.Import.Convert.GranularityConvertResult result = await new CityGranularityConverter().ConvertAsync(
+                        new GranularityConvertOptionUnity(
+                            new GranularityConvertOption(ConvertGranularity.PerPrimaryFeatureObject, 1), new UniqueParentTransformList(convertibleTiles), true));
+                    tileTransforms = TileConvertCommon.GetEditableTransforms(selectedItems, param.EditingTile); // 変換後の Tile を再取得
+                }
+#endif
+                foreach (Transform transform in tileTransforms)
+                {
+                    List<GameObject> processsingGameObjects = GetChildGameObjects(transform);
+                    if (PlateauRenderingBuildingUtilities.GetMeshStructure(processsingGameObjects.First()) != PlateauMeshStructure.CombinedArea && !processsingGameObjects.First().name.Contains(PlateauRenderingConstants.k_Grouped))
+                    {
+                        m_Grouping.GroupObjectsInTransform(transform);
+                        processsingGameObjects.RemoveAll(go => go == null);
+                    }
+
+                    var tcs = new TaskCompletionSource<bool>();
+                    void OnProcessingFinishedHandler()
+                    {
+                        // 処理完了時のコールバック
+                        m_AutoTextureProcessor.OnProcessingFinished -= OnProcessingFinishedHandler;
+                        tcs.TrySetResult(true);
+                    }
+
+                    m_AutoTextureProcessor.OnProcessingFinished += OnProcessingFinishedHandler;
+                    m_AutoTextureProcessor.RunOptimizeProcess(processsingGameObjects); // 処理開始
+                    await tcs.Task; // 完了待ち
+                }
+            }
+        }
+
         internal void DrawImageFilterSaveTileButton(TextureEnhance textureEnhance, ComputeShader computeShader)
         {
 
@@ -235,14 +233,7 @@ namespace PlateauToolkit.Rendering.Editor
 
             EditorApplication.delayCall += () =>
             {
-                bool isOptionSelected = EditorUtility.DisplayDialog(
-                    "タイル保存の確認",
-                    "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
-                    "はい",
-                    "いいえ"
-                );
-
-                if (isOptionSelected)
+                if (ConfirmTileSave())
                 {
                     SaveSelectedTilesImageFilterAsync(textureEnhance, computeShader).ContinueWithErrorCatch();
                 }
@@ -275,25 +266,36 @@ namespace PlateauToolkit.Rendering.Editor
             }
         }
 
-        void ApplyFilterHandler(Transform target, (TextureEnhance, ComputeShader) param )
+        Task ApplyFilterHandler(EditAndSaveTilesParams param, (TextureEnhance, ComputeShader) tparam)
         {
-            (TextureEnhance textureEnhance, ComputeShader computeShader) = param;
-            List<Transform> children = target.GetAllChildrenWithComponent<MeshRenderer>();
-            foreach (Transform child in children)
+            List<Transform> tileTransforms = param.TileTransforms;
+            (TextureEnhance textureEnhance, ComputeShader computeShader) = tparam;
+
+            foreach (Transform target in tileTransforms)
             {
-                GameObject targetGameObject = child.gameObject;
-                if (PlateauRenderingBuildingUtilities.IsObjectAutoTextured(targetGameObject))
+                if (target == null)
                 {
                     continue;
                 }
 
-                if (PlateauRenderingBuildingUtilities.GetMeshLodLevel(targetGameObject) != PlateauMeshLodLevel.Lod2)
+                List<Transform> children = target.GetAllChildrenWithComponent<MeshRenderer>();
+                foreach (Transform child in children)
                 {
-                    continue;
-                }
+                    GameObject targetGameObject = child.gameObject;
+                    if (PlateauRenderingBuildingUtilities.IsObjectAutoTextured(targetGameObject))
+                    {
+                        continue;
+                    }
 
-                m_ParentWindow.ApplyImageOperationsForObject(targetGameObject, textureEnhance, computeShader);
+                    if (PlateauRenderingBuildingUtilities.GetMeshLodLevel(targetGameObject) != PlateauMeshLodLevel.Lod2)
+                    {
+                        continue;
+                    }
+
+                    m_ParentWindow.ApplyImageOperationsForObject(targetGameObject, textureEnhance, computeShader);
+                }
             }
+            return Task.CompletedTask;
         }
 
         internal void DrawImageScalingSaveTileButton(TextureDownscaleRatio scaleRatio)
@@ -305,14 +307,7 @@ namespace PlateauToolkit.Rendering.Editor
 
             EditorApplication.delayCall += () =>
             {
-                bool isOptionSelected = EditorUtility.DisplayDialog(
-                    "タイル保存の確認",
-                    "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
-                    "はい",
-                    "いいえ"
-                );
-
-                if (isOptionSelected)
+                if (ConfirmTileSave())
                 {
                     SaveSelectedTilesImageScalingAsync(scaleRatio).ContinueWithErrorCatch();
                 }
@@ -345,24 +340,34 @@ namespace PlateauToolkit.Rendering.Editor
             }
         }
 
-        void ApplyImageScalingHandler(Transform target, TextureDownscaleRatio scaleRatio)
+        Task ApplyImageScalingHandler(EditAndSaveTilesParams param, TextureDownscaleRatio scaleRatio)
         {
-            List<Transform> children = target.GetAllChildrenWithComponent<MeshRenderer>();
-            foreach (Transform child in children)
+            List<Transform> tileTransforms = param.TileTransforms;
+            foreach (Transform target in tileTransforms)
             {
-                GameObject targetGameObject = child.gameObject;
-                if (PlateauRenderingBuildingUtilities.IsObjectAutoTextured(targetGameObject))
+                if (target == null)
                 {
                     continue;
                 }
 
-                if (PlateauRenderingBuildingUtilities.GetMeshLodLevel(targetGameObject) != PlateauMeshLodLevel.Lod2)
+                List<Transform> children = target.GetAllChildrenWithComponent<MeshRenderer>();
+                foreach (Transform child in children)
                 {
-                    continue;
-                }
+                    GameObject targetGameObject = child.gameObject;
+                    if (PlateauRenderingBuildingUtilities.IsObjectAutoTextured(targetGameObject))
+                    {
+                        continue;
+                    }
 
-                m_ParentWindow.ApplyImageScalingForObject(targetGameObject, scaleRatio);
+                    if (PlateauRenderingBuildingUtilities.GetMeshLodLevel(targetGameObject) != PlateauMeshLodLevel.Lod2)
+                    {
+                        continue;
+                    }
+
+                    m_ParentWindow.ApplyImageScalingForObject(targetGameObject, scaleRatio);
+                }
             }
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -379,6 +384,20 @@ namespace PlateauToolkit.Rendering.Editor
                 selectedGameObjects.Add(child.gameObject);
             }
             return selectedGameObjects;
+        }
+
+        /// <summary>
+        /// タイル保存の確認ダイアログを表示します。
+        /// </summary>
+        /// <returns></returns>
+        bool ConfirmTileSave()
+        {
+            return EditorUtility.DisplayDialog(
+                "タイル保存の確認",
+                "変更されたテクスチャを含むタイルを更新して保存します。実行しますか？",
+                "はい",
+                "いいえ"
+            );
         }
     }
 }
