@@ -233,21 +233,22 @@ namespace PlateauToolkit.Rendering.Editor
                 return;
             }
 
-            bool isOptionSelected = EditorUtility.DisplayDialog(
-                "タイル保存の確認",
-                "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
-                "はい",
-                "いいえ"
-            );
-
-            //EditorGUILayout.Space(5);
-            //if (GUILayout.Button("選択したオブジェクトのタイルを保存する"))
-            if (isOptionSelected)
+            EditorApplication.delayCall += () =>
             {
-                SaveSelectedTilesImageFilterAsync(textureEnhance, computeShader).ContinueWithErrorCatch();
-            }
+                bool isOptionSelected = EditorUtility.DisplayDialog(
+                    "タイル保存の確認",
+                    "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
+                    "はい",
+                    "いいえ"
+                );
 
-            ResetConvertedObjectsInTile();
+                if (isOptionSelected)
+                {
+                    SaveSelectedTilesImageFilterAsync(textureEnhance, computeShader).ContinueWithErrorCatch();
+                }
+
+                ResetConvertedObjectsInTile();
+            };
         }
 
         async Task SaveSelectedTilesImageFilterAsync(TextureEnhance textureEnhance, ComputeShader computeShader)
@@ -256,7 +257,6 @@ namespace PlateauToolkit.Rendering.Editor
 
             try
             {
-                //List<GameObject> selectedObjects = new List<GameObject>(Selection.gameObjects);
                 using (var cts = new CancellationTokenSource())
                 {
                     CancellationToken ct = cts.Token;
@@ -298,28 +298,27 @@ namespace PlateauToolkit.Rendering.Editor
 
         internal void DrawImageScalingSaveTileButton(TextureDownscaleRatio scaleRatio)
         {
-            Debug.Log("DrawImageScalingSaveTileButton called");
-
             if (!HasConvertedObjectsInTile)
             {
                 return;
             }
 
-            bool isOptionSelected = EditorUtility.DisplayDialog(
-                "タイル保存の確認",
-                "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
-                "はい",
-                "いいえ"
-            );
-
-            //EditorGUILayout.Space(5);
-            //if (GUILayout.Button("選択したオブジェクトのタイルを保存する"))
-            if (isOptionSelected)
+            EditorApplication.delayCall += () =>
             {
-                SaveSelectedTilesImageScalingAsync(scaleRatio).ContinueWithErrorCatch();
-            }
+                bool isOptionSelected = EditorUtility.DisplayDialog(
+                    "タイル保存の確認",
+                    "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
+                    "はい",
+                    "いいえ"
+                );
 
-            ResetConvertedObjectsInTile();
+                if (isOptionSelected)
+                {
+                    SaveSelectedTilesImageScalingAsync(scaleRatio).ContinueWithErrorCatch();
+                }
+
+                ResetConvertedObjectsInTile();
+            };
         }
 
         async Task SaveSelectedTilesImageScalingAsync(TextureDownscaleRatio scaleRatio)
