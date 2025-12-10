@@ -117,6 +117,7 @@ namespace PlateauToolkit.Rendering.Editor
             result.ReadPixels(new Rect(0, 0, targetX, targetY), 0, 0);
             result.Compress(true);
             result.Apply(false);
+            result.name = texture2D.name;
 
             RenderTexture.active = previous;
             current.Release();

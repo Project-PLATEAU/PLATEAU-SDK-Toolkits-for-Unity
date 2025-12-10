@@ -21,6 +21,8 @@ namespace PlateauToolkit.Rendering.Editor
         SceneTileChooserType SelectedType { get; }
         void Draw();
         void CreateTexture();
+
+        void AddConvertedObject(GameObject obj);
     }
 
     public class PlateauToolkitRenderingTileStrategy : IPlateauToolkitRenderingStrategy
@@ -37,6 +39,8 @@ namespace PlateauToolkit.Rendering.Editor
         AutoTexturing m_AutoTextureProcessor;
         // LOD grouping
         Grouping m_Grouping;
+
+        List<GameObject> m_ConvertedObjectsInTile;
 
         public SceneTileChooserType SelectedType => m_SceneTileChooser?.SelectedType ?? SceneTileChooserType.SceneObject;
 
@@ -71,6 +75,8 @@ namespace PlateauToolkit.Rendering.Editor
                 m_AutoTextureProcessor = new AutoTexturing();
                 m_AutoTextureProcessor.Initialize();
             }
+
+            m_ConvertedObjectsInTile = new List<GameObject>();
         }
 
         public void Draw()
@@ -100,6 +106,38 @@ namespace PlateauToolkit.Rendering.Editor
                 });
         }
 
+        /// <summary>
+        /// 解像度スケール/画素パラメータをコピーする前に、オブジェクトのリストをリセットします。
+        /// </summary>
+        public void ResetConvertedObjectsInTile()
+        {
+            m_ConvertedObjectsInTile.Clear();
+        }
+
+        /// <summary>
+        /// 解像度スケール/画素パラメータをコピーした際に、タイル内の変換済みオブジェクトをリストに追加します。
+        /// </summary>
+        /// <param name="obj"></param>
+        public void AddConvertedObject(GameObject obj)
+        {
+            if (obj.GetComponentInParent<PLATEAUTileManager>() != null)
+            {
+                if (!m_ConvertedObjectsInTile.Contains(obj))
+                {
+                    m_ConvertedObjectsInTile.Add(obj);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 解像度スケール/画素パラメータをコピー時に、タイル内に変換済みオブジェクトが存在するかどうかを返します。
+        /// </summary>
+        /// <returns></returns>
+        public bool HasConvertedObjectsInTile => m_ConvertedObjectsInTile?.Count > 0;
+
+        /// <summary>
+        /// テクスチャ生成処理開始
+        /// </summary>
         public void CreateTexture()
         {
             AutoTextureAsync().ContinueWithErrorCatch();
@@ -184,6 +222,147 @@ namespace PlateauToolkit.Rendering.Editor
                         m_ParentWindow.UnblockUI();
                     }
                 }
+            }
+        }
+
+        internal void DrawImageFilterSaveTileButton(TextureEnhance textureEnhance, ComputeShader computeShader)
+        {
+
+            if (!HasConvertedObjectsInTile)
+            {
+                return;
+            }
+
+            bool isOptionSelected = EditorUtility.DisplayDialog(
+                "タイル保存の確認",
+                "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
+                "はい",
+                "いいえ"
+            );
+
+            //EditorGUILayout.Space(5);
+            //if (GUILayout.Button("選択したオブジェクトのタイルを保存する"))
+            if (isOptionSelected)
+            {
+                SaveSelectedTilesImageFilterAsync(textureEnhance, computeShader).ContinueWithErrorCatch();
+            }
+
+            ResetConvertedObjectsInTile();
+        }
+
+        async Task SaveSelectedTilesImageFilterAsync(TextureEnhance textureEnhance, ComputeShader computeShader)
+        {
+            m_ParentWindow.BlockUI();
+
+            try
+            {
+                //List<GameObject> selectedObjects = new List<GameObject>(Selection.gameObjects);
+                using (var cts = new CancellationTokenSource())
+                {
+                    CancellationToken ct = cts.Token;
+                    m_TileRebuilder = new TileRebuilder();
+                    await TileConvertCommon.EditAndSaveSelectedTilesAsync<(TextureEnhance, ComputeShader)>(m_ConvertedObjectsInTile, m_TileRebuilder, ApplyFilterHandler, (textureEnhance, computeShader), ct);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogException(ex);
+                m_TileRebuilder?.CancelRebuild();
+            }
+            finally
+            {
+                m_ParentWindow.UnblockUI();
+            }
+        }
+
+        void ApplyFilterHandler(Transform target, (TextureEnhance, ComputeShader) param )
+        {
+            (TextureEnhance textureEnhance, ComputeShader computeShader) = param;
+            List<Transform> children = target.GetAllChildrenWithComponent<MeshRenderer>();
+            foreach (Transform child in children)
+            {
+                GameObject targetGameObject = child.gameObject;
+                if (PlateauRenderingBuildingUtilities.IsObjectAutoTextured(targetGameObject))
+                {
+                    continue;
+                }
+
+                if (PlateauRenderingBuildingUtilities.GetMeshLodLevel(targetGameObject) != PlateauMeshLodLevel.Lod2)
+                {
+                    continue;
+                }
+
+                m_ParentWindow.ApplyImageOperationsForObject(targetGameObject, textureEnhance, computeShader);
+            }
+        }
+
+        internal void DrawImageScalingSaveTileButton(TextureDownscaleRatio scaleRatio)
+        {
+            Debug.Log("DrawImageScalingSaveTileButton called");
+
+            if (!HasConvertedObjectsInTile)
+            {
+                return;
+            }
+
+            bool isOptionSelected = EditorUtility.DisplayDialog(
+                "タイル保存の確認",
+                "変更されたテクスチャを含むタイルを保存しなおします。実行しますか？",
+                "はい",
+                "いいえ"
+            );
+
+            //EditorGUILayout.Space(5);
+            //if (GUILayout.Button("選択したオブジェクトのタイルを保存する"))
+            if (isOptionSelected)
+            {
+                SaveSelectedTilesImageScalingAsync(scaleRatio).ContinueWithErrorCatch();
+            }
+
+            ResetConvertedObjectsInTile();
+        }
+
+        async Task SaveSelectedTilesImageScalingAsync(TextureDownscaleRatio scaleRatio)
+        {
+            m_ParentWindow.BlockUI();
+
+            try
+            {
+                using (var cts = new CancellationTokenSource())
+                {
+                    CancellationToken ct = cts.Token;
+                    m_TileRebuilder = new TileRebuilder();
+                    await TileConvertCommon.EditAndSaveSelectedTilesAsync<TextureDownscaleRatio>(m_ConvertedObjectsInTile, m_TileRebuilder, ApplyImageScalingHandler, scaleRatio, ct);
+                }
+            }
+            catch(Exception ex)
+            {
+                Debug.LogException(ex);
+                m_TileRebuilder?.CancelRebuild();
+            }
+            finally
+            {
+                m_ParentWindow.UnblockUI();
+            }
+        }
+
+        void ApplyImageScalingHandler(Transform target, TextureDownscaleRatio scaleRatio)
+        {
+            List<Transform> children = target.GetAllChildrenWithComponent<MeshRenderer>();
+            foreach (Transform child in children)
+            {
+                GameObject targetGameObject = child.gameObject;
+                if (PlateauRenderingBuildingUtilities.IsObjectAutoTextured(targetGameObject))
+                {
+                    continue;
+                }
+
+                if (PlateauRenderingBuildingUtilities.GetMeshLodLevel(targetGameObject) != PlateauMeshLodLevel.Lod2)
+                {
+                    continue;
+                }
+
+                m_ParentWindow.ApplyImageScalingForObject(targetGameObject, scaleRatio);
             }
         }
 
