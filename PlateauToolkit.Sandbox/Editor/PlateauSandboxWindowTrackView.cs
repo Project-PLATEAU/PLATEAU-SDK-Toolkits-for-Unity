@@ -69,17 +69,29 @@ namespace PlateauToolkit.Sandbox.Editor
         }
 
         /// <summary>
-        /// EditorSplineUtility.SetKnotPlacementTool()が使用できないため代替実装
+        /// spline 2.8 以降で EditorSplineUtility.SetKnotPlacementTool()が使用できないため代替実装
+        /// (Unity 2022 3以降）
+        /// 将来的に使用できなくなる可能性あり。
+        /// EditorSplineUtility.SetKnotPlacementTool();が使用できる場合はそちらを使用すること。
         /// </summary>
         void SetKnotPlacementTool()
         {
-            ToolManager.SetActiveContext<SplineToolContext>();
-
-            System.Reflection.Assembly asm = typeof(SplineToolContext).Assembly;
-            Type type = asm.GetType("UnityEditor.Splines.CreateSplineTool");
-            if (type != null)
+            try
             {
-                ToolManager.SetActiveTool(type);
+                EditorSplineUtility.SetKnotPlacementTool();
+            }
+            catch (Exception)
+            {
+                Debug.LogWarning("EditorSplineUtility.SetKnotPlacementTool() is not available. Using alternative implementation.");
+
+                ToolManager.SetActiveContext<SplineToolContext>();
+
+                System.Reflection.Assembly asm = typeof(SplineToolContext).Assembly;
+                Type type = asm.GetType("UnityEditor.Splines.CreateSplineTool");
+                if (type != null)
+                {
+                    ToolManager.SetActiveTool(type);
+                }
             }
         }
 
@@ -116,7 +128,6 @@ namespace PlateauToolkit.Sandbox.Editor
                         EditorApplication.delayCall += () =>
                         {
                             SetKnotPlacementTool();
-                            EditorSplineUtility.SetKnotPlacementTool();
                             RefreshTracksHierarchy(context);
                         };
 
