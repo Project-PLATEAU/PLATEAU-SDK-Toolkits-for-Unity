@@ -68,6 +68,20 @@ namespace PlateauToolkit.Sandbox.Editor
             ToolManager.activeToolChanged += OnActiveToolChanged;
         }
 
+        /// <summary>
+        /// EditorSplineUtility.SetKnotPlacementTool()が使用できないため代替実装
+        /// </summary>
+        void SetKnotPlacementTool()
+        {
+            ToolManager.SetActiveContext<SplineToolContext>();
+
+            System.Reflection.Assembly asm = typeof(SplineToolContext).Assembly;
+            Type type = asm.GetType("UnityEditor.Splines.CreateSplineTool");
+            if (type != null)
+            {
+                ToolManager.SetActiveTool(type);
+            }
+        }
 
         public void OnGUI(PlateauSandboxContext context, EditorWindow window)
         {
@@ -101,6 +115,7 @@ namespace PlateauToolkit.Sandbox.Editor
                         ActiveEditorTracker.sharedTracker.RebuildIfNecessary();
                         EditorApplication.delayCall += () =>
                         {
+                            SetKnotPlacementTool();
                             EditorSplineUtility.SetKnotPlacementTool();
                             RefreshTracksHierarchy(context);
                         };
