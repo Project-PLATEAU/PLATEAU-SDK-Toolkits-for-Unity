@@ -112,7 +112,7 @@ namespace PlateauToolkit.Rendering.Editor
         bool m_TextureMerged;
 #endif
 
-        PlateauToolkitRenderingTileStrategy m_RenderingTileStrategy;
+        IPlateauToolkitRenderingStrategy m_RenderingStrategy;
 
         enum Tab
         {
@@ -164,9 +164,10 @@ namespace PlateauToolkit.Rendering.Editor
             Selection.selectionChanged += CancelScalingMode;
 
             // タイル選択UIの初期化
-            if (m_RenderingTileStrategy == null)
+            if (m_RenderingStrategy == null)
             {
-                m_RenderingTileStrategy = new PlateauToolkitRenderingTileStrategy(this);
+                //　現状はタイル用処理のみ実装
+                m_RenderingStrategy = new PlateauToolkitRenderingTileStrategy(this);
             }
         }
 
@@ -393,15 +394,15 @@ namespace PlateauToolkit.Rendering.Editor
                     EditorGUILayout.Space();
 
                     // タイル選択UIの表示
-                    m_RenderingTileStrategy?.Draw();
+                    m_RenderingStrategy?.DrawUIForAutoTexture();
 
                     EditorGUI.BeginChangeCheck();
                     if (GUILayout.Button("テクスチャ生成"))
                     {
-                        if (IsTileSelected())
+                        if (IsStrategyAvailable())
                         {
                             // タイル用処理
-                            m_RenderingTileStrategy.CreateTexture();
+                            m_RenderingStrategy.CreateTexture();
                         }
                         else
                         {
@@ -790,7 +791,7 @@ namespace PlateauToolkit.Rendering.Editor
                         {
                             ApplyImageOperations();
 
-                            m_RenderingTileStrategy?.DrawImageFilterSaveTileButton(m_TextureEnhance, m_ComputeShader);
+                            m_RenderingStrategy?.PostApplyImageOperations(m_TextureEnhance, m_ComputeShader);
                         }
                         EditorGUILayout.EndVertical();
                     }
@@ -975,7 +976,7 @@ namespace PlateauToolkit.Rendering.Editor
                         {
                             ApplyImageScaling();
 
-                            m_RenderingTileStrategy?.DrawImageScalingSaveTileButton(m_TextureDownscaleRatio);
+                            m_RenderingStrategy?.PostImageScaling(m_TextureDownscaleRatio);
                         }
 
                         EditorGUILayout.EndVertical();
@@ -1066,7 +1067,7 @@ namespace PlateauToolkit.Rendering.Editor
         void ApplyImageScaling()
         {
             //m_SelectedObjectIsInTile = false;
-            m_RenderingTileStrategy?.ResetConvertedObjectsInTile();
+            m_RenderingStrategy?.ResetConvertedObjects();
 
             GameObject[] selectedObjects = Selection.gameObjects;
             foreach (GameObject gameObject in selectedObjects)
@@ -1091,7 +1092,7 @@ namespace PlateauToolkit.Rendering.Editor
 
                 if (ApplyImageScalingForObject(gameObject, m_TextureDownscaleRatio))
                 {
-                    m_RenderingTileStrategy?.AddConvertedObject(gameObject);
+                    m_RenderingStrategy?.AddConvertedObject(gameObject);
                 }
             }
         }
@@ -1152,7 +1153,7 @@ namespace PlateauToolkit.Rendering.Editor
 
         void ApplyImageOperations()
         {
-            m_RenderingTileStrategy?.ResetConvertedObjectsInTile();
+            m_RenderingStrategy?.ResetConvertedObjects();
 
             GameObject[] selectedObjects = Selection.gameObjects;
             foreach (GameObject gameObject in selectedObjects)
@@ -1177,7 +1178,7 @@ namespace PlateauToolkit.Rendering.Editor
 
                 if (ApplyImageOperationsForObject(gameObject, m_TextureEnhance, m_ComputeShader))
                 {
-                    m_RenderingTileStrategy?.AddConvertedObject(gameObject);
+                    m_RenderingStrategy?.AddConvertedObject(gameObject);
                 }
             }
         }
@@ -1388,12 +1389,12 @@ namespace PlateauToolkit.Rendering.Editor
         }
 
         /// <summary>
-        /// 動的タイルが選択されているかどうか
+        /// PlateauToolkitRenderingTileStrategyの場合：動的タイルが選択されているかどうかを判別
         /// </summary>
         /// <returns></returns>
-        bool IsTileSelected()
+        bool IsStrategyAvailable()
         {
-            return m_RenderingTileStrategy?.IsTileManagerSelected == true;
+            return m_RenderingStrategy?.IsAvailable == true;
         }
 
         bool CanImageEditSelection()
