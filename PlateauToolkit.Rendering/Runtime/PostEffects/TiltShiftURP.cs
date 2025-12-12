@@ -84,7 +84,7 @@ public class TiltShiftURP : ScriptableRendererFeature
             blurMaterial.SetInt("_Samples", blurSamples);
             blurMaterial.SetFloat("_BlurStartRange", blurStartRange);
 
-            source = renderingData.cameraData.renderer.cameraColorTarget;
+            source = renderingData.cameraData.renderer.cameraColorTargetHandle;
             CommandBuffer cmd = CommandBufferPool.Get("BlurPass");
 
             cmd.Blit(source, blurBuffer);

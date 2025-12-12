@@ -69,7 +69,7 @@ public class HalftoneURP : ScriptableRendererFeature
             material.SetFloat("_Range", halftoneRange);
             material.SetFloat("_UseColor", useColor ? 1.0f : 0.0f);
 
-            source = renderingData.cameraData.renderer.cameraColorTarget;
+            source = renderingData.cameraData.renderer.cameraColorTargetHandle;
             CommandBuffer cmd = CommandBufferPool.Get("HalftonePass");
 
             cmd.Blit(source, halftoneBuffer);
