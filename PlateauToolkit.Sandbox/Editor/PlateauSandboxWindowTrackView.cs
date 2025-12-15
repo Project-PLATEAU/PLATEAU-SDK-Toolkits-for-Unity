@@ -69,7 +69,7 @@ namespace PlateauToolkit.Sandbox.Editor
         }
 
         /// <summary>
-        /// spline 2.8 以降(Unity 2022 3以降）で EditorSplineUtility.SetKnotPlacementTool()が使用できないため代替実装
+        /// Splines 2.6.0 以降(Unity 2022 3以降）で EditorSplineUtility.SetKnotPlacementTool()が使用できないため代替実装
         /// 将来的に使用できなくなる可能性あり。
         /// 将来のバージョンでEditorSplineUtility.SetKnotPlacementTool();が使用できるようになった場合はそちらを使用すること。
         /// </summary>

@@ -225,7 +225,8 @@ namespace PlateauToolkit.Rendering.Editor
                 foreach (Transform transform in tileTransforms)
                 {
                     List<GameObject> processsingGameObjects = GetChildGameObjects(transform);
-                    if (PlateauRenderingBuildingUtilities.GetMeshStructure(processsingGameObjects.First()) != PlateauMeshStructure.CombinedArea && !processsingGameObjects.First().name.Contains(PlateauRenderingConstants.k_Grouped))
+                    GameObject firstObject = processsingGameObjects.FirstOrDefault();
+                    if (firstObject != null && PlateauRenderingBuildingUtilities.GetMeshStructure(firstObject) != PlateauMeshStructure.CombinedArea && !firstObject.name.Contains(PlateauRenderingConstants.k_Grouped))
                     {
                         m_Grouping.GroupObjectsInTransform(transform);
                         processsingGameObjects.RemoveAll(go => go == null);

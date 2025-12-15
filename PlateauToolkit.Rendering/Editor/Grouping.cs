@@ -86,26 +86,7 @@ namespace PlateauToolkit.Rendering.Editor
                     for (int k = 0; k < gmlRoot.childCount; k++)
                     {
                         Transform lodGroupedBuildings = gmlRoot.transform.GetChild(k);
-                        if (lodGroupedBuildings.name.Contains("LOD0") || lodGroupedBuildings.name.Contains("LOD1") || lodGroupedBuildings.name.Contains("LOD2"))
-                        {
-                            copyOfGroupedBuildingsList.Clear();
-                            for (int l = 0; l < lodGroupedBuildings.transform.childCount; l++)
-                            {
-                                Transform building = lodGroupedBuildings.transform.GetChild(l);
-                                copyOfGroupedBuildingsList.Add(building);
-                            }
-
-                            for (int m = 0; m < copyOfGroupedBuildingsList.Count; m++)
-                            {
-                                Transform buildingCopy = copyOfGroupedBuildingsList[m];
-                                GroupByLodName(gmlRoot, rootObjects, lodObjects, buildingCopy.gameObject, lodGroupedBuildings.name);
-                            }
-                        }
-
-                        if (lodGroupedBuildings.childCount == 0 && !PrefabUtility.IsPartOfAnyPrefab(lodGroupedBuildings.gameObject))
-                        {
-                            objectsToDelete.Add(lodGroupedBuildings.gameObject);
-                        }
+                        GroupObjectsInner(gmlRoot, lodGroupedBuildings, rootObjects, lodObjects, copyOfGroupedBuildingsList, objectsToDelete);
                     }
 
                     foreach (GameObject obj in objectsToDelete)
@@ -122,7 +103,7 @@ namespace PlateauToolkit.Rendering.Editor
                     }
                 }
             }
-            EditorUtility.ClearProgressBar();
+            EditorUtility.ClearProgressBar();  
             OnProcessingFinished?.Invoke();
         }
 
@@ -138,7 +119,6 @@ namespace PlateauToolkit.Rendering.Editor
             List<Transform> copyOfGroupedBuildingsList = new List<Transform>();
             List<GameObject> objectsToDelete = new List<GameObject>();
 
-            objectsToDelete.Clear();
             for (int i = 0; i < transformRoot.childCount; i++)
             {
                 float stepProgress = i / (float)transformRoot.childCount;
@@ -149,28 +129,7 @@ namespace PlateauToolkit.Rendering.Editor
                 }
 
                 Transform lodGroupedBuildings = transformRoot.transform.GetChild(i);
-                if (lodGroupedBuildings.name.Contains("LOD0") || lodGroupedBuildings.name.Contains("LOD1") || lodGroupedBuildings.name.Contains("LOD2"))
-                {
-                    copyOfGroupedBuildingsList.Clear();
-                    for (int l = 0; l < lodGroupedBuildings.transform.childCount; l++)
-                    {
-                        Transform building = lodGroupedBuildings.transform.GetChild(l);
-                        copyOfGroupedBuildingsList.Add(building);
-                    }
-
-                    for (int m = 0; m < copyOfGroupedBuildingsList.Count; m++)
-                    {
-                        Transform buildingCopy = copyOfGroupedBuildingsList[m];
-                        GroupByLodName(transformRoot, rootObjects, lodObjects, buildingCopy.gameObject, lodGroupedBuildings.name);
-                    }
-                }
-
-                if (lodGroupedBuildings.childCount == 0 && !PrefabUtility.IsPartOfAnyPrefab(lodGroupedBuildings.gameObject))
-                {
-                    objectsToDelete.Add(lodGroupedBuildings.gameObject);
-
-                    Debug.Log("Deleting empty LOD group: " + lodGroupedBuildings.name);
-                }
+                GroupObjectsInner(transformRoot, lodGroupedBuildings, rootObjects, lodObjects, copyOfGroupedBuildingsList, objectsToDelete);
             }
 
             foreach (GameObject obj in objectsToDelete)
@@ -187,6 +146,33 @@ namespace PlateauToolkit.Rendering.Editor
             }
             EditorUtility.ClearProgressBar();
             OnProcessingFinished?.Invoke();
+        }
+
+        void GroupObjectsInner(Transform transformRoot, Transform
+            lodGroupedBuildings, Dictionary<string, GameObject> rootObjects,
+            Dictionary<string, Dictionary<string, GameObject>> lodObjects,
+            List<Transform> copyOfGroupedBuildingsList, List<GameObject> objectsToDelete)
+        {
+            if (lodGroupedBuildings.name.Contains("LOD0") || lodGroupedBuildings.name.Contains("LOD1") || lodGroupedBuildings.name.Contains("LOD2"))
+            {
+                copyOfGroupedBuildingsList.Clear();
+                for (int l = 0; l < lodGroupedBuildings.transform.childCount; l++)
+                {
+                    Transform building = lodGroupedBuildings.transform.GetChild(l);
+                    copyOfGroupedBuildingsList.Add(building);
+                }
+
+                for (int m = 0; m < copyOfGroupedBuildingsList.Count; m++)
+                {
+                    Transform buildingCopy = copyOfGroupedBuildingsList[m];
+                    GroupByLodName(transformRoot, rootObjects, lodObjects, buildingCopy.gameObject, lodGroupedBuildings.name);
+                }
+            }
+
+            if (lodGroupedBuildings.childCount == 0 && !PrefabUtility.IsPartOfAnyPrefab(lodGroupedBuildings.gameObject))
+            {
+                objectsToDelete.Add(lodGroupedBuildings.gameObject);
+            }
         }
 
         void GroupByLodName(Transform gmlRoot, Dictionary<string, GameObject> rootObjectDictionary, Dictionary<string, Dictionary<string, GameObject>> lodDictionary, GameObject obj, string lodLevel)
