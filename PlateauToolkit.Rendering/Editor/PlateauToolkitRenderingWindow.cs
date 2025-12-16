@@ -12,8 +12,11 @@ using PlateauToolkit.Rendering.ImageProcessing;
 using UnityEditor.SceneManagement;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using PLATEAU.DynamicTile;
+
 #if UNITY_URP
 using UnityEngine.Rendering.Universal;
+
 #endif
 #if UNITY_HDRP
 using UnityEngine.Rendering;
@@ -109,6 +112,8 @@ namespace PlateauToolkit.Rendering.Editor
         bool m_TextureMerged;
 #endif
 
+        IPlateauToolkitRenderingStrategy m_RenderingStrategy;
+
         enum Tab
         {
             LodGrouping,
@@ -157,6 +162,13 @@ namespace PlateauToolkit.Rendering.Editor
 
             Selection.selectionChanged += CancelEditMode;
             Selection.selectionChanged += CancelScalingMode;
+
+            // タイル選択UIの初期化
+            if (m_RenderingStrategy == null)
+            {
+                //　現状はタイル用処理のみ実装
+                m_RenderingStrategy = new PlateauToolkitRenderingTileStrategy(this);
+            }
         }
 
         void OnDisable()
@@ -314,47 +326,64 @@ namespace PlateauToolkit.Rendering.Editor
 
                     if (GUILayout.Button("LODグループ生成"))
                     {
+
+                        string message = "シーンのオブジェクトが変更されます。実行しますか？";
+                        if (FindObjectOfType<PLATEAUTileManager>() != null)
+                        {
+                            message += "\n(動的タイルはLODグループ生成の対象に含まれません。)";
+                        }
+
                         bool isOptionSelected = EditorUtility.DisplayDialog(
-                               "LODグループ生成の確認",
-                               "シーンのオブジェクトが変更されます。実行しますか？",
-                               "はい",
-                               "いいえ"
-                           );
+                            "LODグループ生成の確認",
+                            message,
+                            "はい",
+                            "いいえ"
+                            );
 
                         if (isOptionSelected)
                         {
                             m_BlockUI = true;
 
-#if PLATEAU_SDK_222
                             var building = GameObject.FindObjectsOfType<GameObject>()
                                 .Where(obj => obj.GetComponent<PLATEAUCityObjectGroup>() != null
+                                        && obj.GetComponentInParent<PLATEAUTileManager>() == null //タイルは除外
                                         && (obj.name.Contains("BLD") || obj.name.Contains("bldg") || obj.name.Contains("group")))
                                 .FirstOrDefault();
-                            if (building != null)
+                            if (building == null)
                             {
-                                m_MeshGranularity = building.GetComponent<PLATEAUCityObjectGroup>().Granularity;
-                            }
-                            if (m_MeshGranularity == MeshGranularity.PerCityModelArea)
-                            {
-                                PLATEAUInstancedCityModel rootCityModel = PlateauRenderingBuildingUtilities.RetrieveTopmostParentWithComponent<PLATEAUInstancedCityModel>(building.transform);
-                                ConvertAsync(rootCityModel.gameObject, () =>
-                                {
-                                    m_Grouping.GroupObjects();
-                                    m_CreateLodGroup.CreateLodGroups();
-                                }).ContinueWithErrorCatch();
+                                EditorUtility.DisplayDialog(
+                                   "オブジェクトの確認",
+                                   "有効なオブジェクトが見つかりませんでした。",
+                                   "OK"
+                                   );
+                                m_BlockUI = false;
                             }
                             else
                             {
+#if PLATEAU_SDK_222
+                                m_MeshGranularity = building.GetComponent<PLATEAUCityObjectGroup>().Granularity;
+                                if (m_MeshGranularity == MeshGranularity.PerCityModelArea)
+                                {
+                                    PLATEAUInstancedCityModel rootCityModel = PlateauRenderingBuildingUtilities.RetrieveTopmostParentWithComponent<PLATEAUInstancedCityModel>(building.transform);
+                                    ConvertAsync(rootCityModel.gameObject, () =>
+                                    {
+                                        m_Grouping.GroupObjects();
+                                        m_CreateLodGroup.CreateLodGroups();
+                                    }).ContinueWithErrorCatch();
+                                }
+                                else
+                                {
+                                    m_Grouping.TrySeparateMeshes();
+                                    m_Grouping.GroupObjects();
+                                    m_CreateLodGroup.CreateLodGroups();
+                                }
+
+#else
                                 m_Grouping.TrySeparateMeshes();
                                 m_Grouping.GroupObjects();
                                 m_CreateLodGroup.CreateLodGroups();
-                            }
-#else
-
-                            m_Grouping.TrySeparateMeshes();
-                            m_Grouping.GroupObjects();
-                            m_CreateLodGroup.CreateLodGroups();
 #endif
+                            }
                         }
                     }
                     break;
@@ -364,11 +393,23 @@ namespace PlateauToolkit.Rendering.Editor
                     EditorGUILayout.HelpBox("建物のテクスチャを自動的に生成します。実在する建物の見た目と異なる場合があります。", MessageType.Info);
                     EditorGUILayout.Space();
 
+                    // タイル選択UIの表示
+                    m_RenderingStrategy?.DrawUIForAutoTexture();
+
                     EditorGUI.BeginChangeCheck();
                     if (GUILayout.Button("テクスチャ生成"))
                     {
-                        m_SelectedObjects.Clear();
-                        AutoTexture();
+                        if (IsStrategyAvailable())
+                        {
+                            // タイル用処理
+                            m_RenderingStrategy.CreateTexture();
+                        }
+                        else
+                        {
+                            // 通常処理
+                            m_SelectedObjects.Clear();
+                            AutoTexture();
+                        }
                     }
 
                     EditorGUILayout.Space();
@@ -749,6 +790,8 @@ namespace PlateauToolkit.Rendering.Editor
                         if (GUILayout.Button("選択したオブジェクトのテクスチャに保存済の画素パラメータをコピーする"))
                         {
                             ApplyImageOperations();
+
+                            m_RenderingStrategy?.PostApplyImageOperations(m_TextureEnhance, m_ComputeShader);
                         }
                         EditorGUILayout.EndVertical();
                     }
@@ -932,7 +975,10 @@ namespace PlateauToolkit.Rendering.Editor
                         if (GUILayout.Button("選択したオブジェクトのテクスチャに保存済の解像度スケールをコピーします"))
                         {
                             ApplyImageScaling();
+
+                            m_RenderingStrategy?.PostImageScaling(m_TextureDownscaleRatio);
                         }
+
                         EditorGUILayout.EndVertical();
                     }
 
@@ -946,6 +992,18 @@ namespace PlateauToolkit.Rendering.Editor
         void AutoTexture()
         {
             PlateauRenderingMeshUtilities.GetSelectedGameObjects(m_SelectedObjects);
+
+            // TileManager を親に持つオブジェクトが選択されている場合は警告を出す
+            if (m_SelectedObjects.Any(go => go.GetComponentInParent<PLATEAUTileManager>() != null))
+            {
+                string message = "動的タイルを対象とするには「調整対象の種類」を動的タイルにしてください。";
+                EditorUtility.DisplayDialog(
+                    "オブジェクト選択の確認",
+                    message,
+                    "OK"
+                    );
+                return;
+            }
 
             if (!SelectedObjectsExist())
             {
@@ -1008,6 +1066,9 @@ namespace PlateauToolkit.Rendering.Editor
 
         void ApplyImageScaling()
         {
+            //m_SelectedObjectIsInTile = false;
+            m_RenderingStrategy?.ResetConvertedObjects();
+
             GameObject[] selectedObjects = Selection.gameObjects;
             foreach (GameObject gameObject in selectedObjects)
             {
@@ -1029,61 +1090,72 @@ namespace PlateauToolkit.Rendering.Editor
                     continue;
                 }
 
-                MeshRenderer mr = gameObject.GetComponent<MeshRenderer>();
-                MeshFilter mf = gameObject.GetComponent<MeshFilter>();
-
-                // Check for Mesh Filter and Mesh Renderer components
-                if (mf != null && mr != null)
+                if (ApplyImageScalingForObject(gameObject, m_TextureDownscaleRatio))
                 {
-                    Material[] materials = mr.sharedMaterials;
-
-                    foreach (Material mat in materials)
-                    {
-                        if (mat.mainTexture == null)
-                        {
-                            continue;
-                        }
-
-                        // Record the material before changing the texture
-                        Undo.RecordObject(mat, "Scale Texture");
-
-                        int newWidth = mat.mainTexture.width;
-                        int newHeight = mat.mainTexture.height;
-                        switch (m_TextureDownscaleRatio)
-                        {
-                            case TextureDownscaleRatio.None:
-                                break;
-                            case TextureDownscaleRatio.Quarter:
-                                newWidth /= 4;
-                                newHeight /= 4;
-                                mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
-                                break;
-                            case TextureDownscaleRatio.Half:
-                                newWidth /= 2;
-                                newHeight /= 2;
-                                mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
-                                break;
-                            case TextureDownscaleRatio.OneEighth:
-                                newWidth /= 8;
-                                newHeight /= 8;
-                                mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
-                                break;
-                            case TextureDownscaleRatio.OneSixteenth:
-                                newWidth /= 16;
-                                newHeight /= 16;
-                                mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
-                                break;
-
-                        }
-                    }
+                    m_RenderingStrategy?.AddConvertedObject(gameObject);
                 }
             }
         }
 
+        internal bool ApplyImageScalingForObject(GameObject target, TextureDownscaleRatio scaleRatio)
+        {
+            MeshRenderer mr = target.GetComponent<MeshRenderer>();
+            MeshFilter mf = target.GetComponent<MeshFilter>();
+
+            // Check for Mesh Filter and Mesh Renderer components
+            if (mf != null && mr != null)
+            {
+                Material[] materials = mr.sharedMaterials;
+
+                foreach (Material mat in materials)
+                {
+                    if (mat.mainTexture == null)
+                    {
+                        continue;
+                    }
+
+                    // Record the material before changing the texture
+                    Undo.RecordObject(mat, "Scale Texture");
+
+                    int newWidth = mat.mainTexture.width;
+                    int newHeight = mat.mainTexture.height;
+                    switch (scaleRatio)
+                    {
+                        case TextureDownscaleRatio.None:
+                            break;
+                        case TextureDownscaleRatio.Quarter:
+                            newWidth /= 4;
+                            newHeight /= 4;
+                            mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
+                            break;
+                        case TextureDownscaleRatio.Half:
+                            newWidth /= 2;
+                            newHeight /= 2;
+                            mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
+                            break;
+                        case TextureDownscaleRatio.OneEighth:
+                            newWidth /= 8;
+                            newHeight /= 8;
+                            mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
+                            break;
+                        case TextureDownscaleRatio.OneSixteenth:
+                            newWidth /= 16;
+                            newHeight /= 16;
+                            mat.mainTexture = TextureScaler.Resize(mat.mainTexture as Texture2D, newWidth, newHeight);
+                            break;
+
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
         void ApplyImageOperations()
         {
-            GameObject[] selectedObjects = Selection.gameObjects;
+            m_RenderingStrategy?.ResetConvertedObjects();
 
+            GameObject[] selectedObjects = Selection.gameObjects;
             foreach (GameObject gameObject in selectedObjects)
             {
                 // Check if the GameObject is part of a prefab
@@ -1104,60 +1176,72 @@ namespace PlateauToolkit.Rendering.Editor
                     continue;
                 }
 
-                MeshRenderer meshRenderer = gameObject.GetComponent<MeshRenderer>();
-                MeshFilter meshFilter = gameObject.GetComponent<MeshFilter>();
-
-                // Check for Mesh Filter and Mesh Renderer components
-                if (meshFilter != null && meshRenderer != null)
+                if (ApplyImageOperationsForObject(gameObject, m_TextureEnhance, m_ComputeShader))
                 {
-                    (Material original, int materialIndex) = PlateauRenderingMeshUtilities.GetSubmaterialAndIndexByLargestFaceArea(meshRenderer, meshFilter.sharedMesh);
-                    Material newMat = new Material(original);
-
-                    // apply the image processing on the texture
-                    foreach (ImageEditOperation op in m_TextureEnhance.ReadOnlyOperationsList)
-                    {
-                        IPlateauRenderingImageFilter filter = null;
-                        switch (op.ImageParam)
-                        {
-                            case ImageEditParameters.HighPass:
-                                if (filter == null && op.ImageParamValue != 0)
-                                {
-                                    filter = new PlateauRenderingHighPassFilter();
-                                }
-                                break;
-                            case ImageEditParameters.Contrast:
-                                if (filter == null && op.ImageParamValue != 0)
-                                {
-                                    filter = new PlateauRenderingContrastFilter();
-                                }
-                                break;
-                            case ImageEditParameters.Brightness:
-                                if (filter == null && op.ImageParamValue != 0)
-                                {
-                                    filter = new PlateauRenderingBrightnessFilter();
-                                }
-                                break;
-                            case ImageEditParameters.Sharpness:
-                                if (filter == null && op.ImageParamValue != 0)
-                                {
-                                    filter = new PlateauRenderingSharpenFilter();
-                                }
-                                break;
-                        }
-                        if (filter != null && newMat.mainTexture != null)
-                        {
-                            newMat.mainTexture = filter.ApplyFilter(newMat.mainTexture, m_ComputeShader, op.ImageParamValue);
-                        }
-                    }
-
-                    // Register the undo operation for the material changes
-                    Undo.RegisterCompleteObjectUndo(meshRenderer, "Material Change");
-
-                    Material[] sharedMaterials = meshRenderer.sharedMaterials;
-                    sharedMaterials[materialIndex] = newMat;
-                    meshRenderer.sharedMaterials = sharedMaterials;
+                    m_RenderingStrategy?.AddConvertedObject(gameObject);
                 }
             }
+        }
+
+        internal bool ApplyImageOperationsForObject(GameObject target, TextureEnhance textureEnhance, ComputeShader computeShader)
+        {
+
+            MeshRenderer meshRenderer = target.GetComponent<MeshRenderer>();
+            MeshFilter meshFilter = target.GetComponent<MeshFilter>();
+
+            // Check for Mesh Filter and Mesh Renderer components
+            if (meshFilter != null && meshRenderer != null)
+            {
+                (Material original, int materialIndex) = PlateauRenderingMeshUtilities.GetSubmaterialAndIndexByLargestFaceArea(meshRenderer, meshFilter.sharedMesh);
+                Material newMat = new Material(original);
+
+                // apply the image processing on the texture
+                foreach (ImageEditOperation op in textureEnhance.ReadOnlyOperationsList)
+                {
+                    IPlateauRenderingImageFilter filter = null;
+                    switch (op.ImageParam)
+                    {
+                        case ImageEditParameters.HighPass:
+                            if (filter == null && op.ImageParamValue != 0)
+                            {
+                                filter = new PlateauRenderingHighPassFilter();
+                            }
+                            break;
+                        case ImageEditParameters.Contrast:
+                            if (filter == null && op.ImageParamValue != 0)
+                            {
+                                filter = new PlateauRenderingContrastFilter();
+                            }
+                            break;
+                        case ImageEditParameters.Brightness:
+                            if (filter == null && op.ImageParamValue != 0)
+                            {
+                                filter = new PlateauRenderingBrightnessFilter();
+                            }
+                            break;
+                        case ImageEditParameters.Sharpness:
+                            if (filter == null && op.ImageParamValue != 0)
+                            {
+                                filter = new PlateauRenderingSharpenFilter();
+                            }
+                            break;
+                    }
+                    if (filter != null && newMat.mainTexture != null)
+                    {
+                        newMat.mainTexture = filter.ApplyFilter(newMat.mainTexture, computeShader, op.ImageParamValue);
+                    }
+                }
+
+                // Register the undo operation for the material changes
+                Undo.RegisterCompleteObjectUndo(meshRenderer, "Material Change");
+
+                Material[] sharedMaterials = meshRenderer.sharedMaterials;
+                sharedMaterials[materialIndex] = newMat;
+                meshRenderer.sharedMaterials = sharedMaterials;
+
+                return true;
+            }
+            return false;
         }
 
         bool SelectedBuildings()
@@ -1302,6 +1386,15 @@ namespace PlateauToolkit.Rendering.Editor
             {
                 return false;
             }
+        }
+
+        /// <summary>
+        /// PlateauToolkitRenderingTileStrategyの場合：動的タイルが選択されているかどうかを判別
+        /// </summary>
+        /// <returns></returns>
+        bool IsStrategyAvailable()
+        {
+            return m_RenderingStrategy?.IsAvailable == true;
         }
 
         bool CanImageEditSelection()
@@ -1476,6 +1569,12 @@ namespace PlateauToolkit.Rendering.Editor
                     m_TextureEnhance.SaveImageParameter(ImageEditParameters.Sharpness, m_Sharpness);
                 }
             }
+        }
+
+        internal void BlockUI()
+        {
+            m_BlockUI = true;
+            Repaint();
         }
 
         internal void UnblockUI()
