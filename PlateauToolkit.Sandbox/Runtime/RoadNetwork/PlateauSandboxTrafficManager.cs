@@ -98,7 +98,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             // Tile用処理(読込後にDemをGroundに設定するための処理）
             // 重要性は低いので不要なら削除しても大きな問題はないはずだが念のため
-            m_TileManager = GameObject.FindObjectOfType<PLATEAUTileManager>();
+            m_TileManager = GameObject.FindFirstObjectByType<PLATEAUTileManager>();
             if (m_TileManager != null)
             {
                 m_TileManager.onTileInstantiatedAction -= OnTileLoaded;
