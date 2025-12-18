@@ -14,7 +14,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         public RoadTransformGetter()
         {
             // 最初に見つかったPLATEAUReproducedRoadの親を取得する(ReproducedRoadのParentはシーンに1つと想定）
-            PLATEAUReproducedRoad found = GameObject.FindObjectOfType<PLATEAUReproducedRoad>();
+            PLATEAUReproducedRoad found = Object.FindFirstObjectByType<PLATEAUReproducedRoad>();
             if (found != null)
             {
                 m_ReproducedRoadRoot = found.transform.parent;

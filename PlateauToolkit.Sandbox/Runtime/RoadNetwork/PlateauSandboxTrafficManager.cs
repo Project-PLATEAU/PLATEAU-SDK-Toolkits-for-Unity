@@ -124,9 +124,15 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             // Tileの場合、Load時にDemをGroundに設定
             if (tile.Package == PLATEAU.Dataset.PredefinedCityModelPackage.Relief && tile.LoadedObject != null)
             {
+                int groundLayer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
+                if (groundLayer == -1)
+                {
+                    Debug.LogWarning($"Layer '{PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND}' does not exist.");
+                    return;
+                }
                 foreach (Transform child in tile.LoadedObject.transform.GetAllChildrenWithComponent<PLATEAUCityObjectGroup>())
                 {
-                    child.gameObject.layer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
+                    child.gameObject.layer = groundLayer;
                 }
             }
         }
