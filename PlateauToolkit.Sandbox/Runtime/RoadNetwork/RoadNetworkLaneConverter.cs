@@ -79,13 +79,10 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             {
                 foreach (RnCityObjectGroupKey key in keys)
                 {
-                    if (key != null)
+                    Transform trans = m_RoadTransformGetter.GetRoadTransform(key);
+                    if (trans != null)
                     {
-                        Transform trans = m_RoadTransformGetter.GetRoadTransform(key.GmlId);
-                        if (trans != null)
-                        {
-                            trans.gameObject.layer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
-                        }
+                        trans.gameObject.layer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
                     }
                 }
             }

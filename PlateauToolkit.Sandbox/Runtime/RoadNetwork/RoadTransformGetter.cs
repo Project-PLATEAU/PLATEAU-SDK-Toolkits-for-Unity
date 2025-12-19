@@ -12,26 +12,24 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
         const string k_ROAD_PREFIX = "Road-"; //PLATEAUReproducedRoad名のPrefix
 
-        readonly Transform m_ReproducedRoadRoot;
-        public Transform ReproducedRoad => m_ReproducedRoadRoot;
+        Transform m_ReproducedRoadRoot;
+        public Transform ReproducedRoad => GetReproducedRoadRoot();
 
         public RoadTransformGetter()
         {
-            // 最初に見つかったPLATEAUReproducedRoadの親を取得する(ReproducedRoadのParentはシーンに1つと想定）
-            PLATEAUReproducedRoad found = Object.FindFirstObjectByType<PLATEAUReproducedRoad>();
-            m_ReproducedRoadRoot = found?.transform.parent;
+            GetReproducedRoadRoot();
         }
 
         public Transform GetRoadTransform(string gmlId)
         {
-            if (m_ReproducedRoadRoot == null)
+            if (GetReproducedRoadRoot() == null)
             {
                 return null;
             }
 
             string roadName = k_ROAD_PREFIX + gmlId;
             // 取得できないケースもあるが無視
-            return m_ReproducedRoadRoot.Find(roadName);
+            return GetReproducedRoadRoot().Find(roadName);
         }
 
         /// <summary>
@@ -47,6 +45,19 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             }
 
             return GetRoadTransform(key.GmlId);
+        }
+
+        Transform GetReproducedRoadRoot()
+        {
+            if (m_ReproducedRoadRoot != null)
+            {
+                return m_ReproducedRoadRoot;
+            }
+
+            // 最初に見つかったPLATEAUReproducedRoadの親を取得する(ReproducedRoadのParentはシーンに1つと想定）
+            PLATEAUReproducedRoad found = Object.FindFirstObjectByType<PLATEAUReproducedRoad>();
+            m_ReproducedRoadRoot = found?.transform.parent;
+            return m_ReproducedRoadRoot;
         }
     }
 }
