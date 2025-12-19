@@ -41,7 +41,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         /// <returns></returns>
         public Transform GetRoadTransform(RnCityObjectGroupKey key)
         {
-            if (key == null)
+            if (!key.IsValid)
             {
                 return null;
             }
