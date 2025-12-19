@@ -13,23 +13,24 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         const string k_ROAD_PREFIX = "Road-"; //PLATEAUReproducedRoad名のPrefix
 
         Transform m_ReproducedRoadRoot;
-        public Transform ReproducedRoad => GetReproducedRoadRoot();
+        public Transform ReproducedRoadRoot => TryGetReproducedRoadRoot();
 
         public RoadTransformGetter()
         {
-            GetReproducedRoadRoot();
+            // 初期化
+            TryGetReproducedRoadRoot();
         }
 
         public Transform GetRoadTransform(string gmlId)
         {
-            if (GetReproducedRoadRoot() == null)
+            if (TryGetReproducedRoadRoot() == null)
             {
                 return null;
             }
 
             string roadName = k_ROAD_PREFIX + gmlId;
             // 取得できないケースもあるが無視
-            return GetReproducedRoadRoot().Find(roadName);
+            return m_ReproducedRoadRoot.Find(roadName);
         }
 
         /// <summary>
@@ -47,7 +48,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return GetRoadTransform(key.GmlId);
         }
 
-        Transform GetReproducedRoadRoot()
+        /// <summary>
+        /// ReproducedRoadのTransformを取得しm_ReproducedRoadRootに設定
+        /// </summary>
+        /// <returns></returns>
+        Transform TryGetReproducedRoadRoot()
         {
             if (m_ReproducedRoadRoot != null)
             {
