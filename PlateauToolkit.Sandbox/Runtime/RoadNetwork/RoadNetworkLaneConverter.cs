@@ -108,7 +108,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             var intersectionName = $"TrafficIntersection_{intersection.GetId(getter)}";
             var intersectionGameObject = new GameObject(intersectionName, typeof(TrafficIntersection));
 
-            Transform firstTrans = m_RoadTransformGetter.GetRoadTransform(trafficLightController.GetParentRoad(getter).TargetGroupKeys.FirstOrDefault().GmlId);
+            Transform firstTrans = m_RoadTransformGetter.GetRoadTransform(trafficLightController.GetParentRoad(getter).TargetGroupKeys.FirstOrDefault());
             if (firstTrans != null && firstTrans.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
             {
                 intersectionGameObject.transform.position = renderer.bounds.center;

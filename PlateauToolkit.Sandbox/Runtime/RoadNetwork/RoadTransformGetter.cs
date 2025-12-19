@@ -1,9 +1,13 @@
 ﻿
 using PLATEAU.RoadAdjust.RoadNetworkToMesh;
+using PLATEAU.RoadNetwork;
 using UnityEngine;
 
 namespace PlateauToolkit.Sandbox.RoadNetwork
 {
+    /// <summary>
+    /// 道路ネットワークのデータに紐づくUnityのTransform等の情報を取得するためのクラス
+    /// </summary>
     public class RoadTransformGetter
     {
         const string k_ROAD_PREFIX = "Road-"; //PLATEAUReproducedRoad名のPrefix
@@ -28,6 +32,21 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             string roadName = k_ROAD_PREFIX + gmlId;
             // 取得できないケースもあるが無視
             return m_ReproducedRoadRoot.Find(roadName);
+        }
+
+        /// <summary>
+        /// RnCityObjectGroupKeyからTransforomを取得
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        public Transform GetRoadTransform(RnCityObjectGroupKey key)
+        {
+            if (key == null)
+            {
+                return null;
+            }
+
+            return GetRoadTransform(key.GmlId);
         }
     }
 }
