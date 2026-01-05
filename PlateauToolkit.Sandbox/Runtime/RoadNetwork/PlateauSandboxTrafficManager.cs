@@ -5,6 +5,9 @@ using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using PLATEAU.DynamicTile;
+using PLATEAU.Util;
+using PLATEAU.CityInfo;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -46,6 +49,11 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         RoadNetworkDataGetter m_RoadNetworkGetter;
 
+        /// <summary>
+        /// Tile処理に使用
+        /// </summary>
+        PLATEAUTileManager m_TileManager = null;
+
         public TrafficManager SimTrafficManager
         {
             get
@@ -84,6 +92,49 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
         {
             int numRoads = RnGetter.GetRoadBases().OfType<RnDataRoad>().Count();
             return (int)Mathf.Min(numRoads / 2, PlateauSandboxTrafficManagerConstants.NUM_MAX_VEHICLES); // 交差点以外の道路数の半分 or 最大車輛数
+        }
+
+        void Start()
+        {
+            // Tile用処理(読込後にDemをGroundに設定するための処理）
+            // 重要性は低いので不要なら削除しても大きな問題はないはずだが念のため
+            m_TileManager = GameObject.FindFirstObjectByType<PLATEAUTileManager>();
+            if (m_TileManager != null)
+            {
+                m_TileManager.onTileInstantiatedAction -= OnTileLoaded;
+                m_TileManager.onTileInstantiatedAction += OnTileLoaded;
+            }
+        }
+
+        void OnDestroy()
+        {
+            if (m_TileManager != null)
+            {
+                m_TileManager.onTileInstantiatedAction -= OnTileLoaded;
+            }
+        }
+
+        /// <summary>
+        /// TileManagerが存在する場合、Tileの読込を監視しLayerを設定
+        /// (AddressablesのLayerは、Asset読込後に設定する必要があるため)
+        /// </summary>
+        /// <param name="tile"></param>
+        void OnTileLoaded(PLATEAUDynamicTile tile)
+        {
+            // Tileの場合、Load時にDemをGroundに設定
+            if (tile.Package == PLATEAU.Dataset.PredefinedCityModelPackage.Relief && tile.LoadedObject != null)
+            {
+                int groundLayer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
+                if (groundLayer == -1)
+                {
+                    Debug.LogWarning($"Layer '{PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND}' does not exist.");
+                    return;
+                }
+                foreach (Transform child in tile.LoadedObject.transform.GetAllChildrenWithComponent<PLATEAUCityObjectGroup>())
+                {
+                    child.gameObject.layer = groundLayer;
+                }
+            }
         }
 
         public void CreateSimulator(List<GameObject> prefabs)

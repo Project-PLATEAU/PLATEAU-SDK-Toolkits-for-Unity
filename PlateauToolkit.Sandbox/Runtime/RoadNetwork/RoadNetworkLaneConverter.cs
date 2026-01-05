@@ -1,6 +1,7 @@
 ﻿using AWSIM;
 using AWSIM.TrafficSimulation;
 using PLATEAU.CityInfo;
+using PLATEAU.RoadNetwork;
 using PLATEAU.RoadNetwork.Data;
 using PLATEAU.RoadNetwork.Structure;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
     {
 
         public static readonly bool SHOW_DEBUG_INFO = false;
+
+        RoadTransformGetter m_RoadTransformGetter;
 
         //temporarily keeps Lane information as RoadNetwork data
         public struct LaneConvertInfo
@@ -70,15 +73,16 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return outPoints;
         }
 
-        void SetAsGroundLayer(List<PLATEAUCityObjectGroup> cityObjs)
+        void SetAsGroundLayer(List<RnCityObjectGroupKey> keys)
         {
-            if (cityObjs?.Count > 0)
+            if (keys?.Count > 0)
             {
-                foreach (var item in cityObjs)
+                foreach (RnCityObjectGroupKey key in keys)
                 {
-                    if (item != null)
+                    Transform trans = m_RoadTransformGetter.GetRoadTransform(key);
+                    if (trans != null)
                     {
-                        item.gameObject.layer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
+                        trans.gameObject.layer = LayerMask.NameToLayer(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);
                     }
                 }
             }
@@ -101,7 +105,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             var intersectionName = $"TrafficIntersection_{intersection.GetId(getter)}";
             var intersectionGameObject = new GameObject(intersectionName, typeof(TrafficIntersection));
 
-            if (trafficLightController.GetParentRoad(getter).TargetTrans.FirstOrDefault().TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
+            Transform firstTrans = m_RoadTransformGetter.GetRoadTransform(trafficLightController.GetParentRoad(getter).TargetGroupKeys.FirstOrDefault());
+            if (firstTrans != null && firstTrans.TryGetComponent<MeshRenderer>(out MeshRenderer renderer))
             {
                 intersectionGameObject.transform.position = renderer.bounds.center;
                 var collider = intersectionGameObject.GetComponent<BoxCollider>();
@@ -209,6 +214,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
 
         public List<TrafficLane> Create(RoadNetworkDataGetter getter, Transform parent)
         {
+            m_RoadTransformGetter = new RoadTransformGetter();
+
             var laneParent = GameObject.Find(PlateauSandboxTrafficManagerConstants.TRAFFIC_LANE_ROOT_NAME);
             if (laneParent == null)
             {
@@ -246,7 +253,7 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                 {
                     RnDataRoad road = (RnDataRoad)rb;
 
-                    SetAsGroundLayer(road.TargetTrans);
+                    SetAsGroundLayer(road.TargetGroupKeys);
 
                     List<RnDataLane> lanes = road.GetMainLanes(getter);
 
@@ -331,7 +338,8 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
                         continue;
                     }
 
-                    SetAsGroundLayer(intersection.TargetTrans);
+                    SetAsGroundLayer(intersection.TargetGroupKeys);
+
                     CreateTrafficIntersection(intersection, getter, intersectionParent.transform);
 
                     var tracks = intersection.Tracks;
