@@ -512,6 +512,17 @@ namespace PlateauToolkit.Rendering.Editor
                             material.SetFloat("_BaseMapOpacity", 0.95f);
                         }
 
+                        // PLATEAUX3DMaterialShader Texture付 (東京タワー等) 対応
+                        if (material.HasProperty("_BaseMap"))
+                        {
+                            material.SetTexture("_BaseMap", material.mainTexture);
+                        }
+
+                        if (material.HasProperty("_BaseColorMap"))
+                        {
+                            material.SetTexture("_BaseColorMap", material.mainTexture);
+                        }
+
 #if UNITY_URP
                         BaseShaderGUI.SetMaterialKeywords(material);
 #endif
