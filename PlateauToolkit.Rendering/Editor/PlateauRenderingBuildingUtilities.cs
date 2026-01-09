@@ -523,7 +523,7 @@ namespace PlateauToolkit.Rendering.Editor
                                 material.SetTexture("_BaseMap", mainTexture);
                             }
                         }
-# elif UNITY_HDRP
+#elif UNITY_HDRP
                         if (material.HasProperty("_BaseColorMap"))
                         {
                             if (material.GetTexture("_BaseColorMap") == null)
