@@ -461,6 +461,8 @@ namespace PlateauToolkit.Rendering.Editor
                     {
                         Undo.RecordObject(material, "Change Lod2 Building Shader");
 
+                        Texture mainTexture = material.mainTexture;
+
                         // Store the previous shader for undo purposes
                         Shader previousShader = material.shader;
 
@@ -511,6 +513,25 @@ namespace PlateauToolkit.Rendering.Editor
                         {
                             material.SetFloat("_BaseMapOpacity", 0.95f);
                         }
+
+                        // PLATEAUX3DMaterialShader Texture付 (東京タワー等) 対応
+#if UNITY_URP
+                        if (material.HasProperty("_BaseMap"))
+                        {
+                            if (material.GetTexture("_BaseMap") == null)
+                            {
+                                material.SetTexture("_BaseMap", mainTexture);
+                            }
+                        }
+#elif UNITY_HDRP
+                        if (material.HasProperty("_BaseColorMap"))
+                        {
+                            if (material.GetTexture("_BaseColorMap") == null)
+                            {
+                                material.SetTexture("_BaseColorMap", mainTexture);
+                            }
+                        }
+#endif
 
 #if UNITY_URP
                         BaseShaderGUI.SetMaterialKeywords(material);

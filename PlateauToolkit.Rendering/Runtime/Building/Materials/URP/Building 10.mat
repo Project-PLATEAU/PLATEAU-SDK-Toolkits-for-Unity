@@ -242,7 +242,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FrameOffsetXY: {r: 0, g: -0.37, b: 0, a: 0}
     - _RoofColor: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
-    - _Roof_Color: {r: 0.6886792, g: 0.6886792, b: 0.6886792, a: 1}
+    - _Roof_Color: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
     - _Roof_Edge_Color: {r: 0.85534585, g: 0.97439706, b: 1, a: 0}
     - _Roof_Edge_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _Roof_Edge_Tiling: {r: 1, g: 1, b: 0, a: 0}
