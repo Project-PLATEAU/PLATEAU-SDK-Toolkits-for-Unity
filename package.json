@@ -2,7 +2,7 @@
   "name": "com.synesthesias.plateau-unity-toolkit",
   "displayName": "PLATEAU SDK-Toolkits for Unity",
   "version": "2.2.1",
-  "unity": "2022.3",
+  "unity": "6000.3",
   "description": "PLATEAUの3D都市モデルを利用したUnity上でのアプリケーション開発を支援するツールキット群です。",
   "author": {
     "name": "Synesthesias Inc."

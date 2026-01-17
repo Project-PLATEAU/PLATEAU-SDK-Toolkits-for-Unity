@@ -98,8 +98,8 @@ namespace AWSIM
                 {
                     var rigidbody = gameObject.AddComponent<Rigidbody>();
                     rigidbody.mass = 3000;
-                    rigidbody.drag = 0;
-                    rigidbody.angularDrag = 0;
+                    rigidbody.linearDamping = 0;
+                    rigidbody.angularDamping = 0;
                     rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
                     rigidbody.automaticCenterOfMass = true;
@@ -181,7 +181,7 @@ namespace AWSIM
             }
 
             var collider = visualObjectRoot.GetComponentInChildren<Collider>();
-            var physicMaterial = Resources.Load<PhysicMaterial>("VehiclePhisicMaterial");
+            var physicMaterial = Resources.Load<PhysicsMaterial>("VehiclePhisicMaterial");
             if (collider != null)
             {
                 collider.excludeLayers = ~LayerMask.GetMask(PlateauSandboxTrafficManagerConstants.LAYER_MASK_GROUND);  // Everything but ground
@@ -262,8 +262,8 @@ namespace AWSIM
         public void SetPosition(Vector3 position)
         {
             rigidbody.MovePosition(new Vector3(position.x, rigidbody.position.y, position.z));
-            var velocityY = Mathf.Min(rigidbody.velocity.y, maxVerticalSpeed);
-            rigidbody.velocity = new Vector3(0, velocityY, 0);
+            var velocityY = Mathf.Min(rigidbody.linearVelocity.y, maxVerticalSpeed);
+            rigidbody.linearVelocity = new Vector3(0, velocityY, 0);
         }
 
         /// <summary>
