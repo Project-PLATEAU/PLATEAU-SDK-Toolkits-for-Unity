@@ -8,8 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Building S1
-  m_Shader: {fileID: -6465566751694194690, guid: 24a9eb9f9ef06e14a806c2713b103e7f,
-    type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 24a9eb9f9ef06e14a806c2713b103e7f, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
@@ -20,7 +19,8 @@ Material:
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
@@ -235,8 +235,7 @@ Material:
     - _ZWrite: 1
     - _ZWriteControl: 0
     m_Colors:
-    - Color_ca8500d78bab4eb3a7fa57ac27859554: {r: 0.9716981, g: 0.9369359, b: 0.83113796,
-        a: 0}
+    - Color_ca8500d78bab4eb3a7fa57ac27859554: {r: 0.9716981, g: 0.9369359, b: 0.83113796, a: 0}
     - Vector4_D020E36B: {r: 2, g: 2, b: 0, a: 0}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Building_Offset: {r: 0, g: 1, b: 0, a: 0}
@@ -264,6 +263,7 @@ Material:
     - _Windows_Offset: {r: 1, g: 1, b: 0, a: 0}
     - _Windows_Tiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &8504720312071652428
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -276,4 +276,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 10

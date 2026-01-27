@@ -24,15 +24,15 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: FloorEmission
-  m_Shader: {fileID: -6465566751694194690, guid: 120703dbcd94f8d46b058c94a9856f0e,
-    type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 120703dbcd94f8d46b058c94a9856f0e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords:
   - _DISABLE_SSR_TRANSPARENT
+  - _EMISSION
   - _NORMALMAP_TANGENT_SPACE
-  m_LightmapFlags: 0
+  m_LightmapFlags: 2
   m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
@@ -341,6 +341,7 @@ Material:
     - _UVMappingMask: {r: 1, g: 0, b: 0, a: 0}
     - _UVMappingMaskEmissive: {r: 1, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
+  m_AllowLocking: 1
 --- !u!114 &7073807883411125503
 MonoBehaviour:
   m_ObjectHideFlags: 11
@@ -353,4 +354,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  version: 7
+  version: 10
