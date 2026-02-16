@@ -632,6 +632,14 @@ namespace PlateauToolkit.Rendering.Editor
                             material.SetFloat("_BaseMapOpacity", 0.95f);
                         }
 
+                        if (material.HasProperty("_BaseMap"))
+                        {
+                            if (material.HasProperty("_RightTexture"))
+                            {
+                                material.SetTexture("_BaseMap", material.GetTexture("_RightTexture"));
+                            }
+                        }
+
 #if UNITY_URP
                         BaseShaderGUI.SetMaterialKeywords(material);
 #endif
