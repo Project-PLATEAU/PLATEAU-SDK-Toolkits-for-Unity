@@ -652,7 +652,7 @@ namespace PlateauToolkit.Rendering.Editor
             }
         }
 
-        public static void SetBuildingVertexColorForWindow(Mesh mesh, Bounds boundingBox, GameObject go, float maskPercentage = 0.2f, int? seed = null)
+        public static void SetBuildingVertexColorForWindow(Mesh mesh, Bounds boundingBox, GameObject go, float maskPercentage = 0.2f, int? seed = null) // BoundingBoxは未使用だが、外部からの参照を考慮して引数に残す
         {
             var vertices = mesh.vertices;
             var normals = mesh.normals;
@@ -688,7 +688,7 @@ namespace PlateauToolkit.Rendering.Editor
             // 4. 色設定（TransformPoint 不要）
             for (int i = 0; i < count; i++)
             {
-                float normalizedHeight = (vertices[i].y - minY) / heightRange;
+                float normalizedHeight = heightRange > 0 ? (vertices[i].y - minY) / heightRange : 0f;
 
                 Color c = (normalizedHeight < threshold)
                     ? Color.Lerp(Color.green, Color.black, normalizedHeight)

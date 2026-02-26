@@ -361,7 +361,7 @@ namespace PlateauToolkit.Rendering.Editor
         /// <param name="go"></param>
         /// <param name="meshRenderer"></param>
         /// <param name="meshFilter"></param>
-        void ProcessTileZl9Lod1(GameObject go, MeshRenderer meshRenderer, MeshFilter meshFilter)
+        internal void ProcessTileZl9Lod1(GameObject go, MeshRenderer meshRenderer, MeshFilter meshFilter)
         {
             Undo.RecordObject(meshFilter, "Optimize Mesh");
             Undo.RecordObject(meshRenderer, "Optimize Mesh");
