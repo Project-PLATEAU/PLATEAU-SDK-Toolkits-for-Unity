@@ -549,6 +549,7 @@ namespace PlateauToolkit.Rendering.Editor
         /// <summary>
         /// Tile ZoomLevel 9 Lod1 Materialの差替え
         /// Sampleでのみ利用
+        /// HDRP非対応
         /// </summary>
         /// <param name="obj"></param>
         public static void ChangeTileZL9LOD1BuildingShader(GameObject obj)
@@ -573,6 +574,9 @@ namespace PlateauToolkit.Rendering.Editor
 
                 foreach (Material material in renderer.sharedMaterials)
                 {
+                    if (material == null)
+                        continue;
+
                     string shaderName = material.shader?.name;
                     bool isTriplanar = shaderName == "Shader Graphs/PLATEAULod1TriplanarShader"; //Tile ZoomLevel 9 Lod1 Material
 
@@ -580,9 +584,6 @@ namespace PlateauToolkit.Rendering.Editor
                     if (isTriplanar)
                     {
                         Undo.RecordObject(material, "Change Tile Lod1 Building Shader");
-
-                        // Store the previous shader for undo purposes
-                        Shader previousShader = material.shader;
 
                         // Set the new shader
                         material.shader = newShader;
@@ -655,7 +656,6 @@ namespace PlateauToolkit.Rendering.Editor
         public static void SetBuildingVertexColorForWindow(Mesh mesh, Bounds boundingBox, GameObject go, float maskPercentage = 0.2f, int? seed = null) // BoundingBoxは未使用だが、外部からの参照を考慮して引数に残す
         {
             var vertices = mesh.vertices;
-            var normals = mesh.normals;
             int count = vertices.Length;
 
             // 1. ローカル座標で minY / maxY を求める
@@ -677,10 +677,20 @@ namespace PlateauToolkit.Rendering.Editor
             bool hasOriginalColors = originalColors != null && originalColors.Length == count;
 
             // 3. ランダムシード
+            Random.State previousRandomState = Random.state;
             if (seed.HasValue)
                 Random.InitState(seed.Value);
 
-            float randomAlpha = Random.Range(0f, 1f);
+            float randomAlpha;
+            try
+            {
+                randomAlpha = Random.Range(0f, 1f);
+            }
+            finally
+            {
+                if (seed.HasValue)
+                    Random.state = previousRandomState;
+            }
 
             float heightRange = maxY - minY;
             float threshold = 1.0f - maskPercentage;
