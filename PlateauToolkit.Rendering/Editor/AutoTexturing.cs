@@ -279,6 +279,12 @@ namespace PlateauToolkit.Rendering.Editor
         }
         void ProcessLOD1(GameObject go, MeshRenderer meshRenderer, MeshFilter meshFilter)
         {
+            if (IsTileZl9Lod1(meshRenderer?.sharedMaterial))
+            {
+                ProcessTileZl9Lod1(go, meshRenderer, meshFilter);
+                return;
+            }
+
             Undo.RecordObject(meshRenderer, "Optimize Mesh");
             Undo.RecordObject(meshFilter, "Optimize Mesh");
 
@@ -352,6 +358,19 @@ namespace PlateauToolkit.Rendering.Editor
 
             PlateauRenderingBuildingUtilities.PlaceObstacleLightsOnBuildingCorners(go);
             PlateauRenderingBuildingUtilities.CreatePlaneUnderBuilding(go);
+        }
+
+        /// <summary>
+        /// Tile ZoomLevel 9 Lod1 Materialかどうかの判定 (PLATEAULod1TriplanarShaderを利用しているか)
+        /// </summary>
+        /// <param name="material"></param>
+        /// <returns></returns>
+        bool IsTileZl9Lod1(Material material)
+        {
+            if (material == null || material.shader == null)
+                return false;
+            string shaderName = material.shader.name;
+            return shaderName.Contains("Lod1Triplanar"); // Shader Graphs/PLATEAULod1TriplanarShader or Weather/Building_Lod1Triplanar_URP or Weather/Building_Lod1Triplanar_HDRP
         }
 
         /// <summary>
