@@ -279,6 +279,8 @@ namespace PlateauToolkit.Rendering.Editor
         }
         void ProcessLOD1(GameObject go, MeshRenderer meshRenderer, MeshFilter meshFilter)
         {
+            // ZoomLevel 9 Lod1のマテリアルを使用している場合は専用の処理を行う
+            // 主要地物単位の場合、Materialは１つのはずなので、sharedMaterialで判定する
             if (IsTileZl9Lod1(meshRenderer?.sharedMaterial))
             {
                 ProcessTileZl9Lod1(go, meshRenderer, meshFilter);
@@ -375,7 +377,6 @@ namespace PlateauToolkit.Rendering.Editor
 
         /// <summary>
         /// Tile ZoomLevel 9 Lod1 Material用処理 (PLATEAULod1TriplanarShader)
-        /// Sample でのみ利用
         /// </summary>
         /// <param name="go"></param>
         /// <param name="meshRenderer"></param>
