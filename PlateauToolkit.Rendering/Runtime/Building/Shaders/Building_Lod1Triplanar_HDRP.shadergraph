@@ -7749,8 +7749,8 @@
     "m_ObjectId": "0409f5b32a004a808906d5f43a3c5d40",
     "m_Title": "Roof Edge",
     "m_Position": {
-        "x": -1599.0001220703125,
-        "y": 3222.00048828125
+        "x": -1599.0,
+        "y": 3222.0
     }
 }
 
@@ -8128,8 +8128,8 @@
     "m_ObjectId": "06fa50583ea443de953f87fcbfc938c3",
     "m_Title": "Normal Y",
     "m_Position": {
-        "x": -2109.000244140625,
-        "y": 519.9998779296875
+        "x": -2109.0,
+        "y": 520.0
     }
 }
 
@@ -13756,8 +13756,8 @@
     "m_ObjectId": "268aebd00d0b4e74921a871f08492592",
     "m_Title": "Lod1Triplanar",
     "m_Position": {
-        "x": -1089.9998779296875,
-        "y": -3428.999755859375
+        "x": -1090.0,
+        "y": -3429.0
     }
 }
 
@@ -23519,7 +23519,7 @@
     "m_Title": "Fake GI",
     "m_Position": {
         "x": 26.0,
-        "y": 3366.000244140625
+        "y": 3366.0
     }
 }
 
@@ -26527,8 +26527,8 @@
     "m_ObjectId": "7842b84efd7f4355a0c2d1947a3f5836",
     "m_Title": "MaskByHeight",
     "m_Position": {
-        "x": -2221.000244140625,
-        "y": 830.9999389648438
+        "x": -2221.0,
+        "y": 831.0
     }
 }
 
@@ -29440,7 +29440,7 @@
     "m_ObjectId": "8b039dcfcbba48eeb2b8506402fce9f0",
     "m_Title": "Wall",
     "m_Position": {
-        "x": -3282.000244140625,
+        "x": -3282.0,
         "y": -345.0
     }
 }
@@ -34378,8 +34378,8 @@
     "m_ObjectId": "a87e5ff5bc514db192f9e8041313653b",
     "m_Title": "Emission Fade By Distance",
     "m_Position": {
-        "x": -5247.0009765625,
-        "y": 3301.999755859375
+        "x": -5247.0,
+        "y": 3302.0
     }
 }
 
@@ -35154,7 +35154,7 @@
         "m_SerializedTexture": "",
         "m_Guid": ""
     },
-    "isMainTexture": false,
+    "isMainTexture": true,
     "useTilingAndOffset": false,
     "useTexelSize": true,
     "m_Modifiable": true,
@@ -45661,8 +45661,8 @@
     "m_ObjectId": "e6713c9dd4e3412a9a8e8afe50f5efb9",
     "m_Title": "Roof Top",
     "m_Position": {
-        "x": -1544.0001220703125,
-        "y": 2164.000244140625
+        "x": -1544.0,
+        "y": 2164.0
     }
 }
 
@@ -45922,8 +45922,8 @@
     "m_ObjectId": "e743043400924c0797480b7a8a766dd4",
     "m_Title": "Rain",
     "m_Position": {
-        "x": 705.0001220703125,
-        "y": -115.00009155273438
+        "x": 705.0,
+        "y": -115.0
     }
 }
 
@@ -49088,8 +49088,8 @@
     "m_ObjectId": "faf854d6c82c4d6fbec041da4f6b58a8",
     "m_Title": "Emmision Map HDRP",
     "m_Position": {
-        "x": 739.9999389648438,
-        "y": 1117.9996337890625
+        "x": 740.0,
+        "y": 1118.0
     }
 }
 
