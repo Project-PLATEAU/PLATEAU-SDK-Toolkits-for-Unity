@@ -192,6 +192,9 @@
             "m_Id": "bfa0cf41fd70436491fcd94fb1313a03"
         },
         {
+            "m_Id": "16f310d4b2e24f9fb8d389e65131dc06"
+        },
+        {
             "m_Id": "f53b4836895245fdbd15ab2723224a78"
         },
         {
@@ -10949,6 +10952,18 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "16f310d4b2e24f9fb8d389e65131dc06",
+    "m_Name": "Deprecated",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "0b330496ad4f431c98bb3b70781ddb5c"
+        }
+    ]
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.RedirectNodeData",
     "m_ObjectId": "1700e840d63c4e519d5c22a211ee7eae",
     "m_Group": {
@@ -17148,7 +17163,7 @@
     "m_ObjectId": "3da33f9aa16f43ce8d1dd33548e6dfaf",
     "m_Title": "Fake GI",
     "m_Position": {
-        "x": 246.9999542236328,
+        "x": 247.0,
         "y": 2470.0
     }
 }
@@ -28892,7 +28907,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "826ad165760a43b5874a8af38f4f8133",
-    "m_Name": "LOD1",
+    "m_Name": "LOD1 ((deprecated)",
     "m_ChildObjectList": [
         {
             "m_Id": "8b2aac6655e64db981cfacd006498d38"
@@ -39852,9 +39867,6 @@
             "m_Id": "1c8ba876fd4c44549d7e7585a5cc242d"
         },
         {
-            "m_Id": "0b330496ad4f431c98bb3b70781ddb5c"
-        },
-        {
             "m_Id": "df02d2723aba484285bf967af30a1110"
         },
         {
@@ -41540,7 +41552,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "c8d4896e391f4dc2bcc35215c1325aef",
-    "m_Name": "Building Textures",
+    "m_Name": "Building Textures (deprecated)",
     "m_ChildObjectList": [
         {
             "m_Id": "ab4f2c09fd504b9c9f9ff64225201f69"

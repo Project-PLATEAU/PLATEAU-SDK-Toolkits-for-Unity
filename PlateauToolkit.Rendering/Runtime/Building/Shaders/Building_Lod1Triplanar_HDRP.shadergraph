@@ -195,6 +195,9 @@
             "m_Id": "bfa0cf41fd70436491fcd94fb1313a03"
         },
         {
+            "m_Id": "4985ad52e2e5490380687cb06ef7de1c"
+        },
+        {
             "m_Id": "351bb73335a44d568cf12d62be84c501"
         },
         {
@@ -18978,6 +18981,18 @@
 
 {
     "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.CategoryData",
+    "m_ObjectId": "4985ad52e2e5490380687cb06ef7de1c",
+    "m_Name": "Deprecated",
+    "m_ChildObjectList": [
+        {
+            "m_Id": "0b330496ad4f431c98bb3b70781ddb5c"
+        }
+    ]
+}
+
+{
+    "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.DynamicVectorMaterialSlot",
     "m_ObjectId": "4991ba386d3d4f44bcefd23fd94b8a5a",
     "m_Id": 0,
@@ -23410,8 +23425,8 @@
     "m_ObjectId": "656155abed2648b6bf803e4d5394beca",
     "m_Title": "Fake GI",
     "m_Position": {
-        "x": 25.999998092651368,
-        "y": 3365.999755859375
+        "x": 26.0,
+        "y": 3366.0
     }
 }
 
@@ -27882,7 +27897,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "826ad165760a43b5874a8af38f4f8133",
-    "m_Name": "LOD1",
+    "m_Name": "LOD1 (depreccated)",
     "m_ChildObjectList": [
         {
             "m_Id": "8b2aac6655e64db981cfacd006498d38"
@@ -38957,9 +38972,6 @@
             "m_Id": "1c8ba876fd4c44549d7e7585a5cc242d"
         },
         {
-            "m_Id": "0b330496ad4f431c98bb3b70781ddb5c"
-        },
-        {
             "m_Id": "a3b883f42dc44b798507a174915af057"
         },
         {
@@ -40604,7 +40616,7 @@
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.CategoryData",
     "m_ObjectId": "c8d4896e391f4dc2bcc35215c1325aef",
-    "m_Name": "Building Textures",
+    "m_Name": "Building Textures (deprecated)",
     "m_ChildObjectList": [
         {
             "m_Id": "ab4f2c09fd504b9c9f9ff64225201f69"
@@ -49488,7 +49500,7 @@
     "m_Title": "Emmision Map HDRP",
     "m_Position": {
         "x": 740.0,
-        "y": 1117.999755859375
+        "y": 1118.0
     }
 }
 
