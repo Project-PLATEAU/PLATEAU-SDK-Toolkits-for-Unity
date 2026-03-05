@@ -548,8 +548,7 @@ namespace PlateauToolkit.Rendering.Editor
 
         /// <summary>
         /// Tile ZoomLevel 9 Lod1 Materialの差替え
-        /// Sampleでのみ利用
-        /// HDRP非対応
+        /// PLATEAULod1TriplanarShader => Building_Lod1Triplanar_URP or Building_Lod1Triplanar_HDRP
         /// </summary>
         /// <param name="obj"></param>
         public static void ChangeTileZL9LOD1BuildingShader(GameObject obj)
@@ -632,15 +631,6 @@ namespace PlateauToolkit.Rendering.Editor
                         {
                             material.SetFloat("_BaseMapOpacity", 0.95f);
                         }
-
-                        if (material.HasProperty("_BaseMap"))
-                        {
-                            if (material.HasProperty("_RightTexture"))
-                            {
-                                material.SetTexture("_BaseMap", material.GetTexture("_RightTexture"));
-                            }
-                        }
-
 #if UNITY_URP
                         BaseShaderGUI.SetMaterialKeywords(material);
 #endif
