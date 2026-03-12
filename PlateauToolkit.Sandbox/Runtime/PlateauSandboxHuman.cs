@@ -41,7 +41,7 @@ namespace PlateauToolkit.Sandbox
 
         public void OnMove(in MovementInfo movementInfo, PlateauSandboxTrack track)
         {
-            (Vector3 position, Vector3 forward) = track.GetPositionAndForwardBySplineContainerT(movementInfo.m_SplineContainerT);
+            (Vector3 position, Vector3 forward) = track.GetPositionAndForwardBySplineContainerT(movementInfo.m_SplineContainerT, movementInfo.m_PositionOffset);
             m_Speed = movementInfo.m_MoveDelta / Time.deltaTime;
 
             Quaternion toRotation = Quaternion.LookRotation(forward, Vector3.up);

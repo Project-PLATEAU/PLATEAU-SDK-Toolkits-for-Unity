@@ -75,6 +75,11 @@ namespace AWSIM.TrafficSimulation
                 this.groupLightingOrders = groupLightingOrders;
             }
 
+            public void SetIntervalSec(float val)
+            {
+                intervalSec = val;
+            }
+
             [SerializeField] float intervalSec;
             [SerializeField] GroupLightingOrder[] groupLightingOrders;
         }

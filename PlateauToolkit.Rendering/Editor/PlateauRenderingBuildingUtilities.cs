@@ -80,7 +80,8 @@ namespace PlateauToolkit.Rendering.Editor
         /// <returns></returns>
         public static bool IsPlateauBuilding(Transform transformOfSelectedMesh)
         {
-            return transformOfSelectedMesh.HasParentWithComponent<PLATEAUInstancedCityModel>() && (transformOfSelectedMesh.name.Contains("BLD") || transformOfSelectedMesh.name.Contains("bldg") || transformOfSelectedMesh.name.Contains("group"));
+            return (transformOfSelectedMesh.HasParentWithComponent<PLATEAUInstancedCityModel>() || transformOfSelectedMesh.HasParentWithComponent<PLATEAU.DynamicTile.PLATEAUTileManager>())
+                && (transformOfSelectedMesh.name.Contains("BLD") || transformOfSelectedMesh.name.Contains("bldg") || transformOfSelectedMesh.name.Contains("group"));
         }
 
         static bool HasParentWithComponent<T>(this Transform child) where T : Component
@@ -460,6 +461,8 @@ namespace PlateauToolkit.Rendering.Editor
                     {
                         Undo.RecordObject(material, "Change Lod2 Building Shader");
 
+                        Texture mainTexture = material.mainTexture;
+
                         // Store the previous shader for undo purposes
                         Shader previousShader = material.shader;
 
@@ -511,6 +514,25 @@ namespace PlateauToolkit.Rendering.Editor
                             material.SetFloat("_BaseMapOpacity", 0.95f);
                         }
 
+                        // PLATEAUX3DMaterialShader Texture付 (東京タワー等) 対応
+#if UNITY_URP
+                        if (material.HasProperty("_BaseMap"))
+                        {
+                            if (material.GetTexture("_BaseMap") == null)
+                            {
+                                material.SetTexture("_BaseMap", mainTexture);
+                            }
+                        }
+#elif UNITY_HDRP
+                        if (material.HasProperty("_BaseColorMap"))
+                        {
+                            if (material.GetTexture("_BaseColorMap") == null)
+                            {
+                                material.SetTexture("_BaseColorMap", mainTexture);
+                            }
+                        }
+#endif
+
 #if UNITY_URP
                         BaseShaderGUI.SetMaterialKeywords(material);
 #endif
@@ -523,67 +545,176 @@ namespace PlateauToolkit.Rendering.Editor
                 Debug.LogWarning("Renderer not found on object: " + obj.name);
             }
         }
-        public static void SetBuildingVertexColorForWindow(Mesh mesh, Bounds boundingBox, GameObject go, float maskPercentage = 0.2f, int? seed = null)
-        {
-            var colors = new Color[mesh.vertexCount];
-            float largeFaceThreshold = 0.3f * boundingBox.size.y;
 
-            // Find the minimum and maximum vertex heights in the mesh.
+        /// <summary>
+        /// Tile ZoomLevel 9 Lod1 Materialの差替え
+        /// Sampleでのみ利用
+        /// HDRP非対応
+        /// </summary>
+        /// <param name="obj"></param>
+        public static void ChangeTileZL9LOD1BuildingShader(GameObject obj)
+        {
+            string buildingTriplanarShaderPath = "Weather/Building_Lod1Triplanar_URP"; //Tile ZoomLevel 9 Lod1 Material
+
+#if UNITY_HDRP
+            buildingTriplanarShaderPath = "Weather/Building_Lod1Triplanar_HDRP";
+#endif
+
+            var newShader = Shader.Find(buildingTriplanarShaderPath);
+            if (newShader == null)
+            {
+                return;
+            }
+
+            Renderer renderer = obj.GetComponent<Renderer>();
+
+            if (renderer != null)
+            {
+                Undo.RecordObject(renderer, "Change Tile Lod1 Building Shader");
+
+                foreach (Material material in renderer.sharedMaterials)
+                {
+                    if (material == null)
+                        continue;
+
+                    string shaderName = material.shader?.name;
+                    bool isTriplanar = shaderName == "Shader Graphs/PLATEAULod1TriplanarShader"; //Tile ZoomLevel 9 Lod1 Material
+
+                    // Check if the material has a main texture and if it's not null
+                    if (isTriplanar)
+                    {
+                        Undo.RecordObject(material, "Change Tile Lod1 Building Shader");
+
+                        // Set the new shader
+                        material.shader = newShader;
+
+#if UNITY_URP
+                        if (material.HasProperty("_AlphaClip"))
+                        {
+                            material.SetFloat("_AlphaClip", 1.0f);
+                        }
+#endif
+
+#if UNITY_HDRP
+                        if (material.HasProperty("_AlphaCutoffEnable"))
+                        {
+                            material.SetFloat("_AlphaCutoffEnable", 1.0f);
+                        }
+#endif
+
+                        // Set shader-specific parameters if they exist
+                        if (material.HasProperty("_FrameTileX"))
+                        {
+                            material.SetFloat("_FrameTileX", 0.4f);
+                        }
+
+                        if (material.HasProperty("_FrameTileY"))
+                        {
+                            material.SetFloat("_FrameTileY", 0.1f);
+                        }
+
+                        if (material.HasProperty("_FrameSizeX"))
+                        {
+                            material.SetFloat("_FrameSizeX", 0.7f);
+                        }
+
+                        if (material.HasProperty("_FrameSizeY"))
+                        {
+                            material.SetFloat("_FrameSizeY", 0.3f);
+                        }
+
+                        if (material.HasProperty("_NightEmission"))
+                        {
+                            material.SetFloat("_NightEmission", 0.35f);
+                        }
+
+                        if (material.HasProperty("_BaseMapOpacity"))
+                        {
+                            material.SetFloat("_BaseMapOpacity", 0.95f);
+                        }
+
+                        if (material.HasProperty("_BaseMap"))
+                        {
+                            if (material.HasProperty("_RightTexture"))
+                            {
+                                material.SetTexture("_BaseMap", material.GetTexture("_RightTexture"));
+                            }
+                        }
+
+#if UNITY_URP
+                        BaseShaderGUI.SetMaterialKeywords(material);
+#endif
+                    }
+                }
+            }
+            else
+            {
+                Debug.LogWarning("Renderer not found on object: " + obj.name);
+            }
+        }
+
+        public static void SetBuildingVertexColorForWindow(Mesh mesh, Bounds boundingBox, GameObject go, float maskPercentage = 0.2f, int? seed = null) // BoundingBoxは未使用だが、外部からの参照を考慮して引数に残す
+        {
+            var vertices = mesh.vertices;
+            int count = vertices.Length;
+
+            // 1. ローカル座標で minY / maxY を求める
             float minY = float.PositiveInfinity;
             float maxY = float.NegativeInfinity;
 
-            // Create a set to hold the world coordinates of upward facing vertices.
-            HashSet<Vector3> upwardVertices = new HashSet<Vector3>();
-
-            for (int i = 0; i < mesh.vertices.Length; i++)
+            for (int i = 0; i < count; i++)
             {
-                Vector3 worldV = go.transform.TransformPoint(mesh.vertices[i]);
-                minY = Mathf.Min(minY, worldV.y);
-                maxY = Mathf.Max(maxY, worldV.y);
-
-                // If the vertex is facing upwards and is at least 80% of the height of the object, add its world position to the set.
-                if (mesh.normals[i].y > 0.9f && worldV.y >= minY + (1.0f - maskPercentage) * (maxY - minY))
-                {
-                    upwardVertices.Add(worldV);
-                }
+                float y = vertices[i].y;
+                if (y < minY)
+                    minY = y;
+                if (y > maxY)
+                    maxY = y;
             }
 
-            // Set random seed if provided
-            if (seed.HasValue)
-            {
-                Random.InitState(seed.Value);
-            }
-
-            // Generate a single random alpha value for all vertices
-            float randomAlpha = Random.Range(0f, 1f);
-
-            // Check if mesh has vertex colors, otherwise use default color (white)
+            // 2. 色配列を準備
+            Color[] colors = new Color[count];
             Color[] originalColors = mesh.colors;
-            bool hasOriginalColors = originalColors != null && originalColors.Length == mesh.vertexCount;
+            bool hasOriginalColors = originalColors != null && originalColors.Length == count;
 
-            for (int i = 0; i < mesh.vertices.Length; i++)
+            // 3. ランダムシード
+            Random.State previousRandomState = Random.state;
+            if (seed.HasValue)
+                Random.InitState(seed.Value);
+
+            float randomAlpha;
+            try
             {
-                Vector3 worldVertex = go.transform.TransformPoint(mesh.vertices[i]);
+                randomAlpha = Random.Range(0f, 1f);
+            }
+            finally
+            {
+                if (seed.HasValue)
+                    Random.state = previousRandomState;
+            }
 
-                // Calculate normalized height based on the min and max heights of the mesh.
-                float normalizedHeight = (worldVertex.y - minY) / (maxY - minY);
+            float heightRange = maxY - minY;
+            float threshold = 1.0f - maskPercentage;
 
-                // The gradient for green color, full green at the bottom fading to black at the top.
-                Color vertexColor = (normalizedHeight < (1.0f - maskPercentage)) ? Color.Lerp(Color.green, Color.black, normalizedHeight) : Color.black;
+            // 4. 色設定（TransformPoint 不要）
+            for (int i = 0; i < count; i++)
+            {
+                float normalizedHeight = heightRange > 0 ? (vertices[i].y - minY) / heightRange : 0f;
 
-                // Adjust the alpha for all colors to be the same random value.
-                vertexColor.a = randomAlpha;
+                Color c = (normalizedHeight < threshold)
+                    ? Color.Lerp(Color.green, Color.black, normalizedHeight)
+                    : Color.black;
+
+                c.a = randomAlpha;
 
                 if (hasOriginalColors)
                 {
-                    vertexColor.r = originalColors[i].r;
-                    vertexColor.b = originalColors[i].b;
+                    c.r = originalColors[i].r;
+                    c.b = originalColors[i].b;
                 }
 
-                colors[i] = vertexColor;
+                colors[i] = c;
             }
 
-            // Assign the colors back to the mesh.
             mesh.colors = colors;
         }
 

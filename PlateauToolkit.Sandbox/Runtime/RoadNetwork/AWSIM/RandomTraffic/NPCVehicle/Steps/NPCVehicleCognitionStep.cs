@@ -943,7 +943,7 @@ namespace AWSIM.TrafficSimulation
 
                     if (PlateauSandboxTrafficManagerConstants.CHECK_DISTANCE_FROM_GROUND && States[i].ShouldDespawn == false)
                     {
-                        //Gound‚©‚ç‚Ì‹——£”»’è (5fˆÈ‰º‚¾‚ÆBus‚ªdefault‚ÅÁ‚¦‚Ä‚µ‚Ü‚¤j
+                        //Goundã‹ã‚‰ã®è·é›¢åˆ¤å®š (5fä»¥ä¸‹ã ã¨BusãŒdefaultã§æ¶ˆãˆã¦ã—ã¾ã†ï¼‰
                         if (Vector3.Distance(States[i].Vehicle.transform.position, GroundHitInfoArray[i].point) > PlateauSandboxTrafficManagerConstants.MAX_DISTANCE_FROM_GROUND)
                             States[i].ShouldDespawn = true;
                     }
@@ -1110,14 +1110,19 @@ namespace AWSIM.TrafficSimulation
             JobHandle.ScheduleBatchedJobs();
 
             Profiler.EndSample();
-            Profiler.BeginSample("Cognition.CheckRightOfWay");
 
-            new RightOfWayCheckJob
+            if (PlateauSandboxTrafficManagerConstants.USE_RIGHT_OF_WAYS_ON_RUNTIME)
             {
-                States = states
-            }.Execute();
+                Profiler.BeginSample("Cognition.CheckRightOfWay");
 
-            Profiler.EndSample();
+                new RightOfWayCheckJob
+                {
+                    States = states
+                }.Execute();
+
+                Profiler.EndSample();
+            }
+
             Profiler.BeginSample("Cognition.CheckTrafficLight");
 
             new TrafficLightCheckJob

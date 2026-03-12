@@ -64,7 +64,7 @@ public class NightVisionURP : ScriptableRendererFeature
             material.SetFloat("_Range", range);
             material.SetColor("_Color", color);
 
-            source = renderingData.cameraData.renderer.cameraColorTarget;
+            source = renderingData.cameraData.renderer.cameraColorTargetHandle;
             CommandBuffer cmd = CommandBufferPool.Get("NightVisionPass");
 
             cmd.Blit(source, nightVisonBuffer);

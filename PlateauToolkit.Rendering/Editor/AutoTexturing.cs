@@ -353,5 +353,33 @@ namespace PlateauToolkit.Rendering.Editor
             PlateauRenderingBuildingUtilities.PlaceObstacleLightsOnBuildingCorners(go);
             PlateauRenderingBuildingUtilities.CreatePlaneUnderBuilding(go);
         }
+
+        /// <summary>
+        /// Tile ZoomLevel 9 Lod1 Material用処理 (PLATEAULod1TriplanarShader)
+        /// Sample でのみ利用
+        /// </summary>
+        /// <param name="go"></param>
+        /// <param name="meshRenderer"></param>
+        /// <param name="meshFilter"></param>
+        internal void ProcessTileZl9Lod1(GameObject go, MeshRenderer meshRenderer, MeshFilter meshFilter)
+        {
+            if (go == null || meshRenderer == null || meshFilter == null || meshFilter.sharedMesh == null)
+                return;
+            if (go.GetComponent<Processed>() != null)
+                return;
+
+            Undo.RecordObject(meshFilter, "Optimize Mesh");
+            Undo.RecordObject(meshRenderer, "Optimize Mesh");
+
+            // Add the Processed component to the GameObject
+            Undo.AddComponent<Processed>(go);
+
+            Bounds boundingBox = meshRenderer.bounds;
+            PlateauRenderingBuildingUtilities.SetBuildingVertexColorForWindow(meshFilter.sharedMesh, boundingBox, go);
+
+            PlateauRenderingBuildingUtilities.ChangeTileZL9LOD1BuildingShader(go);
+            PlateauRenderingBuildingUtilities.PlaceObstacleLightsOnBuildingCorners(go);
+            PlateauRenderingBuildingUtilities.CreatePlaneUnderBuilding(go);
+        }
     }
 }
