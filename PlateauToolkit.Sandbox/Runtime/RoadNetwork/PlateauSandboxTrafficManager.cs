@@ -94,6 +94,24 @@ namespace PlateauToolkit.Sandbox.RoadNetwork
             return (int)Mathf.Min(numRoads / 2, PlateauSandboxTrafficManagerConstants.NUM_MAX_VEHICLES); // 交差点以外の道路数の半分 or 最大車輛数
         }
 
+        void Awake()
+        {
+            SyncRuntimeFlags();
+        }
+
+        void OnValidate()
+        {
+            SyncRuntimeFlags();
+        }
+
+        /// <summary>
+        /// インスペクタ描画に依存せず、実行時フラグへ設定を反映する。
+        /// </summary>
+        private void SyncRuntimeFlags()
+        {
+            PlateauSandboxTrafficManagerConstants.USE_RIGHT_OF_WAYS_ON_RUNTIME = m_EnableRightOfWays;
+        }
+
         void Start()
         {
             // Tile用処理(読込後にDemをGroundに設定するための処理）
