@@ -279,6 +279,14 @@ namespace PlateauToolkit.Rendering.Editor
         }
         void ProcessLOD1(GameObject go, MeshRenderer meshRenderer, MeshFilter meshFilter)
         {
+            // ZoomLevel 9 Lod1のマテリアルを使用している場合は専用の処理を行う
+            // 主要地物単位の場合、Materialは１つのはずなので、sharedMaterialで判定する
+            if (IsTileZl9Lod1(meshRenderer?.sharedMaterial))
+            {
+                ProcessTileZl9Lod1(go, meshRenderer, meshFilter);
+                return;
+            }
+
             Undo.RecordObject(meshRenderer, "Optimize Mesh");
             Undo.RecordObject(meshFilter, "Optimize Mesh");
 
@@ -355,8 +363,20 @@ namespace PlateauToolkit.Rendering.Editor
         }
 
         /// <summary>
+        /// Tile ZoomLevel 9 Lod1 Materialかどうかの判定 (PLATEAULod1TriplanarShaderを利用しているか)
+        /// </summary>
+        /// <param name="material"></param>
+        /// <returns></returns>
+        bool IsTileZl9Lod1(Material material)
+        {
+            if (material == null || material.shader == null)
+                return false;
+            string shaderName = material.shader.name;
+            return shaderName.Contains("Lod1Triplanar"); // Shader Graphs/PLATEAULod1TriplanarShader or Weather/Building_Lod1Triplanar_URP or Weather/Building_Lod1Triplanar_HDRP
+        }
+
+        /// <summary>
         /// Tile ZoomLevel 9 Lod1 Material用処理 (PLATEAULod1TriplanarShader)
-        /// Sample でのみ利用
         /// </summary>
         /// <param name="go"></param>
         /// <param name="meshRenderer"></param>
