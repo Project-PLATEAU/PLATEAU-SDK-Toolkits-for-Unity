@@ -1,26 +1,39 @@
-#ifndef INTERIOR_MAPPING_INCLUDED
-#define INTERIOR_MAPPING_INCLUDED
+#define EPS_SMALL   1e-4
+#define EPS_RAY     1e-3
 
-float4 Unity_SampleGradient_float(Gradient Gradient, float Time)
+inline float  safe_div(float n, float d)  { return n / max(abs(d), EPS_SMALL); }
+inline float3 safe_ray(float3 v)          { return sign(v) * max(abs(v), EPS_RAY); }
+
+float4 Unity_SampleGradient_float(Gradient G, float t)
 {
-    float3 color = Gradient.colors[0].rgb;
+    float3 color = G.colors[0].rgb;
+
     [unroll]
     for (int c = 1; c < 8; c++)
     {
-        float colorPos = saturate((Time - Gradient.colors[c-1].w) / (Gradient.colors[c].w - Gradient.colors[c-1].w + 1e-6)) * step(c, Gradient.colorsLength-1);
-        color = lerp(color, Gradient.colors[c].rgb, lerp(colorPos, step(0.01, colorPos), Gradient.type));
+        float denom   = max(G.colors[c].w - G.colors[c-1].w, EPS_SMALL);
+        float colorPos = saturate( safe_div(t - G.colors[c-1].w, denom) ) * step(c, G.colorsLength - 1);
+        color = lerp(color, G.colors[c].rgb, lerp(colorPos, step(0.01, colorPos), G.type));
     }
-# ifndef UNITY_COLORSPACE_GAMMA
+#ifndef UNITY_COLORSPACE_GAMMA
     color = SRGBToLinear(color);
-# endif
-    float alpha = Gradient.alphas[0].x;
+#endif
+
+    float alpha = G.alphas[0].x;
     [unroll]
     for (int a = 1; a < 8; a++)
     {
-        float alphaPos = saturate((Time - Gradient.alphas[a-1].y) / ((Gradient.alphas[a].y - Gradient.alphas[a-1].y + 1e-6)) * step(a, Gradient.alphasLength-1) + 1e-8);
-        alpha = lerp(alpha, Gradient.alphas[a].x, lerp(alphaPos, step(0.01, alphaPos), Gradient.type));
+        float denom   = max(G.alphas[a].y - G.alphas[a-1].y, EPS_SMALL);
+        float alphaPos = saturate( safe_div(t - G.alphas[a-1].y, denom) ) * step(a, G.alphasLength - 1);
+        alpha = lerp(alpha, G.alphas[a].x, lerp(alphaPos, step(0.01, alphaPos), G.type));
     }
     return float4(color, alpha);
+}
+
+inline float hash12(float2 p) {
+    p = frac(p * float2(0.1031, 0.1030));
+    p += dot(p, p.yx + 33.33);
+    return frac((p.x + p.y) * p.x);
 }
 
 void InteriorMapping_float(
@@ -36,86 +49,67 @@ void InteriorMapping_float(
     out float4 Out, 
     out float Night, 
     out float3 Emissive
-    )
-{
+){
     float3 rayDir = -viewDir;
-    rayDir .z *= -1;
+    rayDir.z *= -1;
+    rayDir = safe_ray(rayDir);
+
     float3 uvw = float3(frac(uv), -roomDepth + 1.0);
 
-    float3 dist3 = (step(0.0, rayDir) - uvw) / (rayDir);
-    float dist = min(min(dist3.x, dist3.y), dist3.z); 
+    float3 dist3 = (step(0.0, rayDir) - uvw) / rayDir;
+    float  dist  = min(min(dist3.x, dist3.y), dist3.z);
 
     float3 rayHit = uvw + rayDir * dist;
-    rayHit.z = (rayHit.z + roomDepth  - 1.0) / roomDepth ;
+    rayHit.z = safe_div(rayHit.z + roomDepth - 1.0, roomDepth);
+
     float3 rayHitNormal = step(1.0 - 1e-3, abs(rayHit - 0.5) * 2.0);
 
-    float3 finalRGB = float3(dist, dist, dist) * 0.5;
+    float cols = max(floor(roomAtlasColumns + 0.5), 1.0);
+    float rows = max(floor(roomAtlasRows    + 0.5), 1.0);
+    float  tileX = safe_div(1.0, cols);
+    float  tileY = safe_div(1.0, rows);
 
-    float  tileX = 1.0/floor(roomAtlasColumns);
-    float  tileY = 1.0/floor(roomAtlasRows);
+    float RoomNumX = safe_div(cols, 6.0);
+    float RoomNumY = safe_div(rows, 3.0);
+    float Columun  = safe_div(cols, 3.0);
+    float Row      = safe_div(rows, 3.0);
 
-    float RoomNumX = roomAtlasColumns/6.0;
-    float RoomNumY = roomAtlasRows/3.0;
-
-    float Columun = roomAtlasColumns/3.0;
-    float Row = roomAtlasRows/3.0;
-
-    float2 _Rooms = float2(RoomNumX, RoomNumY);
     float2 roomIndexUV = floor(uv);
-    float2 co = roomIndexUV.x + roomIndexUV.y * (roomIndexUV.x + 1);
-    float2 randA = frac(sin(co * float2(12.9898,78.233)) * 43758.5453);
+    float  randD       = hash12(roomIndexUV);
+    float4 randRGB     = Unity_SampleGradient_float(gradient, randD);
 
-    float2 randB = (randA -0.5) * 2;
+    float2 rA = float2(hash12(roomIndexUV + 11.0), hash12(roomIndexUV + 29.0));
+    float2 rC = floor(rA + (1.0 - nightEmission));
+    float  nightBlend = lerp(1.0, rC.x, saturate(nightEmission));
+    Night = nightBlend;
 
-    float2 randC = floor(randA  + 1.0 * (1-nightEmission));
-    float nightBlendingRand = lerp(1, randC.x , nightEmission);
+    float2 n = floor(rA * float2(RoomNumX, RoomNumY));
+    float2 windowUV = 0;
 
-    // randomize the room
-    float2 n = floor(randA * _Rooms.xy);
-    roomIndexUV += n;
-
-    float2 windowUV = {0,0};
-
-    float distPlane = 0.01 / rayDir.z;
+    float  distPlane   = safe_div(0.01, rayDir.z);
     float3 rayHitPlane = uvw + rayDir * distPlane;
-    windowUV += rayHitPlane.xy + float2(2,2);
-    windowUV *= float2(tileX, tileY);
-    windowUV.x += n.x / RoomNumX;
-    windowUV.y += n.y / RoomNumY;
-    float4 windowColor = roomAtlasTex.Sample(Sampler, windowUV);
-    float4 windowColor2 = roomAtlasTex.Sample(Sampler, windowUV + float2(1/Columun,0));
-    windowColor = lerp(windowColor, windowColor2, nightBlendingRand);
+
+    windowUV = (rayHitPlane.xy + float2(2,2)) * float2(tileX, tileY);
+    windowUV += float2( safe_div(n.x, RoomNumX), safe_div(n.y, RoomNumY) );
+
+    float4 windowColor  = roomAtlasTex.Sample(Sampler, windowUV);
+    float4 windowColor2 = roomAtlasTex.Sample(Sampler, windowUV + float2(safe_div(1.0, Columun), 0));
+    windowColor = lerp(windowColor, windowColor2, nightBlend);
     windowColor.a *= step(distPlane, dist);
 
-    distPlane = 0.01 / rayDir.z;
-    rayHitPlane = uvw + rayDir * distPlane;
-
-    float2 roomsUV = {0,0};
+    float2 roomsUV = 0;
     roomsUV += rayHitNormal.x * (rayHit.zy + float2(2 * step(0.5, rayHit.x), 1));
     roomsUV += rayHitNormal.y * (rayHit.xz + float2(1, 2 * step(0.5, rayHit.y)));
     roomsUV += rayHitNormal.z * (rayHit.xy + float2(1, 1));
-    roomsUV *= float2(tileX, tileY);
-    roomsUV.x += n.x / RoomNumX;
-    roomsUV.y += n.y / RoomNumY;
+    roomsUV  = roomsUV * float2(tileX, tileY) + float2( safe_div(n.x, RoomNumX), safe_div(n.y, RoomNumY) );
 
-    float4 roomColor = roomAtlasTex.Sample(Sampler, roomsUV);
-    float4 roomColor2 = roomAtlasTex.Sample(Sampler, roomsUV + float2(1/Columun,0));
-    roomColor = lerp(roomColor, roomColor2, nightBlendingRand);
-
-    float randD= frac(sin(dot(roomIndexUV.xy, float2(12.9898,78.233))) * 43758.5453);
-    float4 randRGB = Unity_SampleGradient_float(gradient, randD);  
- 
-    roomColor.rgb = saturate(roomColor.rgb) ;
-    roomColor.a = 1.0;
+    float4 roomColor  = roomAtlasTex.Sample(Sampler, roomsUV);
+    float4 roomColor2 = roomAtlasTex.Sample(Sampler, roomsUV + float2(safe_div(1.0, Columun), 0));
+    roomColor = lerp(roomColor, roomColor2, nightBlend);
+    roomColor.rgb = saturate(roomColor.rgb);
+    roomColor.a   = 1.0;
 
     float4 finalColor = lerp(roomColor, windowColor, windowColor.a);
-
-    Out = roomColor;
-    Night = nightBlendingRand;
+    Out      = finalColor;
     Emissive = randRGB.rgb;
 }
-
-#endif
-
-
-
