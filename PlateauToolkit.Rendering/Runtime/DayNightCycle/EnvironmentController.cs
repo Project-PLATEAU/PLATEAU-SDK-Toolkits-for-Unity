@@ -684,7 +684,6 @@ namespace PlateauToolkit.Rendering
 
             // Add a virtual tilt to the moon's declination
             double virtualTilt = k_Deg2Rad * 25; // Adjust this value to change the moon's rising and setting time
-            //double dec = Math.Asin(Math.Sin(lng) * Math.Cos(obliquity + virtualTilt) + Math.Cos(lat) * Math.Sin(obliquity + virtualTilt) * Math.Sin(longitude));
             double dec = Math.Asin(Math.Clamp(Math.Sin(lng) * Math.Cos(obliquity + virtualTilt) + Math.Cos(lat) * Math.Sin(obliquity + virtualTilt) * Math.Sin(longitude), -1.0, 1.0));
 
             double h = (k_Deg2Rad * (280.16 + 360.9856235 * julianDate) - lw) - rightAscension;
